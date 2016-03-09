@@ -13,7 +13,7 @@ class Leader(models.Model):
 	avatar = models.ImageField(upload_to='avatars')
 	tail = models.CharField(max_length=255, blank=True)
 	create_time = models.DateTimeField(auto_now=True)
-	successful_times = models.IntegerField(10)
+	successful_times = models.IntegerField(max_length=10)
 
 class Batch(models.Model):
 	title = models.CharField(max_length=200)
@@ -21,7 +21,7 @@ class Batch(models.Model):
 	leader = models.ForeignKey(Leader)
 	start_time = models.DateTimeField(auto_now=True)
 	end_time = models.DateTimeField()
-	status = models.IntegerField(10)
+	status = models.IntegerField(max_length=10)
 
 class Commodity(models.Model):
 	title = models.CharField(max_length=200)
@@ -29,8 +29,8 @@ class Commodity(models.Model):
 	details = models.TextField()
 	unit_price = models.DecimalField(max_digits=9, decimal_places=2)
 	spec = models.CharField(max_length=200)
-	stock = models.IntegerField(10)
-	quota = models.IntegerField(10)
+	stock = models.IntegerField(max_length=10)
+	quota = models.IntegerField(max_length=10)
 
 class Customer(models.Model):
 	nick_name = models.CharField(max_length=200)
@@ -52,11 +52,11 @@ class Order(models.Model):
 	batch = models.ForeignKey(Batch)
 	commodities = models.ManyToManyField(Commodity, through='Membership_Order_To_Commodities')
 	create_time = models.DateTimeField(auto_now=True)
-	status = models.IntegerField(10)
+	status = models.IntegerField(max_length=10)
 
 class Membership_Order_To_Commodities(models.Model):
 	order = models.ForeignKey(Order)
 	commodity = models.ForeignKey(Commodity)
-	quantity = models.IntegerField(10)
+	quantity = models.IntegerField(max_length=10)
 	price = models.DecimalField(max_digits=9, decimal_places=2)
 
