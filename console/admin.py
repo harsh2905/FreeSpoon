@@ -2,8 +2,6 @@ from django.contrib import admin
 
 # Register your models here.
 
-from django.contrib.auth.models import User
-
 from .models import Batch
 from .models import Commodity
 from .models import Customer
@@ -33,15 +31,6 @@ class OrderAdmin(admin.ModelAdmin):
 	#model = Order
 	#filter_horizontal = ('commodities',)
 	inlines = (Membership_Order_To_CommoditiesInLine,)
-
-class UserInLine(admin.StackedInline):
-	model = User
-
-class LeaderAdmin(admin.ModelAdmin):
-	inlines = (UserInLine,)
-
-admin.site.unregister(User)
-admin.site.register(User, UserAdmin)
 
 admin.site.register(Batch, BatchAdmin)
 admin.site.register(Customer)
