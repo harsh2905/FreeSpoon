@@ -39,7 +39,10 @@ class Commodity(models.Model):
 
 class CommodityImage(models.Model):
 	commodity = models.ForeignKey(Commodity)
-	image = models.ImageField(upload_to='commodity_images')
+	image = models.ImageField(upload_to='images/commodity/%Y/%m/%d')
+	def render(self):
+		return u'<img src="%s" />' % self.image.url
+	render.allow_tags = True
 
 class CommodityInBatch(models.Model):
 	batch = models.ForeignKey(Batch)

@@ -15,6 +15,7 @@ from .models import Membership_Order_To_Commodities
 class CommodityImageInline(admin.TabularInline):
 	model = CommodityImage
 	extra = 1
+	readonly_fields = ('render',)
 
 class CommodityAdmin(admin.ModelAdmin):
 	inlines = [CommodityImageInline]
