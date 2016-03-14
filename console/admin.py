@@ -6,11 +6,11 @@ from .models import Batch
 from .models import Commodity
 from .models import CommodityImage
 from .models import CommodityInBatch
+from .models import CommodityInOrder
 from .models import Customer
 from .models import Distributer
 from .models import Leader
 from .models import Order
-from .models import Membership_Order_To_Commodities
 
 class CommodityImageInline(admin.TabularInline):
 	model = CommodityImage
@@ -33,14 +33,14 @@ class BatchAdmin(admin.ModelAdmin):
 	list_filter = ['start_time']
 	search_fields = ['title']
 
-class Membership_Order_To_CommoditiesInline(admin.TabularInline):
-	model = Membership_Order_To_Commodities
+class CommodityInOrderInline(admin.TabularInline):
+	model = CommodityInOrder
 	extra = 1
 
 class OrderAdmin(admin.ModelAdmin):
 	#model = Order
 	#filter_horizontal = ('commodities',)
-	inlines = (Membership_Order_To_CommoditiesInline,)
+	inlines = (CommodityInOrderInline,)
 
 admin.site.register(Commodity, CommodityAdmin)
 admin.site.register(Batch, BatchAdmin)

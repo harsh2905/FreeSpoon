@@ -74,14 +74,14 @@ class Distributer(models.Model):
 class Order(models.Model):
 	customer = models.ForeignKey(Customer)
 	batch = models.ForeignKey(Batch)
-	commodities = models.ManyToManyField(Commodity, through='Membership_Order_To_Commodities')
+	commodities = models.ManyToManyField(Commodity, through='CommodityInOrder')
 	create_time = models.DateTimeField(auto_now=True)
 	status = models.IntegerField(max_length=10)
 	def __unicode__(self):
 		return '%s - %s - %s' % (
 			self.batch.title, self.customer.nick_name, self.create_time)
 
-class Membership_Order_To_Commodities(models.Model):
+class CommodityInOrder(models.Model):
 	order = models.ForeignKey(Order)
 	commodity = models.ForeignKey(Commodity)
 	quantity = models.IntegerField(max_length=10)
