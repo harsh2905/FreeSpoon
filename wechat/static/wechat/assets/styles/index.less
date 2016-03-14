@@ -1,0 +1,98 @@
+*{
+  margin:0;
+  padding:0;
+  font-family: "微软雅黑";
+  font-size: 16px;
+}
+
+ul.commodity-list{
+  li{
+    border-top: solid 1px #DDD;
+    border-bottom: solid 1px #DDD;
+    display: block;
+    margin-top: 20px;
+    @padding: 8px;
+    padding: @padding;
+    background: #FFF;
+    .title{
+      width: 100%;
+      @height: 20px;
+      height: @height;
+      line-height: @height;
+      padding-bottom: @padding;
+      vertical-align:middle;
+      font-size: 0.8em;
+      font-weight: bold;
+    }
+    .content{
+      width: 100%;
+      padding: 0 8px 12px 5px;
+      @height:100px;
+      height: @height;
+      .slide{
+        height: @height;
+        width:@height * 5 / 4;
+        float: left;
+        img{
+          max-width: 100%;
+          max-height: 100%;
+        }
+      }
+      .detail{
+        height:@height;
+        width:auto;
+        padding-left: @height * 5 / 4 + 10px;
+        .commodity-name,.commodity-spec,.commodity-num,.commodity-price{
+          @height: 20px;
+          height: @height;
+          line-height: @height;
+          vertical-align: middle;
+          display: block;
+        }
+        .commodity-name{
+          font-weight: bold;
+          margin-bottom: 5px;
+        }
+        .commodity-spec,.commodity-num{
+          color: #BBB;
+          font-weight: lighter;
+          font-size: 0.6em;
+          margin-bottom: 0;
+        }
+        .commodity-price{
+          font-weight: bold;
+          margin-top: 10px;
+          color: #FA4638;
+          span{
+            font-weight: lighter;
+            font-size: 0.5em;
+          }
+        }
+      }
+    }
+    .actions{
+      width: 100%;
+      border-top: solid 1px #DDD;
+      height: 40px;
+      line-height: 40px;
+      a{
+        background: #A5DE37;
+        border: #A5DE37;
+        color: #FFF;
+        font-weight: lighter;
+        float:right;
+        display: inline-block;
+        margin: 10px 0 0 10px;
+      }
+    }
+  }
+}
+
+div.popup-window-from-bottom{
+  display: none;
+  position: fixed;
+  bottom: 30px;
+  height: 100px;
+  width: 100%;
+  background: #FF0000;
+}

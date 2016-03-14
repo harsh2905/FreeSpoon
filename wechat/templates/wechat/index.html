@@ -1,0 +1,74 @@
+{% load staticfiles %}
+<!doctype html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ batch.title }}</title>
+    <!--<link rel="stylesheet" href="assets/styles/pure-min.css" />-->
+    <link rel="stylesheet" href="{% static 'wechat/assets/styles/jquery.mobile-1.4.5.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'wechat/assets/styles/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'wechat/assets/styles/buttons.css' %}" />
+    <link rel="stylesheet" href="{% static 'wechat/assets/styles/index.css' %}" />
+    <script type="text/javascript" src="{% static 'wechat/assets/scripts/jquery-1.12.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'wechat/assets/scripts/jquery.mobile-1.4.5.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'wechat/assets/scripts/index.js' %}"></script>
+</head>
+<body>
+  <div data-role="header" data-position="fixed">
+    <h1 class="title">{{ batch.title }}</h1>
+    <a href="#" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-left ui-icon-carat-l">返回</a>
+    <a href="#" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-action">分享</a>
+  </div>
+  <ul class="commodity-list">
+    {% for commodity_in_batch in batch.commodityinbatch_set.all %}
+    <li>
+      <div class="title">{{ commodity_in_batch.commodity.title }}</div>
+      <div class="content">
+        <div class="slide">
+          {% for commodityimage in commodity_in_batch.commodity.commodityimage_set.all %}
+	    <img src="{{ commodityimage.image.url }}" />
+	  {% endfor %}
+        </div>
+        <div class="detail">
+          <p class="commodity-name">{{ commodity_in_batch.commodity.title }}</p>
+          <p class="commodity-spec">类型：{{ commodity_in_batch.commodity.spec }}</p>
+          <p class="commodity-num">库存：{{ commodity_in_batch.commodity.stock }}</p>
+          <p class="commodity-price"><span>￥</span>{{ commodity_in_batch.unit_price }}</p>
+        </div>
+      </div>
+      <div class="actions">
+        <a href="javascript:void(0);" class="button button-primary button-rounded button-small">分享</a>
+        <a href="javascript:void(0);" class="button button-primary button-rounded button-small">团购</a>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  <script type="text/javascript">
+    (function(status){
+      window.popup_window_from_bottom = function(){
+          if(status){
+            status = false;
+            $('.popup-window-from-bottom').slideToggle('slow');
+          } else {
+            status = true;
+            $('.popup-window-from-bottom').css('display', 'none');
+          }
+      }
+    })(true);
+  </script>
+  <div data-role="footer" data-position="fixed" data-theme="a" role="contentinfo" class="ui-footer ui-bar-a ui-footer-fixed slideup">
+  		<div data-role="navbar" class="ui-navbar" role="navigation">
+  			<ul class="ui-grid-a">
+  				<li class="ui-block-a"><a href="1" onclick="popup_window_from_bottom();" data-prefetch="true" data-transition="flip" class="ui-btn">购物车</a></li>
+  				<li class="ui-block-b">
+            <a href="#overlay"  data-rel="popup" data-prefetch="true" data-transition="flip" class="ui-btn">团购信息</a>
+            <div id="overlay" data-role="popup" data-overlay-theme="none" class="" style="position: fixed; bottom: 30px; height: 200px; width: 100%; background: #FF0000;">
+            </div>
+          </li>
+  			</ul>
+  		</div>
+  </div>
+  <div class="popup-window-from-bottom"></div>
+</body>
+</html>
