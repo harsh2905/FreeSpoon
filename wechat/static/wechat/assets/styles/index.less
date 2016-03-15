@@ -184,36 +184,83 @@ div.popup-window-from-bottom{
     display: block;
     li{
       display: block;
-      width:100%;
+      width: auto;
       @height: 30px;
       height: @height;
       line-height: @height;
       padding: 15px;
       border-bottom: solid 1px #EEE;
-      .ui-block-a{
-        width:50%;
-      }
-      .ui-block-b{
-        width:20%;
-      }
-      .ui-block-c{
-        width:20%;
-      }
-      .name{
-        font-size: 0.8em;
-      }
-      .price{
-        font-size: 0.8em;
-        font-weight: bold;
-        color: #FA4638;
-        span{
-          font-weight: lighter;
-          font-size: 0.5em;
+      .item{
+        .ui-block-a{
+          width:45%;
         }
-      }
-      .num{
-        font-size: 0.8em;
-        text-align: center;
+        .ui-block-b{
+          width:25%;
+        }
+        .ui-block-c{
+          width:25%;
+        }
+        .name{
+          font-size: 0.8em;
+        }
+        .price{
+          font-size: 0.8em;
+          font-weight: bold;
+          color: #FA4638;
+          span{
+            font-weight: lighter;
+            font-size: 0.5em;
+          }
+        }
+        .num{
+          font-size: 0.8em;
+          text-align: center;
+          .regulator{
+            width: 80px;
+            .block{
+              @margin: 5px;
+              margin: @margin 0;
+              @height_: @height - 2 * @margin - 2px;
+              height: @height_;
+              line-height: @height_;
+              vertical-align: middle;
+              display: inline-block;
+              text-decoration: none;
+              color: #FFF;
+              float: left;
+            }
+            .left{
+              width: 23px;
+              background: #38C;
+              border: solid 1px #38C;
+              border-top-left-radius: 3px;
+              -moz-border-radius-topleft: 3px;
+              border-bottom-left-radius: 3px;
+              -moz-border-radius-bottomleft: 3px;
+            }
+            .right{
+              width: 23px;
+              background: #38C;
+              border: solid 1px #38C;
+              border-top-right-radius: 3px;
+              -moz-border-radius-topright: 3px;
+              border-bottom-right-radius: 3px;
+              -moz-border-radius-bottomright: 3px;
+            }
+            .left:active,.right:active{
+              background: #FFF;
+              color: #000;
+            }
+            .center{
+              color: #000;
+              font-size: 9px;
+              width: 30px;
+              background: #FFF;
+              border-top: solid 1px #38C;
+              border-bottom: solid 1px #38C;
+            }
+          }
+        }
       }
     }
   }

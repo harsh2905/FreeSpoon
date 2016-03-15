@@ -3,7 +3,7 @@
 <html lang="zh-cn">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;">
     <title>{{ batch.title }}</title>
     <!--<link rel="stylesheet" href="assets/styles/pure-min.css" />-->
     <link rel="stylesheet" href="{% static 'wechat/assets/styles/jquery.mobile.structure-1.4.5.css' %}" />
@@ -15,7 +15,7 @@
     <script type="text/javascript" src="{% static 'wechat/assets/scripts/index.js' %}"></script>
 </head>
 <body>
-  <div data-role="header" data-position="fixed" class="navbar">
+  <div class="navbar">
     <p class="title">{{ batch.title }}</p>
   </div>
   <ul class="commodity-list">
@@ -75,19 +75,43 @@
     </div>
     <ul class="list">
       <li>
-        <div class="ui-block-a name">菲律宾凤梨</div>
-        <div class="ui-block-b price"><span>￥</span>28.00</div>
-        <div class="ui-block-c num">2</div>
+        <div class="item ui-grid-a">
+          <div class="ui-block-a name">菲律宾凤梨</div>
+          <div class="ui-block-b price"><span>￥</span>28.00</div>
+          <div class="ui-block-c num">
+            <div class="regulator">
+              <a class="block left" href="javascript:void(0);">-</a>
+              <span class="block center">99</span>
+              <a class="block right" href="javascript:void(0);">+</a>
+            </div>
+          </div>
+        </div>
       </li>
       <li>
-        <div class="ui-block-a name">菲律宾凤梨</div>
-        <div class="ui-block-b price"><span>￥</span>28.00</div>
-        <div class="ui-block-c num">2</div>
+        <div class="item ui-grid-a">
+          <div class="ui-block-a name">菲律宾凤梨</div>
+          <div class="ui-block-b price"><span>￥</span>28.00</div>
+          <div class="ui-block-c num">
+            <div class="regulator">
+              <a class="block left" href="javascript:void(0);">-</a>
+              <span class="block center">99</span>
+              <a class="block right" href="javascript:void(0);">+</a>
+            </div>
+          </div>
+        </div>
       </li>
       <li>
-        <div class="ui-block-a name">菲律宾凤梨</div>
-        <div class="ui-block-b price"><span>￥</span>28.00</div>
-        <div class="ui-block-c num">2</div>
+        <div class="item ui-grid-a">
+          <div class="ui-block-a name">菲律宾凤梨</div>
+          <div class="ui-block-b price"><span>￥</span>28.00</div>
+          <div class="ui-block-c num">
+            <div class="regulator">
+              <a class="block left" href="javascript:void(0);">-</a>
+              <span class="block center">99</span>
+              <a class="block right" href="javascript:void(0);">+</a>
+            </div>
+          </div>
+        </div>
       </li>
     </ul>
   </div>

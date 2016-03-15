@@ -179,34 +179,78 @@ div.popup-window-from-bottom ul.list {
 }
 div.popup-window-from-bottom ul.list li {
   display: block;
-  width: 100%;
+  width: auto;
   height: 30px;
   line-height: 30px;
   padding: 15px;
   border-bottom: solid 1px #EEE;
 }
-div.popup-window-from-bottom ul.list li .ui-block-a {
-  width: 50%;
+div.popup-window-from-bottom ul.list li .item .ui-block-a {
+  width: 45%;
 }
-div.popup-window-from-bottom ul.list li .ui-block-b {
-  width: 20%;
+div.popup-window-from-bottom ul.list li .item .ui-block-b {
+  width: 25%;
 }
-div.popup-window-from-bottom ul.list li .ui-block-c {
-  width: 20%;
+div.popup-window-from-bottom ul.list li .item .ui-block-c {
+  width: 25%;
 }
-div.popup-window-from-bottom ul.list li .name {
+div.popup-window-from-bottom ul.list li .item .name {
   font-size: 0.8em;
 }
-div.popup-window-from-bottom ul.list li .price {
+div.popup-window-from-bottom ul.list li .item .price {
   font-size: 0.8em;
   font-weight: bold;
   color: #FA4638;
 }
-div.popup-window-from-bottom ul.list li .price span {
+div.popup-window-from-bottom ul.list li .item .price span {
   font-weight: lighter;
   font-size: 0.5em;
 }
-div.popup-window-from-bottom ul.list li .num {
+div.popup-window-from-bottom ul.list li .item .num {
   font-size: 0.8em;
   text-align: center;
+}
+div.popup-window-from-bottom ul.list li .item .num .regulator {
+  width: 80px;
+}
+div.popup-window-from-bottom ul.list li .item .num .regulator .block {
+  margin: 5px 0;
+  height: 18px;
+  line-height: 18px;
+  vertical-align: middle;
+  display: inline-block;
+  text-decoration: none;
+  color: #FFF;
+  float: left;
+}
+div.popup-window-from-bottom ul.list li .item .num .regulator .left {
+  width: 23px;
+  background: #38C;
+  border: solid 1px #38C;
+  border-top-left-radius: 3px;
+  -moz-border-radius-topleft: 3px;
+  border-bottom-left-radius: 3px;
+  -moz-border-radius-bottomleft: 3px;
+}
+div.popup-window-from-bottom ul.list li .item .num .regulator .right {
+  width: 23px;
+  background: #38C;
+  border: solid 1px #38C;
+  border-top-right-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  border-bottom-right-radius: 3px;
+  -moz-border-radius-bottomright: 3px;
+}
+div.popup-window-from-bottom ul.list li .item .num .regulator .left:active,
+div.popup-window-from-bottom ul.list li .item .num .regulator .right:active {
+  background: #FFF;
+  color: #000;
+}
+div.popup-window-from-bottom ul.list li .item .num .regulator .center {
+  color: #000;
+  font-size: 9px;
+  width: 30px;
+  background: #FFF;
+  border-top: solid 1px #38C;
+  border-bottom: solid 1px #38C;
 }
