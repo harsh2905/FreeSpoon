@@ -16,7 +16,7 @@
 </head>
 <body>
   <div data-role="header" data-position="fixed" class="navbar">
-    <h1 class="title">{{ batch.title }}</h1>
+    <p class="title">{{ batch.title }}</p>
   </div>
   <ul class="commodity-list">
     {% for commodity_in_batch in batch.commodityinbatch_set.all %}

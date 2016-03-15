@@ -5,7 +5,7 @@
   font-size: 16px;
 }
 
-@header-height: 36px;
+@header-height: 40px;
 
 div.navbar{
   height: @header-height;
@@ -15,11 +15,16 @@ div.navbar{
   width: 100%;
   background: #E9E9E9;
   text-align: center;
-  font-size: 1em;
   border-bottom: solid 1px #DDD;
+  .title{
+    display: inline-block;
+    height: @header-height;
+    line-height: @header-height;
+    font-size: 0.9em;
+  }
 }
 
-@footer-height: @header-height;
+@footer-height: @header-height - 4px;
 
 ul.commodity-list{
   margin-bottom: @footer-height;
