@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ batch.title }}</title>
     <!--<link rel="stylesheet" href="assets/styles/pure-min.css" />-->
-    <link rel="stylesheet" href="{% static 'wechat/assets/styles/jquery.mobile-1.4.5.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'wechat/assets/styles/jquery.mobile.structure-1.4.5.css' %}" />
     <link rel="stylesheet" href="{% static 'wechat/assets/styles/font-awesome.min.css' %}">
     <link rel="stylesheet" href="{% static 'wechat/assets/styles/buttons.css' %}" />
     <link rel="stylesheet" href="{% static 'wechat/assets/styles/index.css' %}" />
@@ -15,10 +15,8 @@
     <script type="text/javascript" src="{% static 'wechat/assets/scripts/index.js' %}"></script>
 </head>
 <body>
-  <div data-role="header" data-position="fixed">
+  <div data-role="header" data-position="fixed" class="navbar">
     <h1 class="title">{{ batch.title }}</h1>
-    <a href="#" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-left ui-icon-carat-l">返回</a>
-    <a href="#" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-action">分享</a>
   </div>
   <ul class="commodity-list">
     {% for commodity_in_batch in batch.commodityinbatch_set.all %}

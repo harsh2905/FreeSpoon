@@ -4,6 +4,17 @@
   font-family: "微软雅黑";
   font-size: 16px;
 }
+div.navbar {
+  height: 36px;
+  line-height: 36px;
+  vertical-align: middle;
+  opacity: 0.9;
+  width: 100%;
+  background: #E9E9E9;
+  text-align: center;
+  font-size: 1em;
+  border-bottom: solid 1px #DDD;
+}
 ul.commodity-list {
   margin-bottom: 36px;
 }
@@ -94,7 +105,6 @@ ul.commodity-list li .actions a {
   line-height: 36px;
   vertical-align: middle;
   opacity: .9;
-  background: #FFF;
   width: 100%;
   z-index: 1100;
   background: #E9E9E9;
