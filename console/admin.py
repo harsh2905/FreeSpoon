@@ -28,7 +28,7 @@ class BatchAdmin(admin.ModelAdmin):
 	#fields = ['title', 'desc', 'leader', \
 	#		'end_time', 'status']
 	inlines = [CommodityInBatchInline]
-	list_display = ('title', 'desc', 'leader', \
+	list_display = ('id', 'title', 'desc', 'leader', \
 			'start_time', 'end_time', 'status')
 	list_filter = ['start_time']
 	search_fields = ['title']
