@@ -16,3 +16,15 @@ def index(request, batch_id):
 		'batch': batch,
 	})
 	return HttpResponse(template.render(context))
+
+def pay_callback(request):
+	template = loader.get_template('wechat/paycb.html')
+	context = RequestContext(request)
+	return HttpResponse(template.render(context))
+
+def confirm(request, batch_id):
+	if request.method == 'GET':
+		template = loader.get_template('wechat/redirect_to_confirm.html')
+		context = RequestContext(request)
+		return HttpResponse(template.render(context))
+

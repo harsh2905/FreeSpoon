@@ -1,0 +1,171 @@
+{% load staticfiles %}
+<!doctype html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;">
+    <title>{{ batch.title }}</title>
+    <!--<link rel="stylesheet" href="assets/styles/pure-min.css" />-->
+    <link rel="stylesheet" href="{% static 'wechat/assets/styles/jquery.mobile.structure-1.4.5.css' %}" />
+    <link rel="stylesheet" href="{% static 'wechat/assets/styles/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'wechat/assets/styles/buttons.css' %}" />
+    <link rel="stylesheet" href="{% static 'wechat/assets/styles/index.css' %}" />
+    <script type="text/javascript" src="{% static 'wechat/assets/scripts/jquery-1.12.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'wechat/assets/scripts/jquery.mobile-1.4.5.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'wechat/assets/scripts/index.js' %}"></script>
+</head>
+<body>
+  <div class="navbar">
+    <p class="title">{{ batch.title }}</p>
+  </div>
+  <ul class="commodity-list">
+    {% for commodity_in_batch in batch.commodityinbatch_set.all %}
+    <li>
+      <div class="title">{{ commodity_in_batch.commodity.title }}</div>
+      <div class="content">
+        <div class="slide">
+          {% for commodityimage in commodity_in_batch.commodity.commodityimage_set.all %}
+	    <img src="{{ commodityimage.image.url }}" />
+	  {% endfor %}
+        </div>
+        <div class="detail">
+          <p class="commodity-name">{{ commodity_in_batch.commodity.title }}</p>
+          <p class="commodity-spec">类型：{{ commodity_in_batch.commodity.spec }}</p>
+          <p class="commodity-num">库存：{{ commodity_in_batch.commodity.stock }}</p>
+          <p class="commodity-price"><span>￥</span>{{ commodity_in_batch.unit_price }}</p>
+        </div>
+      </div>
+      <div class="actions">
+        <a href="javascript:void(0);" class="button button-primary button-rounded button-small">分享</a>
+        <a href="javascript:void(0);" class="button button-primary button-rounded button-small">团购</a>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  <script type="text/javascript">
+    $(function(){
+      (function(status){
+        // TODO clean all touch events
+        $('.overlay').on('tap', function(){
+          status = false;
+          window.popup_window_from_bottom();
+        });
+        window.popup_window_from_bottom = function(){
+            if(status){
+              status = false;
+              $('.overlay').css('display', 'block');
+              $('.popup-window-from-bottom').slideToggle('slow');
+            } else {
+              status = true;
+              $('.overlay').css('display', 'none');
+              $('.popup-window-from-bottom').css('display', 'none');
+            }
+        }
+      })(true);
+    });
+  </script>
+  <div class="footer">
+    <div class="ui-block-a"><a href="javascript:void(0);" onclick="popup_window_from_bottom();">购物车</a></div>
+    <div class="ui-block-b"><a href="javascript:void(0);">支付</a></div>
+  </div>
+  <div class="overlay"></div>
+  <div class="popup-window-from-bottom">
+    <div class="header">
+      <span>购物车</span>
+    </div>
+    <ul class="list">
+      <li>
+        <div class="item ui-grid-a">
+          <div class="ui-block-a name">菲律宾凤梨</div>
+          <div class="ui-block-b price"><span>￥</span>28.00</div>
+          <div class="ui-block-c num">
+            <div class="regulator">
+              <a class="block left" href="javascript:void(0);">-</a>
+              <span class="block center">99</span>
+              <a class="block right" href="javascript:void(0);">+</a>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="item ui-grid-a">
+          <div class="ui-block-a name">菲律宾凤梨</div>
+          <div class="ui-block-b price"><span>￥</span>28.00</div>
+          <div class="ui-block-c num">
+            <div class="regulator">
+              <a class="block left" href="javascript:void(0);">-</a>
+              <span class="block center">99</span>
+              <a class="block right" href="javascript:void(0);">+</a>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="item ui-grid-a">
+          <div class="ui-block-a name">菲律宾凤梨</div>
+          <div class="ui-block-b price"><span>￥</span>28.00</div>
+          <div class="ui-block-c num">
+            <div class="regulator">
+              <a class="block left" href="javascript:void(0);">-</a>
+              <span class="block center">99</span>
+              <a class="block right" href="javascript:void(0);">+</a>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="item ui-grid-a">
+          <div class="ui-block-a name">菲律宾凤梨</div>
+          <div class="ui-block-b price"><span>￥</span>28.00</div>
+          <div class="ui-block-c num">
+            <div class="regulator">
+              <a class="block left" href="javascript:void(0);">-</a>
+              <span class="block center">99</span>
+              <a class="block right" href="javascript:void(0);">+</a>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="item ui-grid-a">
+          <div class="ui-block-a name">菲律宾凤梨</div>
+          <div class="ui-block-b price"><span>￥</span>28.00</div>
+          <div class="ui-block-c num">
+            <div class="regulator">
+              <a class="block left" href="javascript:void(0);">-</a>
+              <span class="block center">99</span>
+              <a class="block right" href="javascript:void(0);">+</a>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="item ui-grid-a">
+          <div class="ui-block-a name">菲律宾凤梨</div>
+          <div class="ui-block-b price"><span>￥</span>28.00</div>
+          <div class="ui-block-c num">
+            <div class="regulator">
+              <a class="block left" href="javascript:void(0);">-</a>
+              <span class="block center">99</span>
+              <a class="block right" href="javascript:void(0);">+</a>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="item ui-grid-a">
+          <div class="ui-block-a name">菲律宾凤梨</div>
+          <div class="ui-block-b price"><span>￥</span>28.00</div>
+          <div class="ui-block-c num">
+            <div class="regulator">
+              <a class="block left" href="javascript:void(0);">-</a>
+              <span class="block center">99</span>
+              <a class="block right" href="javascript:void(0);">+</a>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</body>
+</html>
