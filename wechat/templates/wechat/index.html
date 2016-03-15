@@ -45,30 +45,53 @@
     {% endfor %}
   </ul>
   <script type="text/javascript">
-    (function(status){
-      window.popup_window_from_bottom = function(){
-          if(status){
-            status = false;
-            $('.popup-window-from-bottom').slideToggle('slow');
-          } else {
-            status = true;
-            $('.popup-window-from-bottom').css('display', 'none');
-          }
-      }
-    })(true);
+    $(function(){
+      (function(status){
+        // TODO clean all touch events
+        $('.overlay').on('tap', function(){
+          status = false;
+          window.popup_window_from_bottom();
+        });
+        window.popup_window_from_bottom = function(){
+            if(status){
+              status = false;
+              $('.overlay').css('display', 'block');
+              $('.popup-window-from-bottom').slideToggle('slow');
+            } else {
+              status = true;
+              $('.overlay').css('display', 'none');
+              $('.popup-window-from-bottom').css('display', 'none');
+            }
+        }
+      })(true);
+    });
   </script>
-  <div data-role="footer" data-position="fixed" data-theme="a" role="contentinfo" class="ui-footer ui-bar-a ui-footer-fixed slideup">
-  		<div data-role="navbar" class="ui-navbar" role="navigation">
-  			<ul class="ui-grid-a">
-  				<li class="ui-block-a"><a href="1" onclick="popup_window_from_bottom();" data-prefetch="true" data-transition="flip" class="ui-btn">购物车</a></li>
-  				<li class="ui-block-b">
-            <a href="#overlay"  data-rel="popup" data-prefetch="true" data-transition="flip" class="ui-btn">团购信息</a>
-            <div id="overlay" data-role="popup" data-overlay-theme="none" class="" style="position: fixed; bottom: 30px; height: 200px; width: 100%; background: #FF0000;">
-            </div>
-          </li>
-  			</ul>
-  		</div>
+  <div class="footer">
+    <div class="ui-block-a"><a href="javascript:void(0);" onclick="popup_window_from_bottom();">购物车</a></div>
+    <div class="ui-block-b"><a href="javascript:void(0);">支付</a></div>
   </div>
-  <div class="popup-window-from-bottom"></div>
+  <div class="overlay"></div>
+  <div class="popup-window-from-bottom">
+    <div class="header">
+      <span>购物车</span>
+    </div>
+    <ul class="list">
+      <li>
+        <div class="ui-block-a name">菲律宾凤梨</div>
+        <div class="ui-block-b price"><span>￥</span>28.00</div>
+        <div class="ui-block-c num">2</div>
+      </li>
+      <li>
+        <div class="ui-block-a name">菲律宾凤梨</div>
+        <div class="ui-block-b price"><span>￥</span>28.00</div>
+        <div class="ui-block-c num">2</div>
+      </li>
+      <li>
+        <div class="ui-block-a name">菲律宾凤梨</div>
+        <div class="ui-block-b price"><span>￥</span>28.00</div>
+        <div class="ui-block-c num">2</div>
+      </li>
+    </ul>
+  </div>
 </body>
 </html>

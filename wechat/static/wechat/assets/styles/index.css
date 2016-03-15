@@ -4,6 +4,9 @@
   font-family: "微软雅黑";
   font-size: 16px;
 }
+ul.commodity-list {
+  margin-bottom: 36px;
+}
 ul.commodity-list li {
   border-top: solid 1px #DDD;
   border-bottom: solid 1px #DDD;
@@ -84,11 +87,111 @@ ul.commodity-list li .actions a {
   display: inline-block;
   margin: 10px 0 0 10px;
 }
+.footer {
+  position: fixed;
+  bottom: 0px;
+  height: 36px;
+  line-height: 36px;
+  vertical-align: middle;
+  opacity: .9;
+  background: #FFF;
+  width: 100%;
+  z-index: 1100;
+  background: #E9E9E9;
+}
+.footer .ui-block-a,
+.footer .ui-block-b {
+  width: 50%;
+  height: 36px;
+}
+.footer .ui-block-a a,
+.footer .ui-block-b a {
+  display: block;
+  width: auto;
+  height: auto;
+  border: solid 1px #DDD;
+  text-align: center;
+  text-decoration: none;
+  font-size: 0.8em;
+  color: #000;
+}
+.footer .ui-block-a a:hover,
+.footer .ui-block-b a:hover {
+  background: #FA4638;
+  color: #FFF;
+}
+.overlay {
+  display: none;
+  opacity: .5;
+  background: #BBB;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 1px;
+  position: absolute;
+  z-index: 1099;
+  animation-timing-function: ease-out;
+  animation-duration: 350ms;
+}
 div.popup-window-from-bottom {
+  opacity: 1;
+  z-index: 1100;
   display: none;
   position: fixed;
-  bottom: 30px;
-  height: 100px;
+  bottom: 36px;
+  height: auto;
   width: 100%;
-  background: #FF0000;
+  background: #FFF;
+}
+div.popup-window-from-bottom .header {
+  height: 18px;
+  line-height: 18px;
+  vertical-align: middle;
+  padding: 12px;
+  background: #EEE;
+}
+div.popup-window-from-bottom .header span {
+  display: inline-block;
+  padding-left: 6px;
+  height: 18px;
+  line-height: 18px;
+  vertical-align: middle;
+  font-size: 0.8em;
+  border-left: solid 4px #38C;
+}
+div.popup-window-from-bottom ul.list {
+  display: block;
+}
+div.popup-window-from-bottom ul.list li {
+  display: block;
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  padding: 15px;
+  border-bottom: solid 1px #EEE;
+}
+div.popup-window-from-bottom ul.list li .ui-block-a {
+  width: 50%;
+}
+div.popup-window-from-bottom ul.list li .ui-block-b {
+  width: 20%;
+}
+div.popup-window-from-bottom ul.list li .ui-block-c {
+  width: 20%;
+}
+div.popup-window-from-bottom ul.list li .name {
+  font-size: 0.8em;
+}
+div.popup-window-from-bottom ul.list li .price {
+  font-size: 0.8em;
+  font-weight: bold;
+  color: #FA4638;
+}
+div.popup-window-from-bottom ul.list li .price span {
+  font-weight: lighter;
+  font-size: 0.5em;
+}
+div.popup-window-from-bottom ul.list li .num {
+  font-size: 0.8em;
+  text-align: center;
 }

@@ -5,7 +5,10 @@
   font-size: 16px;
 }
 
+@footer-height: 36px;
+
 ul.commodity-list{
+  margin-bottom: @footer-height;
   li{
     border-top: solid 1px #DDD;
     border-bottom: solid 1px #DDD;
@@ -88,11 +91,112 @@ ul.commodity-list{
   }
 }
 
+.footer{
+  position: fixed;
+  bottom: 0px;
+  height: @footer-height;
+  line-height: @footer-height;
+  vertical-align: middle;
+  opacity: .9;
+  background: #FFF;
+  width: 100%;
+  z-index: 1100;
+  background: #E9E9E9;
+  .ui-block-a,.ui-block-b{
+    width:50%;
+    height: @footer-height;
+    a{
+      display: block;
+      width: auto;
+      height:auto;
+      border: solid 1px #DDD;
+      text-align: center;
+      text-decoration: none;
+      font-size: 0.8em;
+      color: #000;
+      &:hover{
+        background: #FA4638;
+        color: #FFF;
+      }
+    }
+  }
+}
+
+.overlay{
+  display: none;
+  opacity: .5;
+  background: #BBB;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 1px;
+  position: absolute;
+  z-index: 1099;
+  animation-timing-function: ease-out;
+  animation-duration: 350ms;
+}
+
 div.popup-window-from-bottom{
+  opacity: 1;
+  z-index: 1100;
   display: none;
   position: fixed;
-  bottom: 30px;
-  height: 100px;
+  bottom: @footer-height;
+  height: auto;
   width: 100%;
-  background: #FF0000;
+  background: #FFF;
+  .header{
+    @height:18px;
+    height: @height;
+    line-height: @height;
+    vertical-align: middle;
+    padding: 12px;
+    background: #EEE;
+    span{
+      display: inline-block;
+      padding-left: 6px;
+      height: @height;
+      line-height: @height;
+      vertical-align: middle;
+      font-size: 0.8em;
+      border-left: solid 4px #38C;
+    }
+  }
+  ul.list{
+    display: block;
+    li{
+      display: block;
+      width:100%;
+      @height: 30px;
+      height: @height;
+      line-height: @height;
+      padding: 15px;
+      border-bottom: solid 1px #EEE;
+      .ui-block-a{
+        width:50%;
+      }
+      .ui-block-b{
+        width:20%;
+      }
+      .ui-block-c{
+        width:20%;
+      }
+      .name{
+        font-size: 0.8em;
+      }
+      .price{
+        font-size: 0.8em;
+        font-weight: bold;
+        color: #FA4638;
+        span{
+          font-weight: lighter;
+          font-size: 0.5em;
+        }
+      }
+      .num{
+        font-size: 0.8em;
+        text-align: center;
+      }
+    }
+  }
 }
