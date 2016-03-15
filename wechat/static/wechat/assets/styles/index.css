@@ -171,7 +171,7 @@ div.popup-window-from-bottom .header span {
   height: 18px;
   line-height: 18px;
   vertical-align: middle;
-  font-size: 0.8em;
+  font-size: 0.9em;
   border-left: solid 4px #38C;
 }
 div.popup-window-from-bottom ul.list {
@@ -189,10 +189,10 @@ div.popup-window-from-bottom ul.list li .item .ui-block-a {
   width: 45%;
 }
 div.popup-window-from-bottom ul.list li .item .ui-block-b {
-  width: 25%;
+  width: 20%;
 }
 div.popup-window-from-bottom ul.list li .item .ui-block-c {
-  width: 25%;
+  width: 30%;
 }
 div.popup-window-from-bottom ul.list li .item .name {
   font-size: 0.8em;
@@ -201,6 +201,7 @@ div.popup-window-from-bottom ul.list li .item .price {
   font-size: 0.8em;
   font-weight: bold;
   color: #FA4638;
+  text-align: center;
 }
 div.popup-window-from-bottom ul.list li .item .price span {
   font-weight: lighter;
@@ -212,6 +213,7 @@ div.popup-window-from-bottom ul.list li .item .num {
 }
 div.popup-window-from-bottom ul.list li .item .num .regulator {
   width: 80px;
+  float: right;
 }
 div.popup-window-from-bottom ul.list li .item .num .regulator .block {
   margin: 5px 0;
