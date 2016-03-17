@@ -20,17 +20,16 @@
     <div class="detail">
       <p class="topic">收到包裹：</p>
       <ul class="list">
-        <li>泰国椰青 5 个</li>
-        <li>菲律宾凤梨 10 个</li>
-        <li>泰国椰青 5 个</li>
-        <li>菲律宾凤梨 10 个</li>
+        {% for commodity_in_order in order.commodityinorder_set.all %}
+          <li>{{commodity_in_order.commodity.title}} {{ commodity_in_order.quantity}} {{commodity_in_order.commodity.spec}}</li>
+        {% endfor %}
       </ul>
     </div>
     <div class="info ui-grid-a">
         <div class="ui-block-a">订单号：</div>
-        <div class="ui-block-b">0000000001</div>
+        <div class="ui-block-b">{{ order.id | stringformat:"09d" }}</div>
         <div class="ui-block-a">团购批次：</div>
-        <div class="ui-block-b">三月时令水果</div>
+        <div class="ui-block-b">{{ order.batch.title }}</div>
         <div class="ui-block-a">备注：</div>
         <div class="ui-block-b">无</div>
       </tr>

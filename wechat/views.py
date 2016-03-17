@@ -26,7 +26,6 @@ def pay_callback(request):
 	return HttpResponse(template.render(context))
 
 def confirm(request):
-	pdb.set_trace()
 	code = request.GET.get('code', None)
 	batch_id = request.GET.get('state', None)
 	if code is None or batch_id is None:
@@ -42,7 +41,7 @@ def confirm(request):
 	headimgurl = result.get('headimgurl', None)
 	try:
 		customer = Customer.objects.get(id_wechat=open_id)
-		order = Order.objects.filter(batch_id=batch_id, customer_id=customer.id)
+		order = Order.objects.filter(batch_id=batch_id, customer_id=customer.id).first()
 		template = loader.get_template('wechat/confirm.html')
 		context = RequestContext(request, {
 			'nickname': nickname,
@@ -50,12 +49,8 @@ def confirm(request):
 			'headimgurl': headimgurl,
 			'order': order
 		})
+		pdb.set_trace()
+		return HttpResponse(template.render(context))
 	except ObjectDoesNotExist:
 		print('Customer Not Found')
 
-def confirm1(request):
-	template = loader.get_template('wechat/confirm.html')
-	context = RequestContext(request, {
-	})
-	return HttpResponse(template.render(context))
-	
