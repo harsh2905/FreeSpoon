@@ -81,7 +81,12 @@ def complete(request):
 
 def qr_confirm(request, order_id):
 	url = auth.gen_order_confirm_url(order_id)
-	img = qrcode.make(url)
+	qr = qrcode.QRCode(
+		version=None
+	)
+	qr.add_data(url)
+	qr.make(fit=True)
+	img = qr.make_image()
 	response = HttpResponse(content_type='image/png')
 	img.save(response, 'PNG')
 	return response
