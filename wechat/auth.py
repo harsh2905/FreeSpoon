@@ -14,12 +14,15 @@ access_token_fetch_url = \
 	'?grant_type=client_credential&appid=%s&secret=%s')
 authorize_url = \
 	('https://open.weixin.qq.com/connect/oauth2/authorize'
-	'?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_base&state=%s#wechat_redirect')
+	'?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_userinfo&state=%s#wechat_redirect')
 web_access_token_fetch_url = \
 	('https://api.weixin.qq.com/sns/oauth2/access_token'
 	'?appid=%s&secret=%s&code=%s&grant_type=authorization_code')
 user_info_fetch_url = \
 	'https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s&lang=zh_CN'
+order_confirm_url = \
+	'http://efarm.com/wechat/confirm'
+
 access_token_expires_time = datetime.min
 access_token = None
 
@@ -44,6 +47,9 @@ def fetch_access_token():
 def gen_authorize_redirect_url(redirect_url, state):
 	return authorize_url % (APPID, redirect_url, state)
 
+def gen_order_confirm_url(order_id):
+	return gen_authorize_redirect_url(order_confirm_url, order_id)
+
 def fetch_web_access_token(code):
 	try:
 		r = requests.get(web_access_token_fetch_url % (APPID, APPSECRET, code))
@@ -63,7 +69,6 @@ def fetch_user_info(access_token, open_id):
 	except Exception, e:
 		pass
 	return None
-
 
 if __name__ == '__main__':
 	print gen_authorize_redirect_url('http://192.168.102.40', '0')
