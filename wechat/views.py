@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import RequestContext, loader
@@ -47,10 +48,41 @@ def confirm(request):
 			'nickname': nickname,
 			'sex': sex,
 			'headimgurl': headimgurl,
-			'order': order
+			'order': order,
+			'datetime': datetime.now()
 		})
-		pdb.set_trace()
 		return HttpResponse(template.render(context))
 	except ObjectDoesNotExist:
 		print('Customer Not Found')
+
+def complete(request):
+	pdb.set_trace()
+	if request.method == 'GET':
+		template = loader.get_template('wechat/error.html')
+		context = RequestContext(request)
+		return HttpResponse(template.render(context))
+	order_id = request.POST.get('order_id', None)
+	if order_id is None:
+		template = loader.get_template('wechat/error.html')
+		context = RequestContext(request)
+		return HttpResponse(template.render(context))
+	try:
+		order = Order.objects.get(pk=order_id)
+		order.status = 1
+		order.save()
+		template = loader.get_template('wechat/complete.html')
+		context = RequestContext(request, {
+			'order': order,
+			'datetime': datetime.now()
+		})
+		return HttpResponse(template.render(context))
+	except ObjectDoesNotExist:
+		print('Customer Not Found')
+
+
+
+
+
+
+
 
