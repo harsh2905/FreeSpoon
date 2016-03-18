@@ -8,27 +8,38 @@
     <link rel="stylesheet" href="{% static 'wechat/assets/styles/report.css' %}" />
 </head>
 <body>
+  <img class="qr" src="/wechat/qr/confirm/{{ batch.id }}" />
   <div class="title">
     {{ batch.title }} - {{ distributer.name }}
-    <img src="qr/confirm/{{ batch.id }}" />
   </div>
-  <table>
-    <tr>
-      <th>昵称</th>
-      <th>电话号码</th>
-      <th>订单详情</th>
-      <th>备注</th>
-      <th></th>
-      <th></th>
-    </tr>
-    <tr>
-      <td>a</td>
-      <td>186****3725</td>
-      <td>3个泰国椰青，10个菲律宾凤梨，2盒红颜草莓</td>
-      <td>无</td>
-      <td></td>
-      <td></td>
-    </tr>
-  </table>
+  <div class="wrap">
+    <table class="report">
+      <tr>
+        <th>昵称</th>
+        <th>电话号码</th>
+        <th>订单详情</th>
+        <th>备注</th>
+        <th></th>
+        <th></th>
+      </tr>
+      {% for order in orders %}
+      <tr>
+        <td>{{ order.customer.nick_name }}</td>
+        <td>{{ order.customer.tel | slice:":3" }}****{{ order.customer.tel | slice:"8:" }}</td>
+        <td>
+          {% for commodity_in_order in order.commodityinorder_set.all %}
+          {{ commodity_in_order.quantity }}
+          {{ commodity_in_order.commodity.spec }}
+          {{ commodity_in_order.commodity.title }}
+          <br />
+          {% endfor %}
+        </td>
+        <td>无</td>
+        <td></td>
+        <td></td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
 </body>
 </html>

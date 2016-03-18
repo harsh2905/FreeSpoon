@@ -1,0 +1,42 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "微软雅黑";
+  font-size: 16px;
+}
+body {
+  padding: 10px;
+}
+img.qr {
+  width: 120px;
+  height: 120px;
+  position: absolute;
+  left: 5px;
+  top: 5px;
+}
+.title {
+  height: 120px;
+  line-height: 120px;
+  vertical-align: middle;
+  text-align: center;
+  background: #FFF;
+  font-size: 1em;
+  font-weight: bold;
+}
+.wrap .report {
+  width: 100%;
+  border-collapse: collapse;
+}
+.wrap .report th,
+.wrap .report td {
+  padding: 10px;
+  border: 1px solid #DDD;
+  font-size: 0.8em;
+}
+.wrap .report th {
+  text-align: left;
+  background: #EEE;
+}
+.wrap .report td {
+  min-width: 100px;
+}
