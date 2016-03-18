@@ -47,8 +47,8 @@ def fetch_access_token():
 def gen_authorize_redirect_url(redirect_url, state):
 	return authorize_url % (APPID, redirect_url, state)
 
-def gen_order_confirm_url(order_id):
-	return gen_authorize_redirect_url(order_confirm_url, order_id)
+def gen_order_confirm_url(batch_id):
+	return gen_authorize_redirect_url(order_confirm_url, batch_id)
 
 def fetch_web_access_token(code):
 	try:

@@ -6,7 +6,7 @@ from django.template import RequestContext, loader
 from django.core.exceptions import ObjectDoesNotExist
 import qrcode
 
-from console.models import Batch, Customer, Order
+from console.models import Batch, Customer, Order, Distributer
 from wechat import auth
 
 import pdb
@@ -79,8 +79,8 @@ def complete(request):
 	except ObjectDoesNotExist:
 		print('Customer Not Found')
 
-def qr_confirm(request, order_id):
-	url = auth.gen_order_confirm_url(order_id)
+def qr_confirm(request, batch_id):
+	url = auth.gen_order_confirm_url(batch_id)
 	qr = qrcode.QRCode(
 		version=None
 	)
@@ -91,7 +91,22 @@ def qr_confirm(request, order_id):
 	img.save(response, 'PNG')
 	return response
 
-
+def order_report(request, batch_id, dist_id):
+	try:
+		batch = Batch.objects.get(pk=batch_id)
+		dist = Distributer.objects.get(pk=dist_id)
+		orders = Order.objects.filter(batch_id=batch.id, distributer_id=dist.id).all()
+		template = loader.get_template('wechat/order_report.html')
+		context = RequestContext(request, {
+			'batch': batch,
+			'distributer': dist,
+			'orders': orders,
+			'datetime': datetime.now()
+		})
+		return HttpResponse(template.render(context))
+	except ObjectDoesNotExist:
+		print('Customer Not Found')
+		
 
 
 

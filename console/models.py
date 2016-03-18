@@ -74,6 +74,7 @@ class Distributer(models.Model):
 class Order(models.Model):
 	customer = models.ForeignKey(Customer)
 	batch = models.ForeignKey(Batch)
+	distributer = models.ForeignKey(Distributer)
 	commodities = models.ManyToManyField(Commodity, through='CommodityInOrder')
 	create_time = models.DateTimeField(auto_now=True)
 	status = models.IntegerField(max_length=10)
