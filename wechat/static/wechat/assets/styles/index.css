@@ -28,21 +28,21 @@ ul.commodity-list li {
   border-bottom: solid 1px #DDD;
   display: block;
   margin-top: 20px;
-  padding: 8px;
+  padding: 8px 8px 0;
   background: #FFF;
 }
 ul.commodity-list li .title {
   width: 100%;
   height: 20px;
   line-height: 20px;
-  padding-bottom: 8px;
+  padding-bottom: 8px 8px 0;
   vertical-align: middle;
   font-size: 0.8em;
   font-weight: bold;
 }
 ul.commodity-list li .content {
   width: 100%;
-  padding: 0 8px 12px 5px;
+  padding: 2px 8px 12px 0;
   height: 100px;
 }
 ul.commodity-list li .content .slide {
@@ -61,12 +61,54 @@ ul.commodity-list li .content .detail {
 }
 ul.commodity-list li .content .detail .commodity-name,
 ul.commodity-list li .content .detail .commodity-spec,
-ul.commodity-list li .content .detail .commodity-num,
-ul.commodity-list li .content .detail .commodity-price {
+ul.commodity-list li .content .detail .commodity-num {
   height: 20px;
   line-height: 20px;
   vertical-align: middle;
   display: block;
+}
+ul.commodity-list li .content .detail .commodity-price-wrapper {
+  height: 30px;
+  margin-top: 5px;
+}
+ul.commodity-list li .content .detail .commodity-price-wrapper .commodity-price {
+  height: 30px;
+  line-height: 30px;
+  vertical-align: middle;
+  display: block;
+  font-weight: bold;
+  color: #FA4638;
+  float: left;
+}
+ul.commodity-list li .content .detail .commodity-price-wrapper .commodity-price span {
+  font-weight: lighter;
+  font-size: 0.5em;
+}
+ul.commodity-list li .content .detail .commodity-price-wrapper .regulator {
+  width: 80px;
+  height: 24px;
+  padding: 3px 0;
+  float: right;
+}
+ul.commodity-list li .content .detail .commodity-price-wrapper .regulator .block {
+  margin-right: 5px;
+  height: 24px;
+  line-height: 24px;
+  width: 24px;
+  vertical-align: middle;
+  display: inline-block;
+  text-decoration: none;
+  font-weight: bold;
+  color: #FFF;
+  float: right;
+  text-align: center;
+  border-radius: 50%;
+  background: #FA4638;
+}
+ul.commodity-list li .content .detail .commodity-price-wrapper .regulator .left:active,
+ul.commodity-list li .content .detail .commodity-price-wrapper .regulator .right:active {
+  background: #FFF;
+  color: #000;
 }
 ul.commodity-list li .content .detail .commodity-name {
   font-weight: bold;
@@ -79,29 +121,11 @@ ul.commodity-list li .content .detail .commodity-num {
   font-size: 0.6em;
   margin-bottom: 0;
 }
-ul.commodity-list li .content .detail .commodity-price {
-  font-weight: bold;
-  margin-top: 10px;
-  color: #FA4638;
-}
-ul.commodity-list li .content .detail .commodity-price span {
-  font-weight: lighter;
-  font-size: 0.5em;
-}
 ul.commodity-list li .actions {
   width: 100%;
   border-top: solid 1px #DDD;
   height: 40px;
   line-height: 40px;
-}
-ul.commodity-list li .actions a {
-  background: #A5DE37;
-  border: #A5DE37;
-  color: #FFF;
-  font-weight: lighter;
-  float: right;
-  display: inline-block;
-  margin: 10px 0 0 10px;
 }
 .footer {
   position: fixed;
@@ -179,6 +203,9 @@ div.popup-window-from-bottom ul.list {
   overflow: scroll;
   max-height: 244px;
 }
+div.popup-window-from-bottom ul.list ._cart_template {
+  display: none;
+}
 div.popup-window-from-bottom ul.list li {
   display: block;
   width: auto;
@@ -200,14 +227,18 @@ div.popup-window-from-bottom ul.list li .item .name {
   font-size: 0.8em;
 }
 div.popup-window-from-bottom ul.list li .item .price {
-  font-size: 0.8em;
   font-weight: bold;
   color: #FA4638;
   text-align: center;
 }
-div.popup-window-from-bottom ul.list li .item .price span {
+div.popup-window-from-bottom ul.list li .item .price span.sign {
   font-weight: lighter;
   font-size: 0.5em;
+}
+div.popup-window-from-bottom ul.list li .item .price span.text {
+  height: auto;
+  font-size: 0.8em;
+  font-weight: bold;
 }
 div.popup-window-from-bottom ul.list li .item .num {
   font-size: 0.8em;

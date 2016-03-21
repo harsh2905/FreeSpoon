@@ -2,6 +2,9 @@ from datetime import datetime
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import RequestContext, loader
+from django.utils.safestring import SafeString
+
+import json
 
 from django.core.exceptions import ObjectDoesNotExist
 import qrcode
@@ -17,8 +20,18 @@ def index(request, batch_id):
 	#return HttpResponse(batch_id)
 	batch = Batch.objects.get(pk=batch_id)
 	template = loader.get_template('wechat/index.html')
+	commodities = {}
+	for commodityinbatch in batch.commodityinbatch_set.all():
+		commodity = {}
+		commodity['id'] = commodityinbatch.id
+		commodity['title'] = commodityinbatch.commodity.title
+		commodity['unit_price'] = long(commodityinbatch.unit_price)
+		commodity['quota'] = commodityinbatch.quota
+		commodities[str(commodityinbatch.id)] = commodity
+	commoditiesJson = json.dumps(commodities)
 	context = RequestContext(request, {
 		'batch': batch,
+		'commoditiesJson': SafeString(commoditiesJson)
 	})
 	return HttpResponse(template.render(context))
 

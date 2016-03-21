@@ -33,7 +33,7 @@ ul.commodity-list{
     border-bottom: solid 1px #DDD;
     display: block;
     margin-top: 20px;
-    @padding: 8px;
+    @padding: 8px 8px 0;
     padding: @padding;
     background: #FFF;
     .title{
@@ -48,7 +48,7 @@ ul.commodity-list{
     }
     .content{
       width: 100%;
-      padding: 0 8px 12px 5px;
+      padding: 2px 8px 12px 0;
       @height:100px;
       height: @height;
       .slide{
@@ -64,12 +64,57 @@ ul.commodity-list{
         height:@height;
         width:auto;
         padding-left: @height * 5 / 4 + 10px;
-        .commodity-name,.commodity-spec,.commodity-num,.commodity-price{
+        .commodity-name,.commodity-spec,.commodity-num{
           @height: 20px;
           height: @height;
           line-height: @height;
           vertical-align: middle;
           display: block;
+        }
+        .commodity-price-wrapper{
+          @height: 30px;
+          height: @height;
+          margin-top: 5px;
+          .commodity-price{
+            height: @height;
+            line-height: @height;
+            vertical-align: middle;
+            display: block;
+            font-weight: bold;
+            color: #FA4638;
+            float: left;
+            span{
+              font-weight: lighter;
+              font-size: 0.5em;
+            }
+          }
+          .regulator{
+            width: 80px;
+            @height_: @height - 6px;
+            height: @height_;
+            padding: 3px 0;
+            float: right;
+            .block{
+              @margin: 5px;
+              margin-right: @margin;
+              height: @height_;
+              line-height: @height_;
+              width: @height_;
+              vertical-align: middle;
+              display: inline-block;
+              text-decoration: none;
+              font-weight: bold;
+              color: #FFF;
+              float: right;
+              text-align: center;
+              border-radius: 50%;
+              background: #FA4638;
+            }
+            .left:active,.right:active{
+              background: #FFF;
+              color: #000;
+            }
+          }
         }
         .commodity-name{
           font-weight: bold;
@@ -81,15 +126,6 @@ ul.commodity-list{
           font-size: 0.6em;
           margin-bottom: 0;
         }
-        .commodity-price{
-          font-weight: bold;
-          margin-top: 10px;
-          color: #FA4638;
-          span{
-            font-weight: lighter;
-            font-size: 0.5em;
-          }
-        }
       }
     }
     .actions{
@@ -97,15 +133,6 @@ ul.commodity-list{
       border-top: solid 1px #DDD;
       height: 40px;
       line-height: 40px;
-      a{
-        background: #A5DE37;
-        border: #A5DE37;
-        color: #FFF;
-        font-weight: lighter;
-        float:right;
-        display: inline-block;
-        margin: 10px 0 0 10px;
-      }
     }
   }
 }
@@ -184,6 +211,9 @@ div.popup-window-from-bottom{
     display: block;
     overflow: scroll;
     max-height: 244px;
+    ._cart_template{
+      display: none;
+    }
     li{
       display: block;
       width: auto;
@@ -206,13 +236,17 @@ div.popup-window-from-bottom{
           font-size: 0.8em;
         }
         .price{
-          font-size: 0.8em;
           font-weight: bold;
           color: #FA4638;
           text-align: center;
-          span{
+          span.sign{
             font-weight: lighter;
             font-size: 0.5em;
+          }
+          span.text{
+            height: auto;
+            font-size: 0.8em;
+            font-weight: bold;
           }
         }
         .num{

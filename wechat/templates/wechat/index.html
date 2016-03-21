@@ -3,7 +3,7 @@
 <html lang="zh-cn">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>{{ batch.title }}</title>
     <!--<link rel="stylesheet" href="assets/styles/pure-min.css" />-->
     <link rel="stylesheet" href="{% static 'wechat/assets/styles/jquery.mobile.structure-1.4.5.css' %}" />
@@ -13,6 +13,57 @@
     <script type="text/javascript" src="{% static 'wechat/assets/scripts/jquery-1.12.1.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'wechat/assets/scripts/jquery.mobile-1.4.5.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'wechat/assets/scripts/index.js' %}"></script>
+    <script type="text/javascript">
+      $(function(){
+        var commodities = (new Function('', 'return ' + '{{ commoditiesJson }}'))();
+        var cart = $('._cart');
+        var template = $('._cart_template');
+        console.log(commodities);
+        window.addCommodity = function(id){
+          var commodity = commodities[id];
+          if(!!commodity){
+            if(!commodity.domObject){
+              var item = template.clone();
+              commodity.domObject = item;
+              commodity.quantity = 1;
+              item.find('._field_title').text(commodity.title);
+              item.find('._field_unit_price').text(commodity.unit_price);
+              item.find('._field_quantity').text(1);
+              (function(id){
+                item.find('._button_remove').click(function(){
+                  window.removeCommodity(id);
+                });
+                item.find('._button_add').click(function(){
+                  window.addCommodity(id);
+                });
+              })(id);
+              cart.append(item);
+              item.removeClass('_cart_template');
+            } else {
+              commodity.quantity += 1;
+              commodity.domObject.find('._field_quantity')
+                .text(commodity.quantity);
+            }
+          }
+        }
+        window.removeCommodity = function(id){
+          var commodity = commodities[id];
+          if(!!commodity){
+            if(!!commodity.domObject){
+              if(commodity.quantity > 1){
+                commodity.quantity -= 1;
+                commodity.domObject.find('._field_quantity')
+                  .text(commodity.quantity);
+              } else {
+                commodity.quantity -= 1;
+                commodity.domObject.remove();
+                commodity.domObject = null;
+              }
+            }
+          }
+        }
+      });
+    </script>
 </head>
 <body>
   <div class="navbar">
@@ -32,12 +83,18 @@
           <p class="commodity-name">{{ commodity_in_batch.commodity.title }}</p>
           <p class="commodity-spec">类型：{{ commodity_in_batch.commodity.spec }}</p>
           <p class="commodity-num">库存：{{ commodity_in_batch.commodity.stock }}</p>
-          <p class="commodity-price"><span>￥</span>{{ commodity_in_batch.unit_price }}</p>
+          <div class="commodity-price-wrapper">
+            <p class="commodity-price">
+              <span>￥</span>{{ commodity_in_batch.unit_price }}
+              <div class="regulator">
+                <a class="block right" onclick="addCommodity({{ commodity_in_batch.id }})" href="javascript:void(0);">+</a>
+                <a class="block left" onclick="removeCommodity({{ commodity_in_batch.id }})" href="javascript:void(0);">-</a>
+              </div>
+            </p>
+          </div>
         </div>
       </div>
       <div class="actions">
-        <a href="javascript:void(0);" class="button button-primary button-rounded button-small">分享</a>
-        <a href="javascript:void(0);" class="button button-primary button-rounded button-small">团购</a>
       </div>
     </li>
     {% endfor %}
@@ -73,94 +130,16 @@
     <div class="header">
       <span>购物车</span>
     </div>
-    <ul class="list">
-      <li>
+    <ul class="list _cart">
+      <li class="_cart_template">
         <div class="item ui-grid-a">
-          <div class="ui-block-a name">菲律宾凤梨</div>
-          <div class="ui-block-b price"><span>￥</span>28.00</div>
+          <div class="ui-block-a name _field_title"></div>
+          <div class="ui-block-b price"><span class="sign">￥</span><span class="text _field_unit_price"><span></div>
           <div class="ui-block-c num">
             <div class="regulator">
-              <a class="block left" href="javascript:void(0);">-</a>
-              <span class="block center">99</span>
-              <a class="block right" href="javascript:void(0);">+</a>
-            </div>
-          </div>
-        </div>
-      </li>
-      <li>
-        <div class="item ui-grid-a">
-          <div class="ui-block-a name">菲律宾凤梨</div>
-          <div class="ui-block-b price"><span>￥</span>28.00</div>
-          <div class="ui-block-c num">
-            <div class="regulator">
-              <a class="block left" href="javascript:void(0);">-</a>
-              <span class="block center">99</span>
-              <a class="block right" href="javascript:void(0);">+</a>
-            </div>
-          </div>
-        </div>
-      </li>
-      <li>
-        <div class="item ui-grid-a">
-          <div class="ui-block-a name">菲律宾凤梨</div>
-          <div class="ui-block-b price"><span>￥</span>28.00</div>
-          <div class="ui-block-c num">
-            <div class="regulator">
-              <a class="block left" href="javascript:void(0);">-</a>
-              <span class="block center">99</span>
-              <a class="block right" href="javascript:void(0);">+</a>
-            </div>
-          </div>
-        </div>
-      </li>
-      <li>
-        <div class="item ui-grid-a">
-          <div class="ui-block-a name">菲律宾凤梨</div>
-          <div class="ui-block-b price"><span>￥</span>28.00</div>
-          <div class="ui-block-c num">
-            <div class="regulator">
-              <a class="block left" href="javascript:void(0);">-</a>
-              <span class="block center">99</span>
-              <a class="block right" href="javascript:void(0);">+</a>
-            </div>
-          </div>
-        </div>
-      </li>
-      <li>
-        <div class="item ui-grid-a">
-          <div class="ui-block-a name">菲律宾凤梨</div>
-          <div class="ui-block-b price"><span>￥</span>28.00</div>
-          <div class="ui-block-c num">
-            <div class="regulator">
-              <a class="block left" href="javascript:void(0);">-</a>
-              <span class="block center">99</span>
-              <a class="block right" href="javascript:void(0);">+</a>
-            </div>
-          </div>
-        </div>
-      </li>
-      <li>
-        <div class="item ui-grid-a">
-          <div class="ui-block-a name">菲律宾凤梨</div>
-          <div class="ui-block-b price"><span>￥</span>28.00</div>
-          <div class="ui-block-c num">
-            <div class="regulator">
-              <a class="block left" href="javascript:void(0);">-</a>
-              <span class="block center">99</span>
-              <a class="block right" href="javascript:void(0);">+</a>
-            </div>
-          </div>
-        </div>
-      </li>
-      <li>
-        <div class="item ui-grid-a">
-          <div class="ui-block-a name">菲律宾凤梨</div>
-          <div class="ui-block-b price"><span>￥</span>28.00</div>
-          <div class="ui-block-c num">
-            <div class="regulator">
-              <a class="block left" href="javascript:void(0);">-</a>
-              <span class="block center">99</span>
-              <a class="block right" href="javascript:void(0);">+</a>
+              <a class="block left _button_remove" href="javascript:void(0);">-</a>
+              <span class="block center _field_quantity"></span>
+              <a class="block right _button_add" href="javascript:void(0);">+</a>
             </div>
           </div>
         </div>
