@@ -27,7 +27,7 @@
               commodity.domObject = item;
               commodity.quantity = 1;
               item.find('._field_title').text(commodity.title);
-              item.find('._field_unit_price').text(commodity.unit_price);
+              item.find('._field_price').text(commodity.unit_price.toFixed(2));
               item.find('._field_quantity').text(1);
               (function(id){
                 item.find('._button_remove').click(function(){
@@ -43,6 +43,8 @@
               commodity.quantity += 1;
               commodity.domObject.find('._field_quantity')
                 .text(commodity.quantity);
+              commodity.domObject.find('._field_price')
+                .text((commodity.unit_price * commodity.quantity).toFixed(2));
             }
           }
         }
@@ -54,6 +56,8 @@
                 commodity.quantity -= 1;
                 commodity.domObject.find('._field_quantity')
                   .text(commodity.quantity);
+                commodity.domObject.find('._field_price')
+                  .text((commodity.unit_price * commodity.quantity).toFixed(2));
               } else {
                 commodity.quantity -= 1;
                 commodity.domObject.remove();
@@ -134,7 +138,7 @@
       <li class="_cart_template">
         <div class="item ui-grid-a">
           <div class="ui-block-a name _field_title"></div>
-          <div class="ui-block-b price"><span class="sign">￥</span><span class="text _field_unit_price"><span></div>
+          <div class="ui-block-b price"><span class="sign">￥</span><span class="text _field_price"><span></div>
           <div class="ui-block-c num">
             <div class="regulator">
               <a class="block left _button_remove" href="javascript:void(0);">-</a>
