@@ -21,6 +21,7 @@ class Batch(models.Model):
 	title = models.CharField(max_length=200)
 	desc = models.CharField(max_length=255)
 	leader = models.ForeignKey(Leader)
+	distributers = models.ManyToManyField('Distributer')
 	commodities = models.ManyToManyField('Commodity', through='CommodityInBatch')
 	start_time = models.DateTimeField(auto_now=True)
 	end_time = models.DateTimeField()
@@ -68,6 +69,7 @@ class Distributer(models.Model):
 	avatar = models.ImageField(upload_to='avatars', blank=True)
 	tail = models.CharField(max_length=255, blank=True)
 	create_time = models.DateTimeField(auto_now=True)
+	location = models.TextField()
 	def __unicode__(self):
 		return self.name
 

@@ -32,6 +32,8 @@ class BatchAdmin(admin.ModelAdmin):
 			'start_time', 'end_time', 'status')
 	list_filter = ['start_time']
 	search_fields = ['title']
+	model = Batch
+	filter_horizontal = ('distributers',)
 
 class CommodityInOrderInline(admin.TabularInline):
 	model = CommodityInOrder
