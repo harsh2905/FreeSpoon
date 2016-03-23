@@ -2,32 +2,50 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="viewport" content="height=device-height,width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <title>订单详情</title>
+    <link rel="stylesheet" href="assets/styles/reset.css">
     <link rel="stylesheet" href="assets/styles/font-awesome.min.css">
     <link rel="stylesheet" href="assets/styles/buttons.css">
     <link rel="stylesheet" href="assets/styles/goodsList.css"/>
+    <script type="text/javascript">
+        if (/AppleWebKit.*Mobile/i.test(navigator.userAgent) || (/MIDP|SymbianOS|NOKIA|SAMSUNG|LG|NEC|TCL|Alcatel|BIRD|DBTEL|Dopod|PHILIPS|HAIER|LENOVO|MOT-|Nokia|SonyEricsson|SIE-|Amoi|ZTE/.test(navigator.userAgent))) {
+            if (/Android|Windows Phone|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+
+            } else if (/iPad/i.test(navigator.userAgent)) {
+
+            }
+        } else {
+        }
+    </script>
+    <script>
+        var winW = document.documentElement.clientWidth;
+        document.documentElement.style.fontSize =winW/6.4+"px";
+    </script>
 </head>
-<body style="background: #f0f2f5">
+<body>
 <header>
-    <!--<span><i class="icon-chevron-left icon-large"></i></span>-->
+    <span class="return"><i class="icon-chevron-left icon-large"></i></span>
     <div class="navbar">
         <p class="title">订单详情</p>
     </div>
 </header>
 <section >
     <div class="tab">
-       <form method="post">
-           <p>手机号：<input type="text"/></p>
-           <p>自提点：</p>
-       </form>
+
     </div>
     <div class="goods">
         <p>商品详情</p>
         <ul>
-            <li><img src="assets/demo/1.jpg" alt=""/></li>
-            <li><img src="assets/demo/1.jpg" alt=""/></li>
-            <li><img src="assets/demo/1.jpg" alt=""/></li>
+            <li><span>海鲜</span><span>1</span><span>50</span></li>
+            <li><span>苹果</span><span>3</span><span>5</span></li>
+            <li><span>鱼</span><span>5</span><span>12</span></li>
+        </ul>
+        <ul class="other">
+            <li><span>配送费用</span><span>10</span></li>
+        </ul>
+        <ul  class="other">
+        <li><span>统计</span><span>500</span></li>
         </ul>
     </div>
 </section>

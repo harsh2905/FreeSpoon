@@ -1,12 +1,6 @@
-* {
-  margin: 0;
-  padding: 0;
-  font-family: "微软雅黑";
-  font-size: 16px;
-}
-ul,
-li {
-  list-style: none;
+body {
+  font-size: 0.4rem;
+  background: #f0f2f5;
 }
 header {
   position: fixed;
@@ -14,9 +8,15 @@ header {
   top: 0;
   z-index: 100;
 }
-.navbar {
-  height: 40px;
-  line-height: 40px;
+header .return {
+  position: absolute;
+  z-index: 100;
+  margin-left: 0.3rem;
+  margin-top: 0.25rem;
+}
+header .navbar {
+  height: 1rem;
+  line-height: 1.1rem;
   vertical-align: middle;
   opacity: 0.9;
   width: 100%;
@@ -24,64 +24,79 @@ header {
   text-align: center;
   border-bottom: solid 1px #DDD;
 }
-.navbar .title {
+header .navbar .title {
   display: inline-block;
-  height: 40px;
-  line-height: 44px;
-  font-size: 0.9em;
+  height: 1rem;
+  line-height: 1rem;
+  font-size: 0.4rem;
 }
 section {
   width: 100%;
   position: absolute;
-  top: 40px;
+  top: 1rem;
 }
 section .tab {
-  margin-top: 10px;
+  margin-top: 0.3rem;
   background: white;
   width: 100%;
-  padding: 10px;
+  padding: 0.3rem;
 }
 section .goods {
-  margin-top: 10px;
+  margin-top: 0.3rem;
   background: white;
   width: 100%;
 }
 section .goods p {
-  padding: 10px;
-  border-bottom: 2px solid #f0f2f5;
+  padding: 0.2rem;
+  border-bottom: 2px dashed #f0f2f5;
 }
 section .goods ul {
   border-bottom: 2px dashed #f0f2f5;
+  margin-top: 0.1rem;
 }
 section .goods ul li {
-  padding: 0 20px;
+  font-size: 0.3rem;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  padding: 0.1rem;
 }
-section .goods ul li img {
+section .goods ul li span {
+  text-align: center;
   display: block;
-  width: 30%;
-  height: 30%;
+  width: 1.5rem;
+  padding: 0.1rem;
+}
+section .goods .other {
+  font-size: 0.3rem;
+}
+section .goods .other li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 footer {
   position: fixed;
   bottom: 0px;
-  height: 36px;
-  line-height: 36px;
+  height: 0.8rem;
+  line-height: 0.8rem;
   vertical-align: middle;
   opacity: .9;
   width: 100%;
   z-index: 1100;
   background: #E9E9E9;
 }
+footer span {
+  display: inline-block;
+  padding-left: 1.5rem;
+  font-size: 0.3rem;
+}
 footer a {
   color: white;
   text-decoration: none;
   display: block;
   float: right;
-  width: 30%;
+  width: 35%;
   text-align: center;
   background: #FA4638;
-}
-footer span {
-  display: inline-block;
-  padding-left: 35%;
 }
