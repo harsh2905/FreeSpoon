@@ -93,3 +93,13 @@ a:hover {
 ins, a {
     text-decoration: none
 }
+a:link {
+    text-decoration: none;
+    color: #F60;
+}
+a:visited {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: none;
+}

@@ -1,0 +1,153 @@
+body,html{
+  font-size: 0.25rem;
+  background: #f0f2f5;
+  color: #464646;
+  height: 100%;
+  font-family: '微软雅黑', Helvetica, Tahoma, Arial, '华文细黑', sans-serif;
+}
+  @header_height:0.7rem;
+  .pun-header{
+    z-index: 100;
+    position: fixed;
+    width: 100%;
+    top:0;
+    height: @header_height;
+    background: #fbfcff;
+    border-bottom: solid 1px #c8c8c8;
+    .icon{
+      width:@header_height;
+      display: block;
+      padding: 0.2rem;
+    }
+    .header-content{
+      width: 100%;
+      position: absolute;
+      top:0;
+      text-align: center;
+      font-size: 0.3rem;
+      line-height: @header_height;
+      font-weight: bold;
+      -webkit-user-select: none;
+    }
+  }
+  .adds{
+    margin: 0.2rem 0;
+    padding: 2px 18px;
+    background: white;
+    position: relative;
+    top: 0.7rem;
+    .adds-table{
+      width: 100%;
+      tr{
+        display: table-row;
+        vertical-align: inherit;
+        border-color: inherit;
+      }
+      tr th{
+        padding: 0.2rem 0;
+        font-weight: 400;
+        text-align: left;
+        vertical-align: baseline;
+      }
+      tr td{
+        padding:0.2rem 0;
+      }
+    }
+  }
+  .cart-group{
+    background: white;
+    padding: 5px 0 0 0;
+    border-top: solid 1px #c8c8c8;
+    border-bottom: solid 1px #c8c8c8;
+    margin-bottom: @header_height;
+    font-size: 0.3rem;
+    position: relative;
+    top: 0.7rem;
+    .group-comment{
+      position: relative;
+      padding-left:  0.3rem;
+      .comment-wrapper{
+        position: absolute;
+        left: 1.5rem;
+        top: 0;
+        bottom: 0;
+        input{
+          width:  4.5rem;
+          height: 0.7rem;
+          border: solid 1px #cecece;
+          text-indent: 0.1rem;
+          border-radius: 5px;
+          margin-left: 0.2rem;
+          -webkit-appearance: none;
+        }
+      }
+    }
+    .block{
+      line-height: 1rem;
+    }
+    .spline{
+      border-bottom: solid 1px #c8c8c8;
+    }
+    .group-list{
+      width: 100%;
+      border-collapse: collapse;
+      border-spacing: 0;
+      table-layout: fixed;
+      tr td{
+        text-align: center;
+      }
+      tr td:nth-child(1){
+        padding-left: 14px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        width: 3rem;
+      }
+    }
+  }
+  .footer {
+    position: fixed;
+    bottom: 0px;
+    height: @header_height;
+    line-height: @header_height;
+    vertical-align: middle;
+    opacity: .9;
+    width: 100%;
+    z-index: 1100;
+    background: #E9E9E9;
+    span {
+      display: inline-block;
+      padding-left: 1.5rem;
+      font-size: 0.25rem;
+    }
+    a {
+      font-size: 0.25rem;
+      color: white;
+      display: block;
+      float: right;
+      width: 35%;
+      text-align: center;
+      background: #FA4638;
+    }
+  }
+.wrtAds{
+  position: relative;
+  top:0.7rem;
+  width: 100%;
+  form{
+  ul{
+    background: white;
+    margin: 0.2rem 0;
+    li{
+        height: 1rem;
+    }
+  }
+    input{
+      width: 100%;
+      height: 0.7rem;
+      background: white;
+      text-align: center;
+    }
+  }
+
+}
