@@ -6,6 +6,13 @@ html {
   height: 100%;
   font-family: '微软雅黑', Helvetica, Tahoma, Arial, '华文细黑', sans-serif;
 }
+#one {
+  height: 100%;
+}
+#two {
+  height: 100%;
+  display: none;
+}
 .pun-header {
   z-index: 100;
   position: fixed;
@@ -139,10 +146,20 @@ html {
   background: white;
   margin: 0.2rem 0;
 }
-.wrtAds form ul li {
-  height: 1rem;
+.wrtAds form ul .list_li {
+  border-bottom: 1px dashed #c8c8c8;
 }
-.wrtAds form input {
+.wrtAds form ul .list_name {
+  display: inline-block;
+  width: 2rem;
+  padding: 0.2rem 0.2rem;
+}
+.wrtAds form ul .list_name .infor {
+  width: 50%;
+  height: 0.7rem;
+  float: left;
+}
+.wrtAds form .sure {
   width: 100%;
   height: 0.7rem;
   background: white;
