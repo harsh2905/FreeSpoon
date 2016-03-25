@@ -22,8 +22,7 @@ body,html{
     background: #fbfcff;
     border-bottom: solid 1px #c8c8c8;
     .icon{
-      width:@header_height;
-      display: block;
+      width:@header_height + 0.3rem;
       padding: 0.2rem;
     }
     .header-content{
@@ -100,15 +99,20 @@ body,html{
       border-collapse: collapse;
       border-spacing: 0;
       table-layout: fixed;
-      tr td{
-        text-align: center;
-      }
       tr td:nth-child(1){
         padding-left: 14px;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
         width: 3rem;
+        text-align: left;
+      }
+      tr td:nth-child(2){
+        text-align: center;
+      }
+      tr td:nth-child(3){
+        text-align: right;
+        padding-right: 20px;
       }
     }
   }
@@ -141,7 +145,7 @@ body,html{
   position: relative;
   top:0.7rem;
   width: 100%;
-  form{
+  div{
   ul{
     background: white;
     margin: 0.2rem 0;
@@ -157,6 +161,18 @@ body,html{
         height: 0.7rem;
         float: left;
       }
+    }
+    .list_i{
+      float: right;
+      padding: 0.2rem 0.2rem;
+    }
+    .add_massage{
+      padding: 0.2rem 0.3rem;
+      border-bottom:  1px dashed #c8c8c8;
+      font-size: 0.2rem;
+    }
+    .add_massage:hover{
+      background: #EC9B45;
     }
   }
     .sure{

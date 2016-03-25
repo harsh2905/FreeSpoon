@@ -2,88 +2,82 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="height=device-height,width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="viewport"
+          content="height=device-height,width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <title>购物车</title>
     <link rel="stylesheet" href="assets/styles/jquery.mobile-1.4.5.min.css">
     <link rel="stylesheet" href="assets/styles/reset.css">
     <link rel="stylesheet" href="assets/styles/goods.css">
     <link rel="stylesheet" href="assets/styles/font-awesome.min.css">
     <script type="text/javascript" src="assets/scripts/jquery-1.12.1.min.js"></script>
-    <script type="text/javascript">
-        if (/AppleWebKit.*Mobile/i.test(navigator.userAgent) || (/MIDP|SymbianOS|NOKIA|SAMSUNG|LG|NEC|TCL|Alcatel|BIRD|DBTEL|Dopod|PHILIPS|HAIER|LENOVO|MOT-|Nokia|SonyEricsson|SIE-|Amoi|ZTE/.test(navigator.userAgent))) {
-            if (/Android|Windows Phone|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
-
-            } else if (/iPad/i.test(navigator.userAgent)) {
-
-            }
-        } else {
-        }
-    </script>
     <script>
         var winW = document.documentElement.clientWidth;
-        document.documentElement.style.fontSize =winW/6.4+"px";
+        document.documentElement.style.fontSize = winW / 6.4 + "px";
     </script>
 </head>
 <body>
 <div id="one">
-<div class="pun-header">
-    <a class="icon" href="">
-        <i class="icon-chevron-left icon-large"></i>
-    </a>
-    <div class="header-content">购物车</div>
-</div>
-<div class="adds" id="adds">
-    <table class="adds-table">
-        <tr>
-            <th>收货人</th>
-            <td>张三</td>
-        </tr>
-        <tr>
-            <th>电话</th>
-            <td>123454756564</td>
-        </tr>
-        <tr>
-            <th>收货地址</th>
-            <td>北京市丰田台区大连国际</td>
-        </tr>
-    </table>
-</div>
-<div class="cart-group">
-    <div class="group-comment block spline">收货备注
-    <div class="comment-wrapper">
-        <input type="text" placeholder="可输入100字以内特殊要求内容" maxlength="100"/>
+    <div class="pun-header">
+        <div class="icon" id="black">
+            <i class="icon-chevron-left icon-large"></i>
+        </div>
+        <div class="header-content">购物车</div>
     </div>
+    <div class="adds" id="adds">
+        <table class="adds-table">
+            <tr>
+                <th>电话</th>
+                <td>请填写您的联系方式</td>
+            </tr>
+            <tr>
+                <th>收货地址</th>
+                <td>北京市丰田台区大连国际</td>
+            </tr>
+        </table>
     </div>
-    <table class="group-list" id="group-list"></table>
+    <div class="cart-group">
+        <div class="group-comment block spline">收货备注
+            <div class="comment-wrapper">
+                <input type="text" placeholder="可输入100字以内特殊要求内容" maxlength="100"/>
+            </div>
+        </div>
+        <table class="group-list" id="group-list"></table>
+    </div>
+    <div class="footer">
+        <span>实付款：2000</span>
+        <a href="#">提交订单</a>
+    </div>
 </div>
-<div class="footer">
-    <span>实付款：2000</span>
-    <a href="#">提交订单</a>
-</div>
-</div>
-<!--<div id="two" style="background: red;height: 100%"></div>-->
 <div id="two">
-<div class="pun-header">
-    <div class="icon" id="icon">
-        <i class="icon-chevron-left icon-large"></i>
+    <div class="pun-header">
+        <div id="icon">
+            <span class="icon"><i class="icon-chevron-left icon-large"></i></span>
+        </div>
+        <div class="header-content">编辑地址</div>
     </div>
-    <div class="header-content">编辑地址</div>
-</div>
-<div class="wrtAds">
-    <form>
-        <ul>
-            <li class="list_li">
-                <span class="list_name">手机号</span>
-                <input type="text" placeholder="填写您的联系方式" class="infor"/>
-            </li>
-            <li class="list_li">
-                <span class="list_name">取货地址</span>
-                <span></span>
-            </li>
-        </ul>
-        <input type="submit" value="确认" class="sure">
-    </form>
-</div>
+    <div class="wrtAds">
+        <div>
+            <ul>
+                <li class="list_li">
+                    <span class="list_name">手机号</span>
+                    <input type="tel" placeholder="填写您的联系方式" class="infor"/>
+                </li>
+                <li class="list_li">
+                    <div id="list_name">
+                        <span class="list_name">取货地址</span>
+                        <span class="list_i"><i class="icon-chevron-right icon-large"></i></span>
+                    </div>
+                    <div id="toggle" style="display: none">
+                        <div class="add_massage">北京市海淀区</div>
+                        <div class="add_massage">北京市丰台区</div>
+                        <div class="add_massage">北京市石朝阳北京市石景山区北京市石景山区石景山区北京市石景山区</div>
+                        <div class="add_massage">北京市石景山区</div>
+                    </div>
+                </li>
+            </ul>
+            <input type="button" value="确认" class="sure" onclick="define()">
+        </div>
+    </div>
 </div>
 <script type="text/javascript" src="assets/scripts/good.js"></script>
 </body>

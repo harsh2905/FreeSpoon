@@ -23,8 +23,7 @@ html {
   border-bottom: solid 1px #c8c8c8;
 }
 .pun-header .icon {
-  width: 0.7rem;
-  display: block;
+  width: 1rem;
   padding: 0.2rem;
 }
 .pun-header .header-content {
@@ -102,15 +101,20 @@ html {
   border-spacing: 0;
   table-layout: fixed;
 }
-.cart-group .group-list tr td {
-  text-align: center;
-}
 .cart-group .group-list tr td:nth-child(1) {
   padding-left: 14px;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
   width: 3rem;
+  text-align: left;
+}
+.cart-group .group-list tr td:nth-child(2) {
+  text-align: center;
+}
+.cart-group .group-list tr td:nth-child(3) {
+  text-align: right;
+  padding-right: 20px;
 }
 .footer {
   position: fixed;
@@ -142,24 +146,36 @@ html {
   top: 0.7rem;
   width: 100%;
 }
-.wrtAds form ul {
+.wrtAds div ul {
   background: white;
   margin: 0.2rem 0;
 }
-.wrtAds form ul .list_li {
+.wrtAds div ul .list_li {
   border-bottom: 1px dashed #c8c8c8;
 }
-.wrtAds form ul .list_name {
+.wrtAds div ul .list_name {
   display: inline-block;
   width: 2rem;
   padding: 0.2rem 0.2rem;
 }
-.wrtAds form ul .list_name .infor {
+.wrtAds div ul .list_name .infor {
   width: 50%;
   height: 0.7rem;
   float: left;
 }
-.wrtAds form .sure {
+.wrtAds div ul .list_i {
+  float: right;
+  padding: 0.2rem 0.2rem;
+}
+.wrtAds div ul .add_massage {
+  padding: 0.2rem 0.3rem;
+  border-bottom: 1px dashed #c8c8c8;
+  font-size: 0.2rem;
+}
+.wrtAds div ul .add_massage:hover {
+  background: #EC9B45;
+}
+.wrtAds div .sure {
   width: 100%;
   height: 0.7rem;
   background: white;

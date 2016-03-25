@@ -1,440 +1,94 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="height=device-height,width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <title>宜家宜农</title>
-    <link rel="stylesheet" href="assets/styles/jquery.mobile-1.4.5.min.css">
-    <script src="assets/scripts/jquery-1.12.1.min.js"></script>
-    <script src="assets/scripts/jquery.mobile-1.4.5.min.js"></script>
-    <link rel="stylesheet" href="assets/styles/jquery.mobile.structure-1.4.5.css" />
-    <link rel="stylesheet" href="assets/styles/font-awesome.min.css">
-    <link rel="stylesheet" href="assets/styles/buttons.css" />
-    <link rel="stylesheet" href="assets/styles/reset.css">
-    <link rel="stylesheet" href="assets/styles/goods.css">
-    <link rel="stylesheet" href="assets/styles/index.css" />
-    <script type="text/javascript" src="assets/scripts/index.js"></script>
-    <script type="text/javascript">
-        if (/AppleWebKit.*Mobile/i.test(navigator.userAgent) || (/MIDP|SymbianOS|NOKIA|SAMSUNG|LG|NEC|TCL|Alcatel|BIRD|DBTEL|Dopod|PHILIPS|HAIER|LENOVO|MOT-|Nokia|SonyEricsson|SIE-|Amoi|ZTE/.test(navigator.userAgent))) {
-            if (/Android|Windows Phone|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
-
-            } else if (/iPad/i.test(navigator.userAgent)) {
-
-            }
-        } else {
-        }
-    </script>
-    <script>
-        var winW = document.documentElement.clientWidth;
-        document.documentElement.style.fontSize =winW/6.4+"px";
-    </script>
+    <meta charset=gbk />
+    <title>selectList</title>
+    <style type="text/css">
+        *{margin:0;padding:0;}
+        .selectList{width:200px;margin:50px auto;}
+    </style>
+    <script type="text/javascript" src="jquery1.7.1.js"></script>
 </head>
-
 <body>
-<div data-role="page"  id="pageone">
-    <div class="navbar">
-        <p class="title">三月时令水果</p>
-    </div>
-    <ul class="commodity-list">
-        <li>
-            <div class="title">泰国椰青</div>
-            <div class="content">
-                <div class="slide">
-                    <img src="assets/demo/1.jpg" />
-                </div>
-                <div class="detail">
-                    <p class="commodity-name">泰国椰青</p>
-                    <p class="commodity-spec">类型：个</p>
-                    <p class="commodity-num">库存：500</p>
-                    <div class="commodity-price-wrapper">
-                        <p class="commodity-price">
-                            <span>￥</span>20.00
-                        <div class="regulator">
-                            <a class="block right" href="javascript:void(0);">+</a>
-                            <a class="block left" href="javascript:void(0);">-</a>
-                        </div>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="actions">
-            </div>
-        </li>
-        <li>
-            <div class="title">泰国椰青</div>
-            <div class="content">
-                <div class="slide">
-                    <img src="assets/demo/1.jpg" />
-                </div>
-                <div class="detail">
-                    <p class="commodity-name">泰国椰青</p>
-                    <p class="commodity-spec">类型：个</p>
-                    <p class="commodity-num">库存：500</p>
-                    <div class="commodity-price-wrapper">
-                        <p class="commodity-price">
-                            <span>￥</span>20.00
-                        <div class="regulator">
-                            <a class="block right" href="javascript:void(0);">+</a>
-                            <a class="block left" href="javascript:void(0);">-</a>
-                        </div>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="actions">
-            </div>
-        </li>
-        <li>
-            <div class="title">泰国椰青</div>
-            <div class="content">
-                <div class="slide">
-                    <img src="assets/demo/1.jpg" />
-                </div>
-                <div class="detail">
-                    <p class="commodity-name">泰国椰青</p>
-                    <p class="commodity-spec">类型：个</p>
-                    <p class="commodity-num">库存：500</p>
-                    <div class="commodity-price-wrapper">
-                        <p class="commodity-price">
-                            <span>￥</span>20.00
-                        <div class="regulator">
-                            <a class="block right" href="javascript:void(0);">+</a>
-                            <a class="block left" href="javascript:void(0);">-</a>
-                        </div>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="actions">
-            </div>
-        </li>
-        <li>
-            <div class="title">泰国椰青</div>
-            <div class="content">
-                <div class="slide">
-                    <img src="assets/demo/1.jpg" />
-                </div>
-                <div class="detail">
-                    <p class="commodity-name">泰国椰青</p>
-                    <p class="commodity-spec">类型：个</p>
-                    <p class="commodity-num">库存：500</p>
-                    <div class="commodity-price-wrapper">
-                        <p class="commodity-price">
-                            <span>￥</span>20.00
-                        <div class="regulator">
-                            <a class="block right" href="javascript:void(0);">+</a>
-                            <a class="block left" href="javascript:void(0);">-</a>
-                        </div>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="actions">
-            </div>
-        </li>
-        <li>
-            <div class="title">泰国椰青</div>
-            <div class="content">
-                <div class="slide">
-                    <img src="assets/demo/1.jpg" />
-                </div>
-                <div class="detail">
-                    <p class="commodity-name">泰国椰青</p>
-                    <p class="commodity-spec">类型：个</p>
-                    <p class="commodity-num">库存：500</p>
-                    <div class="commodity-price-wrapper">
-                        <p class="commodity-price">
-                            <span>￥</span>20.00
-                        <div class="regulator">
-                            <a class="block right" href="javascript:void(0);">+</a>
-                            <a class="block left" href="javascript:void(0);">-</a>
-                        </div>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="actions">
-            </div>
-        </li>
-        <li>
-            <div class="title">泰国椰青</div>
-            <div class="content">
-                <div class="slide">
-                    <img src="assets/demo/1.jpg" />
-                </div>
-                <div class="detail">
-                    <p class="commodity-name">泰国椰青</p>
-                    <p class="commodity-spec">类型：个</p>
-                    <p class="commodity-num">库存：500</p>
-                    <div class="commodity-price-wrapper">
-                        <p class="commodity-price">
-                            <span>￥</span>20.00
-                        <div class="regulator">
-                            <a class="block right" href="javascript:void(0);">+</a>
-                            <a class="block left" href="javascript:void(0);">-</a>
-                        </div>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="actions">
-            </div>
-        </li>
-        <li>
-            <div class="title">泰国椰青</div>
-            <div class="content">
-                <div class="slide">
-                    <img src="assets/demo/1.jpg" />
-                </div>
-                <div class="detail">
-                    <p class="commodity-name">泰国椰青</p>
-                    <p class="commodity-spec">类型：个</p>
-                    <p class="commodity-num">库存：500</p>
-                    <div class="commodity-price-wrapper">
-                        <p class="commodity-price">
-                            <span>￥</span>20.00
-                        <div class="regulator">
-                            <a class="block right" href="javascript:void(0);">+</a>
-                            <a class="block left" href="javascript:void(0);">-</a>
-                        </div>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="actions">
-            </div>
-        </li>
-        <li>
-            <div class="title">泰国椰青</div>
-            <div class="content">
-                <div class="slide">
-                    <img src="assets/demo/1.jpg" />
-                </div>
-                <div class="detail">
-                    <p class="commodity-name">泰国椰青</p>
-                    <p class="commodity-spec">类型：个</p>
-                    <p class="commodity-num">库存：500</p>
-                    <div class="commodity-price-wrapper">
-                        <p class="commodity-price">
-                            <span>￥</span>20.00
-                        <div class="regulator">
-                            <a class="block right" href="javascript:void(0);">+</a>
-                            <a class="block left" href="javascript:void(0);">-</a>
-                        </div>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="actions">
-            </div>
-        </li>
-        <li>
-            <div class="title">泰国椰青</div>
-            <div class="content">
-                <div class="slide">
-                    <img src="assets/demo/1.jpg" />
-                </div>
-                <div class="detail">
-                    <p class="commodity-name">泰国椰青</p>
-                    <p class="commodity-spec">类型：个</p>
-                    <p class="commodity-num">库存：500</p>
-                    <div class="commodity-price-wrapper">
-                        <p class="commodity-price">
-                            <span>￥</span>20.00
-                        <div class="regulator">
-                            <a class="block right" href="javascript:void(0);">+</a>
-                            <a class="block left" href="javascript:void(0);">-</a>
-                        </div>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="actions">
-            </div>
-        </li>
-    </ul>
-    <script type="text/javascript">
-        $(function(){
-            (function(status){
-                // TODO clean all touch events
-                $('.overlay').on('tap', function(){
-                    status = false;
-                    window.popup_window_from_bottom();
+<div class="selectList">
+    <select class="province">
+        <option>��ѡ��</option>
+    </select>
+    <select class="city">
+        <option>��ѡ��</option>
+    </select>
+    <select class="district">
+        <option>��ѡ��</option>
+    </select>
+</div>
+<div class="selectList">
+    <select class="province">
+        <option>��ѡ��</option>
+    </select>
+    <select class="city">
+        <option>��ѡ��</option>
+    </select>
+    <select class="district">
+        <option>��ѡ��</option>
+    </select>
+</div>
+<script type="text/javascript">
+    $(function(){
+        $(".selectList").each(function(){
+            var url = "area.json";
+            var areaJson;
+            var temp_html;
+            var oProvince = $(this).find(".province");
+            var oCity = $(this).find(".city");
+            var oDistrict = $(this).find(".district");
+//��ʼ��ʡ
+            var province = function(){
+                $.each(areaJson,function(i,province){
+                    temp_html+="<option value='"+province.p+"'>"+province.p+"</option>";
                 });
-                window.popup_window_from_bottom = function(){
-                    if(status){
-                        status = false;
-                        $('.overlay').css('display', 'block');
-                        $('.popup-window-from-bottom').slideToggle('slow');
-                    } else {
-                        status = true;
-                        $('.overlay').css('display', 'none');
-                        $('.popup-window-from-bottom').css('display', 'none');
-                    }
-                }
-            })(true);
+                oProvince.html(temp_html);
+                city();
+            };
+//��ֵ��
+            var city = function(){
+                temp_html = "";
+                var n = oProvince.get(0).selectedIndex;
+                $.each(areaJson[n].c,function(i,city){
+                    temp_html+="<option value='"+city.ct+"'>"+city.ct+"</option>";
+                });
+                oCity.html(temp_html);
+                district();
+            };
+//��ֵ��
+            var district = function(){
+                temp_html = "";
+                var m = oProvince.get(0).selectedIndex;
+                var n = oCity.get(0).selectedIndex;
+                if(typeof(areaJson[m].c[n].d) == "undefined"){
+                    oDistrict.css("display","none");
+                }else{
+                    oDistrict.css("display","inline");
+                    $.each(areaJson[m].c[n].d,function(i,district){
+                        temp_html+="<option value='"+district.dt+"'>"+district.dt+"</option>";
+                    });
+                    oDistrict.html(temp_html);
+                };
+            };
+//ѡ��ʡ�ı���
+            oProvince.change(function(){
+                city();
+            });
+//ѡ���иı���
+            oCity.change(function(){
+                district();
+            });
+//��ȡjson����
+            $.getJSON(url,function(data){
+                areaJson = data;
+                province();
+            });
         });
-    </script>
-    <div class="footer">
-        <div class="ui-block-a"><a href="javascript:void(0);" onclick="popup_window_from_bottom();">购物车</a></div>
-        <div class="ui-block-b"><a href="#pagetwo">支付</a></div>
-    </div>
-    <div class="overlay"></div>
-    <div class="popup-window-from-bottom">
-        <div class="header">
-            <span>购物车</span>
-        </div>
-        <ul class="list">
-            <li>
-                <div class="item ui-grid-a">
-                    <div class="ui-block-a name">泰国椰青</div>
-                    <div class="ui-block-b price"><span class="sign">￥</span><span class="text">40.00<span></div>
-                    <div class="ui-block-c num">
-                        <div class="regulator">
-                            <a class="block left" href="javascript:void(0);">-</a>
-                            <span class="block center">5</span>
-                            <a class="block right" href="javascript:void(0);">+</a>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="item ui-grid-a">
-                    <div class="ui-block-a name">泰国椰青</div>
-                    <div class="ui-block-b price"><span class="sign">￥</span><span class="text">40.00<span></div>
-                    <div class="ui-block-c num">
-                        <div class="regulator">
-                            <a class="block left" href="javascript:void(0);">-</a>
-                            <span class="block center">5</span>
-                            <a class="block right" href="javascript:void(0);">+</a>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="item ui-grid-a">
-                    <div class="ui-block-a name">泰国椰青</div>
-                    <div class="ui-block-b price"><span class="sign">￥</span><span class="text">40.00<span></div>
-                    <div class="ui-block-c num">
-                        <div class="regulator">
-                            <a class="block left" href="javascript:void(0);">-</a>
-                            <span class="block center">5</span>
-                            <a class="block right" href="javascript:void(0);">+</a>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="item ui-grid-a">
-                    <div class="ui-block-a name">泰国椰青</div>
-                    <div class="ui-block-b price"><span class="sign">￥</span><span class="text">40.00<span></div>
-                    <div class="ui-block-c num">
-                        <div class="regulator">
-                            <a class="block left" href="javascript:void(0);">-</a>
-                            <span class="block center">5</span>
-                            <a class="block right" href="javascript:void(0);">+</a>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="item ui-grid-a">
-                    <div class="ui-block-a name">泰国椰青</div>
-                    <div class="ui-block-b price"><span class="sign">￥</span><span class="text">40.00<span></div>
-                    <div class="ui-block-c num">
-                        <div class="regulator">
-                            <a class="block left" href="javascript:void(0);">-</a>
-                            <span class="block center">5</span>
-                            <a class="block right" href="javascript:void(0);">+</a>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="item ui-grid-a">
-                    <div class="ui-block-a name">泰国椰青</div>
-                    <div class="ui-block-b price"><span class="sign">￥</span><span class="text">40.00<span></div>
-                    <div class="ui-block-c num">
-                        <div class="regulator">
-                            <a class="block left" href="javascript:void(0);">-</a>
-                            <span class="block center">5</span>
-                            <a class="block right" href="javascript:void(0);">+</a>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="item ui-grid-a">
-                    <div class="ui-block-a name">泰国椰青</div>
-                    <div class="ui-block-b price"><span class="sign">￥</span><span class="text">40.00<span></div>
-                    <div class="ui-block-c num">
-                        <div class="regulator">
-                            <a class="block left" href="javascript:void(0);">-</a>
-                            <span class="block center">5</span>
-                            <a class="block right" href="javascript:void(0);">+</a>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="item ui-grid-a">
-                    <div class="ui-block-a name">泰国椰青</div>
-                    <div class="ui-block-b price"><span class="sign">￥</span><span class="text">40.00<span></div>
-                    <div class="ui-block-c num">
-                        <div class="regulator">
-                            <a class="block left" href="javascript:void(0);">-</a>
-                            <span class="block center">5</span>
-                            <a class="block right" href="javascript:void(0);">+</a>
-                        </div>
-                    </div>
-                </div>
-            </li>
-        </ul>
-    </div>
-</div>
-
-<div data-role="page" id="pagetwo">
-    <div class="pun-header">
-        <a class="icon" href="#pageone">
-            <i class="icon-chevron-left icon-large"></i>
-        </a>
-        <div class="header-content">购物车</div>
-    </div>
-    <div class="adds">
-        <table class="adds-table">
-            <tr>
-                <th>收货人</th>
-                <td>张三</td>
-            </tr>
-            <tr>
-                <th>电话</th>
-                <td>123454756564</td>
-            </tr>
-            <tr>
-                <th>收货地址</th>
-                <td>北京市丰田台区大连国际</td>
-            </tr>
-        </table>
-    </div>
-    <div class="cart-group">
-        <div class="group-comment block spline">收货备注
-            <div class="comment-wrapper">
-                <input type="text" placeholder="可输入100字以内特殊要求内容" maxlength="100"/>
-            </div>
-        </div>
-        <table class="group-list" id="group-list">
-            <tr class="spline block">
-                <td>康师傅妙芙欧式蛋糕奶油味康师傅妙芙欧式蛋糕奶油味康师傅妙芙欧式蛋糕奶油味康师傅妙芙欧式蛋糕奶油味</td>
-                <td>￥5.9</td>
-                <td>2</td>
-            </tr>
-        </table>
-    </div>
-    <footer>
-        <span>实付款：2000</span>
-        <a href="#">提交订单</a>
-    </footer>
-    <script type="text/javascript" src="assets/scripts/good.js"></script>
-</div>
+    });
+</script>
 </body>
 </html>
