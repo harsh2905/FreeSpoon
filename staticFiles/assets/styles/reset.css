@@ -39,7 +39,9 @@ table {
 fieldset, img {
     border: 0
 }
-
+img{
+    display: block;
+}
 abbr, acronym {
     border: 0;
     font-variant: normal

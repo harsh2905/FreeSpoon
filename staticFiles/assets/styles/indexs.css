@@ -1,0 +1,264 @@
+html,
+body {
+  font-size: 0.25rem;
+  background: #f0f2f5;
+  color: #464646;
+  height: 100%;
+  font-family: '微软雅黑', Helvetica, Tahoma, Arial, '华文细黑', sans-serif;
+}
+.header {
+  position: fixed;
+  top: 0;
+  background: #599c3d;
+  width: 100%;
+  height: 1.4rem;
+  z-index: 100;
+}
+.header .left {
+  width: 100%;
+  margin-right: 2.5rem;
+  float: left;
+}
+.header .left .sculpture {
+  overflow: hidden;
+  width: 1rem;
+  height: 1rem;
+  margin: 0.2rem;
+  float: left;
+  border-radius: 50%;
+}
+.header .left .sculpture img {
+  max-width: 100%;
+  height: 100%;
+}
+.header .left .chief {
+  height: 1.4rem;
+  margin-top: 0.2rem;
+}
+.header .left .chief p {
+  color: #fffcfc;
+  font-size: 0.3rem;
+}
+.header .left .chief p span {
+  font-size: 0.4rem;
+  margin: 0 0.1rem;
+}
+.header .left .chief .chief_in {
+  padding: 0.1rem 0.1rem;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 45%;
+  color: #dedddd;
+}
+.header .right {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 2.5rem;
+  padding: 0.3rem 0.1rem;
+}
+.header .right .audio {
+  width: 0.5rem;
+  height: 0.5rem;
+  background: url("../demo/auid.png") no-repeat center;
+  background-size: 0.3rem;
+  -webkit-background-size: 0.3rem;
+  float: left;
+}
+.header .right div {
+  color: white;
+  text-align: center;
+}
+.header .right div span {
+  color: #fff100;
+  font-size: 0.3rem;
+  margin: 0 0.05rem;
+}
+.main {
+  position: relative;
+  top: 1.4rem;
+  margin-bottom: 1.2rem;
+  padding: 0.4rem 0.2rem;
+}
+.main ul li {
+  margin-bottom: 0.2rem;
+  border: 1px solid #000000;
+}
+.main ul li div {
+  background: white;
+  /*        width: 8rem;
+                height: 4rem;   到底加不加宽高*/
+}
+.main ul li div img {
+  max-height: 100%;
+  max-width: 100%;
+}
+.main ul li .content {
+  padding: 0.3rem 0;
+}
+.main ul li .first,
+.main ul li .between {
+  margin: 0 0.2rem;
+}
+.main ul li .first div,
+.main ul li .between div {
+  position: relative;
+  margin-bottom: 0.2rem;
+  overflow: hidden;
+}
+.main ul li .first div h1,
+.main ul li .between div h1 {
+  font-size: 0.3rem;
+  font-weight: bold;
+  float: left;
+}
+.main ul li .first div span,
+.main ul li .between div span {
+  display: inline-block;
+  color: #ff9934;
+  font-size: 0.2rem;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+.main ul li .first p,
+.main ul li .between p {
+  line-height: 170%;
+}
+.main ul li .between {
+  height: 1rem;
+  line-height: 1rem;
+  overflow: hidden;
+}
+.main ul li .between span {
+  float: right;
+  margin-left: 0.4rem;
+  color: #a9a6a6;
+}
+.main ul li .last {
+  position: relative;
+}
+.main ul li .last .regulator_left {
+  width: 100%;
+  margin-right: 2rem;
+}
+.main ul li .last .regulator_left div {
+  overflow: hidden;
+}
+.main ul li .last .regulator_left div div span:nth-child(1) {
+  background: #313131;
+  width: 0.8rem;
+  height: 0.8rem;
+  float: left;
+}
+.main ul li .last .regulator_left div div span:nth-child(1) img {
+  max-width: 100%;
+  max-height: 100%;
+}
+.main ul li .last .regulator_left div div span:nth-child(2),
+.main ul li .last .regulator_left div div span:nth-child(3),
+.main ul li .last .regulator_left div div span:nth-child(4),
+.main ul li .last .regulator_left div div span:nth-child(5) {
+  height: 0.8rem;
+  line-height: 0.8rem;
+  text-align: center;
+  color: white;
+  font-size: 0.3rem;
+}
+.main ul li .last .regulator_left div div span:nth-child(2) {
+  margin-left: 0.1rem;
+}
+.main ul li .last .regulator_left div div span:nth-child(5) {
+  font-size: 0.25rem;
+}
+.main ul li .last .regulator_left div div:nth-child(1) {
+  width: 3.5rem;
+  background: #599c3d;
+  float: left;
+  z-index: 101;
+}
+.main ul li .last .regulator_right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 2rem;
+  margin: 0.2rem 0;
+}
+.main ul li .last .regulator_right span,
+.main ul li .last .regulator_right a {
+  font-size: 0.3rem;
+  float: left;
+  border: 1px solid #ff9934;
+  width: 0.5rem;
+  height: 0.5rem;
+  text-align: center;
+  line-height: 0.5rem;
+}
+.main ul li .last .regulator_right span {
+  width: 0.8rem;
+}
+.main ul li .last .regulator_right a:active {
+  background: #ff9934;
+  color: white;
+}
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 1.1rem;
+  background: white;
+}
+.footer .f_left {
+  width: 100%;
+  margin-right: 2rem;
+}
+.footer .f_left .shop {
+  position: relative;
+  width: 0.9rem;
+  height: 0.8rem;
+  background: url("../demo/shop.png") no-repeat center;
+  background-size: 0.6rem;
+  margin: 0.3rem 0.2rem;
+}
+.footer .f_left .shop span {
+  display: block;
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 50%;
+  background: #ff9934;
+  color: white;
+  text-align: center;
+  position: absolute;
+  right: 0;
+}
+.footer .f_left .shop_info {
+  position: absolute;
+  top: 0;
+  margin-left: 1.3rem;
+  margin-top: 0.15rem;
+  padding: 0.1rem 0;
+}
+.footer .f_left .shop_info p {
+  font-size: 0.3rem;
+  font-weight: bold;
+}
+.footer .f_left .shop_info span:nth-child(2) {
+  font-size: 0.2rem;
+}
+.footer .f_right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 2rem;
+  background: #ff9934;
+  height: 1.2rem;
+  text-align: center;
+}
+.footer .f_right a {
+  text-align: center;
+  font-size: 0.45rem;
+  line-height: 1.1rem;
+  color: white;
+}

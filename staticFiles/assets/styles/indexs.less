@@ -1,0 +1,255 @@
+@header-height:1.4rem;
+html,body{
+  font-size: 0.25rem;
+  background: #f0f2f5;
+  color: #464646;
+  height: 100%;
+  font-family: '微软雅黑', Helvetica, Tahoma, Arial, '华文细黑', sans-serif;
+}
+.header{
+  position: fixed;
+  top:0;
+  background: #599c3d;
+  width: 100%;
+  height: @header-height;
+  z-index: 100;
+  .left{
+    width: 100%;
+    margin-right: 2.5rem;
+    float: left;
+    .sculpture{
+      overflow: hidden;
+      width: 1rem;
+      height: 1rem;
+      margin: 0.2rem;
+      float: left;
+      border-radius: 50%;
+    img{
+      max-width: 100%;
+      height: 100%;
+    }
+    }
+    .chief{
+      height: @header-height;
+      margin-top: 0.2rem;
+      p{
+        color: #fffcfc;
+        font-size: 0.3rem;
+        span{
+          font-size: 0.4rem;
+          margin:0 0.1rem;
+        }
+      }
+      .chief_in{
+        padding: 0.1rem 0.1rem;
+        display: block;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+        width: 45%;
+        color: #dedddd;
+      }
+    }
+  }
+  .right{
+    position: absolute;
+    right: 0;
+    top:0;
+    width: 2.5rem;
+    padding: 0.3rem 0.1rem;
+    .audio{
+      width: 0.5rem;
+      height: 0.5rem;
+      background: url("../demo/auid.png") no-repeat center;
+      background-size:0.3rem;
+      -webkit-background-size:0.3rem;
+      float: left;
+    }
+    div{
+      color: white;
+      text-align: center;
+      span{
+        color: #fff100;
+        font-size: 0.3rem;
+        margin: 0 0.05rem;
+      }
+    }
+  }
+}
+.main{
+  position: relative;
+  top:@header-height;
+  margin-bottom: @header-height - 0.2rem;;
+  padding: 0.4rem 0.2rem;
+  ul{
+    li {
+      margin-bottom: 0.2rem;
+      border: 1px solid #000000;
+      div {
+        background: white;
+        /*        width: 8rem;
+                height: 4rem;   到底加不加宽高*/
+        img {
+          max-height: 100%;
+          max-width: 100%;
+        }
+      }
+      .content {
+        padding: 0.3rem 0;
+      }
+      .first,.between {
+        margin: 0 0.2rem;
+        div {
+          position: relative;
+          margin-bottom: 0.2rem;
+          overflow: hidden;
+          h1 {
+            font-size: 0.3rem;
+            font-weight: bold;
+            float: left;
+          }
+          span {
+            display: inline-block;
+            color: #ff9934;
+            font-size: 0.2rem;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+          }
+        }
+        p {
+          line-height: 170%
+        }
+      }
+      .between{
+        height: 1rem;
+        line-height: 1rem;
+        overflow: hidden;
+        span{
+          float: right;
+          margin-left: 0.4rem;
+          color:#a9a6a6;
+        }
+      }
+      .last{
+        position: relative;
+        .regulator_left{
+          width: 100%;
+          margin-right: 2rem;
+          div{
+            overflow: hidden;
+          }
+          div div span:nth-child(1){
+            background: #313131;
+            width: 0.8rem;
+            height: 0.8rem;
+            float: left;
+            img{
+              max-width: 100%;
+              max-height: 100%;
+            }
+          }
+          div div span:nth-child(2),div div span:nth-child(3),div div span:nth-child(4),div div span:nth-child(5){
+            height: 0.8rem;
+            line-height: 0.8rem;
+             text-align: center;
+             color: white;
+            font-size: 0.3rem;
+          }
+          div div span:nth-child(2){
+            margin-left: 0.1rem;
+          }
+          div div span:nth-child(5){
+            font-size: 0.25rem;
+          }
+          div div:nth-child(1){
+            width: 3.5rem;
+            background: #599c3d;
+            float: left;
+            z-index: 101;
+          }
+        }
+        .regulator_right{
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 2rem;
+          margin: 0.2rem 0;
+          span,a{
+            font-size: 0.3rem;
+            float: left;
+            border: 1px solid #ff9934;
+            width: 0.5rem;
+            height: 0.5rem;
+            text-align: center;
+            line-height: 0.5rem;
+          }
+          span{width: 0.8rem;}
+          a:active{
+            background:#ff9934;
+            color: white;
+          }
+        }
+      }
+    }
+    }
+  }
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: @header-height - 0.3rem;
+  background: white;
+  .f_left{
+    width: 100%;
+    margin-right: 2rem;
+    .shop{
+      position: relative;
+      @shop_img:0.9rem;
+      width: @shop_img;
+      height: @shop_img - 0.1rem;
+      background: url("../demo/shop.png") no-repeat center;
+      background-size: @shop_img - 0.3rem;
+      margin: 0.3rem 0.2rem;
+      span{
+        display: block;
+        width: 0.35rem;
+        height: 0.35rem;
+        border-radius: 50%;
+        background: #ff9934;
+        color: white;
+        text-align: center;
+        position: absolute;
+        right: 0;
+      }
+    }
+    .shop_info{
+      position: absolute;
+      top:0;
+      margin-left: 1.3rem;
+      margin-top: 0.15rem;
+      padding: 0.1rem 0;
+      p{
+        font-size: 0.3rem;
+        font-weight: bold;
+      }
+      span:nth-child(2){
+        font-size: 0.2rem;
+      }
+    }
+  }
+  .f_right{
+    position: absolute;
+    top:0;
+    right: 0;
+    width:2rem;
+    background: #ff9934;
+    height: 1.2rem;
+    text-align: center;
+    a{
+      text-align: center;font-size: 0.45rem;
+      line-height: @header-height - 0.3rem;
+      color: white;
+    }
+  }
+}
