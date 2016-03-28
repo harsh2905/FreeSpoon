@@ -16,7 +16,7 @@
     </script>
 </head>
 <body>
-<div id="index">
+<div id="index" style="display: block">
     <div class="header">
         <div class="left">
             <div class="sculpture"><img src="assets/demo/1.jpg" alt=""></div>
@@ -190,10 +190,11 @@
         <div class="f_right"><a href="#checkout">去结算</a></div>
     </div>
 </div>
-
 <div id="checkout" style="display: none">
     <div class="header">
-        <div id="black" class="black"><</div>
+        <div class="black">
+            <i class="icon-chevron-left icon-large"></i>
+        </div>
         <div class="header-content">订单确认</div>
     </div>
     <div class="main">
@@ -225,7 +226,7 @@
                 </li>
                 <li>
                     <div>
-                        <p>海淀区上地实验小学东门</p>
+                        <p>海淀区上地实验小学东门海淀区上地实验小学东门海淀区上地实验小学东门</p>
                         <p>预计:3月12日 9:30 </p>
                     </div>
                 </li>
@@ -248,7 +249,7 @@
                 </li>
                 <li>
                     <span>1</span>
-                    <span>进口冷冻阿根廷红虾</span>
+                    <span>进口冷冻阿根廷红虾进口冷冻阿根廷红虾进口冷冻阿根廷红虾</span>
                     <span>￥55.00</span>
                     <span>2</span>
                 </li>
@@ -260,7 +261,7 @@
         <div class="total">
             <span>总计</span>
             <div>
-                <span>￥456.00</span>
+                <span>￥456</span>
                 <span>.</span>
                 <span>00</span>
             </div>
@@ -270,8 +271,90 @@
         <a href="javascript:void(0);">立即支付</a>
     </div>
 </div>
+<div id="Payment_success" style="display: none">
+    <div class="header">
+        <div class="black">
+            <i class="icon-chevron-left icon-large"></i>
+        </div>
+        <div class="header-content"></div>
+    </div>
+    <div class="main">
+        <div>
+            <div></div>
+            <p>支付成功</p>
+            <p>恭喜您成为第88位接龙者，快去邀请小伙伴继续接龙吧！</p>
+        </div>
+    </div>
+    <div class="footer">
+        <a href="javascript:void(0);">接龙到微信，邀请群友吧</a>
+    </div>
+</div>
+<div id="Order_details" style="display: none">
+    <div class="header">
+        <div class="black">
+            <i class="icon-chevron-left icon-large"></i>
+        </div>
+        <div class="header-content">订单详情</div>
+    </div>
+    <div class="main">
+        <div class="follow">
+            <div></div>
+            <div>
+                <p>订单号:<span>123456789</span></p>
+                <p>下单时间:<span>2016-3-29</span><span>2:20:00</span></p>
+                <p>支付方式:<span>微信支付</span></p>
+            </div>
+        </div>
+        <div class="delivery">
+            <div>取货信息</div>
+            <div>
+                <p>收货人:<span>欧阳雨晴</span></p>
+                <p>手机号:<span>15209633819</span></p>
+                <p>取货地址:<span>海淀区上地实验小区</span></p>
+                <p>取货时间:<span>预计:3月12日9:30</span></p>
+            </div>
+        </div>
+        <div class="inventory">
+            <div>商品明细</div>
+            <ul>
+                <li>
+                    <span>1</span>
+                    <span>进口冷冻阿根廷红虾</span>
+                    <span>￥55.00</span>
+                    <span>2</span>
+                </li>
+                <li>
+                    <span>1</span>
+                    <span>进口冷冻阿根廷红虾</span>
+                    <span>￥55.00</span>
+                    <span>2</span>
+                </li>
+                <li>
+                    <span>1</span>
+                    <span>进口冷冻阿根廷红虾进口冷冻阿根廷红虾进口冷冻阿根廷红虾</span>
+                    <span>￥55.00</span>
+                    <span>2</span>
+                </li>
+            </ul>
+        </div>
+        <div class="moe">
+            <p>配送费<span>￥10</span></p>
+        </div>
+        <div class="total">
+            <span>总计</span>
+            <div>
+                <span>￥456</span>
+                <span>.</span>
+                <span>00</span>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <a href="javascript:void(0);">接龙到微信群，邀请群友吧</a>
+    </div>
+</div>
 
-<div class="popup"></div>
+<div class="popup" style="display: none"></div>
 <div class="popup_box">
     <div>
         <div>
@@ -353,6 +436,13 @@
                 </div>
             </li>
         </ul>
+    </div>
+</div>
+<div id="success_popup">
+    <div>
+        <div class="header">支付成功</div>
+        <div class="main">恭喜您成为第88位接龙者，快去邀请小伙伴继续接龙吧！</div>
+        <div class="footer">接龙到微信群，邀请群友吧！</div>
     </div>
 </div>
 <script type="text/javascript" src="assets/scripts/indexs.js"></script>

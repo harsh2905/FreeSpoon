@@ -122,7 +122,108 @@ body {
 .select {
   display: block;
 }
-/*onegpage*/
+._header {
+  z-index: 100;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  height: 0.7rem;
+  background: #e5e5e5;
+  border-bottom: solid 1px #c8c8c8;
+}
+._header .black {
+  height: 0.7rem;
+  margin: 0.2rem 0.3rem;
+}
+._header .header-content {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  text-align: center;
+  font-size: 0.3rem;
+  line-height: 0.7rem;
+  font-weight: bold;
+  -webkit-user-select: none;
+  color: #599c3d;
+}
+._footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 1100;
+}
+._footer a {
+  background: #599c3d;
+  margin: 0.1rem 0.1rem;
+  color: white;
+  text-align: center;
+  display: block;
+  line-height: 0.5rem;
+}
+._inventory div {
+  padding-left: 0.5rem;
+  margin: 0.2rem 0.3rem;
+  font-weight: 500;
+  background: url("../demo/1.PNG") no-repeat left;
+  background-size: 0.4rem;
+}
+._inventory ul {
+  background: white;
+  padding: 0.1rem 0;
+}
+._inventory ul li {
+  font-size: 0.2rem;
+  color: #7e7e7e;
+  padding: 0.1rem 0.25rem;
+}
+._inventory ul li span {
+  display: inline-block;
+}
+._inventory ul li span:nth-child(1) {
+  text-align: center;
+  width: 30px;
+  margin: 5px 0;
+}
+._inventory ul li span:nth-child(2) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 3rem;
+}
+._inventory ul li span:nth-child(3) {
+  float: right;
+}
+._inventory ul li span:nth-child(4) {
+  margin-right: 30px;
+  float: right;
+}
+._moe {
+  padding: 0.2rem 0.3rem;
+  font-weight: 500;
+}
+._moe p {
+  font-weight: bold;
+}
+._moe p span {
+  font-weight: normal;
+  display: inline-block;
+  float: right;
+}
+._total {
+  padding: 0.2rem 0.3rem;
+  font-weight: 500;
+}
+._total span {
+  font-weight: bold;
+}
+._total div {
+  color: #ff9934 ;
+  font-weight: normal;
+  float: right;
+}
+._total div span:nth-child(3) {
+  font-size: 0.2rem;
+}
 #index .header {
   position: fixed;
   top: 0;
@@ -371,17 +472,17 @@ body {
   top: 0;
   right: 0;
   width: 2rem;
-  background: #ff9934;
+  background: #ff9934 !important;
   height: 1.2rem;
   text-align: center;
 }
 #index .footer .f_right a {
+  background: #ff9934;
   text-align: center;
   font-size: 0.45rem;
   line-height: 1.1rem;
   color: white;
 }
-/*twopage*/
 #checkout {
   height: 100%;
 }
@@ -394,14 +495,9 @@ body {
   background: #e5e5e5;
   border-bottom: solid 1px #c8c8c8;
 }
-#checkout .header #black {
-  height: 0.7rem;
-  width: 50px;
-}
 #checkout .header .black {
-  font-size: 0.5rem;
-  position: absolute;
-  margin-left: 0.2rem;
+  height: 0.7rem;
+  margin: 0.2rem 0.3rem;
 }
 #checkout .header .header-content {
   width: 100%;
@@ -446,7 +542,7 @@ body {
   color: #ccc;
 }
 #checkout .main .adds div {
-  padding-left: 30px;
+  padding-left: 0.5rem;
   margin: 0.2rem 0.3rem;
   font-weight: 500;
   background: url("../demo/adds.png") no-repeat left;
@@ -459,15 +555,14 @@ body {
 #checkout .main .adds ul li {
   font-size: 0.2rem;
   color: #7e7e7e;
-  padding: 0.1rem 0.25rem;
 }
 #checkout .main .adds ul li div {
   background: url("../demo/3.png") no-repeat left;
-  background-size: 0.3rem;
-  padding-left: 30px;
+  background-size: 0.4rem;
+  padding-left: 0.5rem;
 }
 #checkout .main .inventory div {
-  padding-left: 30px;
+  padding-left: 0.5rem;
   margin: 0.2rem 0.3rem;
   font-weight: 500;
   background: url("../demo/1.PNG") no-repeat left;
@@ -491,7 +586,10 @@ body {
   margin: 5px 0;
 }
 #checkout .main .inventory ul li span:nth-child(2) {
-  margin-left: 30px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 3rem;
 }
 #checkout .main .inventory ul li span:nth-child(3) {
   float: right;
@@ -540,4 +638,239 @@ body {
   text-align: center;
   display: block;
   line-height: 0.5rem;
+}
+#Payment_success {
+  height: 100%;
+}
+#Payment_success .header {
+  z-index: 100;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  height: 0.7rem;
+  background: #e5e5e5;
+  border-bottom: solid 1px #c8c8c8;
+}
+#Payment_success .header .black {
+  height: 0.7rem;
+  margin: 0.2rem 0.3rem;
+}
+#Payment_success .header .header-content {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  text-align: center;
+  font-size: 0.3rem;
+  line-height: 0.7rem;
+  font-weight: bold;
+  -webkit-user-select: none;
+  color: #599c3d;
+}
+#Payment_success .main {
+  background: white;
+  height: 100%;
+}
+#Payment_success .main div {
+  margin: 0 auto;
+  padding: 2rem 0.5rem;
+}
+#Payment_success .main div div {
+  background: url("../demo/sussce.png") no-repeat center;
+  background-size: 2rem;
+  height: 2.5rem;
+  padding: 0;
+}
+#Payment_success .main div p:first-of-type {
+  text-align: center;
+  font-size: 0.5rem;
+}
+#Payment_success .main div p:last-of-type {
+  margin-top: 0.5rem;
+  font-size: 0.3rem;
+}
+#Payment_success .footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 1100;
+}
+#Payment_success .footer a {
+  background: #599c3d;
+  margin: 0.1rem 0.1rem;
+  color: white;
+  text-align: center;
+  display: block;
+  line-height: 0.5rem;
+}
+#Order_details {
+  height: 100%;
+}
+#Order_details .header {
+  z-index: 100;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  height: 0.7rem;
+  background: #e5e5e5;
+  border-bottom: solid 1px #c8c8c8;
+}
+#Order_details .header .black {
+  height: 0.7rem;
+  margin: 0.2rem 0.3rem;
+}
+#Order_details .header .header-content {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  text-align: center;
+  font-size: 0.3rem;
+  line-height: 0.7rem;
+  font-weight: bold;
+  -webkit-user-select: none;
+  color: #599c3d;
+}
+#Order_details .main {
+  margin-bottom: 1rem;
+  position: relative;
+  top: 0.7rem;
+}
+#Order_details .main .follow div:last-of-type {
+  padding: 0.2rem 0.3rem;
+  background: white;
+}
+#Order_details .main .follow div:last-of-type p {
+  color: #7e7e7e;
+  padding: 0.1rem 0;
+}
+#Order_details .main .follow div:last-of-type p span {
+  display: inline-block;
+  margin: 0 0.15rem;
+}
+#Order_details .main .delivery div:first-of-type {
+  padding-left: 0.5rem;
+  margin: 0.2rem 0.3rem;
+  font-weight: 500;
+  background: url("../demo/pop.png") no-repeat left;
+  background-size: 0.35rem;
+}
+#Order_details .main .delivery div:last-of-type {
+  padding: 0.2rem 0.3rem;
+  background: white;
+}
+#Order_details .main .delivery div:last-of-type p {
+  color: #7e7e7e;
+  padding: 0.1rem 0;
+}
+#Order_details .main .delivery div:last-of-type p span {
+  display: inline-block;
+  margin: 0 0.15rem;
+}
+#Order_details .main .inventory div {
+  padding-left: 0.5rem;
+  margin: 0.2rem 0.3rem;
+  font-weight: 500;
+  background: url("../demo/1.PNG") no-repeat left;
+  background-size: 0.4rem;
+}
+#Order_details .main .inventory ul {
+  background: white;
+  padding: 0.1rem 0;
+}
+#Order_details .main .inventory ul li {
+  font-size: 0.2rem;
+  color: #7e7e7e;
+  padding: 0.1rem 0.25rem;
+}
+#Order_details .main .inventory ul li span {
+  display: inline-block;
+}
+#Order_details .main .inventory ul li span:nth-child(1) {
+  text-align: center;
+  width: 30px;
+  margin: 5px 0;
+}
+#Order_details .main .inventory ul li span:nth-child(2) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 3rem;
+}
+#Order_details .main .inventory ul li span:nth-child(3) {
+  float: right;
+}
+#Order_details .main .inventory ul li span:nth-child(4) {
+  margin-right: 30px;
+  float: right;
+}
+#Order_details .main .moe {
+  padding: 0.2rem 0.3rem;
+  font-weight: 500;
+}
+#Order_details .main .moe p {
+  font-weight: bold;
+}
+#Order_details .main .moe p span {
+  font-weight: normal;
+  display: inline-block;
+  float: right;
+}
+#Order_details .main .total {
+  padding: 0.2rem 0.3rem;
+  font-weight: 500;
+}
+#Order_details .main .total span {
+  font-weight: bold;
+}
+#Order_details .main .total div {
+  color: #ff9934 ;
+  font-weight: normal;
+  float: right;
+}
+#Order_details .main .total div span:nth-child(3) {
+  font-size: 0.2rem;
+}
+#Order_details .footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 1100;
+}
+#Order_details .footer a {
+  background: #599c3d;
+  margin: 0.1rem 0.1rem;
+  color: white;
+  text-align: center;
+  display: block;
+  line-height: 0.5rem;
+}
+#success_popup {
+  display: none;
+  position: absolute;
+  top: 3rem;
+  left: 0.2rem;
+  right: 0.2rem;
+  z-index: 2000;
+}
+#success_popup div div:nth-child(1) {
+  font-size: 0.35rem;
+  text-align: center;
+  height: 0.7rem;
+  line-height: 0.7rem;
+  background: #e5e5e5;
+  font-weight: 700;
+}
+#success_popup div div:nth-child(2) {
+  background: white;
+  height: 1.5rem;
+  padding: 0.3rem 0.45rem;
+  font-size: 0.3rem;
+  color: #707070;
+}
+#success_popup div div:nth-child(3) {
+  line-height: 0.7rem;
+  height: 0.7rem;
+  text-align: center;
+  color: white;
+  background: #599c3d;
+  font-size: 0.3rem;
 }

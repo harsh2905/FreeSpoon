@@ -1,4 +1,5 @@
 @header-height: 1.4rem;
+@height: @header-height/2;
 
 html, body {
   font-size: 0.25rem;
@@ -7,7 +8,6 @@ html, body {
   height: 100%;
   font-family: '微软雅黑', Helvetica, Tahoma, Arial, '华文细黑', sans-serif;
 }
-
 .popup {
   display: none;
   position: fixed;
@@ -19,7 +19,6 @@ html, body {
   top: 0;
   bottom: 1.7rem;
 }
-
 .popup_box {
   display: none;
   background: white;
@@ -123,12 +122,114 @@ html, body {
     }
   }
 }
-
 .select {
   display: block;
 }
+._header{
+  z-index: 100;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  height: @height;
+  background: #e5e5e5;
+  border-bottom: solid 1px #c8c8c8;
+  .black{
+    height: 0.7rem;
+    margin: 0.2rem 0.3rem;
+  }
+  .header-content {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    text-align: center;
+    font-size: 0.3rem;
+    line-height: @height;
+    font-weight: bold;
+    -webkit-user-select: none;
+    color: #599c3d;
+  }
+}
+._footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 1100;
+  a {
+    background: #599c3d;
+    margin: 0.1rem 0.1rem;
+    color: white;
+    text-align: center;
+    display: block;
+    line-height: 0.5rem;
+  }
+}
+._inventory {
+  div {
+    padding-left: 0.5rem;
+    margin: 0.2rem 0.3rem;
+    font-weight: 500;
+    background: url("../demo/1.PNG") no-repeat left;
+    background-size: 0.4rem;
+  }
+  ul {
+    background: white;
+    padding: 0.1rem 0;
+    li {
+      font-size: 0.2rem;
+      color: #7e7e7e;
+      padding: 0.1rem 0.25rem;
+      span {
+        display: inline-block;
+      }
+      span:nth-child(1) {
+        text-align: center;
+        width: 30px;
+        margin: 5px 0;
+      }
+      span:nth-child(2){
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 3rem;
+      }
+      span:nth-child(3) {
+        float: right;
+      }
+      span:nth-child(4) {
+        margin-right: 30px;
+        float: right;
+      }
+    }
+  }
+}
+._moe{
+  padding: 0.2rem 0.3rem;
+  font-weight: 500;
+  p{
+    font-weight: bold;
+    span{
+      font-weight: normal;
+      display: inline-block;
+      float: right;
+    }
+  }
+}
+._total{
+  padding: 0.2rem 0.3rem;
+  font-weight: 500;
+  span{
+    font-weight: bold;
+  }
+  div{
+    color:#ff9934 ;
+    font-weight: normal;
+    float: right;
+    span:nth-child(3){
+      font-size: 0.2rem;
+    }
+  }
+}
 
-/*onegpage*/
 #index {
   .header {
     position: fixed;
@@ -371,10 +472,11 @@ html, body {
       top: 0;
       right: 0;
       width: 2rem;
-      background: #ff9934;
+      background: #ff9934 !important;
       height: 1.2rem;
       text-align: center;
-      a {
+      a{
+        background: #ff9934;
         text-align: center;
         font-size: 0.45rem;
         line-height: @header-height - 0.3rem;
@@ -383,39 +485,10 @@ html, body {
     }
   }
 }
-
-/*twopage*/
 #checkout {
-  @height: @header-height/2;
   height: 100%;
-  .header {
-    z-index: 100;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    height: @height;
-    background: #e5e5e5;
-    border-bottom: solid 1px #c8c8c8;
-    #black{
-      height: 0.7rem;
-      width: 50px;
-    }
-    .black {
-      font-size: 0.5rem;
-      position: absolute;
-      margin-left: 0.2rem;
-    }
-    .header-content {
-      width: 100%;
-      position: absolute;
-      top: 0;
-      text-align: center;
-      font-size: 0.3rem;
-      line-height: @height;
-      font-weight: bold;
-      -webkit-user-select: none;
-      color: #599c3d;
-    }
+  .header{
+    ._header;
   }
   .main {
     margin-bottom: 1rem;
@@ -450,7 +523,7 @@ html, body {
     }
     .adds {
       div {
-        padding-left: 30px;
+        padding-left: 0.5rem;
         margin: 0.2rem 0.3rem;
         font-weight: 500;
         background: url("../demo/adds.png") no-repeat left;
@@ -462,91 +535,153 @@ html, body {
         li {
           font-size: 0.2rem;
           color: #7e7e7e;
-          padding: 0.1rem 0.25rem;
           div {
             background: url("../demo/3.png") no-repeat left;
-            background-size: 0.3rem;
-            padding-left: 30px;
+            background-size: 0.4rem;
+            padding-left: 0.5rem;
           }
         }
       }
     }
     .inventory {
-      div {
-        padding-left: 30px;
-        margin: 0.2rem 0.3rem;
-        font-weight: 500;
-        background: url("../demo/1.PNG") no-repeat left;
-        background-size: 0.4rem;
-      }
-      ul {
-        background: white;
-        padding: 0.1rem 0;
-        li {
-          font-size: 0.2rem;
-          color: #7e7e7e;
-          padding: 0.1rem 0.25rem;
-          span {
-            display: inline-block;
-          }
-          span:nth-child(1) {
-            text-align: center;
-            width: 30px;
-            margin: 5px 0;
-          }
-          span:nth-child(2) {
-            margin-left: 30px;
-          }
-          span:nth-child(3) {
-            float: right;
-          }
-          span:nth-child(4) {
-            margin-right: 30px;
-            float: right;
-          }
-        }
-      }
+      ._inventory;
     }
     .moe{
-      padding: 0.2rem 0.3rem;
-      font-weight: 500;
-        p{
-          font-weight: bold;
-          span{
-            font-weight: normal;
-            display: inline-block;
-            float: right;
-          }
-        }
+      ._moe;
     }
     .total{
-      padding: 0.2rem 0.3rem;
-      font-weight: 500;
-      span{
-        font-weight: bold;
-      }
+      ._total
+    }
+  }
+  .footer{
+    ._footer;
+  }
+}
+#Payment_success{
+  height: 100%;
+  .header{
+    ._header;
+  }
+  .main{
+    background: white;
+    height: 100%;
+    div{
+      margin: 0 auto;
+      padding: 2rem 0.5rem;
       div{
-        color:#ff9934 ;
-        font-weight: normal;
-        float: right;
-        span:nth-child(3){
-          font-size: 0.2rem;
-        }
+        background: url("../demo/sussce.png") no-repeat center;
+        background-size: 2rem;
+        height: 2.5rem;
+        padding: 0;
+      }
+      p:first-of-type{
+        text-align: center;
+        font-size: 0.5rem;
+      }
+      p:last-of-type{
+          margin-top:0.5rem;
+        font-size: 0.3rem;
       }
     }
   }
-  .footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    z-index: 1100;
-    a {
-      background: #599c3d;
-      margin: 0.1rem 0.1rem;
-      color: white;
-      text-align: center;
-      display: block;
-      line-height: 0.5rem;
+  .footer{
+    ._footer;
+  }
+}
+#Order_details{
+  height: 100%;
+  .header{
+    ._header;
+  }
+  .main{
+    margin-bottom: 1rem;
+    position: relative;
+    top: 0.7rem;
+    .follow{
+      div:first-of-type{
+
+      }
+      div:last-of-type{
+        padding: 0.2rem 0.3rem;
+        background: white;
+        p{
+          color: #7e7e7e;
+          padding: 0.1rem 0;
+          span{
+            display: inline-block;
+            margin: 0 0.15rem;
+          }
+        }
+      }
     }
+    .delivery {
+      div:first-of-type {
+        padding-left: 0.5rem;
+        margin: 0.2rem 0.3rem;
+        font-weight: 500;
+        background: url("../demo/pop.png") no-repeat left;
+        background-size: 0.35rem;
+      }
+      div:last-of-type{
+        padding: 0.2rem 0.3rem;
+        background: white;
+        p{
+          color: #7e7e7e;
+          padding: 0.1rem 0;
+          span{
+            display: inline-block;
+            margin: 0 0.15rem;
+          }
+        }
+      }
+
+    }
+    .inventory {
+      ._inventory;
+    }
+    .moe{
+      ._moe;
+    }
+    .total{
+      ._total
+    }
+  }
+  .footer{
+    ._footer;
+  }
+}
+
+#success_popup{
+  display: none;
+  position: absolute;
+  top: 3rem;
+  left: 0.2rem;
+  right: 0.2rem;
+  z-index: 2000;
+  div{
+    div:nth-child(1){
+      font-size: 0.35rem;
+      text-align: center;
+      height: 0.7rem;
+      line-height: 0.7rem;
+      background: #e5e5e5;
+      font-weight: 700;
+    }
+    div:nth-child(2){
+      background: white;
+      height: 1.5rem;
+      padding: 0.3rem 0.45rem;
+      font-size: 0.3rem;
+      color: #707070;
+    }
+    div:nth-child(3){
+      line-height: 0.7rem;
+      height: 0.7rem;
+      text-align: center;
+      color: white;
+      background: #599c3d;
+      font-size: 0.3rem;
+    }
+
   }
 }
