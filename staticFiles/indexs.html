@@ -14,6 +14,24 @@
         var winW = document.documentElement.clientWidth;
         document.documentElement.style.fontSize = winW / 6.4 + "px";
     </script>
+ <!--   <script type="text/javascript">
+        ~function(){
+            var data = [
+                {id: 1, title: 'xxxxx大红虾',unit_price:1000},
+                {id: 2, title: 'xxxxx大闸蟹',unit_price:2500},
+                {id: 3, title: 'xxxxx乌贼',unit_price:12530},
+                {id: 4, title: 'xxxxx榴莲',unit_price:800},
+            ];
+            (function render(data){
+                var li=document.getElementsByClassName("main");
+                for(key in data){
+                    var new_li=li.cloneNode();
+                    console.log(new_li);
+                }
+            })()
+        }();
+
+    </script>-->
 </head>
 <body>
 <div id="index" cls="page" default="yes" jid="1" style="display: none">
@@ -61,117 +79,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="regulator_right">
+                        <div class="counter">
                             <a class="block left" href="javascript:void(0);">-</a>
-                            <span class="block center"></span>
-                            <a class="block right" href="javascript:void(0);">+</a>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div>
-                    <img src="assets/demo/红虾.jpg" alt="">
-                </div>
-                <div class="content">
-                    <div class="first">
-                        <div>
-                            <h1>进口冷冻阿根廷红虾北极甜虾</h1>
-                            <span>500g/一盒</span>
-                        </div>
-                        <p>阿根廷红虾是阿根廷南部海域野生的虾子，红色，营养丰富，富含铁等元素，因是野生深海虾，加上全身红色，相对于国内虾来说。</p>
-                    </div>
-                    <div class="between clearfloat">
-                        <span>已团10盒</span>
-                        <span>已有20人参团</span>
-                    </div>
-                    <div class="last ">
-                        <div class="regulator_left">
-                            <div>
-                                <div>
-                                    <span><img src="assets/demo/poper.png" alt=""></span>
-                                    <span>团购价</span>
-                                    <span>￥1680</span>
-                                    <span>.</span>
-                                    <span>00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="regulator_right">
-                            <a class="block left" href="javascript:void(0);">-</a>
-                            <span class="block center"></span>
-                            <a class="block right" href="javascript:void(0);">+</a>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div>
-                    <img src="assets/demo/红虾.jpg" alt="">
-                </div>
-                <div class="content">
-                    <div class="first">
-                        <div>
-                            <h1>进口冷冻阿根廷红虾北极甜虾</h1>
-                            <span>500g/一盒</span>
-                        </div>
-                        <p>阿根廷红虾是阿根廷南部海域野生的虾子，红色，营养丰富，富含铁等元素，因是野生深海虾，加上全身红色，相对于国内虾来说。</p>
-                    </div>
-                    <div class="between clearfloat">
-                        <span>已团10盒</span>
-                        <span>已有20人参团</span>
-                    </div>
-                    <div class="last ">
-                        <div class="regulator_left">
-                            <div>
-                                <div>
-                                    <span><img src="assets/demo/poper.png" alt=""></span>
-                                    <span>团购价</span>
-                                    <span>￥1680</span>
-                                    <span>.</span>
-                                    <span>00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="regulator_right">
-                            <a id="reduce" class="block left" href="javascript:void(0);">-</a>
-                            <span id="number" class="block center"></span>
-                            <a id="plus" class="block right" href="javascript:void(0);">+</a>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div>
-                    <img src="assets/demo/红虾.jpg" alt="">
-                </div>
-                <div class="content">
-                    <div class="first">
-                        <div>
-                            <h1>进口冷冻阿根廷红虾北极甜虾</h1>
-                            <span>500g/一盒</span>
-                        </div>
-                        <p>阿根廷红虾是阿根廷南部海域野生的虾子，红色，营养丰富，富含铁等元素，因是野生深海虾，加上全身红色，相对于国内虾来说。</p>
-                    </div>
-                    <div class="between clearfloat">
-                        <span>已团10盒</span>
-                        <span>已有20人参团</span>
-                    </div>
-                    <div class="last ">
-                        <div class="regulator_left">
-                            <div>
-                                <div>
-                                    <span><img src="assets/demo/poper.png" alt=""></span>
-                                    <span>团购价</span>
-                                    <span>￥1680</span>
-                                    <span>.</span>
-                                    <span>00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="regulator_right">
-                            <a class="block left" href="javascript:void(0);">-</a>
-                            <span class="block center"></span>
+                            <input type="text" value="0" class="block center">
                             <a class="block right" href="javascript:void(0);">+</a>
                         </div>
                     </div>
@@ -360,7 +270,7 @@
 </div>
 
 <div class="popup" style="display: none"></div>
-<div class="popup_box" style="display: block">
+<div class="popup_box" style="display: none">
     <div>
         <div>
             <div class="oder">
@@ -379,8 +289,8 @@
                 <div>
                     <div>9999.00</div>
                     <div class="regulator_right">
-                        <a  href="javascript:void(0);">-</a>
-                        <span class="center">1</span>
+                        <a href="javascript:void(0);">-</a>
+                        <input type="text" class="center" value="0">
                         <a href="javascript:void(0);">+</a>
                     </div>
                 </div>
@@ -389,10 +299,10 @@
                 <div>红虾特卖红虾特卖红虾特卖红虾特卖红虾特卖红虾特卖</div>
                 <div>
                     <div>9999.00</div>
-                    <div class="box regulator_right">
-                        <a class="box_left block left" href="javascript:void(0);">-</a>
-                        <span class="box_center block center">1</span>
-                        <a class="box_right block right" href="javascript:void(0);">+</a>
+                    <div class="regulator_right">
+                        <a  href="javascript:void(0);">-</a>
+                        <input type="text" class="center" value="0">
+                        <a href="javascript:void(0);">+</a>
                     </div>
                 </div>
             </li>
@@ -400,43 +310,10 @@
                 <div>红虾特卖红虾特卖红虾特卖红虾特卖红虾特卖红虾特卖</div>
                 <div>
                     <div>9999.00</div>
-                    <div class="box regulator_right">
-                        <a class="box_left block left" href="javascript:void(0);">-</a>
-                        <span class="box_center block center">1</span>
-                        <a class="box_right block right" href="javascript:void(0);">+</a>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div>红虾特卖红虾特卖红虾特卖红虾特卖红虾特卖红虾特卖</div>
-                <div>
-                    <div>9999.00</div>
-                    <div class="box regulator_right">
-                        <a class="box_left block left" href="javascript:void(0);">-</a>
-                        <span class="box_center block center">1</span>
-                        <a class="box_right block right" href="javascript:void(0);">+</a>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div>红虾特卖红虾特卖红虾特卖红虾特卖红虾特卖红虾特卖</div>
-                <div>
-                    <div>9999.00</div>
-                    <div class="box regulator_right">
-                        <a class="box_left block left" href="javascript:void(0);">-</a>
-                        <span class="box_center block center">1</span>
-                        <a class="box_right block right" href="javascript:void(0);">+</a>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div>红虾特卖红虾特卖红虾特卖红虾特卖红虾特卖红虾特卖</div>
-                <div>
-                    <div>9999.00</div>
-                    <div class="box regulator_right">
-                        <a class="box_left block left" href="javascript:void(0);">-</a>
-                        <span class="box_center block center">1</span>
-                        <a class="box_right block right" href="javascript:void(0);">+</a>
+                    <div class="regulator_right">
+                        <a  href="javascript:void(0);">-</a>
+                        <input type="text" class="center" value="0">
+                        <a href="javascript:void(0);">+</a>
                     </div>
                 </div>
             </li>

@@ -68,7 +68,7 @@ html, body {
         margin-top: 0.15rem;
         span:nth-child(1) {
           float: right;
-          font-size: 0.1rem;
+          font-size: 0.2rem;
           margin-left: 0.05rem;
         }
         span:nth-child(2) {
@@ -113,7 +113,7 @@ html, body {
           position: absolute;
           top: 0;
           right: 0;
-          span, a {
+          input, a {
             float: left;
             border: 1px solid #ff9934;
             width: 20px;
@@ -122,7 +122,7 @@ html, body {
             line-height: 20px;
             border-radius:50% ;
           }
-          span {
+          input {
             border: none;
             width: 20px;
             height: 20px;
@@ -252,6 +252,7 @@ html, body {
     }
   }
 }
+
 #index {
   .header {
     position: fixed;
@@ -420,13 +421,13 @@ html, body {
       }
     }
   }
-  .regulator_right {
+  .counter {
     position: absolute;
     top: 0;
     right: 0;
     width: 2rem;
     margin: 0.2rem 0;
-    span, a {
+    input, a {
       font-size: 0.3rem;
       float: left;
       border: 1px solid #ff9934;
@@ -435,7 +436,8 @@ html, body {
       text-align: center;
       line-height: 0.5rem;
     }
-    span {
+    input {
+      text-align: center;
       width: 0.8rem;
     }
     a:active {

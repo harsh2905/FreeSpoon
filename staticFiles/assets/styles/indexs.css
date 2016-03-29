@@ -69,7 +69,7 @@ body {
 }
 .popup_box > div > div .del span:nth-child(1) {
   float: right;
-  font-size: 0.1rem;
+  font-size: 0.2rem;
   margin-left: 0.05rem;
 }
 .popup_box > div > div .del span:nth-child(2) {
@@ -112,7 +112,7 @@ body {
   top: 0;
   right: 0;
 }
-.popup_box > div ul li .regulator_right span,
+.popup_box > div ul li .regulator_right input,
 .popup_box > div ul li .regulator_right a {
   float: left;
   border: 1px solid #ff9934;
@@ -122,7 +122,7 @@ body {
   line-height: 20px;
   border-radius: 50% ;
 }
-.popup_box > div ul li .regulator_right span {
+.popup_box > div ul li .regulator_right input {
   border: none;
   width: 20px;
   height: 20px;
@@ -417,15 +417,15 @@ body {
   border-radius: 0 3.5rem 3.5rem 0;
   z-index: 101;
 }
-#index .regulator_right {
+#index .counter {
   position: absolute;
   top: 0;
   right: 0;
   width: 2rem;
   margin: 0.2rem 0;
 }
-#index .regulator_right span,
-#index .regulator_right a {
+#index .counter input,
+#index .counter a {
   font-size: 0.3rem;
   float: left;
   border: 1px solid #ff9934;
@@ -434,10 +434,11 @@ body {
   text-align: center;
   line-height: 0.5rem;
 }
-#index .regulator_right span {
+#index .counter input {
+  text-align: center;
   width: 0.8rem;
 }
-#index .regulator_right a:active {
+#index .counter a:active {
   background: #ff9934;
   color: white;
 }
