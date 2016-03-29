@@ -1,46 +1,59 @@
-$(".regulator_right").bind("click",function(e){
-    var tar= e.target;
-    var count= Number($(this).find("span")[0].innerHTML);
-    var boder_count=Number($(".shop").find("span")[0].innerHTML);
-    if(tar.className=="block left"||tar.className=="box_left block left"){
-        if(count==0||boder_count==0){
-            return
+window.onload=function(){
+    var pageAry={};
+    var allDom=document.getElementsByTagName("body")[0].getElementsByTagName("*");
+    var activePage=null;
+    for(var i=0;i<allDom.length;i++) {
+        var cur = allDom[i];
+        if (cur.getAttribute("cls") && cur.getAttribute("jid")) {
+            var id=cur.getAttribute("jid");
+            pageAry[id]=cur;
         }
-        if(boder_count<2){
-            $(".shop>span").hide();
+        if (cur.getAttribute("method") && cur.getAttribute("target")) {
+            cur.addEventListener("click", jump);
         }
-        $(this).find("span")[0].innerHTML--;
-        $(".shop").find("span")[0].innerHTML--;
-    }else if(tar.className=="block right"|| tar.className=="box_right block right"){
-        $(".shop>span").show();
-        $(this).find("span")[0].innerHTML++;
-        $(".shop").find("span")[0].innerHTML++;
+        var defaultAttr = cur.getAttribute('default');
+        if(!!defaultAttr && defaultAttr == 'yes'){
+            activePage = cur;
+            activePage.style.display = 'block';
+        }
     }
-    if(boder_count===1){
-        $(".shop").unbind();
-    }else if(boder_count>=1){
-
+    function jump(e){
+        if(!!activePage){
+            activePage.style.display="none";
+        }
+        var id= e.currentTarget.getAttribute("target");
+        pageAry[id].style.display="block";
+        activePage= pageAry[id];
     }
+};
+/*var oUls=document.getElementById("add_li");
+var oLis=oUls.children;
+for(var i=0;i<oLis.length;i++) {
+    var cur = oLis[i].children[0];
+    (function(e){
+        cur.onclick =function(){
+            for(var i = 0; i < oLis.length; i++){
+                oLis[i].children[0].className="div";
+                console.log(1);
+            }
+            oLis[e].children[0].className="page";
+        };
+    })(i);
+}*/
 
-});
-$(".shop").bind("click",function(e){
-    $(".popup").toggle();
-    $(".popup_box").toggle();
-});
+var checkbox_group = document.getElementsByClassName('__checkbox__');
+for(var _ in checkbox_group){
+    var checkbox = checkbox_group[_];
+    checkbox.onclick = function(){
+        for(var i = 0; i < checkbox_group.length; i++){
+            var checkbox_ = checkbox_group[i];
+            checkbox_.classList.remove('checked');
+        }
+        this.classList.add('checked');
+    };
+}
 
 
-$("#del").bind("click",function(){
-    $(".popup").hide();
-    $(".popup_box").hide();
-});
 
-$(".f_right").bind("click",function(){
-    $("#index").hide();
-    $("#checkout").show();
-});
-$("#black").bind("click",function(){
-    console.log(1);
-    $("#index").show();
-    $("#checkout").hide();
-});
+
 

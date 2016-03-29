@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        div{
+            width:100px;
+            height:100px;
+            background: #000;
+        }
+    </style>
+    <script type="text/javascript">
+        window.onload = function(){
+            var domObjects = document.getElementsByTagName('div');
+            var dict = {};
+            for(var i = 0; i < domObjects.length; i++){
+                var domObject = domObjects[i];
+                var className = domObject.getAttribute('class');//a b c d e f
+                dict[className] = domObject;
+            }
+            console.log(dict);
+
+
+            var domObject = dict['f'];
+            domObject.style.background = '#FF0000';
+        }
+    </script>
+</head>
+<body>
+<div class="a"></div>
+<div class="b"></div>
+<div class="c"></div>
+<div class="d"></div>
+<div class="e"></div>
+<div class="f"></div>
+</body>
+</html>

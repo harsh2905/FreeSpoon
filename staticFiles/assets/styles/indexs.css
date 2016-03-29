@@ -1,3 +1,10 @@
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-decoration: none;
+  color: #000;
+}
 html,
 body {
   font-size: 0.25rem;
@@ -100,24 +107,32 @@ body {
   text-align: right;
   color: #ff9934;
 }
-.popup_box > div ul li .box {
-  width: 1.2rem;
-  margin: auto 0;
+.popup_box > div ul li .regulator_right {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
-.popup_box > div ul li .box_left,
-.popup_box > div ul li .box_right {
-  width: 0.3rem;
-  height: 0.3rem;
-  line-height: 0.25rem;
-  font-size: 0.3rem;
-  border-radius: 50%;
+.popup_box > div ul li .regulator_right span,
+.popup_box > div ul li .regulator_right a {
+  float: left;
+  border: 1px solid #ff9934;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  border-radius: 50% ;
 }
-.popup_box > div ul li .box_center {
-  border: 0;
-  width: 0.5rem;
-  height: 0.3rem;
-  line-height: 0.3rem;
+.popup_box > div ul li .regulator_right span {
+  border: none;
+  width: 20px;
+  height: 20px;
   font-size: 0.2rem;
+  text-align: center;
+  line-height: 20px;
+}
+.popup_box > div ul li .regulator_right a:active {
+  background: #ff9934;
+  color: white;
 }
 .select {
   display: block;
@@ -131,14 +146,18 @@ body {
   background: #e5e5e5;
   border-bottom: solid 1px #c8c8c8;
 }
-._header .black {
+._header i {
+  overflow: hidden;
+  display: block;
+  z-index: 999;
   height: 0.7rem;
-  margin: 0.2rem 0.3rem;
+  line-height: 0.7rem;
+  vertical-align: middle;
+  padding: 0 0.2rem;
+  float: left;
 }
 ._header .header-content {
-  width: 100%;
-  position: absolute;
-  top: 0;
+  width: auto;
   text-align: center;
   font-size: 0.3rem;
   line-height: 0.7rem;
@@ -158,7 +177,8 @@ body {
   color: white;
   text-align: center;
   display: block;
-  line-height: 0.5rem;
+  height: 0.6rem;
+  line-height: 0.6rem;
 }
 ._inventory div {
   padding-left: 0.5rem;
@@ -495,14 +515,18 @@ body {
   background: #e5e5e5;
   border-bottom: solid 1px #c8c8c8;
 }
-#checkout .header .black {
+#checkout .header i {
+  overflow: hidden;
+  display: block;
+  z-index: 999;
   height: 0.7rem;
-  margin: 0.2rem 0.3rem;
+  line-height: 0.7rem;
+  vertical-align: middle;
+  padding: 0 0.2rem;
+  float: left;
 }
 #checkout .header .header-content {
-  width: 100%;
-  position: absolute;
-  top: 0;
+  width: auto;
   text-align: center;
   font-size: 0.3rem;
   line-height: 0.7rem;
@@ -556,10 +580,14 @@ body {
   font-size: 0.2rem;
   color: #7e7e7e;
 }
-#checkout .main .adds ul li div {
-  background: url("../demo/3.png") no-repeat left;
+#checkout .main .adds ul li .__checkbox__ {
+  background: url("../demo/2.png") no-repeat left;
   background-size: 0.4rem;
   padding-left: 0.5rem;
+}
+#checkout .main .adds ul li .checked {
+  background: url("../demo/3.png") no-repeat left !important;
+  background-size: 0.4rem !important;
 }
 #checkout .main .inventory div {
   padding-left: 0.5rem;
@@ -637,7 +665,8 @@ body {
   color: white;
   text-align: center;
   display: block;
-  line-height: 0.5rem;
+  height: 0.6rem;
+  line-height: 0.6rem;
 }
 #Payment_success {
   height: 100%;
@@ -651,14 +680,18 @@ body {
   background: #e5e5e5;
   border-bottom: solid 1px #c8c8c8;
 }
-#Payment_success .header .black {
+#Payment_success .header i {
+  overflow: hidden;
+  display: block;
+  z-index: 999;
   height: 0.7rem;
-  margin: 0.2rem 0.3rem;
+  line-height: 0.7rem;
+  vertical-align: middle;
+  padding: 0 0.2rem;
+  float: left;
 }
 #Payment_success .header .header-content {
-  width: 100%;
-  position: absolute;
-  top: 0;
+  width: auto;
   text-align: center;
   font-size: 0.3rem;
   line-height: 0.7rem;
@@ -700,7 +733,8 @@ body {
   color: white;
   text-align: center;
   display: block;
-  line-height: 0.5rem;
+  height: 0.6rem;
+  line-height: 0.6rem;
 }
 #Order_details {
   height: 100%;
@@ -714,14 +748,18 @@ body {
   background: #e5e5e5;
   border-bottom: solid 1px #c8c8c8;
 }
-#Order_details .header .black {
+#Order_details .header i {
+  overflow: hidden;
+  display: block;
+  z-index: 999;
   height: 0.7rem;
-  margin: 0.2rem 0.3rem;
+  line-height: 0.7rem;
+  vertical-align: middle;
+  padding: 0 0.2rem;
+  float: left;
 }
 #Order_details .header .header-content {
-  width: 100%;
-  position: absolute;
-  top: 0;
+  width: auto;
   text-align: center;
   font-size: 0.3rem;
   line-height: 0.7rem;
@@ -841,7 +879,8 @@ body {
   color: white;
   text-align: center;
   display: block;
-  line-height: 0.5rem;
+  height: 0.6rem;
+  line-height: 0.6rem;
 }
 #success_popup {
   display: none;

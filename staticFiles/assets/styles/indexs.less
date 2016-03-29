@@ -1,6 +1,14 @@
 @header-height: 1.4rem;
 @height: @header-height/2;
 
+*{
+  margin:0;
+  padding:0;
+  list-style: none;
+  text-decoration: none;
+  color: #000;
+}
+
 html, body {
   font-size: 0.25rem;
   background: #f0f2f5;
@@ -27,9 +35,9 @@ html, body {
   z-index: 1000;
   width: 100%;
   margin-bottom: @header-height - 0.3rem;
-  > div {
+  &> div {
     margin: 0.2rem 0.15rem 0.7rem 0.15rem;
-    > div {
+    &> div {
       overflow: hidden;
       height: 0.6rem;
       background: #e3e3e3;
@@ -79,7 +87,7 @@ html, body {
         border-bottom: 1px solid #CCCCCC;
         margin: 0.1rem 0;
         padding: 0.1rem 0;
-        > div:nth-child(1) {
+        &> div:nth-child(1) {
           overflow: hidden;
           margin-right: 2rem;
           text-overflow: ellipsis;
@@ -87,7 +95,7 @@ html, body {
           padding-right: 1rem;
           padding-left: 0.15rem;
         }
-        > div:nth-child(2) {
+        &> div:nth-child(2) {
           position: absolute;
           top: 0.1rem;
           right: 0;
@@ -100,28 +108,38 @@ html, body {
             color: #ff9934;
           }
         }
-        .box {
-          width: 1.2rem;
-          margin: auto 0;
-        }
-        .box_left, .box_right {
-          width: 0.3rem;
-          height: 0.3rem;
-          line-height: 0.25rem;
-          font-size: 0.3rem;
-          border-radius: 50%;
-        }
-        .box_center {
-          border: 0;
-          width: 0.5rem;
-          height: 0.3rem;
-          line-height: 0.3rem;
-          font-size: 0.2rem;
+        .regulator_right {
+
+          position: absolute;
+          top: 0;
+          right: 0;
+          span, a {
+            float: left;
+            border: 1px solid #ff9934;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 20px;
+            border-radius:50% ;
+          }
+          span {
+            border: none;
+            width: 20px;
+            height: 20px;
+            font-size: 0.2rem;
+            text-align: center;
+            line-height: 20px;
+          }
+          a:active {
+            background: #ff9934;
+            color: white;
+          }
         }
       }
     }
   }
 }
+
 .select {
   display: block;
 }
@@ -133,14 +151,18 @@ html, body {
   height: @height;
   background: #e5e5e5;
   border-bottom: solid 1px #c8c8c8;
-  .black{
+  i{
+    overflow: hidden;
+    display: block;
+    z-index: 999;
     height: 0.7rem;
-    margin: 0.2rem 0.3rem;
+    line-height: 0.7rem;
+    vertical-align: middle;
+    padding:0 0.2rem;
+    float: left;
   }
   .header-content {
-    width: 100%;
-    position: absolute;
-    top: 0;
+    width: auto;
     text-align: center;
     font-size: 0.3rem;
     line-height: @height;
@@ -160,7 +182,8 @@ html, body {
     color: white;
     text-align: center;
     display: block;
-    line-height: 0.5rem;
+    height: 0.6rem;
+    line-height: 0.6rem;
   }
 }
 ._inventory {
@@ -229,7 +252,6 @@ html, body {
     }
   }
 }
-
 #index {
   .header {
     position: fixed;
@@ -535,10 +557,14 @@ html, body {
         li {
           font-size: 0.2rem;
           color: #7e7e7e;
-          div {
-            background: url("../demo/3.png") no-repeat left;
+          .__checkbox__ {
+            background: url("../demo/2.png") no-repeat left;
             background-size: 0.4rem;
             padding-left: 0.5rem;
+          }
+          .checked {
+            background: url("../demo/3.png") no-repeat left !important;
+            background-size: 0.4rem !important;
           }
         }
       }
@@ -650,7 +676,6 @@ html, body {
     ._footer;
   }
 }
-
 #success_popup{
   display: none;
   position: absolute;

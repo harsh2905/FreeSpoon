@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="height=device-height,width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <title>益家E农</title>
-    <link rel="stylesheet" href="assets/styles/reset.css">
+    <!--<link rel="stylesheet" href="assets/styles/reset.css">-->
     <link rel="stylesheet" href="assets/styles/indexs.css">
     <link rel="stylesheet" href="assets/styles/font-awesome.min.css">
 
@@ -16,7 +16,7 @@
     </script>
 </head>
 <body>
-<div id="index" style="display: block">
+<div id="index" cls="page" default="yes" jid="1" style="display: none">
     <div class="header">
         <div class="left">
             <div class="sculpture"><img src="assets/demo/1.jpg" alt=""></div>
@@ -187,14 +187,12 @@
                 <span>不含运费</span>
             </div>
         </div>
-        <div class="f_right"><a href="#checkout">去结算</a></div>
+        <div class="f_right" ><a href="javascript:void(0)" method="jump" target="2">去结算</a></div>
     </div>
 </div>
-<div id="checkout" style="display: none">
-    <div class="header">
-        <div class="black">
-            <i class="icon-chevron-left icon-large"></i>
-        </div>
+<div id="checkout" cls="page" jid="2" style="display: none">
+    <div class="header"  >
+            <i class="icon-chevron-left icon-large" method="jump" target="1" ></i>
         <div class="header-content">订单确认</div>
     </div>
     <div class="main">
@@ -207,25 +205,25 @@
             <div>取货地</div>
             <ul>
                 <li>
-                    <div>
+                    <div class="__checkbox__">
                         <p>海淀区上地实验小学东门</p>
                         <p>预计:3月12日 9:30 </p>
                     </div>
                 </li>
                 <li>
-                    <div>
+                    <div class="__checkbox__">
                         <p>海淀区上地实验小学东门</p>
                         <p>预计:3月12日 9:30 </p>
                     </div>
                 </li>
                 <li>
-                    <div>
+                    <div class="__checkbox__">
                         <p>海淀区上地实验小学东门</p>
                         <p>预计:3月12日 9:30 </p>
                     </div>
                 </li>
                 <li>
-                    <div>
+                    <div class="__checkbox__">
                         <p>海淀区上地实验小学东门海淀区上地实验小学东门海淀区上地实验小学东门</p>
                         <p>预计:3月12日 9:30 </p>
                     </div>
@@ -256,7 +254,7 @@
             </ul>
         </div>
         <div class="moe">
-           <p>配送费<span>￥10</span></p>
+            <p>配送费<span>￥10</span></p>
         </div>
         <div class="total">
             <span>总计</span>
@@ -271,8 +269,8 @@
         <a href="javascript:void(0);">立即支付</a>
     </div>
 </div>
-<div id="Payment_success" style="display: none">
-    <div class="header">
+<div id="Payment_success" cls="page" jid="3" style="display: none">
+    <div class="header" method="change" target="2">
         <div class="black">
             <i class="icon-chevron-left icon-large"></i>
         </div>
@@ -289,8 +287,8 @@
         <a href="javascript:void(0);">接龙到微信，邀请群友吧</a>
     </div>
 </div>
-<div id="Order_details" style="display: none">
-    <div class="header">
+<div id="Order_details" cls="page" jid="4" style="display: none">
+    <div class="header" method="change" target="3">
         <div class="black">
             <i class="icon-chevron-left icon-large"></i>
         </div>
@@ -353,9 +351,16 @@
         <a href="javascript:void(0);">接龙到微信群，邀请群友吧</a>
     </div>
 </div>
+<div id="success_popup" cls="page" jid="5" >
+    <div>
+        <div class="header">支付成功</div>
+        <div class="main">恭喜您成为第88位接龙者，快去邀请小伙伴继续接龙吧！</div>
+        <div class="footer">接龙到微信群，邀请群友吧！</div>
+    </div>
+</div>
 
 <div class="popup" style="display: none"></div>
-<div class="popup_box">
+<div class="popup_box" style="display: block">
     <div>
         <div>
             <div class="oder">
@@ -373,10 +378,10 @@
                 <div>红虾特卖红虾特卖红虾特卖红虾特卖红虾特卖红虾特卖</div>
                 <div>
                     <div>9999.00</div>
-                    <div class="box regulator_right">
-                        <a class="box_left block left" href="javascript:void(0);">-</a>
-                        <span class="box_center block center">1</span>
-                        <a class="box_right block right" href="javascript:void(0);">+</a>
+                    <div class="regulator_right">
+                        <a  href="javascript:void(0);">-</a>
+                        <span class="center">1</span>
+                        <a href="javascript:void(0);">+</a>
                     </div>
                 </div>
             </li>
@@ -436,13 +441,6 @@
                 </div>
             </li>
         </ul>
-    </div>
-</div>
-<div id="success_popup">
-    <div>
-        <div class="header">支付成功</div>
-        <div class="main">恭喜您成为第88位接龙者，快去邀请小伙伴继续接龙吧！</div>
-        <div class="footer">接龙到微信群，邀请群友吧！</div>
     </div>
 </div>
 <script type="text/javascript" src="assets/scripts/indexs.js"></script>
