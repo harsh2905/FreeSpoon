@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        .box{
+            background: #2798eb;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <p>sjflasgjlasg</p>
+</div>
+<script type="text/javascript">
+var obj={1:{num:12,name:"abc"},
+         2:{num:5,name:"edf"},
+         3:{num:30,name:"ghj"},
+         4:{num:20,name:"set"}
+};
+function num(obj){
+    var total=0;
+    for(var key in obj){
+        total+=obj[key].num;
+    }
+    return total;
+}
+console.log(num(obj));
+
+   /* for(key in obj){
+        console.log(obj[key]);
+    }*/
+
+</script>
+</body>
+</html>

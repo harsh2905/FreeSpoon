@@ -8,30 +8,11 @@
     <!--<link rel="stylesheet" href="assets/styles/reset.css">-->
     <link rel="stylesheet" href="assets/styles/indexs.css">
     <link rel="stylesheet" href="assets/styles/font-awesome.min.css">
-
     <script type="text/javascript" src="assets/scripts/jquery-1.12.1.min.js"></script>
     <script>
         var winW = document.documentElement.clientWidth;
         document.documentElement.style.fontSize = winW / 6.4 + "px";
     </script>
- <!--   <script type="text/javascript">
-        ~function(){
-            var data = [
-                {id: 1, title: 'xxxxx大红虾',unit_price:1000},
-                {id: 2, title: 'xxxxx大闸蟹',unit_price:2500},
-                {id: 3, title: 'xxxxx乌贼',unit_price:12530},
-                {id: 4, title: 'xxxxx榴莲',unit_price:800},
-            ];
-            (function render(data){
-                var li=document.getElementsByClassName("main");
-                for(key in data){
-                    var new_li=li.cloneNode();
-                    console.log(new_li);
-                }
-            })()
-        }();
-
-    </script>-->
 </head>
 <body>
 <div id="index" cls="page" default="yes" jid="1" style="display: none">
@@ -49,7 +30,7 @@
             <div>还有<span>2天</span>结束</div>
         </div>
     </div>
-    <div class="main">
+    <div class="main" >
         <ul>
             <li>
                 <div>
@@ -80,9 +61,81 @@
                             </div>
                         </div>
                         <div class="counter">
-                            <a class="block left" href="javascript:void(0);">-</a>
-                            <input type="text" value="0" class="block center">
-                            <a class="block right" href="javascript:void(0);">+</a>
+                            <a class="block left" href="javascript:void(0);" onclick="removedCommodity(1)">-</a>
+                            <input type="text" value="0" class="block center _field_quantity_1" autocomplete="off" readonly="readonly" >
+                            <a class="block right" href="javascript:void(0);" onclick="addCommodity(1)">+</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <img src="assets/demo/红虾.jpg" alt="">
+                </div>
+                <div class="content">
+                    <div class="first">
+                        <div>
+                            <h1>进口冷冻阿根廷红虾北极甜虾</h1>
+                            <span>500g/一盒</span>
+                        </div>
+                        <p>阿根廷红虾是阿根廷南部海域野生的虾子，红色，营养丰富，富含铁等元素，因是野生深海虾，加上全身红色，相对于国内虾来说。</p>
+                    </div>
+                    <div class="between clearfloat">
+                        <span>已团10盒</span>
+                        <span>已有20人参团</span>
+                    </div>
+                    <div class="last ">
+                        <div class="regulator_left">
+                            <div>
+                                <div>
+                                    <span><img src="assets/demo/poper.png" alt=""></span>
+                                    <span>团购价</span>
+                                    <span>￥1680</span>
+                                    <span>.</span>
+                                    <span>00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="counter">
+                            <a class="block left" href="javascript:void(0);" onclick="removedCommodity(2)">-</a>
+                            <input type="text" value="0" class="block center _field_quantity_2" autocomplete="off" readonly="readonly" >
+                            <a class="block right" href="javascript:void(0);" onclick="addCommodity(2)">+</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <img src="assets/demo/红虾.jpg" alt="">
+                </div>
+                <div class="content">
+                    <div class="first">
+                        <div>
+                            <h1>进口冷冻阿根廷红虾北极甜虾</h1>
+                            <span>500g/一盒</span>
+                        </div>
+                        <p>阿根廷红虾是阿根廷南部海域野生的虾子，红色，营养丰富，富含铁等元素，因是野生深海虾，加上全身红色，相对于国内虾来说。</p>
+                    </div>
+                    <div class="between clearfloat">
+                        <span>已团10盒</span>
+                        <span>已有20人参团</span>
+                    </div>
+                    <div class="last ">
+                        <div class="regulator_left">
+                            <div>
+                                <div>
+                                    <span><img src="assets/demo/poper.png" alt=""></span>
+                                    <span>团购价</span>
+                                    <span>￥1680</span>
+                                    <span>.</span>
+                                    <span>00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="counter">
+                            <a class="block left" href="javascript:void(0);" onclick="removedCommodity(3)">-</a>
+                            <input type="text" value="0" class="block center _field_quantity_3" autocomplete="off" readonly="readonly" >
+                            <a class="block right" href="javascript:void(0);" onclick="addCommodity(3)">+</a>
                         </div>
                     </div>
                 </div>
@@ -91,13 +144,42 @@
     </div>
     <div class="footer">
         <div class="f_left">
-            <div class="shop"><span>0</span></div>
+            <div class="shop"><span></span></div>
             <div class="shop_info">
-                <p>合计:<span>5000.00</span></p>
+                <p>合计:<span class="_total">0</span></p>
                 <span>不含运费</span>
             </div>
         </div>
-        <div class="f_right" ><a href="javascript:void(0)" method="jump" target="2">去结算</a></div>
+        <div class="f_right" ><a href="javascript:void(0)" method="jump(in_list)" target="2">去结算</a></div>
+    </div>
+    <div class="popup" style="display: none"></div>
+    <div class="popup_box" style="display: none">
+        <div>
+            <div>
+                <div class="oder">
+                    <span></span>
+                    <span>订单信息</span>
+                </div>
+
+                <div id="del" class="del">
+                    <span>清空</span>
+                    <span></span>
+                </div>
+            </div>
+            <ul id="popup">
+                <li class="_template">
+                    <div class="_field_title"></div>
+                    <div>
+                        <div class="_field_price"></div>
+                        <div class="regulator_right">
+                            <a href="javascript:void(0);" class="_button_remove">-</a>
+                            <input type="text" class="center _field_quantity" autocomplete="off" readonly="readonly">
+                            <a href="javascript:void(0);" class="_button_add">+</a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
 <div id="checkout" cls="page" jid="2" style="display: none">
@@ -142,24 +224,12 @@
         </div>
         <div class="inventory">
             <div>商品明细</div>
-            <ul>
-                <li>
-                    <span>1</span>
-                    <span>进口冷冻阿根廷红虾</span>
-                    <span>￥55.00</span>
-                    <span>2</span>
-                </li>
-                <li>
-                    <span>1</span>
-                    <span>进口冷冻阿根廷红虾</span>
-                    <span>￥55.00</span>
-                    <span>2</span>
-                </li>
-                <li>
-                    <span>1</span>
-                    <span>进口冷冻阿根廷红虾进口冷冻阿根廷红虾进口冷冻阿根廷红虾</span>
-                    <span>￥55.00</span>
-                    <span>2</span>
+            <ul id="invent">
+                <li class="_inventory_list">
+                    <span></span>
+                    <span class="inventory_title"></span>
+                    <span class="inventory__price"></span>
+                    <span class="inventory__total"></span>
                 </li>
             </ul>
         </div>
@@ -169,9 +239,7 @@
         <div class="total">
             <span>总计</span>
             <div>
-                <span>￥456</span>
-                <span>.</span>
-                <span>00</span>
+                <span class="total_number">￥</span>
             </div>
         </div>
     </div>
@@ -269,57 +337,7 @@
     </div>
 </div>
 
-<div class="popup" style="display: none"></div>
-<div class="popup_box" style="display: none">
-    <div>
-        <div>
-            <div class="oder">
-                <span></span>
-                <span>订单信息</span>
-            </div>
 
-            <div id="del" class="del">
-                <span>清空</span>
-                <span></span>
-            </div>
-        </div>
-        <ul id="popup">
-            <li>
-                <div>红虾特卖红虾特卖红虾特卖红虾特卖红虾特卖红虾特卖</div>
-                <div>
-                    <div>9999.00</div>
-                    <div class="regulator_right">
-                        <a href="javascript:void(0);">-</a>
-                        <input type="text" class="center" value="0">
-                        <a href="javascript:void(0);">+</a>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div>红虾特卖红虾特卖红虾特卖红虾特卖红虾特卖红虾特卖</div>
-                <div>
-                    <div>9999.00</div>
-                    <div class="regulator_right">
-                        <a  href="javascript:void(0);">-</a>
-                        <input type="text" class="center" value="0">
-                        <a href="javascript:void(0);">+</a>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div>红虾特卖红虾特卖红虾特卖红虾特卖红虾特卖红虾特卖</div>
-                <div>
-                    <div>9999.00</div>
-                    <div class="regulator_right">
-                        <a  href="javascript:void(0);">-</a>
-                        <input type="text" class="center" value="0">
-                        <a href="javascript:void(0);">+</a>
-                    </div>
-                </div>
-            </li>
-        </ul>
-    </div>
-</div>
 <script type="text/javascript" src="assets/scripts/indexs.js"></script>
 </body>
 </html>

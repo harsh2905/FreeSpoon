@@ -1,3 +1,4 @@
+
 window.onload = function () {
     var pageAry = {};
     var allDom = document.getElementsByTagName("body")[0].getElementsByTagName("*");
@@ -26,40 +27,9 @@ window.onload = function () {
         activePage = pageAry[id];
     }
 };
-~function () {
-    var shop = document.getElementsByClassName("shop")[0];
-    var num = shop.getElementsByTagName("span")[0];
-    var flag = -1;
-    shop.onclick = function () {
-        var popup = document.getElementsByClassName("popup")[0];
-        var popup_box = document.getElementsByClassName("popup_box")[0];
-        if (num.innerHTML > 0 && flag == "-1") {
-            popup.style.display = "block";
-            popup_box.style.display = "block";
-            flag = flag * -1;
-        } else if (num.innerHTML > 0 && flag == "1") {
-            popup.style.display = "none";
-            popup_box.style.display = "none";
-            flag = flag * -1;
-        }
-    };
-}();
+function in_list(){
 
-
-/*var oUls=document.getElementById("add_li");
- var oLis=oUls.children;
- for(var i=0;i<oLis.length;i++) {
- var cur = oLis[i].children[0];
- (function(e){
- cur.onclick =function(){
- for(var i = 0; i < oLis.length; i++){
- oLis[i].children[0].className="div";
- console.log(1);
- }
- oLis[e].children[0].className="page";
- };
- })(i);
- }*/
+}
 var checkbox_group = document.getElementsByClassName('__checkbox__');
 for (var _ in checkbox_group) {
     var checkbox = checkbox_group[_];
@@ -72,36 +42,128 @@ for (var _ in checkbox_group) {
     };
 }
 
-var obj = {};
-var counter = document.getElementsByClassName("counter");
-for (var i = 0; i < counter.length; i++) {
-    counter[i].onclick = function (e) {
-        var el = e.srcElement;
-        var cls = el.className;
-        var input = this.getElementsByTagName("input")[0];
-        var val = parseInt(input.value);
-        var cnotent = this.getElementsByTagName("span");
-        var shop = document.getElementsByClassName("shop")[0].getElementsByTagName("span")[0];
-        var unit_scrip = {};
-        switch (cls) {
-            case "block left":
-                if (val > 0) {
-                    unit_scrip[this.id] = input.value;
-                    input.value = val - 1;
-                    shop.innerHTML = Number(shop.innerHTML) - 1;
-                }
-                break;
-            case "block right":
-                shop.style.display = "block";
-                shop.innerHTML = Number(shop.innerHTML) + 1;
-                input.value = val + 1;
-                break;
-
-            default:
-                break;
-        }
+var shop = document.getElementsByClassName("shop")[0];
+var popup = document.getElementsByClassName("popup")[0];
+var popup_box = document.getElementsByClassName("popup_box")[0];
+var flag = -1;
+popup.onclick=function(){
+    console.log(1);
+    if( popup_box.style.display="block"){
+        popup_box.style.display="none";
+        popup.style.display="none";
     }
-}
+};
+shop.onclick = function () {
+    if (num[0].innerHTML > 0 && flag == "-1") {
+        popup.style.display = "block";
+        popup_box.style.display = "block";
+        flag = flag * -1;
+    } else if (num[0].innerHTML > 0 && flag == "1") {
+        popup.style.display = "none";
+        popup_box.style.display = "none";
+        flag = flag * -1;
+    }
+};
+(function () {
+    var commodities = (new Function('', 'return ' + '{"1": {"cur":0,"quota": 1, "id": 1, "unit_price": 20, "title": "\u6cf0\u56fd\u6930\u9752"}, "3": { "cur":0,"quota": 1, "id": 3, "unit_price": 59, "title": "\u7ea2\u989c\u8349\u8393"}, "2": {"cur":0,"quota": 1, "id": 2, "unit_price": 28, "title": "\u83f2\u5f8b\u5bbe\u51e4\u68a8"}, "4": {"cur":0,"quota": 1, "id": 4, "unit_price": 0, "title": "\u8d85\u4fbf\u5b9c\u6c34\u679c"}}'))();
+    var cart = $("#popup");
+    var template = $("._template");
+    num=$(".shop span");
+    var invent=$("#invent");
+    var inventory_list=$("._inventory_list");
+    window.addCommodity = function (id) {
+        var commodity = commodities[id];
+        if (!!commodity) {
+            if (!commodity.domeObject) {
+                var item = template.clone();
+                var inventory=inventory_list.clone();
+                commodity.domeObject = item;
+                commodity.dome_inventory_list = inventory;
+                commodity.quantity = 1;
+                item.find("._field_title").text(commodity.title);
+                item.find("._field_price").text(commodity.unit_price.toFixed(2));
+                num.text(1);
+                item.find("._field_quantity").val(1);
+                $('._field_quantity_' + id).val(1);
+                inventory.find(".inventory_title").text(commodity.title);
+                inventory.find(".inventory__price").text(commodity.quantity);
+                inventory.find(".inventory__total").text((commodity.unit_price * commodity.quantity).toFixed(2));
+                (function (id) {
+                    item.find("._button_remove").click(function () {
+                        window.removedCommodity(id);
+                    });
+                    item.find("._button_add").click(function () {
+                        window.addCommodity(id);
+                    });
+                })(id);
+                cart.append(item);
+                invent.append(inventory);
+                inventory_list.remove();
+                template.remove();
+            } else {
+                commodity.quantity += 1;
+                num.text(commodity.quantity);
+                $('._field_quantity_' + id).val(commodity.quantity);
+                commodity.domeObject.find("._field_quantity").val(commodity.quantity);
+                commodity.domeObject.find("._field_price").text((commodity.unit_price * commodity.quantity).toFixed(2));
+                commodity.dome_inventory_list.find(".inventory__price").text(commodity.quantity);
+                commodity.dome_inventory_list.find(".inventory__total").text((commodity.unit_price * commodity.quantity).toFixed(2));
+            }
+        }
+        total(id);
+    };
+    window.removedCommodity = function (id) {
+        var commodity = commodities[id];
+        if (!!commodity) {
+            if (!!commodity.domeObject) {
+                if (commodity.quantity > 1) {
+                    commodity.quantity -= 1;
+                    num.text(commodity.quantity);
+                    $('._field_quantity_' + id).val(commodity.quantity);
+                    commodity.domeObject.find("._field_quantity").val(commodity.quantity);
+                    commodity.domeObject.find("._field_price").text((commodity.unit_price * commodity.quantity).toFixed(2));
+                } else {
+                    commodity.quantity -= 1;
+                    $('._field_quantity_' + id).val(commodity.quantity);
+                    commodity.domeObject.remove();
+                    commodity.domeObject = null;
+                }
+            }
+        }
+        total(id);
+    };
+    function total(id){
+        var commodity=commodities[id];
+        var num=0;
+        if(!!commodity){
+            for(key in commodities){
+                var a=(commodity.unit_price*commodity.quantity).toFixed((2));
+                commodity.cur=a;
+                num+=eval(commodities[key].cur);
+            }
+        }
+        $("._total").text(num);
+        $(".total_number").text(num);
+        console.log(num);
+        return num;
+    };
+
+    $("#del")[0].onclick=function(){
+        console.log(commodities[1]);
+        for(key in  commodities){
+            commodities[key].quantity=0;
+            if(!!commodities[key].domeObject) {
+                commodities[key].domeObject.remove();
+
+            }
+        }
+        $("._total").text(0);
+        $(".total_number").text(0);
+    }
+
+
+})();
+
 
 
 
