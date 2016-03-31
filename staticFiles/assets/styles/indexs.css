@@ -13,7 +13,7 @@ body {
   height: 100%;
   font-family: '微软雅黑', Helvetica, Tahoma, Arial, '华文细黑', sans-serif;
 }
-.popup {
+.overlay {
   display: none;
   position: fixed;
   height: 100%;
@@ -24,7 +24,7 @@ body {
   top: 0;
   bottom: 1.7rem;
 }
-.popup_box {
+.popup-window-from-bottom {
   display: none;
   background: white;
   position: fixed;
@@ -33,20 +33,20 @@ body {
   width: 100%;
   margin-bottom: 1.1rem;
 }
-.popup_box > div {
+.popup-window-from-bottom > div {
   margin: 0.2rem 0.15rem 0.7rem 0.15rem;
 }
-.popup_box > div > div {
+.popup-window-from-bottom > div > div {
   overflow: hidden;
   height: 0.6rem;
   background: #e3e3e3;
   position: relative;
 }
-.popup_box > div > div .oder {
+.popup-window-from-bottom > div > div .oder {
   margin-top: 0.15rem;
   margin-left: 0.15rem;
 }
-.popup_box > div > div .oder span:nth-child(1) {
+.popup-window-from-bottom > div > div .oder span:nth-child(1) {
   background: url("../demo/book.png");
   height: 0.25rem;
   width: 0.21rem;
@@ -55,11 +55,11 @@ body {
   float: left;
   margin-top: 0.06rem;
 }
-.popup_box > div > div .oder span:nth-child(2) {
+.popup-window-from-bottom > div > div .oder span:nth-child(2) {
   font-weight: 600;
   margin-left: 0.1rem;
 }
-.popup_box > div > div .del {
+.popup-window-from-bottom > div > div .del {
   position: absolute;
   top: 0;
   right: 0;
@@ -67,12 +67,12 @@ body {
   margin-right: 0.15rem;
   margin-top: 0.15rem;
 }
-.popup_box > div > div .del span:nth-child(1) {
+.popup-window-from-bottom > div > div .del span:nth-child(1) {
   float: right;
   font-size: 0.2rem;
   margin-left: 0.05rem;
 }
-.popup_box > div > div .del span:nth-child(2) {
+.popup-window-from-bottom > div > div .del span:nth-child(2) {
   float: right;
   background: url("../demo/del.png");
   height: 0.23rem;
@@ -80,13 +80,16 @@ body {
   background-size: 0.2rem;
   display: inline-block;
 }
-.popup_box > div ul li {
+.popup-window-from-bottom > div ul li {
   position: relative;
   border-bottom: 1px solid #CCCCCC;
   margin: 0.1rem 0;
   padding: 0.1rem 0;
 }
-.popup_box > div ul li > div:nth-child(1) {
+.popup-window-from-bottom > div ul li._template {
+  display: none;
+}
+.popup-window-from-bottom > div ul li > div:nth-child(1) {
   overflow: hidden;
   margin-right: 2rem;
   text-overflow: ellipsis;
@@ -94,7 +97,7 @@ body {
   padding-right: 1rem;
   padding-left: 0.15rem;
 }
-.popup_box > div ul li > div:nth-child(2) {
+.popup-window-from-bottom > div ul li > div:nth-child(2) {
   position: absolute;
   top: 0.1rem;
   right: 0;
@@ -102,18 +105,18 @@ body {
   width: 3rem;
   margin-right: 0.15rem;
 }
-.popup_box > div ul li > div:nth-child(2) div:nth-child(1) {
+.popup-window-from-bottom > div ul li > div:nth-child(2) div:nth-child(1) {
   padding-right: 1.4rem;
   text-align: right;
   color: #ff9934;
 }
-.popup_box > div ul li .regulator_right {
+.popup-window-from-bottom > div ul li .regulator_right {
   position: absolute;
   top: 0;
   right: 0;
 }
-.popup_box > div ul li .regulator_right input,
-.popup_box > div ul li .regulator_right a {
+.popup-window-from-bottom > div ul li .regulator_right input,
+.popup-window-from-bottom > div ul li .regulator_right a {
   float: left;
   border: 1px solid #ff9934;
   width: 20px;
@@ -122,7 +125,7 @@ body {
   line-height: 20px;
   border-radius: 50% ;
 }
-.popup_box > div ul li .regulator_right input {
+.popup-window-from-bottom > div ul li .regulator_right input {
   border: none;
   width: 20px;
   height: 20px;
@@ -130,7 +133,7 @@ body {
   text-align: center;
   line-height: 20px;
 }
-.popup_box > div ul li .regulator_right a:active {
+.popup-window-from-bottom > div ul li .regulator_right a:active {
   background: #ff9934;
   color: white;
 }

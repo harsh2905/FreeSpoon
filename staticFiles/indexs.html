@@ -13,9 +13,304 @@
         var winW = document.documentElement.clientWidth;
         document.documentElement.style.fontSize = winW / 6.4 + "px";
     </script>
+    <script type="text/javascript">
+      $(function(){
+        (function(status){
+          // TODO clean all touch events
+          $('.overlay').on('click', function(){//TODO WTF click to tap
+            status = false;
+            window.popup_window_from_bottom();
+          });
+          window.popup_window_from_bottom = function(){
+              if(status){
+                status = false;
+                $('.overlay').css('display', 'block');
+                $('.popup-window-from-bottom').slideToggle('slow');
+              } else {
+                status = true;
+                $('.overlay').css('display', 'none');
+                $('.popup-window-from-bottom').css('display', 'none');
+              }
+          }
+        })(true);
+      });
+    </script>
+    <script type="text/javascript">
+      $(function(){
+        var PageManager = window.PageManager = {
+          pages: {},
+          switchData: {},
+          init: function(){
+            var that = this;
+            $('.__page__').each(function(){
+              var name = $(this).attr('name');
+              that.pages[name] = $(this);
+            });
+          },
+          jump: function(pageName, closureName){
+            var activePage = this.pages[pageName];
+            if(!!activePage){
+              var closureMethod = this.switchData[closureName];
+              if(!!closureMethod){
+                if(!closureMethod()){
+                  return;
+                }
+              }
+              for(var _ in this.pages){
+                var currentPage = this.pages[_];
+                currentPage.css('display', 'none');
+              }
+              activePage.css('display', 'block');
+            }
+          }
+        };
+
+        var CheckoutManager = window.CheckoutManager = {
+          detail: null,
+          detailTemplate: null,
+          total: null,
+          addresses: null,
+          currentAddress: null,
+          tel: null,
+          commodities: null,
+          init: function(addresses){
+            var that = this;
+            var tel = $('.__checkout_tel');
+            tel.change(function(){
+              that.tel = $(this).val();
+            });
+            this.addresses = addresses;
+            this.detail = $('.__checkout_detail');
+            this.detailTemplate = $('.__template_checkout_detail_item');
+            this.detailTemplate.remove();
+            this.detailTemplate.removeClass('.__template_checkout_detail_item');
+            this.total = $('.__checkout_total');
+            var checkbox_group = $('.__checkbox__');
+            checkbox_group.click(function(){
+              checkbox_group.each(function(){
+                $(this).removeClass('checked');
+              });
+              $(this).addClass('checked');
+            });
+          },
+          setAddress: function(id){
+            var address = this.addresses[id];
+            if(!!address){
+              this.currentAddress = address;
+            }
+          },
+          fetchPayInfo: function(){
+            var result = {};
+            if(!this.tel || this.tel.length == 0){
+              result.status = 'failed';
+              result.msg = '电话号码不能为空';
+              return result;
+            } else {
+              result.tel = this.tel;
+            }
+            if(!this.currentAddress){
+              result.status = 'failed';
+              result.msg = '请选择取货地';
+              return result;
+            } else {
+              result.address = this.currentAddress.id;
+            }
+            result.status = 'success';
+            result.commodities = [];
+            for(var _ in this.commodities){
+              var commodity = this.commodities[_];
+              if(!commodity.quantity || commodity.quantity == 0){
+                continue;
+              }
+              var item = {
+                id: commodity.id,
+                quantity: commodity.quantity
+              };
+              result.commodities.push(item);
+            }
+            return result;
+          },
+          pay: function(){
+            var payInfo = this.fetchPayInfo();
+            if(payInfo.status == 'failed'){
+              alert(payInfo.msg);
+              return;
+            }
+            //alert(JSON.stringify(payInfo));
+          },
+          dump: function(commodities){
+            this.commodities = commodities;
+            this.detail.empty();
+            var total = 0;
+            for(var _ in commodities){
+              var commodity = commodities[_];
+              if(!commodity.quantity || commodity.quantity == 0){
+                continue;
+              }
+              total += commodity.quantity * commodity.unit_price;
+              var item = this.detailTemplate.clone();
+              item.find('.__field_checkout_title').text(commodity.title);
+              item.find('.__field_checkout_quantity').text(commodity.quantity);
+              var price = (commodity.quantity * commodity.unit_price / 100).toFixed(2).toString();
+              item.find('.__field_checkout_price').text(price);
+              this.detail.append(item);
+            }
+            this.total.text('￥' + (total / 100).toFixed(2).toString());
+          }
+        }
+
+        var CartManager = window.CartManager = {
+          commodities: null,
+          cartTemplate: null,
+          cart: null,
+          total: 0,
+          init: function(data){
+            var that = this;
+            this.commodities = data;
+            for(var _ in this.commodities){
+              var commodity = this.commodities[_];
+              var className = '.__field_quantity_' + commodity.id;
+              var domObject = $(className);
+              commodity.quantity_in_list = domObject;
+            }
+            this.cartTemplate = $('.__template');
+            this.cartTemplate.remove();
+            this.cartTemplate.removeClass('.__template');
+            this.cart = $('.__cart');
+
+            window.PageManager.switchData['dumpDataToCheckout'] = (function(commodities){
+              var closureMethod = function(){
+                //alert(JSON.stringify(commodities));
+                if(!that.total || that.total == 0){
+                  return false;
+                }
+                window.CheckoutManager.dump(commodities);
+                return true;
+              }
+              return closureMethod;
+            })(commodities);
+          },
+          generateCartItem: function(commodity){
+            var that = this;
+            var domObject = this.cartTemplate.clone();
+            domObject.find('.__field_title').text(commodity.title);
+            var price = (commodity.quantity * commodity.unit_price / 100).toFixed(2).toString();
+            domObject.find('.__field_price').text(price);
+            domObject.find('.__field_quantity').val(commodity.quantity);
+            domObject.find('.__button_add').click(function(){
+              that.add(commodity.id);
+            });
+            domObject.find('.__button_remove').click(function(){
+              that.remove(commodity.id);
+            });
+            return domObject;
+          },
+          updateCartItem: function(commodity, domObject){
+            var price = (commodity.quantity * commodity.unit_price / 100).toFixed(2).toString();
+            domObject.find('.__field_price').text(price);
+            domObject.find('.__field_quantity').val(commodity.quantity);
+          },
+          add: function(id){
+            var commodity = this.commodities[id];
+            if(!!commodity){
+              if(!commodity.quantity){
+                commodity.quantity = 1;
+              }else{
+                commodity.quantity += 1;
+              }
+              this.render();
+            }
+          },
+          remove: function(id){
+            var commodity = this.commodities[id];
+            if(!!commodity && !!commodity.quantity){
+              if(commodity.quantity > 1){
+                commodity.quantity -= 1;
+              } else{
+                commodity.quantity = 0;
+              }
+              this.render();
+            }
+          },
+          empty: function(){
+            for(var _ in this.commodities){
+              var commodity = this.commodities[_];
+              commodity.quantity = 0;
+            }
+            this.render();
+          },
+          render: function(){
+            var amount = 0;
+            var total = 0;
+            for(var _ in this.commodities){
+              var commodity = this.commodities[_];
+              if(!!commodity.quantity){
+                amount += commodity.quantity;
+                total += commodity.quantity * commodity.unit_price;
+                commodity.quantity_in_list.val(commodity.quantity);
+              }else{
+                commodity.quantity_in_list.val(0);
+              }
+              if(!commodity.item_in_cart){
+                if(!!commodity.quantity && commodity.quantity > 0){
+                  var domObject = this.generateCartItem(commodity);
+                  commodity.item_in_cart = domObject;
+                  this.cart.append(domObject);
+                }
+              } else {
+                var domObject = commodity.item_in_cart;
+                if(!!commodity.quantity && commodity.quantity > 0){
+                  this.updateCartItem(commodity, domObject);
+                } else {
+                  domObject.remove();
+                  commodity.item_in_cart = null;
+                }
+              }
+            }
+            this.render_amount(amount);
+            this.render_total(total);
+            this.total = total;
+          },
+          render_amount: function(amount){
+            var domObject = $('.__amount');
+            if(!amount && amount == 0){
+              domObject.css('display', 'none');
+            } else{
+              domObject.css('display', 'block');
+              domObject.text(amount);
+            }
+          },
+          render_total: function(total){
+            var domObject = $('.__total');
+            if(!total && total == 0){
+              domObject.text(0);
+            }else{
+              total_string = (total / 100).toFixed(2).toString();
+              domObject.text('￥' + total_string);
+            }
+          }
+        };
+
+
+        //run
+        PageManager.init();
+        var commodities = {
+          '1': {id: 1, title: '进口冷冻阿根廷红虾北极甜虾1', unit_price: 10010},
+          '2': {id: 2, title: '进口冷冻阿根廷红虾北极甜虾2', unit_price: 20085},
+          '3': {id: 3, title: '进口冷冻阿根廷红虾北极甜虾3', unit_price: 30003}
+        };
+        var addresses = {
+          '1': {id: 1, address: '北京市海淀区上地七街1号汇众科技大厦2号楼713室', dist: '惠订1'},
+          '2': {id: 2, address: '北京市海淀区上地七街1号汇众科技大厦2号楼714室', dist: '惠订2'},
+          '3': {id: 3, address: '北京市海淀区上地七街1号汇众科技大厦2号楼715室', dist: '惠订3'}
+        };
+        CartManager.init(commodities);
+        CheckoutManager.init(addresses);
+      });
+    </script>
 </head>
 <body>
-<div id="index" cls="page" default="yes" jid="1" style="display: none">
+<div id="index" class="__page__" name="index" jid="1">
     <div class="header">
         <div class="left">
             <div class="sculpture"><img src="assets/demo/1.jpg" alt=""></div>
@@ -61,9 +356,9 @@
                             </div>
                         </div>
                         <div class="counter">
-                            <a class="block left" href="javascript:void(0);" onclick="removedCommodity(1)">-</a>
-                            <input type="text" value="0" class="block center _field_quantity_1" autocomplete="off" readonly="readonly" >
-                            <a class="block right" href="javascript:void(0);" onclick="addCommodity(1)">+</a>
+                            <a class="block left" href="javascript:void(0);" onclick="CartManager.remove(1)">-</a>
+                            <input type="text" value="0" class="block center __field_quantity_1" autocomplete="off" readonly="readonly" >
+                            <a class="block right" href="javascript:void(0);" onclick="CartManager.add(1)">+</a>
                         </div>
                     </div>
                 </div>
@@ -97,9 +392,9 @@
                             </div>
                         </div>
                         <div class="counter">
-                            <a class="block left" href="javascript:void(0);" onclick="removedCommodity(2)">-</a>
-                            <input type="text" value="0" class="block center _field_quantity_2" autocomplete="off" readonly="readonly" >
-                            <a class="block right" href="javascript:void(0);" onclick="addCommodity(2)">+</a>
+                            <a class="block left" href="javascript:void(0);" onclick="CartManager.remove(2)">-</a>
+                            <input type="text" value="0" class="block center __field_quantity_2" autocomplete="off" readonly="readonly" >
+                            <a class="block right" href="javascript:void(0);" onclick="CartManager.add(2)">+</a>
                         </div>
                     </div>
                 </div>
@@ -133,9 +428,9 @@
                             </div>
                         </div>
                         <div class="counter">
-                            <a class="block left" href="javascript:void(0);" onclick="removedCommodity(3)">-</a>
-                            <input type="text" value="0" class="block center _field_quantity_3" autocomplete="off" readonly="readonly" >
-                            <a class="block right" href="javascript:void(0);" onclick="addCommodity(3)">+</a>
+                            <a class="block left" href="javascript:void(0);" onclick="CartManager.remove(3)">-</a>
+                            <input type="text" value="0" class="block center __field_quantity_3" autocomplete="off" readonly="readonly" >
+                            <a class="block right" href="javascript:void(0);" onclick="CartManager.add(3)">+</a>
                         </div>
                     </div>
                 </div>
@@ -143,17 +438,17 @@
         </ul>
     </div>
     <div class="footer">
-        <div class="f_left">
-            <div class="shop"><span></span></div>
+        <div class="f_left" onclick="popup_window_from_bottom();">
+            <div class="shop"><span class="__amount"></span></div>
             <div class="shop_info">
-                <p>合计:<span class="_total">0</span></p>
+                <p>合计:<span class="__total">0</span></p>
                 <span>不含运费</span>
             </div>
         </div>
-        <div class="f_right" ><a href="javascript:void(0)" method="jump(in_list)" target="2">去结算</a></div>
+        <div class="f_right" ><a href="javascript:void(0)" onclick="PageManager.jump('checkout', 'dumpDataToCheckout')">去结算</a></div>
     </div>
-    <div class="popup" style="display: none"></div>
-    <div class="popup_box" style="display: none">
+    <div class="overlay"></div>
+    <div class="popup-window-from-bottom">
         <div>
             <div>
                 <div class="oder">
@@ -161,20 +456,20 @@
                     <span>订单信息</span>
                 </div>
 
-                <div id="del" class="del">
+                <div id="del" class="del" onclick="CartManager.empty()">
                     <span>清空</span>
                     <span></span>
                 </div>
             </div>
-            <ul id="popup">
-                <li class="_template">
-                    <div class="_field_title"></div>
+            <ul id="popup" class="__cart">
+                <li class="__template">
+                    <div class="__field_title"></div>
                     <div>
-                        <div class="_field_price"></div>
+                        <div class="__field_price"></div>
                         <div class="regulator_right">
-                            <a href="javascript:void(0);" class="_button_remove">-</a>
-                            <input type="text" class="center _field_quantity" autocomplete="off" readonly="readonly">
-                            <a href="javascript:void(0);" class="_button_add">+</a>
+                            <a href="javascript:void(0);" class="__button_remove">-</a>
+                            <input type="text" class="center __field_quantity" autocomplete="off" readonly="readonly">
+                            <a href="javascript:void(0);" class="__button_add">+</a>
                         </div>
                     </div>
                 </li>
@@ -182,41 +477,35 @@
         </div>
     </div>
 </div>
-<div id="checkout" cls="page" jid="2" style="display: none">
+<div id="checkout" class="__page__" name="checkout" jid="2" style="display: none">
     <div class="header"  >
-            <i class="icon-chevron-left icon-large" method="jump" target="1" ></i>
+            <i class="icon-chevron-left icon-large" onclick="PageManager.jump('index')" ></i>
         <div class="header-content">订单确认</div>
     </div>
     <div class="main">
         <div class="user">
             <div class="sculpture"><img src="assets/demo/1.jpg" alt=""></div>
             <span>某某某某</span>
-            <input type="tel" placeholder="填输入联系方式"/>
+            <input type="tel" class="__checkout_tel" placeholder="填输入联系方式"/>
         </div>
         <div class="adds">
             <div>取货地</div>
             <ul>
                 <li>
-                    <div class="__checkbox__">
+                    <div onclick="CheckoutManager.setAddress(1)" class="__checkbox__">
                         <p>海淀区上地实验小学东门</p>
                         <p>预计:3月12日 9:30 </p>
                     </div>
                 </li>
                 <li>
-                    <div class="__checkbox__">
+                    <div onclick="CheckoutManager.setAddress(2)" class="__checkbox__">
                         <p>海淀区上地实验小学东门</p>
                         <p>预计:3月12日 9:30 </p>
                     </div>
                 </li>
                 <li>
-                    <div class="__checkbox__">
+                    <div onclick="CheckoutManager.setAddress(3)" class="__checkbox__">
                         <p>海淀区上地实验小学东门</p>
-                        <p>预计:3月12日 9:30 </p>
-                    </div>
-                </li>
-                <li>
-                    <div class="__checkbox__">
-                        <p>海淀区上地实验小学东门海淀区上地实验小学东门海淀区上地实验小学东门</p>
                         <p>预计:3月12日 9:30 </p>
                     </div>
                 </li>
@@ -224,12 +513,12 @@
         </div>
         <div class="inventory">
             <div>商品明细</div>
-            <ul id="invent">
-                <li class="_inventory_list">
+            <ul id="invent" class="__checkout_detail">
+                <li class="__template_checkout_detail_item">
                     <span></span>
-                    <span class="inventory_title"></span>
-                    <span class="inventory__price"></span>
-                    <span class="inventory__total"></span>
+                    <span class="__field_checkout_title"></span>
+                    <span class="__field_checkout_quantity"></span>
+                    <span class="__field_checkout_price"></span>
                 </li>
             </ul>
         </div>
@@ -239,15 +528,15 @@
         <div class="total">
             <span>总计</span>
             <div>
-                <span class="total_number">￥</span>
+                <span class="__checkout_total"></span>
             </div>
         </div>
     </div>
     <div class="footer">
-        <a href="javascript:void(0);">立即支付</a>
+        <a href="javascript:void(0);" onclick="CheckoutManager.pay()">立即支付</a>
     </div>
 </div>
-<div id="Payment_success" cls="page" jid="3" style="display: none">
+<div id="Payment_success" class="__page__" name="success" jid="3" style="display: none">
     <div class="header" method="change" target="2">
         <div class="black">
             <i class="icon-chevron-left icon-large"></i>
@@ -265,7 +554,7 @@
         <a href="javascript:void(0);">接龙到微信，邀请群友吧</a>
     </div>
 </div>
-<div id="Order_details" cls="page" jid="4" style="display: none">
+<div id="Order_details" class="__page__" name="details" jid="4" style="display: none">
     <div class="header" method="change" target="3">
         <div class="black">
             <i class="icon-chevron-left icon-large"></i>
@@ -328,16 +617,15 @@
     <div class="footer">
         <a href="javascript:void(0);">接龙到微信群，邀请群友吧</a>
     </div>
+
 </div>
-<div id="success_popup" cls="page" jid="5" >
-    <div>
-        <div class="header">支付成功</div>
-        <div class="main">恭喜您成为第88位接龙者，快去邀请小伙伴继续接龙吧！</div>
-        <div class="footer">接龙到微信群，邀请群友吧！</div>
-    </div>
+<div id="success_popup" class="__page__" name="popup" jid="5" >
+<div>
+    <div class="header">支付成功</div>
+    <div class="main">恭喜您成为第88位接龙者，快去邀请小伙伴继续接龙吧！</div>
+    <div class="footer">接龙到微信群，邀请群友吧！</div>
+</div>
 </div>
 
-
-<script type="text/javascript" src="assets/scripts/indexs.js"></script>
 </body>
 </html>

@@ -16,7 +16,7 @@ html, body {
   height: 100%;
   font-family: '微软雅黑', Helvetica, Tahoma, Arial, '华文细黑', sans-serif;
 }
-.popup {
+.overlay {
   display: none;
   position: fixed;
   height: 100%;
@@ -27,7 +27,7 @@ html, body {
   top: 0;
   bottom: 1.7rem;
 }
-.popup_box {
+.popup-window-from-bottom {
   display: none;
   background: white;
   position: fixed;
@@ -83,6 +83,9 @@ html, body {
     }
     ul {
       li {
+        &._template{
+          display: none;
+        }
         position: relative;
         border-bottom: 1px solid #CCCCCC;
         margin: 0.1rem 0;
