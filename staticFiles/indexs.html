@@ -15,64 +15,66 @@
     </script>
     <script type="text/javascript">
       $(function(){
-        (function(status){
+          //实现购物车弹层功能
+        (function(status){//标识符->方法执行时传入一个参数true
           // TODO clean all touch events
-          $('.overlay').on('click', function(){//TODO WTF click to tap
-            status = false;
-            window.popup_window_from_bottom();
+          $('.overlay').on('click', function(){//TODO WTF click to tap   //给弹出背景绑定点击事件
+            status = false;//点击时，让function下的私有status变为false
+            window.popup_window_from_bottom();//触发window下popup_window_from_bottom这个事件
           });
           window.popup_window_from_bottom = function(){
-              if(status){
-                status = false;
-                $('.overlay').css('display', 'block');
-                $('.popup-window-from-bottom').slideToggle('slow');
-              } else {
-                status = true;
-                $('.overlay').css('display', 'none');
-                $('.popup-window-from-bottom').css('display', 'none');
+              if(status){//判断，如果status为true
+                status = false;//修改statusde值为false
+                $('.overlay').css('display', 'block');//修改样式名为overlay的行内样式，显示背景弹层
+                $('.popup-window-from-bottom').slideToggle('slow');//调用jQuery中的slideToggle方法，让购物车弹层滑动显示
+              } else {//如果status不是true,那么....
+                status = true;//修改status的值为true
+                $('.overlay').css('display', 'none');//修改样式名为overlay的行内样式，隐藏背景弹层
+                $('.popup-window-from-bottom').css('display', 'none');//修改购物车弹层的行内样式
               }
           }
         })(true);
       });
     </script>
     <script type="text/javascript">
-      $(function(){
-        var PageManager = window.PageManager = {
-          pages: {},
-          switchData: {},
-          init: function(){
-            var that = this;
-            $('.__page__').each(function(){
-              var name = $(this).attr('name');
-              that.pages[name] = $(this);
+      $(function(){//把所有方法写在一个自执行函数里，形成闭包
+        var PageManager = window.PageManager = {//初始化页面 哈市表
+          pages: {},//用来存放通过className=__page__的页面->五个代表页面的div
+          switchData: {},//用来存放
+          init: function(){//初始化页面方法
+            var that = this;//将当前作用下的this赋值给that   this->Object {pages: Object, switchData: Object}
+            $('.__page__').each(function(){//通过jQuery中each()方法对className为__page__的每个元素规定运行的函数
+              var name = $(this).attr('name');//定义私有变量name 把通过attr返回的name属性下的属性值赋值给私有变量，this->div#index.__page__ 、div#checkout.__page__、div#Payment_success.__page__、div#Order_details.__page__、div#success_popup.__page__    name->index、checkout、success、details、popup
+              that.pages[name] = $(this);//把获取到的dom元素集合按照各自的name存放在page对象里面。当前作用域下的this是div，我们需要放在上一作用域下的pages对象里，所以需要用that
             });
           },
-          jump: function(pageName, closureName){
-            var activePage = this.pages[pageName];
-            if(!!activePage){
-              var closureMethod = this.switchData[closureName];
+          jump: function(pageName, closureName){//实现页面切页效果 参数1：要跳转的页面、参数2：dumpDataToCheckout
+            var activePage = this.pages[pageName];//私有变量存储用户点击执行jump方法时，当前点击的dom元素。->是在pages对象中通过键取出
+            if(!!activePage){//如果dom元素存在
+              var closureMethod = this.switchData[closureName];//
+
               if(!!closureMethod){
                 if(!closureMethod()){
                   return;
                 }
               }
-              for(var _ in this.pages){
-                var currentPage = this.pages[_];
-                currentPage.css('display', 'none');
+              for(var _ in this.pages){//循环pages对象下的每一个项->dom元素
+                var currentPage = this.pages[_];//把每一项赋值给私有变量
+                currentPage.css('display', 'none');//让每一项dom元素的display为none->元素不显示
               }
-              activePage.css('display', 'block');
+              activePage.css('display', 'block');//再让当前项dom元素display为block->元素显示
             }
           }
         };
 
         var CheckoutManager = window.CheckoutManager = {
-          detail: null,
-          detailTemplate: null,
-          total: null,
+          detail: null,//dom元素->ul
+          detailTemplate: null,//checkout页下商品列表li模板
+          total: null,//商品数量合计
           addresses: null,
-          currentAddress: null,
-          tel: null,
-          commodities: null,
+          currentAddress: null,//用户选中收货地址
+          tel: null,  //用户电话信息初始化
+          commodities: null,//用户订单信息数据->
           init: function(addresses){
             var that = this;
             var tel = $('.__checkout_tel');
@@ -93,7 +95,7 @@
               $(this).addClass('checked');
             });
           },
-          setAddress: function(id){
+          setAddress: function(id){//获取用户选中地址方法
             var address = this.addresses[id];
             if(!!address){
               this.currentAddress = address;
@@ -293,7 +295,7 @@
 
 
         //run
-        PageManager.init();
+        PageManager.init();//调用init方法，开始渲染页面
         var commodities = {
           '1': {id: 1, title: '进口冷冻阿根廷红虾北极甜虾1', unit_price: 10010},
           '2': {id: 2, title: '进口冷冻阿根廷红虾北极甜虾2', unit_price: 20085},
@@ -305,7 +307,7 @@
           '3': {id: 3, address: '北京市海淀区上地七街1号汇众科技大厦2号楼715室', dist: '惠订3'}
         };
         CartManager.init(commodities);
-        CheckoutManager.init(addresses);
+        CheckoutManager.init(addresses);//执行checkout下init方法
       });
     </script>
 </head>
