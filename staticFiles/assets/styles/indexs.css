@@ -8,7 +8,6 @@
 html,
 body {
   font-size: 0.25rem;
-  background: #f0f2f5;
   color: #464646;
   height: 100%;
   font-family: '微软雅黑', Helvetica, Tahoma, Arial, '华文细黑', sans-serif;
@@ -31,239 +30,131 @@ body {
   bottom: 0;
   z-index: 1000;
   width: 100%;
-  margin-bottom: 1.1rem;
+  margin-bottom: 0.9rem;
 }
-.popup-window-from-bottom > div {
-  margin: 0.2rem 0.15rem 0.7rem 0.15rem;
+.popup-window-from-bottom .box {
+  margin: 0.25rem 0.2rem;
 }
-.popup-window-from-bottom > div > div {
-  overflow: hidden;
+.popup-window-from-bottom .box .popup-bottom-title {
   height: 0.6rem;
+  padding-right: 0.3rem;
   background: #e3e3e3;
-  position: relative;
 }
-.popup-window-from-bottom > div > div .oder {
-  margin-top: 0.15rem;
-  margin-left: 0.15rem;
+.popup-window-from-bottom .box .popup-bottom-title .oder {
+  width: auto;
+  height: 0.6rem;
 }
-.popup-window-from-bottom > div > div .oder span:nth-child(1) {
-  background: url("../demo/book.png");
-  height: 0.25rem;
-  width: 0.21rem;
-  background-size: 0.2rem;
-  display: block;
-  float: left;
-  margin-top: 0.06rem;
+.popup-window-from-bottom .box .popup-bottom-title .oder .popup_bottom_oder {
+  padding: 0.1rem;
 }
-.popup-window-from-bottom > div > div .oder span:nth-child(2) {
-  font-weight: 600;
-  margin-left: 0.1rem;
-}
-.popup-window-from-bottom > div > div .del {
-  position: absolute;
-  top: 0;
-  right: 0;
-  overflow: hidden;
-  margin-right: 0.15rem;
-  margin-top: 0.15rem;
-}
-.popup-window-from-bottom > div > div .del span:nth-child(1) {
-  float: right;
-  font-size: 0.2rem;
-  margin-left: 0.05rem;
-}
-.popup-window-from-bottom > div > div .del span:nth-child(2) {
-  float: right;
-  background: url("../demo/del.png");
-  height: 0.23rem;
-  width: 0.2rem;
-  background-size: 0.2rem;
+.popup-window-from-bottom .box .popup-bottom-title .oder .popup_bottom_oder .oder_img {
   display: inline-block;
+  width: 0.4rem;
+  height: 0.4rem;
+  background: url("../demo/book.png") no-repeat center;
+  background-size: 0.4rem;
+  float: left;
 }
-.popup-window-from-bottom > div ul li {
-  position: relative;
-  border-bottom: 1px solid #CCCCCC;
-  margin: 0.1rem 0;
-  padding: 0.1rem 0;
+.popup-window-from-bottom .box .popup-bottom-title .oder .popup_bottom_oder .oder_text {
+  margin-left: 0.1rem;
+  display: inline-block;
+  font-size: 0.3rem;
+  font-weight: bold;
+  text-align: center;
+  vertical-align: middle;
 }
-.popup-window-from-bottom > div ul li._template {
-  display: none;
-}
-.popup-window-from-bottom > div ul li > div:nth-child(1) {
-  overflow: hidden;
-  margin-right: 2rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  padding-right: 1rem;
-  padding-left: 0.15rem;
-}
-.popup-window-from-bottom > div ul li > div:nth-child(2) {
-  position: absolute;
-  top: 0.1rem;
-  right: 0;
+.popup-window-from-bottom .box .popup-bottom-title .del {
   float: right;
   width: 3rem;
-  margin-right: 0.15rem;
+  height: 0.6rem;
 }
-.popup-window-from-bottom > div ul li > div:nth-child(2) div:nth-child(1) {
-  padding-right: 1.4rem;
-  text-align: right;
-  color: #ff9934;
+.popup-window-from-bottom .box .popup-bottom-title .del .popup_bottom_del {
+  height: 0.4rem;
+  padding: 0.1rem;
 }
-.popup-window-from-bottom > div ul li .regulator_right {
-  position: absolute;
-  top: 0;
-  right: 0;
+.popup-window-from-bottom .box .popup-bottom-title .del .popup_bottom_del .del_img {
+  display: inline-block;
+  background: url("../demo/del.png") no-repeat center;
+  width: 0.4rem;
+  height: 0.4rem;
+  background-size: 0.4rem;
+  float: right;
 }
-.popup-window-from-bottom > div ul li .regulator_right input,
-.popup-window-from-bottom > div ul li .regulator_right a {
-  float: left;
-  border: 1px solid #ff9934;
-  width: 20px;
-  height: 20px;
-  text-align: center;
-  line-height: 20px;
-  border-radius: 50% ;
-}
-.popup-window-from-bottom > div ul li .regulator_right input {
-  border: none;
-  width: 20px;
-  height: 20px;
+.popup-window-from-bottom .box .popup-bottom-title .del .popup_bottom_del .del_text {
+  line-height: 0.4rem;
+  display: inline-block;
   font-size: 0.2rem;
   text-align: center;
-  line-height: 20px;
+  vertical-align: middle;
+  float: right;
 }
-.popup-window-from-bottom > div ul li .regulator_right a:active {
+.popup-window-from-bottom .box .__cart {
+  margin-bottom: 0.5rem;
+}
+.popup-window-from-bottom .box .__cart .__template {
+  padding: 0.2rem 0.1rem;
+  border-bottom: 1px solid #CCCCCC;
+}
+.popup-window-from-bottom .box .__cart .__template .__field_title {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  width: 3rem;
+  overflow: hidden;
+  line-height: 0.5rem;
+  height: 0.5rem;
+  vertical-align: middle;
+}
+.popup-window-from-bottom .box .__cart .__template .popup_reduce {
+  width: 2.5rem;
+  float: right;
+  margin-right: 0.2rem;
+  height: 0.5rem;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 0.5rem;
+}
+.popup-window-from-bottom .box .__cart .__template .popup_reduce .__field_price {
+  display: inline-block;
+}
+.popup-window-from-bottom .box .__cart .__template .popup_reduce .regulator_right {
+  display: inline-block;
+  float: right;
+}
+.popup-window-from-bottom .box .__cart .__template .popup_reduce .regulator_right a {
+  display: inline-block;
+  border: 1px solid #ff9934;
+  width: 0.4rem;
+  height: 0.4rem;
+  text-align: center;
+  border-radius: 50%;
+  line-height: 0.4rem;
+}
+.popup-window-from-bottom .box .__cart .__template .popup_reduce .regulator_right a:active {
   background: #ff9934;
   color: white;
 }
 .select {
   display: block;
 }
-._header {
-  z-index: 100;
-  position: fixed;
-  width: 100%;
-  top: 0;
-  height: 0.7rem;
-  background: #e5e5e5;
-  border-bottom: solid 1px #c8c8c8;
-}
-._header i {
-  overflow: hidden;
-  display: block;
-  z-index: 999;
-  height: 0.7rem;
-  line-height: 0.7rem;
-  vertical-align: middle;
-  padding: 0 0.2rem;
-  float: left;
-}
-._header .header-content {
-  width: auto;
-  text-align: center;
-  font-size: 0.3rem;
-  line-height: 0.7rem;
-  font-weight: bold;
-  -webkit-user-select: none;
-  color: #599c3d;
-}
-._footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  z-index: 1100;
-}
-._footer a {
-  background: #599c3d;
-  margin: 0.1rem 0.1rem;
-  color: white;
-  text-align: center;
-  display: block;
-  height: 0.6rem;
-  line-height: 0.6rem;
-}
-._inventory div {
-  padding-left: 0.5rem;
-  margin: 0.2rem 0.3rem;
-  font-weight: 500;
-  background: url("../demo/1.PNG") no-repeat left;
-  background-size: 0.4rem;
-}
-._inventory ul {
-  background: white;
-  padding: 0.1rem 0;
-}
-._inventory ul li {
-  font-size: 0.2rem;
-  color: #7e7e7e;
-  padding: 0.1rem 0.25rem;
-}
-._inventory ul li span {
-  display: inline-block;
-}
-._inventory ul li span:nth-child(1) {
-  text-align: center;
-  width: 30px;
-  margin: 5px 0;
-}
-._inventory ul li span:nth-child(2) {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: 3rem;
-}
-._inventory ul li span:nth-child(3) {
-  float: right;
-}
-._inventory ul li span:nth-child(4) {
-  margin-right: 30px;
-  float: right;
-}
-._moe {
-  padding: 0.2rem 0.3rem;
-  font-weight: 500;
-}
-._moe p {
-  font-weight: bold;
-}
-._moe p span {
-  font-weight: normal;
-  display: inline-block;
-  float: right;
-}
-._total {
-  padding: 0.2rem 0.3rem;
-  font-weight: 500;
-}
-._total span {
-  font-weight: bold;
-}
-._total div {
-  color: #ff9934 ;
-  font-weight: normal;
-  float: right;
-}
-._total div span:nth-child(3) {
-  font-size: 0.2rem;
+#index {
+  background: #f0f2f5;
 }
 #index .header {
   position: fixed;
   top: 0;
   background: #599c3d;
   width: 100%;
-  height: 1.4rem;
   z-index: 100;
 }
 #index .header .left {
   width: 100%;
-  margin-right: 2.5rem;
   float: left;
 }
 #index .header .left .sculpture {
   overflow: hidden;
-  width: 1rem;
-  height: 1rem;
+  width: 0.8rem;
+  height: 0.8rem;
   margin: 0.2rem;
   float: left;
   border-radius: 50%;
@@ -273,8 +164,8 @@ body {
   height: 100%;
 }
 #index .header .left .chief {
-  height: 1.4rem;
-  margin-top: 0.2rem;
+  height: 1rem;
+  padding: 0.1rem 0;
 }
 #index .header .left .chief p {
   color: #fffcfc;
@@ -298,7 +189,7 @@ body {
   right: 0;
   top: 0;
   width: 2.5rem;
-  padding: 0.3rem 0.1rem;
+  padding: 0.2rem 0.1rem;
 }
 #index .header .right .audio {
   width: 0.5rem;
@@ -318,19 +209,16 @@ body {
   margin: 0 0.05rem;
 }
 #index .main {
-  position: relative;
-  top: 1.4rem;
-  margin-bottom: 1.2rem;
-  padding: 0.4rem 0.2rem;
+  margin-top: 1.2rem;
+  margin-bottom: 1rem;
+  padding: 0.7rem 0.2rem;
 }
 #index .main ul li {
-  margin-bottom: 0.2rem;
-  border: 1px solid #000000;
+  margin-bottom: 0.8rem;
+  border: 1px solid #CCCCCC;
 }
 #index .main ul li div {
   background: white;
-  /*        width: 8rem;
-                  height: 4rem;   到底加不加宽高*/
 }
 #index .main ul li div img {
   max-height: 100%;
@@ -378,57 +266,57 @@ body {
   margin-left: 0.4rem;
   color: #a9a6a6;
 }
-#index .main ul li .last {
-  position: relative;
-}
-#index .main ul li .last .regulator_left {
+#index .main ul li .last .regulator {
   width: 100%;
   margin-right: 2rem;
+  height: 0.8rem;
 }
-#index .main ul li .last .regulator_left div {
-  overflow: hidden;
-}
-#index .main ul li .last .regulator_left div div span:nth-child(1) {
+#index .main ul li .last .regulator .groupon_icon {
   background: #313131;
   width: 0.8rem;
   height: 0.8rem;
   float: left;
 }
-#index .main ul li .last .regulator_left div div span:nth-child(1) img {
-  margin-top: 0.05rem;
+#index .main ul li .last .regulator .groupon_icon img {
+  margin: 0.05rem;
+  width: 0.7rem;
+  height: 0.7rem;
 }
-#index .main ul li .last .regulator_left div div span:nth-child(2),
-#index .main ul li .last .regulator_left div div span:nth-child(3),
-#index .main ul li .last .regulator_left div div span:nth-child(4),
-#index .main ul li .last .regulator_left div div span:nth-child(5) {
+#index .main ul li .last .regulator .groupon {
+  height: 0.8rem;
+  width: auto;
+  background: #599c3d;
+  float: left;
+  border-radius: 0 3.5rem 3.5rem 0;
+  z-index: 101;
+  padding-right: 0.1rem;
+}
+#index .main ul li .last .regulator .groupon span {
+  display: inline-block;
   height: 0.8rem;
   line-height: 0.8rem;
   text-align: center;
   color: white;
   font-size: 0.3rem;
 }
-#index .main ul li .last .regulator_left div div span:nth-child(2) {
+#index .main ul li .last .regulator .groupon span:nth-child(1) {
   margin-left: 0.1rem;
 }
-#index .main ul li .last .regulator_left div div span:nth-child(5) {
-  font-size: 0.25rem;
+#index .main ul li .last .regulator .groupon span:nth-child(2) {
+  font-size: 0.35rem;
 }
-#index .main ul li .last .regulator_left div div:nth-child(1) {
-  width: 3.6rem;
-  background: #599c3d;
-  float: left;
-  border-radius: 0 3.5rem 3.5rem 0;
-  z-index: 101;
+#index .main ul li .last .regulator .groupon span:nth-child(3) {
+  margin: 0 -0.01rem;
 }
-#index .counter {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 2rem;
-  margin: 0.2rem 0;
+#index .main ul li .last .counter {
+  height: 0.55rem;
+  line-height: 0.55rem;
+  vertical-align: middle;
+  float: right;
+  margin: 0.125rem 0.2rem;
 }
-#index .counter input,
-#index .counter a {
+#index .main ul li .last .counter span,
+#index .main ul li .last .counter a {
   font-size: 0.3rem;
   float: left;
   border: 1px solid #ff9934;
@@ -437,11 +325,7 @@ body {
   text-align: center;
   line-height: 0.5rem;
 }
-#index .counter input {
-  text-align: center;
-  width: 0.8rem;
-}
-#index .counter a:active {
+#index .main ul li .last .counter a:active {
   background: #ff9934;
   color: white;
 }
@@ -450,61 +334,66 @@ body {
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 1.1rem;
+  height: 1rem;
   background: white;
   border-top: 1px solid #CCCCCC;
 }
 #index .footer .f_left {
-  width: 100%;
+  background: white;
+  width: auto;
   margin-right: 2rem;
+  height: 1rem;
 }
 #index .footer .f_left .shop {
   position: relative;
-  width: 0.9rem;
-  height: 0.8rem;
+  float: left;
+  width: 1rem;
+  height: 1rem;
   background: url("../demo/shop.png") no-repeat center;
-  background-size: 0.6rem;
-  margin: 0.2rem 0.2rem;
+  background-size: 0.7rem;
 }
 #index .footer .f_left .shop span {
   display: none;
-  width: 0.35rem;
-  height: 0.35rem;
+  width: 0.4rem;
+  height: 0.4rem;
+  line-height: 0.4rem;
   border-radius: 50%;
   background: #ff9934;
   color: white;
   text-align: center;
+  vertical-align: middle;
   position: absolute;
+  top: 0.1rem;
   right: 0;
+  font-size: 0.2rem;
 }
 #index .footer .f_left .shop_info {
-  position: absolute;
-  top: 0;
-  margin-left: 1.3rem;
-  margin-top: 0.15rem;
-  padding: 0.1rem 0;
+  width: auto;
+  margin-left: 1.2rem;
+  padding: 0.15rem 0;
+  height: 0.7rem;
 }
-#index .footer .f_left .shop_info p {
+#index .footer .f_left .shop_info p.line1 {
+  height: 0.4rem;
+  line-height: 0.4rem;
   font-size: 0.3rem;
   font-weight: bold;
 }
-#index .footer .f_left .shop_info span:nth-child(2) {
+#index .footer .f_left .shop_info p.line2 {
+  height: 0.3rem;
+  line-height: 0.3rem;
   font-size: 0.2rem;
 }
 #index .footer .f_right {
-  position: absolute;
-  top: 0;
-  right: 0;
+  height: 1rem;
+  float: right;
   width: 2rem;
-  background: #ff9934 !important;
-  text-align: center;
-}
-#index .footer .f_right a {
   background: #ff9934;
   text-align: center;
   font-size: 0.45rem;
-  line-height: 1.1rem;
+  line-height: 1rem;
   color: white;
+  vertical-align: middle;
 }
 #checkout {
   height: 100%;
@@ -514,7 +403,7 @@ body {
   position: fixed;
   width: 100%;
   top: 0;
-  height: 0.7rem;
+  height: 0.8rem;
   background: #e5e5e5;
   border-bottom: solid 1px #c8c8c8;
 }
@@ -522,25 +411,25 @@ body {
   overflow: hidden;
   display: block;
   z-index: 999;
-  height: 0.7rem;
-  line-height: 0.7rem;
+  height: 0.8rem;
+  line-height: 0.8rem;
   vertical-align: middle;
   padding: 0 0.2rem;
   float: left;
 }
 #checkout .header .header-content {
-  width: auto;
+  width: 320px;
   text-align: center;
   font-size: 0.3rem;
-  line-height: 0.7rem;
+  line-height: 0.8rem;
   font-weight: bold;
   -webkit-user-select: none;
   color: #599c3d;
+  height: 0.8rem;
+  vertical-align: middle;
 }
 #checkout .main {
-  margin-bottom: 1rem;
-  position: relative;
-  top: 0.7rem;
+  margin: 0.8rem 0;
 }
 #checkout .main .user {
   overflow: hidden;
@@ -549,8 +438,8 @@ body {
 }
 #checkout .main .user .sculpture {
   overflow: hidden;
-  width: 0.6rem;
-  height: 0.6rem;
+  width: 0.9rem;
+  height: 0.9rem;
   float: left;
   border-radius: 50%;
 }
@@ -560,78 +449,118 @@ body {
 }
 #checkout .main .user span {
   display: inline-block;
+  width: 1rem;
+  float: left;
   margin: 0 0.2rem;
+  height: 0.9rem;
+  line-height: 0.9rem;
+  font-size: .35rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#checkout .main .user .tel_border {
+  float: left;
+  border: 1px solid #ccc;
   height: 0.6rem;
   line-height: 0.6rem;
+  margin: 0.15rem 0;
 }
-#checkout .main .user input {
-  font-size: 0.2rem;
-  color: #ccc;
+#checkout .main .user .tel_border input {
+  font-size: 0.3rem;
+  border: none;
+  outline: medium;
+  text-align: center;
+  width: 3rem;
+  color: #CCCCCC;
 }
-#checkout .main .adds div {
-  padding-left: 0.5rem;
-  margin: 0.2rem 0.3rem;
+#checkout .main .address_title,
+#checkout .main .shop_title {
+  background: #f0f2f5;
+  height: 0.6rem;
+  line-height: 0.6rem;
+  padding: 0.2rem 0.3rem;
   font-weight: 500;
-  background: url("../demo/adds.png") no-repeat left;
-  background-size: 0.4rem;
 }
-#checkout .main .adds ul {
+#checkout .main .address_title span,
+#checkout .main .shop_title span {
+  display: inline-block;
+}
+#checkout .main .address_title_img {
+  width: 0.5rem;
+  height: 0.5rem;
+  line-height: 0.5rem;
+  background: url("../demo/adds.png") no-repeat center;
+  background-size: 0.5rem;
+  float: left;
+}
+#checkout .main .address_title_text,
+#checkout .main .shop_title_text {
+  height: 0.5rem;
+  line-height: 0.5rem;
+  font-size: 0.3rem;
+  margin-left: 0.1rem;
+}
+#checkout .main .address_list ul {
   background: white;
-  padding: 0.1rem 0;
+  padding: 0.2rem 0.3rem;
 }
-#checkout .main .adds ul li {
+#checkout .main .address_list ul li {
   font-size: 0.2rem;
   color: #7e7e7e;
+  margin-bottom: 0.2rem;
 }
-#checkout .main .adds ul li .__checkbox__ {
+#checkout .main .address_list ul li .__checkbox__ {
   background: url("../demo/2.png") no-repeat left;
   background-size: 0.4rem;
   padding-left: 0.5rem;
 }
-#checkout .main .adds ul li .checked {
+#checkout .main .address_list ul li .checked {
   background: url("../demo/3.png") no-repeat left !important;
   background-size: 0.4rem !important;
 }
-#checkout .main .inventory div {
-  padding-left: 0.5rem;
-  margin: 0.2rem 0.3rem;
-  font-weight: 500;
-  background: url("../demo/1.PNG") no-repeat left;
+#checkout .main .shop_title_img {
+  width: 0.4rem;
+  height: 0.4rem;
+  line-height: 0.4rem;
+  background: url("../demo/1.png") no-repeat center;
   background-size: 0.4rem;
+  float: left;
+  margin: 0.1rem 0;
 }
-#checkout .main .inventory ul {
+#checkout .main .__checkout_detail {
   background: white;
+  margin: 0.2rem 0.25rem;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 0.3rem;
+}
+#checkout .main .__checkout_detail .__template_checkout_detail_item {
+  color: #7e7e7e;
   padding: 0.1rem 0;
 }
-#checkout .main .inventory ul li {
-  font-size: 0.2rem;
-  color: #7e7e7e;
-  padding: 0.1rem 0.25rem;
-}
-#checkout .main .inventory ul li span {
+#checkout .main .__checkout_detail .__template_checkout_detail_item span {
   display: inline-block;
 }
-#checkout .main .inventory ul li span:nth-child(1) {
-  text-align: center;
-  width: 30px;
-  margin: 5px 0;
-}
-#checkout .main .inventory ul li span:nth-child(2) {
+#checkout .main .__checkout_detail .__template_checkout_detail_item .__field_checkout_title {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 3rem;
 }
-#checkout .main .inventory ul li span:nth-child(3) {
+#checkout .main .__checkout_detail .__template_checkout_detail_item .__field_checkout_quantity {
   float: right;
 }
-#checkout .main .inventory ul li span:nth-child(4) {
+#checkout .main .__checkout_detail .__template_checkout_detail_item .__field_checkout_price {
   margin-right: 30px;
   float: right;
 }
 #checkout .main .moe {
-  padding: 0.2rem 0.3rem;
+  margin: 0.2rem 0.3rem;
   font-weight: 500;
+  height: 0.6rem;
+  border-bottom: 1px solid #ccc;
+  line-height: 0.6rem;
+  padding-bottom: 0.2rem;
 }
 #checkout .main .moe p {
   font-weight: bold;
@@ -642,14 +571,17 @@ body {
   float: right;
 }
 #checkout .main .total {
-  padding: 0.2rem 0.3rem;
+  margin: 0.2rem 0.3rem;
   font-weight: 500;
+  height: 0.6rem;
+  line-height: 0.6rem;
+  padding-bottom: 0.2rem;
 }
 #checkout .main .total span {
   font-weight: bold;
 }
 #checkout .main .total div {
-  color: #ff9934 ;
+  color: #ff9934;
   font-weight: normal;
   float: right;
 }
@@ -671,74 +603,6 @@ body {
   height: 0.6rem;
   line-height: 0.6rem;
 }
-#Payment_success {
-  height: 100%;
-}
-#Payment_success .header {
-  z-index: 100;
-  position: fixed;
-  width: 100%;
-  top: 0;
-  height: 0.7rem;
-  background: #e5e5e5;
-  border-bottom: solid 1px #c8c8c8;
-}
-#Payment_success .header i {
-  overflow: hidden;
-  display: block;
-  z-index: 999;
-  height: 0.7rem;
-  line-height: 0.7rem;
-  vertical-align: middle;
-  padding: 0 0.2rem;
-  float: left;
-}
-#Payment_success .header .header-content {
-  width: auto;
-  text-align: center;
-  font-size: 0.3rem;
-  line-height: 0.7rem;
-  font-weight: bold;
-  -webkit-user-select: none;
-  color: #599c3d;
-}
-#Payment_success .main {
-  background: white;
-  height: 100%;
-}
-#Payment_success .main div {
-  margin: 0 auto;
-  padding: 2rem 0.5rem;
-}
-#Payment_success .main div div {
-  background: url("../demo/sussce.png") no-repeat center;
-  background-size: 2rem;
-  height: 2.5rem;
-  padding: 0;
-}
-#Payment_success .main div p:first-of-type {
-  text-align: center;
-  font-size: 0.5rem;
-}
-#Payment_success .main div p:last-of-type {
-  margin-top: 0.5rem;
-  font-size: 0.3rem;
-}
-#Payment_success .footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  z-index: 1100;
-}
-#Payment_success .footer a {
-  background: #599c3d;
-  margin: 0.1rem 0.1rem;
-  color: white;
-  text-align: center;
-  display: block;
-  height: 0.6rem;
-  line-height: 0.6rem;
-}
 #Order_details {
   height: 100%;
 }
@@ -747,7 +611,7 @@ body {
   position: fixed;
   width: 100%;
   top: 0;
-  height: 0.7rem;
+  height: 0.8rem;
   background: #e5e5e5;
   border-bottom: solid 1px #c8c8c8;
 }
@@ -755,97 +619,180 @@ body {
   overflow: hidden;
   display: block;
   z-index: 999;
-  height: 0.7rem;
-  line-height: 0.7rem;
+  height: 0.8rem;
+  line-height: 0.8rem;
   vertical-align: middle;
   padding: 0 0.2rem;
   float: left;
 }
 #Order_details .header .header-content {
-  width: auto;
+  width: 320px;
   text-align: center;
   font-size: 0.3rem;
-  line-height: 0.7rem;
+  line-height: 0.8rem;
   font-weight: bold;
   -webkit-user-select: none;
   color: #599c3d;
+  height: 0.8rem;
+  vertical-align: middle;
 }
 #Order_details .main {
-  margin-bottom: 1rem;
+  margin: 0.8rem 0;
+}
+#Order_details .main .follow {
   position: relative;
-  top: 0.7rem;
-}
-#Order_details .main .follow div:last-of-type {
-  padding: 0.2rem 0.3rem;
+  overflow: hidden;
   background: white;
+  padding: 0.2rem;
 }
-#Order_details .main .follow div:last-of-type p {
-  color: #7e7e7e;
-  padding: 0.1rem 0;
-}
-#Order_details .main .follow div:last-of-type p span {
-  display: inline-block;
-  margin: 0 0.15rem;
-}
-#Order_details .main .delivery div:first-of-type {
-  padding-left: 0.5rem;
-  margin: 0.2rem 0.3rem;
-  font-weight: 500;
-  background: url("../demo/pop.png") no-repeat left;
-  background-size: 0.35rem;
-}
-#Order_details .main .delivery div:last-of-type {
-  padding: 0.2rem 0.3rem;
-  background: white;
-}
-#Order_details .main .delivery div:last-of-type p {
-  color: #7e7e7e;
-  padding: 0.1rem 0;
-}
-#Order_details .main .delivery div:last-of-type p span {
-  display: inline-block;
-  margin: 0 0.15rem;
-}
-#Order_details .main .inventory div {
-  padding-left: 0.5rem;
-  margin: 0.2rem 0.3rem;
-  font-weight: 500;
-  background: url("../demo/1.PNG") no-repeat left;
-  background-size: 0.4rem;
-}
-#Order_details .main .inventory ul {
-  background: white;
-  padding: 0.1rem 0;
-}
-#Order_details .main .inventory ul li {
-  font-size: 0.2rem;
-  color: #7e7e7e;
-  padding: 0.1rem 0.25rem;
-}
-#Order_details .main .inventory ul li span {
+#Order_details .main .follow span {
   display: inline-block;
 }
-#Order_details .main .inventory ul li span:nth-child(1) {
+#Order_details .main .follow .follow_tip {
+  width: 6rem;
+  height: 0.5rem;
+}
+#Order_details .main .follow .follow_tip .follow_left {
+  float: left;
+  width: 1.3rem;
+  text-align: left;
+}
+#Order_details .main .follow .follow_tip .follow_center {
+  width: 3rem;
+  margin: 0 0.2rem;
   text-align: center;
-  width: 30px;
-  margin: 5px 0;
 }
-#Order_details .main .inventory ul li span:nth-child(2) {
+#Order_details .main .follow .follow_tip .follow_right {
+  float: right;
+  width: 1.3rem;
+  text-align: right;
+}
+#Order_details .main .follow .follow_tip .line {
+  border: 1px solid #CCCCCC;
+  margin: 0.2rem 0.5rem;
+}
+#Order_details .main .follow .follow_tip .line_tip {
+  width: 5rem;
+  margin: 0.2rem 0.5rem;
+  position: absolute;
+  top: 0.4rem;
+}
+#Order_details .main .follow .follow_tip .line_tip .tip_left,
+#Order_details .main .follow .follow_tip .line_tip .tip_center,
+#Order_details .main .follow .follow_tip .line_tip .tip_right {
+  display: inline-block;
+  border: 1px solid #CCCCCC;
+  border-radius: 50%;
+  width: 0.2rem;
+  height: 0.2rem;
+}
+#Order_details .main .follow .follow_tip .line_tip .tip_left {
+  float: left;
+  background: #CCCCCC;
+}
+#Order_details .main .follow .follow_tip .line_tip .tip_center {
+  margin: 0 2rem;
+  background: #CCCCCC;
+}
+#Order_details .main .follow .follow_tip .line_tip .tip_right {
+  float: right;
+  background: white;
+}
+#Order_details .main .follow .follow_text {
+  margin-top: 0.5rem;
+}
+#Order_details .main .follow .follow_text p {
+  color: #7e7e7e;
+  padding: 0.1rem 0;
+}
+#Order_details .main .follow .follow_text p .text_margin {
+  margin: 0 0.15rem;
+}
+#Order_details .main .delivery_title,
+#Order_details .main .inventory_title {
+  background: #f0f2f5;
+  height: 0.6rem;
+  line-height: 0.6rem;
+  padding: 0.2rem 0.3rem;
+  font-weight: 500;
+}
+#Order_details .main .delivery_title span,
+#Order_details .main .inventory_title span {
+  display: inline-block;
+}
+#Order_details .main .delivery_title .delivery_title_img,
+#Order_details .main .inventory_title .delivery_title_img {
+  width: 0.5rem;
+  height: 0.5rem;
+  line-height: 0.5rem;
+  background: url("../demo/pop.png") no-repeat center;
+  background-size: 0.5rem;
+  float: left;
+}
+#Order_details .main .delivery_title .inventory_title_img,
+#Order_details .main .inventory_title .inventory_title_img {
+  width: 0.4rem;
+  height: 0.4rem;
+  line-height: 0.4rem;
+  background: url("../demo/1.png") no-repeat center;
+  background-size: 0.4rem;
+  float: left;
+  margin: 0.1rem 0;
+}
+#Order_details .main .delivery_title .delivery_title_text,
+#Order_details .main .inventory_title .delivery_title_text,
+#Order_details .main .delivery_title .inventory_title_text,
+#Order_details .main .inventory_title .inventory_title_text {
+  height: 0.5rem;
+  line-height: 0.5rem;
+  font-size: 0.3rem;
+  margin-left: 0.1rem;
+}
+#Order_details .main .delivery_list {
+  padding: 0.2rem 0.3rem;
+  background: white;
+}
+#Order_details .main .delivery_list p {
+  color: #7e7e7e;
+  padding: 0.1rem 0;
+}
+#Order_details .main .delivery_list p span {
+  display: inline-block;
+  margin: 0 0.15rem;
+}
+#Order_details .main .inventory_list {
+  background: white;
+  margin: 0.2rem 0.25rem;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 0.3rem;
+}
+#Order_details .main .inventory_list .inventory_list_item {
+  color: #7e7e7e;
+  padding: 0.1rem 0;
+}
+#Order_details .main .inventory_list .inventory_list_item span {
+  display: inline-block;
+}
+#Order_details .main .inventory_list .inventory_list_item .inventory_list_title {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 3rem;
 }
-#Order_details .main .inventory ul li span:nth-child(3) {
+#Order_details .main .inventory_list .inventory_list_item .inventory_list_quantity {
   float: right;
 }
-#Order_details .main .inventory ul li span:nth-child(4) {
+#Order_details .main .inventory_list .inventory_list_item .inventory_list_price {
   margin-right: 30px;
   float: right;
 }
 #Order_details .main .moe {
-  padding: 0.2rem 0.3rem;
+  margin: 0.2rem 0.3rem;
   font-weight: 500;
+  height: 0.6rem;
+  border-bottom: 1px solid #ccc;
+  line-height: 0.6rem;
+  padding-bottom: 0.2rem;
 }
 #Order_details .main .moe p {
   font-weight: bold;
@@ -856,14 +803,17 @@ body {
   float: right;
 }
 #Order_details .main .total {
-  padding: 0.2rem 0.3rem;
+  margin: 0.2rem 0.3rem;
   font-weight: 500;
+  height: 0.6rem;
+  line-height: 0.6rem;
+  padding-bottom: 0.2rem;
 }
 #Order_details .main .total span {
   font-weight: bold;
 }
 #Order_details .main .total div {
-  color: #ff9934 ;
+  color: #ff9934;
   font-weight: normal;
   float: right;
 }
@@ -884,35 +834,4 @@ body {
   display: block;
   height: 0.6rem;
   line-height: 0.6rem;
-}
-#success_popup {
-  display: none;
-  position: absolute;
-  top: 3rem;
-  left: 0.2rem;
-  right: 0.2rem;
-  z-index: 2000;
-}
-#success_popup div div:nth-child(1) {
-  font-size: 0.35rem;
-  text-align: center;
-  height: 0.7rem;
-  line-height: 0.7rem;
-  background: #e5e5e5;
-  font-weight: 700;
-}
-#success_popup div div:nth-child(2) {
-  background: white;
-  height: 1.5rem;
-  padding: 0.3rem 0.45rem;
-  font-size: 0.3rem;
-  color: #707070;
-}
-#success_popup div div:nth-child(3) {
-  line-height: 0.7rem;
-  height: 0.7rem;
-  text-align: center;
-  color: white;
-  background: #599c3d;
-  font-size: 0.3rem;
 }

@@ -1,169 +1,291 @@
-
-window.onload = function () {
-    var pageAry = {};
-    var allDom = document.getElementsByTagName("body")[0].getElementsByTagName("*");
-    var activePage = null;
-    for (var i = 0; i < allDom.length; i++) {
-        var cur = allDom[i];
-        if (cur.getAttribute("cls") && cur.getAttribute("jid")) {
-            var id = cur.getAttribute("jid");
-            pageAry[id] = cur;
-        }
-        if (cur.getAttribute("method") && cur.getAttribute("target")) {
-            cur.addEventListener("click", jump);
-        }
-        var defaultAttr = cur.getAttribute('default');
-        if (!!defaultAttr && defaultAttr == 'yes') {
-            activePage = cur;
-            activePage.style.display = 'block';
-        }
-    }
-    function jump(e) {
-        if (!!activePage) {
-            activePage.style.display = "none";
-        }
-        var id = e.currentTarget.getAttribute("target");
-        pageAry[id].style.display = "block";
-        activePage = pageAry[id];
-    }
-};
-function in_list(){
-
-}
-var checkbox_group = document.getElementsByClassName('__checkbox__');
-for (var _ in checkbox_group) {
-    var checkbox = checkbox_group[_];
-    checkbox.onclick = function () {
-        for (var i = 0; i < checkbox_group.length; i++) {
-            var checkbox_ = checkbox_group[i];
-            checkbox_.classList.remove('checked');
-        }
-        this.classList.add('checked');
-    };
-}
-
-var shop = document.getElementsByClassName("shop")[0];
-var popup = document.getElementsByClassName("popup")[0];
-var popup_box = document.getElementsByClassName("popup_box")[0];
-var flag = -1;
-popup.onclick=function(){
-    console.log(1);
-    if( popup_box.style.display="block"){
-        popup_box.style.display="none";
-        popup.style.display="none";
-    }
-};
-shop.onclick = function () {
-    if (num[0].innerHTML > 0 && flag == "-1") {
-        popup.style.display = "block";
-        popup_box.style.display = "block";
-        flag = flag * -1;
-    } else if (num[0].innerHTML > 0 && flag == "1") {
-        popup.style.display = "none";
-        popup_box.style.display = "none";
-        flag = flag * -1;
-    }
-};
-(function () {
-    var commodities = (new Function('', 'return ' + '{"1": {"cur":0,"quota": 1, "id": 1, "unit_price": 20, "title": "\u6cf0\u56fd\u6930\u9752"}, "3": { "cur":0,"quota": 1, "id": 3, "unit_price": 59, "title": "\u7ea2\u989c\u8349\u8393"}, "2": {"cur":0,"quota": 1, "id": 2, "unit_price": 28, "title": "\u83f2\u5f8b\u5bbe\u51e4\u68a8"}, "4": {"cur":0,"quota": 1, "id": 4, "unit_price": 0, "title": "\u8d85\u4fbf\u5b9c\u6c34\u679c"}}'))();
-    var cart = $("#popup");
-    var template = $("._template");
-    num=$(".shop span");
-    var invent=$("#invent");
-    var inventory_list=$("._inventory_list");
-    window.addCommodity = function (id) {
-        var commodity = commodities[id];
-        if (!!commodity) {
-            if (!commodity.domeObject) {
-                var item = template.clone();
-                var inventory=inventory_list.clone();
-                commodity.domeObject = item;
-                commodity.dome_inventory_list = inventory;
-                commodity.quantity = 1;
-                item.find("._field_title").text(commodity.title);
-                item.find("._field_price").text(commodity.unit_price.toFixed(2));
-                num.text(1);
-                item.find("._field_quantity").val(1);
-                $('._field_quantity_' + id).val(1);
-                inventory.find(".inventory_title").text(commodity.title);
-                inventory.find(".inventory__price").text(commodity.quantity);
-                inventory.find(".inventory__total").text((commodity.unit_price * commodity.quantity).toFixed(2));
-                (function (id) {
-                    item.find("._button_remove").click(function () {
-                        window.removedCommodity(id);
-                    });
-                    item.find("._button_add").click(function () {
-                        window.addCommodity(id);
-                    });
-                })(id);
-                cart.append(item);
-                invent.append(inventory);
-                inventory_list.remove();
-                template.remove();
-            } else {
-                commodity.quantity += 1;
-                num.text(commodity.quantity);
-                $('._field_quantity_' + id).val(commodity.quantity);
-                commodity.domeObject.find("._field_quantity").val(commodity.quantity);
-                commodity.domeObject.find("._field_price").text((commodity.unit_price * commodity.quantity).toFixed(2));
-                commodity.dome_inventory_list.find(".inventory__price").text(commodity.quantity);
-                commodity.dome_inventory_list.find(".inventory__total").text((commodity.unit_price * commodity.quantity).toFixed(2));
-            }
-        }
-        total(id);
-    };
-    window.removedCommodity = function (id) {
-        var commodity = commodities[id];
-        if (!!commodity) {
-            if (!!commodity.domeObject) {
-                if (commodity.quantity > 1) {
-                    commodity.quantity -= 1;
-                    num.text(commodity.quantity);
-                    $('._field_quantity_' + id).val(commodity.quantity);
-                    commodity.domeObject.find("._field_quantity").val(commodity.quantity);
-                    commodity.domeObject.find("._field_price").text((commodity.unit_price * commodity.quantity).toFixed(2));
-                } else {
-                    commodity.quantity -= 1;
-                    $('._field_quantity_' + id).val(commodity.quantity);
-                    commodity.domeObject.remove();
-                    commodity.domeObject = null;
+    $(function(){
+        //实现购物车弹层功能
+        (function(status){//标识符->方法执行时传入一个参数true
+            // TODO clean all touch events
+            $('.overlay').on('click', function(){//TODO WTF click to tap   //给弹出背景绑定点击事件
+                status = false;//点击时，让function下的私有status变为false
+                window.popup_window_from_bottom();//触发window下popup_window_from_bottom这个事件
+            });
+            window.popup_window_from_bottom = function(){
+                if(status&&CartManager.total!=0){//判断，如果status为true
+                    status = false;//修改statusde值为false
+                    $('.overlay').css('display', 'block');//修改样式名为overlay的行内样式，显示背景弹层
+                    $('.popup-window-from-bottom').css("display","block");//调用jQuery中的slideToggle方法，让购物车弹层滑动显示
+                } else {//如果status不是true,那么....
+                    status = true;//修改status的值为true
+                    $('.overlay').css('display', 'none');//修改样式名为overlay的行内样式，隐藏背景弹层
+                    $('.popup-window-from-bottom').css('display', 'none');//修改购物车弹层的行内样式
                 }
             }
-        }
-        total(id);
-    };
-    function total(id){
-        var commodity=commodities[id];
-        var num=0;
-        if(!!commodity){
-            for(key in commodities){
-                var a=(commodity.unit_price*commodity.quantity).toFixed((2));
-                commodity.cur=a;
-                num+=eval(commodities[key].cur);
+        })(true);
+    });
+
+    $(function(){//把所有方法写在一个自执行函数里，形成闭包
+        var PageManager = window.PageManager = {//初始化页面 哈市表
+            pages: {},//用来存放通过className=__page__的页面->五个代表页面的div
+            switchData: {},//用来存放
+            init: function(){//初始化页面方法
+                var that = this;//将当前作用下的this赋值给that   this->Object {pages: Object, switchData: Object}
+                $('.__page__').each(function(){//通过jQuery中each()方法对className为__page__的每个元素规定运行的函数
+                    var name = $(this).attr('name');//定义私有变量name 把通过attr返回的name属性下的属性值赋值给私有变量，this->div#index.__page__ 、div#checkout.__page__、div#Payment_success.__page__、div#Order_details.__page__、div#success_popup.__page__    name->index、checkout、success、details、popup
+                    that.pages[name] = $(this);//把获取到的dom元素集合按照各自的name存放在page对象里面。当前作用域下的this是div，我们需要放在上一作用域下的pages对象里，所以需要用that
+                });
+            },
+            jump: function(pageName, closureName){//实现页面切页效果 参数1：要跳转的页面、参数2：dumpDataToCheckout
+                var activePage = this.pages[pageName];//私有变量存储用户点击执行jump方法时，当前点击的dom元素。->是在pages对象中通过键取出
+                if(!!activePage){//如果dom元素存在
+                    var closureMethod = this.switchData[closureName];//
+                    if(!!closureMethod){
+                        if(!closureMethod()){
+                            return;
+                        }
+                    }
+                    for(var _ in this.pages){//循环pages对象下的每一个项->dom元素
+                        var currentPage = this.pages[_];//把每一项赋值给私有变量
+                        currentPage.css('display', 'none');//让每一项dom元素的display为none->元素不显示
+                    }
+                    activePage.css('display', 'block');//再让当前项dom元素display为block->元素显示
+                }
             }
-        }
-        $("._total").text(num);
-        $(".total_number").text(num);
-        console.log(num);
-        return num;
-    };
-
-    $("#del")[0].onclick=function(){
-        console.log(commodities[1]);
-        for(key in  commodities){
-            commodities[key].quantity=0;
-            if(!!commodities[key].domeObject) {
-                commodities[key].domeObject.remove();
-
+        };
+        var CheckoutManager = window.CheckoutManager = {
+            detail: null,//dom元素->ul
+            detailTemplate: null,//checkout页下商品列表li模板
+            total: null,//商品数量合计
+            addresses: null,
+            currentAddress: null,//用户选中收货地址
+            tel: null,  //用户电话信息初始化
+            commodities: null,//用户订单信息数据->
+            init: function(addresses){
+                var that = this;
+                var tel = $('.__checkout_tel');
+                tel.change(function(){
+                    that.tel = $(this).val();
+                });
+                this.addresses = addresses;
+                this.detail = $('.__checkout_detail');
+                this.detailTemplate = $('.__template_checkout_detail_item');
+                this.detailTemplate.remove();
+                this.detailTemplate.removeClass('.__template_checkout_detail_item');
+                this.total = $('.__checkout_total');
+                var checkbox_group = $('.__checkbox__');
+                checkbox_group.click(function(){
+                    checkbox_group.each(function(){
+                        $(this).removeClass('checked');
+                    });
+                    $(this).addClass('checked');
+                });
+            },
+            setAddress: function(id){//获取用户选中地址方法
+                var address = this.addresses[id];
+                if(!!address){
+                    this.currentAddress = address;
+                }
+            },
+            fetchPayInfo: function(){
+                var result = {};
+                if(!this.tel || this.tel.length == 0){
+                    result.status = 'failed';
+                    result.msg = '电话号码不能为空';
+                    return result;
+                } else {
+                    result.tel = this.tel;
+                }
+                if(!this.currentAddress){
+                    result.status = 'failed';
+                    result.msg = '请选择取货地';
+                    return result;
+                } else {
+                    result.address = this.currentAddress.id;
+                }
+                result.status = 'success';
+                result.commodities = [];
+                for(var _ in this.commodities){
+                    var commodity = this.commodities[_];
+                    if(!commodity.quantity || commodity.quantity == 0){
+                        continue;
+                    }
+                    var item = {
+                        id: commodity.id,
+                        quantity: commodity.quantity
+                    };
+                    result.commodities.push(item);
+                }
+                return result;
+            },
+            pay: function(){
+                var payInfo = this.fetchPayInfo();
+                if(payInfo.status == 'failed'){
+                    alert(payInfo.msg);
+                    return;
+                }
+                //alert(JSON.stringify(payInfo));
+            },
+            dump: function(commodities){
+                this.commodities = commodities;
+                this.detail.empty();
+                var total = 0;
+                for(var _ in commodities){
+                    var commodity = commodities[_];
+                    if(!commodity.quantity || commodity.quantity == 0){
+                        continue;
+                    }
+                    total += commodity.quantity * commodity.unit_price;
+                    var item = this.detailTemplate.clone();
+                    item.find('.__field_checkout_title').text(commodity.title);
+                    item.find('.__field_checkout_quantity').text(commodity.quantity);
+                    var price = (commodity.quantity * commodity.unit_price / 100).toFixed(2).toString();
+                    item.find('.__field_checkout_price').text(price);
+                    this.detail.append(item);
+                }
+                this.total.text('￥' + (total / 100).toFixed(2).toString());
             }
-        }
-        $("._total").text(0);
-        $(".total_number").text(0);
-    }
-
-
-})();
-
-
-
-
+        };
+        var CartManager = window.CartManager = {
+            commodities: null,
+            cartTemplate: null,
+            cart: null,
+            total: 0,
+            init: function(data){
+                var that = this;
+                this.commodities = data;
+                for(var _ in this.commodities){
+                    var commodity = this.commodities[_];
+                    var className = '.__field_quantity_' + commodity.id;
+                    var domObject = $(className);
+                    commodity.quantity_in_list = domObject;
+                }
+                this.cartTemplate = $('.__template');
+                this.cartTemplate.remove();
+                this.cartTemplate.removeClass('.__template');
+                this.cart = $('.__cart');
+                window.PageManager.switchData['dumpDataToCheckout'] = (function(commodities){
+                    var closureMethod = function(){
+                        //alert(JSON.stringify(commodities));
+                        if(!that.total || that.total == 0){
+                            return false;
+                        }
+                        window.CheckoutManager.dump(commodities);
+                        return true;
+                    }
+                    return closureMethod;
+                })(commodities);
+            },
+            generateCartItem: function(commodity){
+                var that = this;
+                var domObject = this.cartTemplate.clone();
+                domObject.find('.__field_title').text(commodity.title);
+                var price = (commodity.quantity * commodity.unit_price / 100).toFixed(2).toString();
+                domObject.find('.__field_price').text(price);
+                domObject.find('.__field_quantity').text(commodity.quantity);
+                domObject.find('.__button_add').click(function(){
+                    that.add(commodity.id);
+                });
+                domObject.find('.__button_remove').click(function(){
+                    that.remove(commodity.id);
+                });
+                return domObject;
+            },
+            updateCartItem: function(commodity, domObject){
+                var price = (commodity.quantity * commodity.unit_price / 100).toFixed(2).toString();
+                domObject.find('.__field_price').text(price);
+                domObject.find('.__field_quantity').text(commodity.quantity);
+            },
+            add: function(id){
+                var commodity = this.commodities[id];
+                if(!!commodity){
+                    if(!commodity.quantity){
+                        commodity.quantity = 1;
+                    }else{
+                        commodity.quantity += 1;
+                    }
+                    this.render();
+                }
+            },
+            remove: function(id){
+                var commodity = this.commodities[id];
+                if(!!commodity && !!commodity.quantity){
+                    if(commodity.quantity > 1){
+                        commodity.quantity -= 1;
+                    } else{
+                        commodity.quantity = 0;
+                    }
+                    this.render();
+                }
+            },
+            empty: function(){
+                for(var _ in this.commodities){
+                    var commodity = this.commodities[_];
+                    commodity.quantity = 0;
+                }
+                this.render();
+                $('.overlay').css('display', 'none');
+                $('.popup-window-from-bottom').css('display', 'none');
+            },
+            render: function(){
+                var amount = 0;
+                var total = 0;
+                for(var _ in this.commodities){
+                    var commodity = this.commodities[_];
+                    if(!!commodity.quantity){
+                        amount += commodity.quantity;
+                        total += commodity.quantity * commodity.unit_price;
+                        commodity.quantity_in_list.text(commodity.quantity);
+                    }else{
+                        commodity.quantity_in_list.text(0);
+                    }
+                    if(!commodity.item_in_cart){
+                        if(!!commodity.quantity && commodity.quantity > 0){
+                            var domObject = this.generateCartItem(commodity);
+                            commodity.item_in_cart = domObject;
+                            this.cart.append(domObject);
+                        }
+                    } else {
+                        var domObject = commodity.item_in_cart;
+                        if(!!commodity.quantity && commodity.quantity > 0){
+                            this.updateCartItem(commodity, domObject);
+                        } else {
+                            domObject.remove();
+                            commodity.item_in_cart = null;
+                        }
+                    }
+                }
+                this.render_amount(amount);
+                this.render_total(total);
+                this.total = total;
+            },
+            render_amount: function(amount){
+                var domObject = $('.__amount');
+                if(!amount && amount == 0){
+                    domObject.css('display', 'none');
+                } else{
+                    domObject.css('display', 'block');
+                    domObject.text(amount);
+                }
+            },
+            render_total: function(total){
+                var domObject = $('.__total');
+                if(!total && total == 0){
+                    domObject.text(0);
+                }else{
+                    total_string = (total / 100).toFixed(2).toString();
+                    domObject.text('￥' + total_string);
+                }
+                return total;
+            }
+        };
+        //run
+        PageManager.init();//调用init方法，开始渲染页面
+        var commodities = {
+            '1': {id: 1, title: '进口冷冻阿根廷红虾北极甜虾1', unit_price: 10010},
+            '2': {id: 2, title: '进口冷冻阿根廷红虾北极甜虾2', unit_price: 20085},
+            '3': {id: 3, title: '进口冷冻阿根廷红虾北极甜虾3', unit_price: 30003}
+        };
+        var addresses = {
+            '1': {id: 1, address: '北京市海淀区上地七街1号汇众科技大厦2号楼713室', dist: '惠订1'},
+            '2': {id: 2, address: '北京市海淀区上地七街1号汇众科技大厦2号楼714室', dist: '惠订2'},
+            '3': {id: 3, address: '北京市海淀区上地七街1号汇众科技大厦2号楼715室', dist: '惠订3'}
+        };
+        CartManager.init(commodities);
+        CheckoutManager.init(addresses);//执行checkout下init方法
+    });

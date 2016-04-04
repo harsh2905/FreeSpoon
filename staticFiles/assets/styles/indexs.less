@@ -1,9 +1,6 @@
-@header-height: 1.4rem;
-@height: @header-height/2;
-
-*{
-  margin:0;
-  padding:0;
+* {
+  margin: 0;
+  padding: 0;
   list-style: none;
   text-decoration: none;
   color: #000;
@@ -11,11 +8,15 @@
 
 html, body {
   font-size: 0.25rem;
-  background: #f0f2f5;
   color: #464646;
   height: 100%;
   font-family: '微软雅黑', Helvetica, Tahoma, Arial, '华文细黑', sans-serif;
+  user-select: none;
+  -webkit-user-select:none;
 }
+
+@header-height: 1.2rem;
+@height: @header-height/2;
 .overlay {
   display: none;
   position: fixed;
@@ -27,6 +28,7 @@ html, body {
   top: 0;
   bottom: 1.7rem;
 }
+
 .popup-window-from-bottom {
   display: none;
   background: white;
@@ -35,107 +37,104 @@ html, body {
   z-index: 1000;
   width: 100%;
   margin-bottom: @header-height - 0.3rem;
-  &> div {
-    margin: 0.2rem 0.15rem 0.7rem 0.15rem;
-    &> div {
-      overflow: hidden;
-      height: 0.6rem;
+  .box {
+    @height: 0.6rem;
+    margin: 0.25rem 0.2rem;
+    .popup-bottom-title {
+      height: @height;
+      padding-right: 0.3rem;
       background: #e3e3e3;
-      position: relative;
       .oder {
-        margin-top: 0.15rem;
-        margin-left: 0.15rem;
-        span:nth-child(1) {
-          background: url("../demo/book.png");
-          height: 0.25rem;
-          width: 0.21rem;
-          background-size: 0.2rem;
-          display: block;
-          float: left;
-          margin-top: 0.06rem;
-        }
-        span:nth-child(2) {
-          font-weight: 600;
-          margin-left: 0.1rem;
+        width: auto;
+        height: @height;
+        .popup_bottom_oder {
+          padding: 0.1rem;
+          .oder_img {
+            display: inline-block;
+            width: @height - 0.2rem;
+            height: @height - 0.2rem;
+            background: url("../demo/book.png") no-repeat center;
+            background-size: 0.4rem;
+            float: left;
+          }
+          .oder_text {
+            margin-left: 0.1rem;
+            display: inline-block;
+            font-size: 0.3rem;
+            font-weight: bold;
+            text-align: center;
+            vertical-align: middle;
+          }
         }
       }
       .del {
-        position: absolute;
-        top: 0;
-        right: 0;
-        overflow: hidden;
-        margin-right: 0.15rem;
-        margin-top: 0.15rem;
-        span:nth-child(1) {
-          float: right;
-          font-size: 0.2rem;
-          margin-left: 0.05rem;
-        }
-        span:nth-child(2) {
-          float: right;
-          background: url("../demo/del.png");
-          height: 0.23rem;
-          width: 0.2rem;
-          background-size: 0.2rem;
-          display: inline-block;
+        float: right;
+        width: 3rem;
+        height: @height;
+        .popup_bottom_del {
+          height: 0.4rem;
+          padding: 0.1rem;
+          .del_img {
+            display: inline-block;
+            background: url("../demo/del.png") no-repeat center;
+            width: @height - 0.2rem;
+            height: @height - 0.2rem;
+            background-size: 0.4rem;
+            float: right;
+          }
+          .del_text {
+            line-height: 0.4rem;
+            display: inline-block;
+            font-size: 0.2rem;
+            text-align: center;
+            vertical-align: middle;
+            float: right;
+          }
         }
       }
     }
-    ul {
-      li {
-        &._template{
-          display: none;
-        }
-        position: relative;
+    .__cart {
+      margin-bottom: 0.5rem;
+      .__template {
+        padding: 0.2rem 0.1rem;
         border-bottom: 1px solid #CCCCCC;
-        margin: 0.1rem 0;
-        padding: 0.1rem 0;
-        &> div:nth-child(1) {
-          overflow: hidden;
-          margin-right: 2rem;
+        .__field_title {
           text-overflow: ellipsis;
           white-space: nowrap;
-          padding-right: 1rem;
-          padding-left: 0.15rem;
-        }
-        &> div:nth-child(2) {
-          position: absolute;
-          top: 0.1rem;
-          right: 0;
-          float: right;
+          display: inline-block;
           width: 3rem;
-          margin-right: 0.15rem;
-          div:nth-child(1) {
-            padding-right: 1.4rem;
-            text-align: right;
-            color: #ff9934;
-          }
+          overflow: hidden;
+          line-height: 0.5rem;
+          height: 0.5rem;
+          vertical-align: middle;
         }
-        .regulator_right {
-
-          position: absolute;
-          top: 0;
-          right: 0;
-          input, a {
-            float: left;
-            border: 1px solid #ff9934;
-            width: 20px;
-            height: 20px;
-            text-align: center;
-            line-height: 20px;
-            border-radius:50% ;
+        .popup_reduce {
+          width: 2.5rem;
+          float: right;
+          margin-right: 0.2rem;
+          height: 0.5rem;
+          text-align: center;
+          vertical-align: middle;
+          line-height: 0.5rem;
+          .__field_price {
+            display: inline-block;
           }
-          input {
-            border: none;
-            width: 20px;
-            height: 20px;
-            font-size: 0.2rem;
-            text-align: center;
-            line-height: 20px;
-          }
-          a:active {
-            background: #ff9934;
-            color: white;
+          .regulator_right {
+            display: inline-block;
+            float: right;
+            a {
+              display: inline-block;
+              border: 1px solid #ff9934;
+              width: 0.4rem;
+              height: 0.4rem;
+              text-align: center;
+              border-radius: 50%;
+              line-height: 0.4rem;
+            }
+            a:active {
+              background: #ff9934;
+              color: white;
+            }
           }
         }
       }
@@ -146,132 +145,22 @@ html, body {
 .select {
   display: block;
 }
-._header{
-  z-index: 100;
-  position: fixed;
-  width: 100%;
-  top: 0;
-  height: @height;
-  background: #e5e5e5;
-  border-bottom: solid 1px #c8c8c8;
-  i{
-    overflow: hidden;
-    display: block;
-    z-index: 999;
-    height: 0.7rem;
-    line-height: 0.7rem;
-    vertical-align: middle;
-    padding:0 0.2rem;
-    float: left;
-  }
-  .header-content {
-    width: auto;
-    text-align: center;
-    font-size: 0.3rem;
-    line-height: @height;
-    font-weight: bold;
-    -webkit-user-select: none;
-    color: #599c3d;
-  }
-}
-._footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  z-index: 1100;
-  a {
-    background: #599c3d;
-    margin: 0.1rem 0.1rem;
-    color: white;
-    text-align: center;
-    display: block;
-    height: 0.6rem;
-    line-height: 0.6rem;
-  }
-}
-._inventory {
-  div {
-    padding-left: 0.5rem;
-    margin: 0.2rem 0.3rem;
-    font-weight: 500;
-    background: url("../demo/1.PNG") no-repeat left;
-    background-size: 0.4rem;
-  }
-  ul {
-    background: white;
-    padding: 0.1rem 0;
-    li {
-      font-size: 0.2rem;
-      color: #7e7e7e;
-      padding: 0.1rem 0.25rem;
-      span {
-        display: inline-block;
-      }
-      span:nth-child(1) {
-        text-align: center;
-        width: 30px;
-        margin: 5px 0;
-      }
-      span:nth-child(2){
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        width: 3rem;
-      }
-      span:nth-child(3) {
-        float: right;
-      }
-      span:nth-child(4) {
-        margin-right: 30px;
-        float: right;
-      }
-    }
-  }
-}
-._moe{
-  padding: 0.2rem 0.3rem;
-  font-weight: 500;
-  p{
-    font-weight: bold;
-    span{
-      font-weight: normal;
-      display: inline-block;
-      float: right;
-    }
-  }
-}
-._total{
-  padding: 0.2rem 0.3rem;
-  font-weight: 500;
-  span{
-    font-weight: bold;
-  }
-  div{
-    color:#ff9934 ;
-    font-weight: normal;
-    float: right;
-    span:nth-child(3){
-      font-size: 0.2rem;
-    }
-  }
-}
 
 #index {
+  background: #f0f2f5;
   .header {
     position: fixed;
     top: 0;
     background: #599c3d;
     width: 100%;
-    height: @header-height;
     z-index: 100;
     .left {
       width: 100%;
-      margin-right: 2.5rem;
       float: left;
       .sculpture {
         overflow: hidden;
-        width: 1rem;
-        height: 1rem;
+        width: @header-height - 0.4rem;
+        height: @header-height - 0.4rem;
         margin: 0.2rem;
         float: left;
         border-radius: 50%;
@@ -281,8 +170,8 @@ html, body {
         }
       }
       .chief {
-        height: @header-height;
-        margin-top: 0.2rem;
+        height: @header-height - 0.2rem;
+        padding: 0.1rem 0;
         p {
           color: #fffcfc;
           font-size: 0.3rem;
@@ -307,7 +196,7 @@ html, body {
       right: 0;
       top: 0;
       width: 2.5rem;
-      padding: 0.3rem 0.1rem;
+      padding: 0.2rem 0.1rem;
       .audio {
         width: 0.5rem;
         height: 0.5rem;
@@ -328,18 +217,15 @@ html, body {
     }
   }
   .main {
-    position: relative;
-    top: @header-height;
-    margin-bottom: @header-height - 0.2rem;;
-    padding: 0.4rem 0.2rem;
+    margin-top:@header-height;
+    margin-bottom: @header-height - 0.2rem;
+    padding: 0.7rem 0.2rem;
     ul {
       li {
-        margin-bottom: 0.2rem;
-        border: 1px solid #000000;
+        margin-bottom: 0.8rem;
+        border: 1px solid #CCCCCC;
         div {
           background: white;
-          /*        width: 8rem;
-                  height: 4rem;   到底加不加宽高*/
           img {
             max-height: 100%;
             max-width: 100%;
@@ -383,69 +269,74 @@ html, body {
           }
         }
         .last {
-          position: relative;
-          .regulator_left {
+          @height: 0.8rem;
+          .regulator {
             width: 100%;
             margin-right: 2rem;
-            div {
-              overflow: hidden;
-            }
-            div div span:nth-child(1) {
+            height: @height;
+            .groupon_icon {
               background: #313131;
-              width: 0.8rem;
-              height: 0.8rem;
+              width: @height;
+              height: @height;
               float: left;
               img {
-                margin-top: 0.05rem;
+                @img_height: @height - 0.1rem;
+                margin: (@height - @img_height)/2;
+                width: @img_height;
+                height: @img_height;
               }
             }
-            div div span:nth-child(2), div div span:nth-child(3), div div span:nth-child(4), div div span:nth-child(5) {
-              height: 0.8rem;
-              line-height: 0.8rem;
-              text-align: center;
-              color: white;
-              font-size: 0.3rem;
-            }
-            div div span:nth-child(2) {
-              margin-left: 0.1rem;
-            }
-            div div span:nth-child(5) {
-              font-size: 0.25rem;
-            }
-            div div:nth-child(1) {
-              width: 3.6rem;
+            .groupon {
+              height: @height;
+              width: auto;
               background: #599c3d;
               float: left;
               border-radius: 0 3.5rem 3.5rem 0;
               z-index: 101;
+              padding-right: 0.1rem;
+              span {
+                display: inline-block;
+                height: 0.8rem;
+                line-height: 0.8rem;
+                text-align: center;
+                color: white;
+                font-size: 0.3rem;
+              }
+              span:nth-child(1) {
+                margin-left: 0.1rem;
+              }
+              span:nth-child(2) {
+                font-size: 0.35rem;
+              }
+              span:nth-child(3) {
+                margin: 0 -0.01rem;
+              }
+            }
+
+          }
+          .counter {
+            @counter_height: @height - 0.25rem;
+            height: @counter_height;
+            line-height: @counter_height;
+            vertical-align: middle;
+            float: right;
+            margin: (@height - @counter_height )/2 0.2rem;
+            span, a {
+              font-size: 0.3rem;
+              float: left;
+              border: 1px solid #ff9934;
+              width: 0.5rem;
+              height: 0.5rem;
+              text-align: center;
+              line-height: 0.5rem;
+            }
+            a:active {
+              background: #ff9934;
+              color: white;
             }
           }
         }
       }
-    }
-  }
-  .counter {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 2rem;
-    margin: 0.2rem 0;
-    input, a {
-      font-size: 0.3rem;
-      float: left;
-      border: 1px solid #ff9934;
-      width: 0.5rem;
-      height: 0.5rem;
-      text-align: center;
-      line-height: 0.5rem;
-    }
-    input {
-      text-align: center;
-      width: 0.8rem;
-    }
-    a:active {
-      background: #ff9934;
-      color: white;
     }
   }
   .footer {
@@ -453,75 +344,110 @@ html, body {
     position: fixed;
     bottom: 0;
     width: 100%;
-    height: @header-height - 0.3rem;
+    height: @header-height - 0.2rem;
     background: white;
     border-top: 1px solid #CCCCCC;
     .f_left {
-      width: 100%;
+      background: white;
+      width: auto;
       margin-right: 2rem;
+      height: @header-height - 0.2rem;
       .shop {
         position: relative;
-        @shop_img: 0.9rem;
-        width: @shop_img;
-        height: @shop_img - 0.1rem;
+        float: left;
+        width: @header-height - 0.2rem;
+        height: @header-height - 0.2rem;
         background: url("../demo/shop.png") no-repeat center;
-        background-size: @shop_img - 0.3rem;
-        margin: 0.2rem 0.2rem;
+        background-size: @header-height - 0.5rem;
         span {
           display: none;
-          width: 0.35rem;
-          height: 0.35rem;
+          width: @header-height - 0.8rem;
+          height: @header-height - 0.8rem;
+          line-height: @header-height - 0.8rem;
           border-radius: 50%;
           background: #ff9934;
           color: white;
           text-align: center;
+          vertical-align: middle;
           position: absolute;
+          top: 0.1rem;
           right: 0;
+          font-size: @header-height - 1rem;
         }
       }
       .shop_info {
-        position: absolute;
-        top: 0;
-        margin-left: 1.3rem;
-        margin-top: 0.15rem;
-        padding: 0.1rem 0;
-        p {
-          font-size: 0.3rem;
+        width: auto;
+        @height: @header-height - 0.2rem;
+        margin-left: @header-height - 0.2rem + 0.2rem;
+        @line1_height: 0.4rem;
+        @line2_height: 0.3rem;
+        @padding-top: (@height - @line1_height - @line2_height) / 2;
+        padding: @padding-top 0;
+        height: @height - @padding-top * 2;
+        p.line1 {
+          height: @line1_height;
+          line-height: @line1_height;
+          font-size: @line1_height - 0.1rem;
           font-weight: bold;
         }
-        span:nth-child(2) {
-          font-size: 0.2rem;
+        p.line2 {
+          height: @line2_height;
+          line-height: @line2_height;
+          font-size: @line2_height - 0.1rem;
         }
       }
     }
     .f_right {
-      position: absolute;
-      top: 0;
-      right: 0;
+      height: @header-height - 0.2rem;
+      float: right;
       width: 2rem;
-      background: #ff9934 !important;
+      background: #ff9934;
       text-align: center;
-      a{
-        background: #ff9934;
-        text-align: center;
-        font-size: 0.45rem;
-        line-height: @header-height - 0.3rem;
-        color: white;
-      }
+      font-size: 0.45rem;
+      line-height: @header-height - 0.2rem;
+      color: white;
+      vertical-align: middle;
     }
   }
 }
+
 #checkout {
   height: 100%;
-  .header{
-    ._header;
+  .header {
+    @height: 0.8rem;
+    z-index: 100;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    height: @height;
+    background: #e5e5e5;
+    border-bottom: solid 1px #c8c8c8;
+    i {
+      overflow: hidden;
+      display: block;
+      z-index: 999;
+      height: @height;
+      line-height: @height;
+      vertical-align: middle;
+      padding: 0 0.2rem;
+      float: left;
+    }
+    .header-content {
+      width: 320px;
+      text-align: center;
+      font-size: 0.3rem;
+      line-height: @height;
+      font-weight: bold;
+      -webkit-user-select: none;
+      color: #599c3d;
+      height: @height;
+      vertical-align: middle;
+    }
   }
   .main {
-    margin-bottom: 1rem;
-    position: relative;
-    top: 0.7rem;
+    margin: 0.8rem 0;
     .user {
-      @height: 0.6rem;
+      @height: 0.9rem;
       overflow: hidden;
       background: white;
       padding: 0.2rem 0.25rem;
@@ -538,29 +464,65 @@ html, body {
       }
       span {
         display: inline-block;
+        width: 1rem;
+        float: left;
         margin: 0 0.2rem;
         height: @height;
         line-height: @height;
+        font-size: .35rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
-      input {
-        font-size: 0.2rem;
-        color: #ccc;
+      .tel_border {
+        @input_height: @height - 0.3rem;
+        float: left;
+        border: 1px solid #ccc;
+        height: @input_height;
+        line-height: @input_height;
+        margin: (@height - @input_height)/2rem 0;
+        input {
+          font-size: 0.3rem;
+          border: none;
+          outline: medium;
+          text-align: center;
+          width: 3rem;
+          color: #CCCCCC;
+        }
       }
     }
-    .adds {
-      div {
-        padding-left: 0.5rem;
-        margin: 0.2rem 0.3rem;
-        font-weight: 500;
-        background: url("../demo/adds.png") no-repeat left;
-        background-size: 0.4rem;
+    .address_title, .shop_title {
+      background: #f0f2f5;
+      height: @height;
+      line-height: @height;
+      padding: 0.2rem 0.3rem;
+      font-weight: 500;
+      span {
+        display: inline-block;
       }
+    }
+    .address_title_img{
+      width: @height - 0.1rem;
+      height: @height - 0.1rem;
+      line-height: @height - 0.1rem;
+      background: url("../demo/adds.png") no-repeat center;
+      background-size: @height - 0.1rem;
+      float: left;
+    }
+    .address_title_text, .shop_title_text {
+      height: @height - 0.1rem;
+      line-height: @height - 0.1rem;
+      font-size: 0.3rem;
+      margin-left: 0.1rem;
+    }
+    .address_list {
       ul {
         background: white;
-        padding: 0.1rem 0;
+        padding: 0.2rem 0.3rem;
         li {
           font-size: 0.2rem;
           color: #7e7e7e;
+          margin-bottom: 0.2rem;
           .__checkbox__ {
             background: url("../demo/2.png") no-repeat left;
             background-size: 0.4rem;
@@ -573,144 +535,317 @@ html, body {
         }
       }
     }
-    .inventory {
-      ._inventory;
+    .shop_title_img {
+      @shop_height: @height - 0.2rem;
+      width: @shop_height;
+      height: @shop_height;
+      line-height: @shop_height;
+      background: url("../demo/1.png") no-repeat center;
+      background-size: @height - 0.2rem;
+      float: left;
+      margin: (@height - @shop_height)/2rem 0;
     }
-    .moe{
-      ._moe;
-    }
-    .total{
-      ._total
-    }
-  }
-  .footer{
-    ._footer;
-  }
-}
-#Payment_success{
-  height: 100%;
-  .header{
-    ._header;
-  }
-  .main{
-    background: white;
-    height: 100%;
-    div{
-      margin: 0 auto;
-      padding: 2rem 0.5rem;
-      div{
-        background: url("../demo/sussce.png") no-repeat center;
-        background-size: 2rem;
-        height: 2.5rem;
-        padding: 0;
-      }
-      p:first-of-type{
-        text-align: center;
-        font-size: 0.5rem;
-      }
-      p:last-of-type{
-          margin-top:0.5rem;
-        font-size: 0.3rem;
-      }
-    }
-  }
-  .footer{
-    ._footer;
-  }
-}
-#Order_details{
-  height: 100%;
-  .header{
-    ._header;
-  }
-  .main{
-    margin-bottom: 1rem;
-    position: relative;
-    top: 0.7rem;
-    .follow{
-      div:first-of-type{
-
-      }
-      div:last-of-type{
-        padding: 0.2rem 0.3rem;
-        background: white;
-        p{
-          color: #7e7e7e;
-          padding: 0.1rem 0;
-          span{
-            display: inline-block;
-            margin: 0 0.15rem;
-          }
-        }
-      }
-    }
-    .delivery {
-      div:first-of-type {
-        padding-left: 0.5rem;
-        margin: 0.2rem 0.3rem;
-        font-weight: 500;
-        background: url("../demo/pop.png") no-repeat left;
-        background-size: 0.35rem;
-      }
-      div:last-of-type{
-        padding: 0.2rem 0.3rem;
-        background: white;
-        p{
-          color: #7e7e7e;
-          padding: 0.1rem 0;
-          span{
-            display: inline-block;
-            margin: 0 0.15rem;
-          }
-        }
-      }
-
-    }
-    .inventory {
-      ._inventory;
-    }
-    .moe{
-      ._moe;
-    }
-    .total{
-      ._total
-    }
-  }
-  .footer{
-    ._footer;
-  }
-}
-#success_popup{
-  display: none;
-  position: absolute;
-  top: 3rem;
-  left: 0.2rem;
-  right: 0.2rem;
-  z-index: 2000;
-  div{
-    div:nth-child(1){
-      font-size: 0.35rem;
-      text-align: center;
-      height: 0.7rem;
-      line-height: 0.7rem;
-      background: #e5e5e5;
-      font-weight: 700;
-    }
-    div:nth-child(2){
+    .__checkout_detail {
       background: white;
-      height: 1.5rem;
-      padding: 0.3rem 0.45rem;
-      font-size: 0.3rem;
-      color: #707070;
+      margin: 0.2rem 0.25rem;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 0.3rem;
+      .__template_checkout_detail_item {
+        color: #7e7e7e;
+        padding: 0.1rem 0;
+        span {
+          display: inline-block
+        }
+        .__field_checkout_title {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          width: 3rem;
+        }
+        .__field_checkout_quantity {
+          float: right;
+        }
+        .__field_checkout_price {
+          margin-right: 30px;
+          float: right;
+        }
+      }
     }
-    div:nth-child(3){
-      line-height: 0.7rem;
-      height: 0.7rem;
-      text-align: center;
-      color: white;
+    .moe {
+      margin: 0.2rem 0.3rem;
+      font-weight: 500;
+      height: 0.6rem;
+      border-bottom: 1px solid #ccc;
+      line-height: 0.6rem;
+      padding-bottom: 0.2rem;
+      p {
+        font-weight: bold;
+        span {
+          font-weight: normal;
+          display: inline-block;
+          float: right;
+        }
+      }
+    }
+    .total {
+      margin: 0.2rem 0.3rem;
+      font-weight: 500;
+      height: 0.6rem;
+      line-height: 0.6rem;
+      padding-bottom: 0.2rem;
+      span {
+        font-weight: bold;
+      }
+      div {
+        color: #ff9934;
+        font-weight: normal;
+        float: right;
+        span:nth-child(3) {
+          font-size: 0.2rem;
+        }
+      }
+    }
+  }
+  .footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1100;
+    a {
       background: #599c3d;
-      font-size: 0.3rem;
+      margin: 0.1rem 0.1rem;
+      color: white;
+      text-align: center;
+      display: block;
+      height: 0.6rem;
+      line-height: 0.6rem;
     }
+  }
+}
 
+#Order_details {
+  height: 100%;
+  .header {
+    @height: 0.8rem;
+    z-index: 100;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    height: @height;
+    background: #e5e5e5;
+    border-bottom: solid 1px #c8c8c8;
+    i {
+      overflow: hidden;
+      display: block;
+      z-index: 999;
+      height: @height;
+      line-height: @height;
+      vertical-align: middle;
+      padding: 0 0.2rem;
+      float: left;
+    }
+    .header-content {
+      width: 320px;
+      text-align: center;
+      font-size: 0.3rem;
+      line-height: @height;
+      font-weight: bold;
+      -webkit-user-select: none;
+      color: #599c3d;
+      height: @height;
+      vertical-align: middle;
+    }
+  }
+  .main {
+    margin: 0.8rem 0;
+    .follow {
+      position: relative;
+      overflow: hidden;
+      background: white;
+      padding: 0.2rem;
+      span {
+        display: inline-block;
+      }
+      .follow_tip {
+        width: 6rem;
+        height: 0.5rem;
+        .follow_left {
+          float: left;
+          width: 1.3rem;
+          text-align: left;
+        }
+        .follow_center {
+          width: 3rem;
+          margin: 0 0.2rem;
+          text-align: center;
+        }
+        .follow_right {
+          float: right;
+          width: 1.3rem;
+          text-align: right;
+        }
+        .line {
+          border: 1px solid #CCCCCC;
+          margin: 0.2rem 0.5rem;
+        }
+        .line_tip {
+          width: 5rem;
+          margin: 0.2rem 0.5rem;
+          position: absolute;
+          top: 0.4rem;
+          .tip_left, .tip_center, .tip_right {
+            display: inline-block;
+            border: 1px solid #CCCCCC;
+            border-radius: 50%;
+            width: 0.2rem;
+            height: 0.2rem;
+          }
+          .tip_left {
+            float: left;
+            background: #CCCCCC;
+          }
+          .tip_center {
+            margin: 0 2rem;
+            background: #CCCCCC;
+          }
+          .tip_right {
+            float: right;
+            background: white;
+          }
+        }
+
+      }
+      .follow_text {
+        margin-top: 0.5rem;
+        p {
+          color: #7e7e7e;
+          padding: 0.1rem 0;
+          .text_margin {
+            margin: 0 0.15rem;
+          }
+        }
+      }
+    }
+    .delivery_title,.inventory_title{
+      background: #f0f2f5;
+      height: @height;
+      line-height: @height;
+      padding: 0.2rem 0.3rem;
+      font-weight: 500;
+      span {
+        display: inline-block;
+      }
+      .delivery_title_img {
+        width: @height - 0.1rem;
+        height: @height - 0.1rem;
+        line-height: @height - 0.1rem;
+        background: url("../demo/pop.png") no-repeat center;
+        background-size: @height - 0.1rem;
+        float: left;
+      }
+      .inventory_title_img {
+        @shop_height: @height - 0.2rem;
+        width: @shop_height;
+        height: @shop_height;
+        line-height: @shop_height;
+        background: url("../demo/1.png") no-repeat center;
+        background-size: @height - 0.2rem;
+        float: left;
+        margin: (@height - @shop_height)/2rem 0;
+      }
+      .delivery_title_text,.inventory_title_text{
+        height: @height - 0.1rem;
+        line-height: @height - 0.1rem;
+        font-size: 0.3rem;
+        margin-left: 0.1rem;
+      }
+    }
+    .delivery_list {
+      padding: 0.2rem 0.3rem;
+      background: white;
+      p {
+        color: #7e7e7e;
+        padding: 0.1rem 0;
+        span {
+          display: inline-block;
+          margin: 0 0.15rem;
+        }
+      }
+    }
+    .inventory_list {
+      background: white;
+      margin: 0.2rem 0.25rem;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 0.3rem;
+      .inventory_list_item {
+        color: #7e7e7e;
+        padding: 0.1rem 0;
+        span {
+          display: inline-block
+        }
+        .inventory_list_title {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          width: 3rem;
+        }
+        .inventory_list_quantity {
+          float: right;
+        }
+        .inventory_list_price {
+          margin-right: 30px;
+          float: right;
+        }
+      }
+    }
+    .moe {
+      margin: 0.2rem 0.3rem;
+      font-weight: 500;
+      height: 0.6rem;
+      border-bottom: 1px solid #ccc;
+      line-height: 0.6rem;
+      padding-bottom: 0.2rem;
+      p {
+        font-weight: bold;
+        span {
+          font-weight: normal;
+          display: inline-block;
+          float: right;
+        }
+      }
+    }
+    .total {
+      margin: 0.2rem 0.3rem;
+      font-weight: 500;
+      height: 0.6rem;
+      line-height: 0.6rem;
+      padding-bottom: 0.2rem;
+      span {
+        font-weight: bold;
+      }
+      div {
+        color: #ff9934;
+        font-weight: normal;
+        float: right;
+        span:nth-child(3) {
+          font-size: 0.2rem;
+        }
+      }
+    }
+  }
+  .footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1100;
+    a {
+      background: #599c3d;
+      margin: 0.1rem 0.1rem;
+      color: white;
+      text-align: center;
+      display: block;
+      height: 0.6rem;
+      line-height: 0.6rem;
+    }
   }
 }

@@ -13,303 +13,6 @@
         var winW = document.documentElement.clientWidth;
         document.documentElement.style.fontSize = winW / 6.4 + "px";
     </script>
-    <script type="text/javascript">
-      $(function(){
-          //实现购物车弹层功能
-        (function(status){//标识符->方法执行时传入一个参数true
-          // TODO clean all touch events
-          $('.overlay').on('click', function(){//TODO WTF click to tap   //给弹出背景绑定点击事件
-            status = false;//点击时，让function下的私有status变为false
-            window.popup_window_from_bottom();//触发window下popup_window_from_bottom这个事件
-          });
-          window.popup_window_from_bottom = function(){
-              if(status){//判断，如果status为true
-                status = false;//修改statusde值为false
-                $('.overlay').css('display', 'block');//修改样式名为overlay的行内样式，显示背景弹层
-                $('.popup-window-from-bottom').slideToggle('slow');//调用jQuery中的slideToggle方法，让购物车弹层滑动显示
-              } else {//如果status不是true,那么....
-                status = true;//修改status的值为true
-                $('.overlay').css('display', 'none');//修改样式名为overlay的行内样式，隐藏背景弹层
-                $('.popup-window-from-bottom').css('display', 'none');//修改购物车弹层的行内样式
-              }
-          }
-        })(true);
-      });
-    </script>
-    <script type="text/javascript">
-      $(function(){//把所有方法写在一个自执行函数里，形成闭包
-        var PageManager = window.PageManager = {//初始化页面 哈市表
-          pages: {},//用来存放通过className=__page__的页面->五个代表页面的div
-          switchData: {},//用来存放
-          init: function(){//初始化页面方法
-            var that = this;//将当前作用下的this赋值给that   this->Object {pages: Object, switchData: Object}
-            $('.__page__').each(function(){//通过jQuery中each()方法对className为__page__的每个元素规定运行的函数
-              var name = $(this).attr('name');//定义私有变量name 把通过attr返回的name属性下的属性值赋值给私有变量，this->div#index.__page__ 、div#checkout.__page__、div#Payment_success.__page__、div#Order_details.__page__、div#success_popup.__page__    name->index、checkout、success、details、popup
-              that.pages[name] = $(this);//把获取到的dom元素集合按照各自的name存放在page对象里面。当前作用域下的this是div，我们需要放在上一作用域下的pages对象里，所以需要用that
-            });
-          },
-          jump: function(pageName, closureName){//实现页面切页效果 参数1：要跳转的页面、参数2：dumpDataToCheckout
-            var activePage = this.pages[pageName];//私有变量存储用户点击执行jump方法时，当前点击的dom元素。->是在pages对象中通过键取出
-            if(!!activePage){//如果dom元素存在
-              var closureMethod = this.switchData[closureName];//
-
-              if(!!closureMethod){
-                if(!closureMethod()){
-                  return;
-                }
-              }
-              for(var _ in this.pages){//循环pages对象下的每一个项->dom元素
-                var currentPage = this.pages[_];//把每一项赋值给私有变量
-                currentPage.css('display', 'none');//让每一项dom元素的display为none->元素不显示
-              }
-              activePage.css('display', 'block');//再让当前项dom元素display为block->元素显示
-            }
-          }
-        };
-
-        var CheckoutManager = window.CheckoutManager = {
-          detail: null,//dom元素->ul
-          detailTemplate: null,//checkout页下商品列表li模板
-          total: null,//商品数量合计
-          addresses: null,
-          currentAddress: null,//用户选中收货地址
-          tel: null,  //用户电话信息初始化
-          commodities: null,//用户订单信息数据->
-          init: function(addresses){
-            var that = this;
-            var tel = $('.__checkout_tel');
-            tel.change(function(){
-              that.tel = $(this).val();
-            });
-            this.addresses = addresses;
-            this.detail = $('.__checkout_detail');
-            this.detailTemplate = $('.__template_checkout_detail_item');
-            this.detailTemplate.remove();
-            this.detailTemplate.removeClass('.__template_checkout_detail_item');
-            this.total = $('.__checkout_total');
-            var checkbox_group = $('.__checkbox__');
-            checkbox_group.click(function(){
-              checkbox_group.each(function(){
-                $(this).removeClass('checked');
-              });
-              $(this).addClass('checked');
-            });
-          },
-          setAddress: function(id){//获取用户选中地址方法
-            var address = this.addresses[id];
-            if(!!address){
-              this.currentAddress = address;
-            }
-          },
-          fetchPayInfo: function(){
-            var result = {};
-            if(!this.tel || this.tel.length == 0){
-              result.status = 'failed';
-              result.msg = '电话号码不能为空';
-              return result;
-            } else {
-              result.tel = this.tel;
-            }
-            if(!this.currentAddress){
-              result.status = 'failed';
-              result.msg = '请选择取货地';
-              return result;
-            } else {
-              result.address = this.currentAddress.id;
-            }
-            result.status = 'success';
-            result.commodities = [];
-            for(var _ in this.commodities){
-              var commodity = this.commodities[_];
-              if(!commodity.quantity || commodity.quantity == 0){
-                continue;
-              }
-              var item = {
-                id: commodity.id,
-                quantity: commodity.quantity
-              };
-              result.commodities.push(item);
-            }
-            return result;
-          },
-          pay: function(){
-            var payInfo = this.fetchPayInfo();
-            if(payInfo.status == 'failed'){
-              alert(payInfo.msg);
-              return;
-            }
-            //alert(JSON.stringify(payInfo));
-          },
-          dump: function(commodities){
-            this.commodities = commodities;
-            this.detail.empty();
-            var total = 0;
-            for(var _ in commodities){
-              var commodity = commodities[_];
-              if(!commodity.quantity || commodity.quantity == 0){
-                continue;
-              }
-              total += commodity.quantity * commodity.unit_price;
-              var item = this.detailTemplate.clone();
-              item.find('.__field_checkout_title').text(commodity.title);
-              item.find('.__field_checkout_quantity').text(commodity.quantity);
-              var price = (commodity.quantity * commodity.unit_price / 100).toFixed(2).toString();
-              item.find('.__field_checkout_price').text(price);
-              this.detail.append(item);
-            }
-            this.total.text('￥' + (total / 100).toFixed(2).toString());
-          }
-        }
-
-        var CartManager = window.CartManager = {
-          commodities: null,
-          cartTemplate: null,
-          cart: null,
-          total: 0,
-          init: function(data){
-            var that = this;
-            this.commodities = data;
-            for(var _ in this.commodities){
-              var commodity = this.commodities[_];
-              var className = '.__field_quantity_' + commodity.id;
-              var domObject = $(className);
-              commodity.quantity_in_list = domObject;
-            }
-            this.cartTemplate = $('.__template');
-            this.cartTemplate.remove();
-            this.cartTemplate.removeClass('.__template');
-            this.cart = $('.__cart');
-
-            window.PageManager.switchData['dumpDataToCheckout'] = (function(commodities){
-              var closureMethod = function(){
-                //alert(JSON.stringify(commodities));
-                if(!that.total || that.total == 0){
-                  return false;
-                }
-                window.CheckoutManager.dump(commodities);
-                return true;
-              }
-              return closureMethod;
-            })(commodities);
-          },
-          generateCartItem: function(commodity){
-            var that = this;
-            var domObject = this.cartTemplate.clone();
-            domObject.find('.__field_title').text(commodity.title);
-            var price = (commodity.quantity * commodity.unit_price / 100).toFixed(2).toString();
-            domObject.find('.__field_price').text(price);
-            domObject.find('.__field_quantity').val(commodity.quantity);
-            domObject.find('.__button_add').click(function(){
-              that.add(commodity.id);
-            });
-            domObject.find('.__button_remove').click(function(){
-              that.remove(commodity.id);
-            });
-            return domObject;
-          },
-          updateCartItem: function(commodity, domObject){
-            var price = (commodity.quantity * commodity.unit_price / 100).toFixed(2).toString();
-            domObject.find('.__field_price').text(price);
-            domObject.find('.__field_quantity').val(commodity.quantity);
-          },
-          add: function(id){
-            var commodity = this.commodities[id];
-            if(!!commodity){
-              if(!commodity.quantity){
-                commodity.quantity = 1;
-              }else{
-                commodity.quantity += 1;
-              }
-              this.render();
-            }
-          },
-          remove: function(id){
-            var commodity = this.commodities[id];
-            if(!!commodity && !!commodity.quantity){
-              if(commodity.quantity > 1){
-                commodity.quantity -= 1;
-              } else{
-                commodity.quantity = 0;
-              }
-              this.render();
-            }
-          },
-          empty: function(){
-            for(var _ in this.commodities){
-              var commodity = this.commodities[_];
-              commodity.quantity = 0;
-            }
-            this.render();
-          },
-          render: function(){
-            var amount = 0;
-            var total = 0;
-            for(var _ in this.commodities){
-              var commodity = this.commodities[_];
-              if(!!commodity.quantity){
-                amount += commodity.quantity;
-                total += commodity.quantity * commodity.unit_price;
-                commodity.quantity_in_list.val(commodity.quantity);
-              }else{
-                commodity.quantity_in_list.val(0);
-              }
-              if(!commodity.item_in_cart){
-                if(!!commodity.quantity && commodity.quantity > 0){
-                  var domObject = this.generateCartItem(commodity);
-                  commodity.item_in_cart = domObject;
-                  this.cart.append(domObject);
-                }
-              } else {
-                var domObject = commodity.item_in_cart;
-                if(!!commodity.quantity && commodity.quantity > 0){
-                  this.updateCartItem(commodity, domObject);
-                } else {
-                  domObject.remove();
-                  commodity.item_in_cart = null;
-                }
-              }
-            }
-            this.render_amount(amount);
-            this.render_total(total);
-            this.total = total;
-          },
-          render_amount: function(amount){
-            var domObject = $('.__amount');
-            if(!amount && amount == 0){
-              domObject.css('display', 'none');
-            } else{
-              domObject.css('display', 'block');
-              domObject.text(amount);
-            }
-          },
-          render_total: function(total){
-            var domObject = $('.__total');
-            if(!total && total == 0){
-              domObject.text(0);
-            }else{
-              total_string = (total / 100).toFixed(2).toString();
-              domObject.text('￥' + total_string);
-            }
-          }
-        };
-
-
-        //run
-        PageManager.init();//调用init方法，开始渲染页面
-        var commodities = {
-          '1': {id: 1, title: '进口冷冻阿根廷红虾北极甜虾1', unit_price: 10010},
-          '2': {id: 2, title: '进口冷冻阿根廷红虾北极甜虾2', unit_price: 20085},
-          '3': {id: 3, title: '进口冷冻阿根廷红虾北极甜虾3', unit_price: 30003}
-        };
-        var addresses = {
-          '1': {id: 1, address: '北京市海淀区上地七街1号汇众科技大厦2号楼713室', dist: '惠订1'},
-          '2': {id: 2, address: '北京市海淀区上地七街1号汇众科技大厦2号楼714室', dist: '惠订2'},
-          '3': {id: 3, address: '北京市海淀区上地七街1号汇众科技大厦2号楼715室', dist: '惠订3'}
-        };
-        CartManager.init(commodities);
-        CheckoutManager.init(addresses);//执行checkout下init方法
-      });
-    </script>
 </head>
 <body>
 <div id="index" class="__page__" name="index" jid="1">
@@ -327,7 +30,7 @@
             <div>还有<span>2天</span>结束</div>
         </div>
     </div>
-    <div class="main" >
+    <div class="main">
         <ul>
             <li>
                 <div>
@@ -346,22 +49,20 @@
                         <span>已有20人参团</span>
                     </div>
                     <div class="last ">
-                        <div class="regulator_left">
-                            <div>
-                                <div>
-                                    <span><img src="assets/demo/poper.png" alt=""></span>
-                                    <span>团购价</span>
-                                    <span>￥1680</span>
-                                    <span>.</span>
-                                    <span>00</span>
-                                </div>
-                            </div>
-                        </div>
                         <div class="counter">
                             <a class="block left" href="javascript:void(0);" onclick="CartManager.remove(1)">-</a>
-                            <input type="text" value="0" class="block center __field_quantity_1" autocomplete="off" readonly="readonly" >
+                            <span class="block center __field_quantity_1"></span>
                             <a class="block right" href="javascript:void(0);" onclick="CartManager.add(1)">+</a>
                         </div>
+                        <div class="regulator">
+                            <span class="groupon_icon"><img src="assets/demo/poper.png" alt=""></span>
+                            <div class="groupon">
+                                <span>团购价</span>
+                                <span>￥1680</span>
+                                <span>.</span>
+                                <span>00</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </li>
@@ -382,21 +83,19 @@
                         <span>已有20人参团</span>
                     </div>
                     <div class="last ">
-                        <div class="regulator_left">
-                            <div>
-                                <div>
-                                    <span><img src="assets/demo/poper.png" alt=""></span>
-                                    <span>团购价</span>
-                                    <span>￥1680</span>
-                                    <span>.</span>
-                                    <span>00</span>
-                                </div>
-                            </div>
-                        </div>
                         <div class="counter">
                             <a class="block left" href="javascript:void(0);" onclick="CartManager.remove(2)">-</a>
-                            <input type="text" value="0" class="block center __field_quantity_2" autocomplete="off" readonly="readonly" >
+                            <span class="block center __field_quantity_2"></span>
                             <a class="block right" href="javascript:void(0);" onclick="CartManager.add(2)">+</a>
+                        </div>
+                        <div class="regulator">
+                            <span class="groupon_icon"><img src="assets/demo/poper.png" alt=""></span>
+                            <div class="groupon">
+                                <span>团购价</span>
+                                <span>￥1680</span>
+                                <span>.</span>
+                                <span>00</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -418,21 +117,19 @@
                         <span>已有20人参团</span>
                     </div>
                     <div class="last ">
-                        <div class="regulator_left">
-                            <div>
-                                <div>
-                                    <span><img src="assets/demo/poper.png" alt=""></span>
-                                    <span>团购价</span>
-                                    <span>￥1680</span>
-                                    <span>.</span>
-                                    <span>00</span>
-                                </div>
-                            </div>
-                        </div>
                         <div class="counter">
                             <a class="block left" href="javascript:void(0);" onclick="CartManager.remove(3)">-</a>
-                            <input type="text" value="0" class="block center __field_quantity_3" autocomplete="off" readonly="readonly" >
+                            <span class="block center __field_quantity_3"></span>
                             <a class="block right" href="javascript:void(0);" onclick="CartManager.add(3)">+</a>
+                        </div>
+                        <div class="regulator">
+                            <span class="groupon_icon"><img src="assets/demo/poper.png" alt=""></span>
+                            <div class="groupon">
+                                <span>团购价</span>
+                                <span>￥1680</span>
+                                <span>.</span>
+                                <span>00</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -440,37 +137,42 @@
         </ul>
     </div>
     <div class="footer">
+        <a class="f_right" href="javascript:void(0)"
+           onclick="PageManager.jump('checkout', 'dumpDataToCheckout')">去结算</a>
         <div class="f_left" onclick="popup_window_from_bottom();">
             <div class="shop"><span class="__amount"></span></div>
             <div class="shop_info">
-                <p>合计:<span class="__total">0</span></p>
-                <span>不含运费</span>
+                <p class="line1">合计:<span class="__total">￥</span></p>
+                <p class="line2">不含运费</p>
             </div>
         </div>
-        <div class="f_right" ><a href="javascript:void(0)" onclick="PageManager.jump('checkout', 'dumpDataToCheckout')">去结算</a></div>
     </div>
     <div class="overlay"></div>
-    <div class="popup-window-from-bottom">
-        <div>
-            <div>
-                <div class="oder">
-                    <span></span>
-                    <span>订单信息</span>
-                </div>
+    <div class="popup-window-from-bottom" style="display: none">
+        <div class="box">
+            <div class="popup-bottom-title">
+                <div class="del" onclick="CartManager.empty()">
+                    <div class="popup_bottom_del">
+                        <span class="del_text">清空</span>
+                        <span class="del_img"></span>
+                    </div>
 
-                <div id="del" class="del" onclick="CartManager.empty()">
-                    <span>清空</span>
-                    <span></span>
+                </div>
+                <div class="oder">
+                    <div class="popup_bottom_oder">
+                        <span class="oder_img"></span>
+                        <span class="oder_text">订单详情</span>
+                    </div>
                 </div>
             </div>
-            <ul id="popup" class="__cart">
+            <ul  class="__cart">
                 <li class="__template">
-                    <div class="__field_title"></div>
-                    <div>
+                    <span class="__field_title"></span>
+                    <div class="popup_reduce">
                         <div class="__field_price"></div>
                         <div class="regulator_right">
                             <a href="javascript:void(0);" class="__button_remove">-</a>
-                            <input type="text" class="center __field_quantity" autocomplete="off" readonly="readonly">
+                            <span class="center __field_quantity"></span>
                             <a href="javascript:void(0);" class="__button_add">+</a>
                         </div>
                     </div>
@@ -480,18 +182,20 @@
     </div>
 </div>
 <div id="checkout" class="__page__" name="checkout" jid="2" style="display: none">
-    <div class="header"  >
-            <i class="icon-chevron-left icon-large" onclick="PageManager.jump('index')" ></i>
+    <div class="header">
+        <i class="icon-chevron-left icon-large" onclick="PageManager.jump('index')"></i>
         <div class="header-content">订单确认</div>
     </div>
     <div class="main">
         <div class="user">
             <div class="sculpture"><img src="assets/demo/1.jpg" alt=""></div>
-            <span>某某某某</span>
-            <input type="tel" class="__checkout_tel" placeholder="填输入联系方式"/>
+            <span>某某某某moumouuu</span>
+            <div class="tel_border"><input type="tel" class="__checkout_tel" placeholder="填输入联系方式"/></div>
         </div>
-        <div class="adds">
-            <div>取货地</div>
+        <div class="address_title">
+            <span class="address_title_img"></span>           <span class="address_title_text">取货地</span>
+        </div>
+        <div class="address_list">
             <ul>
                 <li>
                     <div onclick="CheckoutManager.setAddress(1)" class="__checkbox__">
@@ -513,11 +217,13 @@
                 </li>
             </ul>
         </div>
-        <div class="inventory">
-            <div>商品明细</div>
-            <ul id="invent" class="__checkout_detail">
+        <div class="shop_title">
+            <span class="shop_title_img"></span>
+            <span class="shop_title_text">商品明细</span>
+        </div>
+        <div>
+            <ul class="__checkout_detail">
                 <li class="__template_checkout_detail_item">
-                    <span></span>
                     <span class="__field_checkout_title"></span>
                     <span class="__field_checkout_quantity"></span>
                     <span class="__field_checkout_price"></span>
@@ -538,24 +244,6 @@
         <a href="javascript:void(0);" onclick="CheckoutManager.pay()">立即支付</a>
     </div>
 </div>
-<div id="Payment_success" class="__page__" name="success" jid="3" style="display: none">
-    <div class="header" method="change" target="2">
-        <div class="black">
-            <i class="icon-chevron-left icon-large"></i>
-        </div>
-        <div class="header-content"></div>
-    </div>
-    <div class="main">
-        <div>
-            <div></div>
-            <p>支付成功</p>
-            <p>恭喜您成为第88位接龙者，快去邀请小伙伴继续接龙吧！</p>
-        </div>
-    </div>
-    <div class="footer">
-        <a href="javascript:void(0);">接龙到微信，邀请群友吧</a>
-    </div>
-</div>
 <div id="Order_details" class="__page__" name="details" jid="4" style="display: none">
     <div class="header" method="change" target="3">
         <div class="black">
@@ -565,42 +253,52 @@
     </div>
     <div class="main">
         <div class="follow">
-            <div></div>
-            <div>
-                <p>订单号:<span>123456789</span></p>
-                <p>下单时间:<span>2016-3-29</span><span>2:20:00</span></p>
-                <p>支付方式:<span>微信支付</span></p>
+            <div class="follow_tip">
+                <span class="follow_left">订单已提交</span>
+                <span class="follow_right">订单完成</span>
+                <span class="follow_center">组团成功</span>
+                <div class="line"></div>
+                <div class="line_tip">
+                    <span class="tip_left"></span>
+                    <span class="tip_right"></span>
+                    <span class="tip_center"></span>
+                </div>
+            </div>
+            <div class="follow_text">
+                <p>订单号:<span class="text_margin">123456789</span></p>
+                <p>下单时间:<span class="text_margin">2016-3-29</span><span>2:20:00</span></p>
+                <p>支付方式:<span class="text_margin">微信支付</span></p>
             </div>
         </div>
-        <div class="delivery">
-            <div>取货信息</div>
-            <div>
-                <p>收货人:<span>欧阳雨晴</span></p>
-                <p>手机号:<span>15209633819</span></p>
-                <p>取货地址:<span>海淀区上地实验小区</span></p>
-                <p>取货时间:<span>预计:3月12日9:30</span></p>
-            </div>
+        <div class="delivery_title">
+            <span class="delivery_title_img"></span>           <span class="delivery_title_text">取货信息</span>
         </div>
-        <div class="inventory">
-            <div>商品明细</div>
-            <ul>
-                <li>
-                    <span>1</span>
-                    <span>进口冷冻阿根廷红虾</span>
-                    <span>￥55.00</span>
-                    <span>2</span>
+        <div class="delivery_list">
+            <p>收货人:<span>欧阳雨晴</span></p>
+            <p>手机号:<span>15209633819</span></p>
+            <p>取货地址:<span>海淀区上地实验小区</span></p>
+            <p>取货时间:<span>预计:3月12日9:30</span></p>
+        </div>
+        <div class="inventory_title">
+            <span class="inventory_title_img"></span>
+            <span class="inventory_title_text">商品明细</span>
+        </div>
+        <div>
+            <ul class="inventory_list">
+                <li class="inventory_list_item">
+                    <span class="inventory_list_title">进口冷冻阿根廷红虾</span>
+                    <span class="inventory_list_quantity">2</span>
+                    <span class="inventory_list_price">￥55.00</span>
                 </li>
-                <li>
-                    <span>1</span>
-                    <span>进口冷冻阿根廷红虾</span>
-                    <span>￥55.00</span>
-                    <span>2</span>
+                <li class="inventory_list_item">
+                    <span class="inventory_list_title">进口冷冻阿根廷红虾</span>
+                    <span class="inventory_list_quantity">2</span>
+                    <span class="inventory_list_price">￥55.00</span>
                 </li>
-                <li>
-                    <span>1</span>
-                    <span>进口冷冻阿根廷红虾进口冷冻阿根廷红虾进口冷冻阿根廷红虾</span>
-                    <span>￥55.00</span>
-                    <span>2</span>
+                <li class="inventory_list_item">
+                    <span class="inventory_list_title">进口冷冻阿根廷红虾</span>
+                    <span class="inventory_list_quantity">2</span>
+                    <span class="inventory_list_price">￥55.00</span>
                 </li>
             </ul>
         </div>
@@ -621,13 +319,6 @@
     </div>
 
 </div>
-<div id="success_popup" class="__page__" name="popup" jid="5" >
-<div>
-    <div class="header">支付成功</div>
-    <div class="main">恭喜您成为第88位接龙者，快去邀请小伙伴继续接龙吧！</div>
-    <div class="footer">接龙到微信群，邀请群友吧！</div>
-</div>
-</div>
-
+<script type="text/javascript" src="assets/scripts/indexs.js"></script>
 </body>
 </html>

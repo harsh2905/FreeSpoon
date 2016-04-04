@@ -1,0 +1,126 @@
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-decoration: none;
+  color: #000;
+}
+html,
+body {
+  font-size: 0.25rem;
+  background: #f0f2f5;
+  color: #464646;
+  height: 100%;
+  font-family: '微软雅黑', Helvetica, Tahoma, Arial, '华文细黑', sans-serif;
+}
+._header {
+  z-index: 100;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  height: 0.7rem;
+  background: #e5e5e5;
+  border-bottom: solid 1px #c8c8c8;
+}
+._header i {
+  overflow: hidden;
+  display: block;
+  z-index: 999;
+  height: 0.7rem;
+  line-height: 0.7rem;
+  vertical-align: middle;
+  padding: 0 0.2rem;
+  float: left;
+}
+._header .header-content {
+  width: auto;
+  text-align: center;
+  font-size: 0.3rem;
+  line-height: 0.7rem;
+  font-weight: bold;
+  -webkit-user-select: none;
+  color: #599c3d;
+}
+._footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 1100;
+}
+._footer a {
+  background: #599c3d;
+  margin: 0.1rem 0.1rem;
+  color: white;
+  text-align: center;
+  display: block;
+  height: 0.6rem;
+  line-height: 0.6rem;
+}
+#Payment_success {
+  height: 100%;
+}
+#Payment_success .header {
+  z-index: 100;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  height: 0.7rem;
+  background: #e5e5e5;
+  border-bottom: solid 1px #c8c8c8;
+}
+#Payment_success .header i {
+  overflow: hidden;
+  display: block;
+  z-index: 999;
+  height: 0.7rem;
+  line-height: 0.7rem;
+  vertical-align: middle;
+  padding: 0 0.2rem;
+  float: left;
+}
+#Payment_success .header .header-content {
+  width: auto;
+  text-align: center;
+  font-size: 0.3rem;
+  line-height: 0.7rem;
+  font-weight: bold;
+  -webkit-user-select: none;
+  color: #599c3d;
+}
+#Payment_success .main {
+  background: white;
+  height: 100%;
+}
+#Payment_success .main div {
+  margin: 0 auto;
+  padding: 2rem 0.5rem;
+}
+#Payment_success .main div div {
+  background: url("../demo/sussce.png") no-repeat center;
+  background-size: 2rem;
+  height: 2.5rem;
+  padding: 0;
+}
+#Payment_success .main div p:first-of-type {
+  text-align: center;
+  font-size: 0.5rem;
+}
+#Payment_success .main div p:last-of-type {
+  margin-top: 0.5rem;
+  font-size: 0.3rem;
+}
+#Payment_success .footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 1100;
+}
+#Payment_success .footer a {
+  background: #599c3d;
+  margin: 0.1rem 0.1rem;
+  color: white;
+  text-align: center;
+  display: block;
+  height: 0.6rem;
+  line-height: 0.6rem;
+}
