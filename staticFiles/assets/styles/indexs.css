@@ -11,6 +11,12 @@ body {
   color: #464646;
   height: 100%;
   font-family: '微软雅黑', Helvetica, Tahoma, Arial, '华文细黑', sans-serif;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .overlay {
   display: none;
@@ -30,14 +36,14 @@ body {
   bottom: 0;
   z-index: 1000;
   width: 100%;
-  margin-bottom: 0.9rem;
+  margin-bottom: 1rem;
 }
 .popup-window-from-bottom .box {
-  margin: 0.25rem 0.2rem;
+  margin: 0.25rem 0.2rem 0 0.2rem;
 }
 .popup-window-from-bottom .box .popup-bottom-title {
   height: 0.6rem;
-  padding-right: 0.3rem;
+  padding-right: 0.1rem;
   background: #e3e3e3;
 }
 .popup-window-from-bottom .box .popup-bottom-title .oder {
@@ -89,17 +95,21 @@ body {
   float: right;
 }
 .popup-window-from-bottom .box .__cart {
-  margin-bottom: 0.5rem;
+  margin: 0 0.2em;
 }
-.popup-window-from-bottom .box .__cart .__template {
-  padding: 0.2rem 0.1rem;
+.popup-window-from-bottom .box .__cart li {
+  padding: 0.2rem 0;
   border-bottom: 1px solid #CCCCCC;
+}
+.popup-window-from-bottom .box .__cart li:last-child {
+  border-bottom: none;
 }
 .popup-window-from-bottom .box .__cart .__template .__field_title {
   text-overflow: ellipsis;
   white-space: nowrap;
-  display: inline-block;
-  width: 3rem;
+  display: block;
+  width: auto;
+  margin-right: 3rem;
   overflow: hidden;
   line-height: 0.5rem;
   height: 0.5rem;
@@ -108,7 +118,6 @@ body {
 .popup-window-from-bottom .box .__cart .__template .popup_reduce {
   width: 2.5rem;
   float: right;
-  margin-right: 0.2rem;
   height: 0.5rem;
   text-align: center;
   vertical-align: middle;
@@ -117,18 +126,40 @@ body {
 .popup-window-from-bottom .box .__cart .__template .popup_reduce .__field_price {
   display: inline-block;
 }
+.popup-window-from-bottom .box .__cart .__template .popup_reduce .price {
+  height: 0.5rem;
+  text-align: left;
+  line-height: 0.5rem;
+  vertical-align: middle;
+  width: 1.1rem;
+  float: left;
+}
 .popup-window-from-bottom .box .__cart .__template .popup_reduce .regulator_right {
   display: inline-block;
   float: right;
+  width: 1.4rem;
 }
 .popup-window-from-bottom .box .__cart .__template .popup_reduce .regulator_right a {
-  display: inline-block;
+  box-sizing: border-box;
+  display: block;
   border: 1px solid #ff9934;
-  width: 0.4rem;
-  height: 0.4rem;
+  width: 0.5rem;
+  height: 0.5rem;
   text-align: center;
   border-radius: 50%;
-  line-height: 0.4rem;
+  line-height: 0.5rem;
+  vertical-align: middle;
+  overflow: hidden;
+  float: left;
+}
+.popup-window-from-bottom .box .__cart .__template .popup_reduce .regulator_right span {
+  display: block;
+  width: 0.4rem;
+  height: 0.5rem;
+  line-height: 0.5rem;
+  vertical-align: middle;
+  float: left;
+  overflow: hidden;
 }
 .popup-window-from-bottom .box .__cart .__template .popup_reduce .regulator_right a:active {
   background: #ff9934;
@@ -319,11 +350,17 @@ body {
 #index .main ul li .last .counter a {
   font-size: 0.3rem;
   float: left;
-  border: 1px solid #ff9934;
   width: 0.5rem;
   height: 0.5rem;
   text-align: center;
   line-height: 0.5rem;
+}
+#index .main ul li .last .counter a {
+  border: 1px solid #ff9934;
+}
+#index .main ul li .last .counter span {
+  border-top: 1px solid #ff9934;
+  border-bottom: 1px solid #ff9934;
 }
 #index .main ul li .last .counter a:active {
   background: #ff9934;
@@ -506,7 +543,6 @@ body {
   padding: 0.2rem 0.3rem;
 }
 #checkout .main .address_list ul li {
-  font-size: 0.2rem;
   color: #7e7e7e;
   margin-bottom: 0.2rem;
 }
@@ -515,9 +551,16 @@ body {
   background-size: 0.4rem;
   padding-left: 0.5rem;
 }
+#checkout .main .address_list ul li .__checkbox__ p {
+  font-size: 0.25rem;
+  line-height: ;
+}
 #checkout .main .address_list ul li .checked {
   background: url("../demo/3.png") no-repeat left !important;
   background-size: 0.4rem !important;
+}
+#checkout .main .address_list ul li:last-child {
+  margin-bottom: 0;
 }
 #checkout .main .shop_title_img {
   width: 0.4rem;

@@ -12,7 +12,12 @@ html, body {
   height: 100%;
   font-family: '微软雅黑', Helvetica, Tahoma, Arial, '华文细黑', sans-serif;
   user-select: none;
+  -webkit-touch-callout:none;
   -webkit-user-select:none;
+  -khtml-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
 }
 
 @header-height: 1.2rem;
@@ -36,13 +41,13 @@ html, body {
   bottom: 0;
   z-index: 1000;
   width: 100%;
-  margin-bottom: @header-height - 0.3rem;
+  margin-bottom: @header-height - 0.2rem;
   .box {
     @height: 0.6rem;
-    margin: 0.25rem 0.2rem;
+    margin: 0.25rem 0.2rem 0 0.2rem;
     .popup-bottom-title {
       height: @height;
-      padding-right: 0.3rem;
+      padding-right: 0.1rem;
       background: #e3e3e3;
       .oder {
         width: auto;
@@ -94,15 +99,21 @@ html, body {
       }
     }
     .__cart {
-      margin-bottom: 0.5rem;
-      .__template {
-        padding: 0.2rem 0.1rem;
+      margin: 0 0.2em;
+      li{
+        padding: 0.2rem 0;
         border-bottom: 1px solid #CCCCCC;
+        &:last-child{
+          border-bottom: none;
+        }
+      }
+      .__template {
         .__field_title {
           text-overflow: ellipsis;
           white-space: nowrap;
-          display: inline-block;
-          width: 3rem;
+          display: block;
+          width: auto;
+          margin-right: 3rem;
           overflow: hidden;
           line-height: 0.5rem;
           height: 0.5rem;
@@ -111,7 +122,6 @@ html, body {
         .popup_reduce {
           width: 2.5rem;
           float: right;
-          margin-right: 0.2rem;
           height: 0.5rem;
           text-align: center;
           vertical-align: middle;
@@ -119,17 +129,39 @@ html, body {
           .__field_price {
             display: inline-block;
           }
+          .price{
+            height: 0.5rem;
+            text-align: left;
+            line-height: 0.5rem;
+            vertical-align: middle;
+            width:1.1rem;
+            float: left;
+          }
           .regulator_right {
             display: inline-block;
             float: right;
+            width: 1.4rem;
             a {
-              display: inline-block;
+              box-sizing: border-box;
+              display: block;
               border: 1px solid #ff9934;
-              width: 0.4rem;
-              height: 0.4rem;
+              width: 0.5rem;
+              height: 0.5rem;
               text-align: center;
               border-radius: 50%;
-              line-height: 0.4rem;
+              line-height: 0.5rem;
+              vertical-align: middle;
+              overflow: hidden;
+              float: left;
+            }
+            span{
+              display: block;
+              width:0.4rem;
+              height: 0.5rem;
+              line-height: 0.5rem;
+              vertical-align: middle;
+              float: left;
+              overflow: hidden;
             }
             a:active {
               background: #ff9934;
@@ -324,11 +356,17 @@ html, body {
             span, a {
               font-size: 0.3rem;
               float: left;
-              border: 1px solid #ff9934;
               width: 0.5rem;
               height: 0.5rem;
               text-align: center;
               line-height: 0.5rem;
+            }
+            a{
+              border: 1px solid #ff9934;
+            }
+            span{
+              border-top: 1px solid #ff9934;
+              border-bottom: 1px solid #ff9934;
             }
             a:active {
               background: #ff9934;
@@ -520,17 +558,23 @@ html, body {
         background: white;
         padding: 0.2rem 0.3rem;
         li {
-          font-size: 0.2rem;
           color: #7e7e7e;
           margin-bottom: 0.2rem;
           .__checkbox__ {
             background: url("../demo/2.png") no-repeat left;
             background-size: 0.4rem;
             padding-left: 0.5rem;
+            p{
+              font-size: 0.25rem;
+              line-height: ;
+            }
           }
           .checked {
             background: url("../demo/3.png") no-repeat left !important;
             background-size: 0.4rem !important;
+          }
+          &:last-child{
+            margin-bottom: 0;
           }
         }
       }
