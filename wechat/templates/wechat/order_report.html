@@ -1,0 +1,45 @@
+{% load staticfiles %}
+<!doctype html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>订单确认表 - {{ batch.title }}</title>
+    <link rel="stylesheet" href="{% static 'wechat/assets/styles/report.css' %}" />
+</head>
+<body>
+  <img class="qr" src="/wechat/qr/confirm/{{ batch.id }}" />
+  <div class="title">
+    {{ batch.title }} - {{ distributer.name }}
+  </div>
+  <div class="wrap">
+    <table class="report">
+      <tr>
+        <th>昵称</th>
+        <th>电话号码</th>
+        <th>订单详情</th>
+        <th>备注</th>
+        <th></th>
+        <th></th>
+      </tr>
+      {% for order in orders %}
+      <tr>
+        <td>{{ order.customer.nick_name }}</td>
+        <td>{{ order.customer.tel | slice:":3" }}****{{ order.customer.tel | slice:"8:" }}</td>
+        <td>
+          {% for commodity_in_order in order.commodityinorder_set.all %}
+          {{ commodity_in_order.quantity }}
+          {{ commodity_in_order.commodity.spec }}
+          {{ commodity_in_order.commodity.title }}
+          <br />
+          {% endfor %}
+        </td>
+        <td>无</td>
+        <td></td>
+        <td></td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</body>
+</html>

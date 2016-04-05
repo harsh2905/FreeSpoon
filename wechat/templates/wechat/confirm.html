@@ -1,0 +1,48 @@
+{% load staticfiles %}
+<!doctype html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>确认收货 - {{ order.batch.title }}</title>
+    <link rel="stylesheet" href="{% static 'wechat/assets/styles/jquery.mobile.structure-1.4.5.css' %}" />
+    <link rel="stylesheet" href="{% static 'wechat/assets/styles/buttons.css' %}" />
+    <link rel="stylesheet" href="{% static 'wechat/assets/styles/confirm.css' %}" />
+    <script type="text/javascript" src="{% static 'wechat/assets/scripts/jquery-1.12.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'wechat/assets/scripts/jquery.mobile-1.4.5.min.js' %}"></script>
+</head>
+<body>
+  <div class="dialog">
+    <div class="header">
+      <p class="title">订单确认</p>
+      <p class="datetime">{{ datetime | date:"m-d h:i" }}</p>
+    </div>
+    <div class="detail">
+      <p class="topic">收到包裹：</p>
+      <ul class="list">
+        {% for commodity_in_order in order.commodityinorder_set.all %}
+          <li>{{commodity_in_order.commodity.title}} {{ commodity_in_order.quantity}} {{commodity_in_order.commodity.spec}}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="info ui-grid-a">
+        <div class="ui-block-a">订单号：</div>
+        <div class="ui-block-b">{{ order.id | stringformat:"09d" }}</div>
+        <div class="ui-block-a">团购批次：</div>
+        <div class="ui-block-b">{{ order.batch.title }}</div>
+        <div class="ui-block-a">备注：</div>
+        <div class="ui-block-b">无</div>
+      </tr>
+    </div>
+    <a href="javascript:void(0);" onclick="submit();" class="button button-primary button-rounded">确认</a>
+    <form id="default" action="complete" method="POST">{% csrf_token %}
+      <input type="hidden" name="order_id" value="{{ order.id }}" />
+    </form>
+    <script type="text/javascript">
+      function submit(){
+        $('#default').submit();
+      }
+    </script>
+  </div>
+</body>
+</html>

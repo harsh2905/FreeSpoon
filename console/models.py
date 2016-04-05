@@ -56,6 +56,7 @@ class CommodityInBatch(models.Model):
 class Customer(models.Model):
 	nick_name = models.CharField(max_length=200)
 	id_wechat = models.CharField(max_length=200, unique=True)
+	avatar = models.CharField(max_length=200)
 	tel = models.CharField(max_length=20, unique=True)
 	def __unicode__(self):
 		return self.nick_name
@@ -88,7 +89,7 @@ class CommodityInOrder(models.Model):
 	order = models.ForeignKey(Order)
 	commodity = models.ForeignKey(Commodity)
 	quantity = models.IntegerField(max_length=10)
-	price = models.DecimalField(max_digits=9, decimal_places=2)
+	#price = models.DecimalField(max_digits=9, decimal_places=2)
 	def __unicode__(self):
 		return str(self.id)
 
