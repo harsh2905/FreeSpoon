@@ -18,7 +18,30 @@
                 }
             }
         })(true);
-    });
+    })
+
+    $(function(){
+        (function(status){
+           /* $(".overlay").on("click",function(){
+                status=false;
+
+            })*/
+            function success_popup(){
+
+                if(status){
+                    $(".overlay").css("display","block");
+                    $(".success_popup").css("display","block");
+                }else{
+                    status=true;
+                    $(".overlay").css("display","none");
+                    $(".success_popup").css("display","none");
+                }
+            }
+            var success=document.getElementById("footer_success");
+            success.addEventListener("click",success_popup,false);
+        })(true);
+
+    })
 
     $(function(){//把所有方法写在一个自执行函数里，形成闭包
         var PageManager = window.PageManager = {//初始化页面 哈市表

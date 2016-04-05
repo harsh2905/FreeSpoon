@@ -14,7 +14,7 @@ html, body {
   user-select: none;
   -webkit-touch-callout:none;
   -webkit-user-select:none;
-  -khtml-user-select:none;
+
   -moz-user-select:none;
   -ms-user-select:none;
   user-select:none;
@@ -32,6 +32,89 @@ html, body {
   z-index: 1000;
   top: 0;
   bottom: 1.7rem;
+}
+#success_popup{
+  display: none;
+  position: absolute;
+  top: 3rem;
+  left: 0.2rem;
+  right: 0.2rem;
+  z-index: 2000;
+  div{
+    div:nth-child(1){
+      font-size: 0.35rem;
+      text-align: center;
+      height: 0.7rem;
+      line-height: 0.7rem;
+      background: #e5e5e5;
+      font-weight: 700;
+    }
+    div:nth-child(2){
+      background: white;
+      height: 1.5rem;
+      padding: 0.3rem 0.45rem;
+      font-size: 0.3rem;
+      color: #707070;
+    }
+    div:nth-child(3){
+      line-height: 0.7rem;
+      height: 0.7rem;
+      text-align: center;
+      color: white;
+      background: #599c3d;
+      font-size: 0.3rem;
+    }
+
+  }
+}
+#Payment_success{
+  height: 100%;
+  .header {
+    z-index: 100;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    height: @height;
+    background: #e5e5e5;
+    border-bottom: solid 1px #c8c8c8;
+  }
+  .main{
+    background: white;
+    height: 100%;
+    div{
+      margin: 0 auto;
+      padding: 2rem 0.5rem;
+      div{
+        background: url("../demo/sussce.png") no-repeat center;
+        background-size: 2rem;
+        height: 2.5rem;
+        padding: 0;
+      }
+      p:first-of-type{
+        text-align: center;
+        font-size: 0.5rem;
+      }
+      p:last-of-type{
+        margin-top:0.5rem;
+        font-size: 0.3rem;
+      }
+    }
+  }
+  .footer{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1100;
+    a {
+      background: #599c3d;
+      margin: 0.1rem 0.1rem;
+      color: white;
+      text-align: center;
+      display: block;
+      height: 0.6rem;
+      line-height: 0.6rem;
+    }
+  }
 }
 
 .popup-window-from-bottom {
@@ -566,7 +649,6 @@ html, body {
             padding-left: 0.5rem;
             p{
               font-size: 0.25rem;
-              line-height: ;
             }
           }
           .checked {
@@ -893,3 +975,4 @@ html, body {
     }
   }
 }
+
