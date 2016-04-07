@@ -1,0 +1,27 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>错误</title>
+    <link rel="stylesheet" href="{% static 'wechat/assets/styles/index.css' %}">
+    <script>
+        var winW = document.documentElement.clientWidth;
+        document.documentElement.style.fontSize = winW / 6.4 + "px";
+    </script>
+</head>
+<body>
+<div id="Payment_fail" class="__page__" name="fail" >
+    <div class="main">
+        <div>
+            <div></div>
+            <p>{{ title }}</p>
+            <p>{{ desc }}</p>
+        </div>
+    </div>
+    <div class="footer">
+        <a href="javascript:void(0);">点击返回首页</a>
+    </div>
+</div>
+</body>
+</html>
