@@ -31,12 +31,17 @@
                     that.pages[name] = $(this);//把获取到的dom元素集合按照各自的name存放在page对象里面。当前作用域下的this是div，我们需要放在上一作用域下的pages对象里，所以需要用that
                 });
             },
-            jump: function(pageName, closureName){//实现页面切页效果 参数1：要跳转的页面、参数2：dumpDataToCheckout
+            jump: function(pageName, closure){//实现页面切页效果 参数1：要跳转的页面、参数2：dumpDataToCheckout
                 var activePage = this.pages[pageName];//私有变量存储用户点击执行jump方法时，当前点击的dom元素。->是在pages对象中通过键取出
                 if(!!activePage){//如果dom元素存在
-                    var closureMethod = this.switchData[closureName];//
+					var closureMethod = null;
+					if(typeof closure == 'function'){
+						closureMethod = closure;
+					} else {
+						closureMethod = this.switchData[closure];//
+					}
                     if(!!closureMethod){
-                        if(!closureMethod()){
+                        if(!closureMethod(activePage)){
                             return;
                         }
                     }
@@ -59,12 +64,16 @@
             user_info: null,
             batch_id: null,
             pay_callback: null,
-            init: function(addresses, user_info, batch_id, pay_callback){
+            init: function(addresses, user_info, batch_id, pay_callback, tel_){
                 var that = this;
                 var tel = $('.__checkout_tel');
                 tel.change(function(){
                     that.tel = $(this).val();
                 });
+				if(!!tel_ && tel_.length > 0){
+					that.tel = tel_;
+					tel.val(tel_);
+				}
                 this.addresses = addresses;
                 this.user_info = user_info;
                 this.batch_id = batch_id;
@@ -127,8 +136,8 @@
                 return;
               }
               var cart_data = {
-                wx_nickname: that.user_info.nickname,
-                wx_openid: that.user_info.openid,
+                nick_name: that.user_info.nickname,
+                openid: that.user_info.openid,
                 tel: payInfo.tel,
                 ipaddress: '127.0.0.1',
                 batch_id: that.batch_id,
@@ -146,20 +155,20 @@
                   if(!!window.WeChatIsReady && window.WeChatIsReady){
                     alert(JSON.stringify(data));
                     WeixinJSBridge.invoke(
-                      'getBrandWCPayRequest', data,
+                      'getBrandWCPayRequest', data.payRequest,
                       function(res){
                         alert(JSON.stringify(res));
                         alert(res.err_msg);
                         if(res.err_msg == "get_brand_wcpay_request:ok" ) {
                           alert('Successfully!');
-                          that.pay_callback();
+                          that.pay_callback(data);
                         }
                       }
                     );
                   }
                 },
                 type: 'POST',
-                url: 'xhr/unifiedorder'
+                url: 'unifiedOrder'
               });
             },
             dump: function(commodities){

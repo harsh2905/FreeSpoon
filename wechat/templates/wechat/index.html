@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load custom_tags %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,19 +20,26 @@
         $(function(){
           PageManager.init();//调用init方法，开始渲染页面
           var commodities = (new Function('', 'return ' + '{{ commoditiesJson }}'))();
-          var user_info = (new Function('', 'return ' + '{{ user_info_string }}'))();
-          var addresses = (new Function('', 'return ' + '{{ addressesJson }}'))();
+          var userInfo = (new Function('', 'return ' + '{{ userInfoJson }}'))();
+          var addresses = (new Function('', 'return ' + '{{ distsJson }}'))();
           CartManager.init(commodities);
-          CheckoutManager.init(addresses, user_info, {{ batch.id }}, function(){
+          CheckoutManager.init(addresses, userInfo, {{ batch.id }}, function(data){
             alert('Function \'pay_callback\' has been call');
             alert('window is ' + window);
             alert('window.PageManager is ' + window.PageManager);
-            window.PageManager.jump('success');
-          });//执行checkout下init方法
+            window.PageManager.jump('success', function(page){
+				alert('Jump to page \'success\'');
+				var titleObj = page.find('.__field_title');
+				var descObj = page.find('.__field_desc');
+				titleObj.text('支付成功');
+				descObj.text('恭喜您成为第' + data.orderAmounts + '位接龙者，快去邀请小伙伴继续接龙吧！');
+				return true;
+			});
+		  }, '{{ tel }}');//执行checkout下init方法
 
           //configure the fuck WeChat
           (function(){
-            var wx_config_data = (new Function('', 'return ' + '{{ wx_config_data }}'))();
+            var wx_config_data = (new Function('', 'return ' + '{{ wxConfigJson }}'))();
             alert(JSON.stringify(wx_config_data));
             wx.config(wx_config_data);
             wx.ready(function(){
@@ -67,44 +75,42 @@
         </div>
         <div class="right">
             <div class="audio"></div>
-            <div>已有<span>xx人</span>参团</div>
-            <div>还有<span>x天</span>结束</div>
+            <div>已有<span>{{ orderAmounts }}人</span>参团</div>
+            <div>还有<span>{{ expireTime }}天</span>结束</div>
         </div>
     </div>
     <div class="main" >
         <ul>
-            {% for commodity_in_batch in batch.commodityinbatch_set.all %}
+            {% for commodity in commodities %}
             <li>
                 <div>
-                    {% for commodityimage in commodity_in_batch.commodity.commodityimage_set.all %}
-                    <img src="{{ commodityimage.image.url }}" alt="">
-                    {% endfor %}
+                    <img src="{{ commodity | dict_get:'image' }}" alt="">
                 </div>
                 <div class="content">
                     <div class="first">
                         <div>
-                            <h1>{{ commodity_in_batch.commodity.title }}</h1>
-                            <span>{{ commodity_in_batch.commodity.spec }}</span>
+                            <h1>{{ commodity | dict_get:'title' }}</h1>
+                            <span>{{ commodity | dict_get:'spec' }}</span>
                         </div>
-                        <p>{{ commodity_in_batch.commodity.details }}</p>
+                        <p>{{ commodity | dict_get:'details' }}</p>
                     </div>
                     <div class="between clearfloat">
-                        <span>已团xx盒</span>
-                        <span>已有xx人参团</span>
+                        <span>已团{{ commodity | dict_get:'globalQuantities' }}盒</span>
+                        <span>已有{{ commodity | dict_get:'globalAmounts' }}人参团</span>
                     </div>
                     <div class="last ">
                         <div class="counter">
-                            <a class="block left" href="javascript:void(0);" onclick="CartManager.remove({{ commodity_in_batch.id }})">-</a>
-                            <span class="block center __field_quantity_{{ commodity_in_batch.id }}">0</span>
-                            <a class="block right" href="javascript:void(0);" onclick="CartManager.add({{ commodity_in_batch.id }})">+</a>
+                            <a class="block left" href="javascript:void(0);" onclick="CartManager.remove({{ commodity | dict_get:'id' }})">-</a>
+                            <span class="block center __field_quantity_{{ commodity | dict_get:'id' }}">0</span>
+                            <a class="block right" href="javascript:void(0);" onclick="CartManager.add({{ commodity | dict_get:'id' }})">+</a>
                         </div>
                         <div class="regulator">
                             <span class="groupon_icon"><img src="{% static 'wechat/assets/demo/poper.png' %}" alt=""></span>
                             <div class="groupon">
                                 <span>团购价</span>
-                                <span>￥{{ commodity_in_batch.unit_price | floatformat:"0" }}</span>
+                                <span>￥{{ commodity | dict_get:'unit_price' | floatformat:"0" }}</span>
                                 <span>.</span>
-                                <span>{{ commodity_in_batch.unit_price | floatformat:"-2" | slice:"-2:" }}</span>
+                                <span>{{ commodity | dict_get:'unit_price' | floatformat:"-2" | slice:"-2:" }}</span>
                             </div>
                         </div>
                     </div>
@@ -165,9 +171,9 @@
     </div>
     <div class="main">
         <div class="user">
-            <div class="sculpture"><img src="{{ user_info.headimgurl }}" alt=""></div>
-            <span>{{ nickname }}</span>
-            <div class="tel_border"><input type="tel" class="__checkout_tel" placeholder="填输入联系方式"/></div>
+            <div class="sculpture"><img src="{{ userInfo.getHeadImgUrl }}" alt=""></div>
+            <span>{{ userInfo.getNickName }}</span>
+            <div class="tel_border"><input type="tel" class="__checkout_tel" placeholder="填输入联系方式" /></div>
         </div>
         <div class="address_title">
             <span class="address_title_img"></span>
@@ -288,28 +294,45 @@
     </div>
 </div>
 <div id="Payment_success" class="__page__" name="success" jid="3" style="display:none;">
-     <div class="header" method="change" target="2">
-         <div class="header-content"></div>
-     </div>
+    <div class="share" style="display:none;">
+        <p>恭喜您成为第88位接龙者，快去邀请小伙伴继续接龙！<span>请点击右上角<span class="more"></span>分享</span></p>
+        <div class="arrow"></div>
+    </div>
      <div class="main">
-         <div>
+         <div class="success_box">
              <div></div>
-             <p>支付成功</p>
-             <p>恭喜您成为第88位接龙者，快去邀请小伙伴继续接龙吧！</p>
+             <p class="__field_title"></p>
+             <p class="__field_desc"></p>
          </div>
      </div>
      <div class="footer">
          <a href="javascript:void(0);">接龙到微信，邀请群友吧</a>
+         <script type="text/javascript">
+           wx.onMenuShareAppMessage({
+             title: '分享标题', // 分享标题
+             desc: '分享描述', // 分享描述
+             link: '{{ wx_share_url }}', // 分享链接
+             imgUrl: '', // 分享图标
+             //type: '', // 分享类型,music、video或link，不填默认为link
+             //dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+             success: function () {
+                 wx.closeWindow();
+             },
+             cancel: function () {
+                 // 用户取消分享后执行的回调函数
+             }
+          });
+        </script>
      </div>
  </div>
-
- <div class="overlay"></div>
- <div id="success_popup" class="__page__" name="popup" jid="5"  style="display: none">
+<div id="success_popup" class="__page__" name="popup" jid="5"  style="display: none">
      <div>
          <div class="header">支付成功</div>
          <div class="main">恭喜您成为第88位接龙者，快去邀请小伙伴继续接龙吧！</div>
          <div class="footer">接龙到微信群，邀请群友吧！</div>
      </div>
  </div>
+
+<div class="public_overlay"></div>
 </body>
 </html>

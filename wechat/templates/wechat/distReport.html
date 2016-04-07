@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{% static 'wechat/assets/styles/report.css' %}" />
 </head>
 <body>
-  <img class="qr" src="/wechat/qr/confirm/{{ batch.id }}" />
+  <img class="qr" src="/wechat/createQRFromConfirm?id={{ batch.id }}" />
   <div class="title">
     {{ batch.title }} - {{ distributer.name }}
   </div>

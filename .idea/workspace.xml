@@ -2,19 +2,29 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="03c3f447-38aa-4be6-816c-8cda21c13c8c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/1.PNG" afterPath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/1.PNG" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/watcherTasks.xml" />
+      <change type="DELETED" beforePath="\\192.168.102.40\orderq\wechat\templates\wechat\order_report.html" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/demo/1.PNG" afterPath="$PROJECT_DIR$/staticFiles/assets/demo/1.PNG" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/demo/1.jpg" afterPath="$PROJECT_DIR$/staticFiles/assets/demo/1.jpg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/1.jpg" afterPath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/1.jpg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/demo/2.jpg" afterPath="$PROJECT_DIR$/staticFiles/assets/demo/2.jpg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/2.jpg" afterPath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/2.jpg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/demo/2.png" afterPath="$PROJECT_DIR$/staticFiles/assets/demo/2.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/2.png" afterPath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/2.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/demo/3.jpg" afterPath="$PROJECT_DIR$/staticFiles/assets/demo/3.jpg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/3.jpg" afterPath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/3.jpg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/demo/3.png" afterPath="$PROJECT_DIR$/staticFiles/assets/demo/3.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/3.png" afterPath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/3.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/font/FontAwesome.otf" afterPath="$PROJECT_DIR$/staticFiles/assets/font/FontAwesome.otf" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/static/wechat/assets/font/FontAwesome.otf" afterPath="$PROJECT_DIR$/wechat/static/wechat/assets/font/FontAwesome.otf" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/OrderQ/__init__.py" afterPath="$PROJECT_DIR$/OrderQ/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/console/__init__.py" afterPath="$PROJECT_DIR$/console/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/console/migrations/__init__.py" afterPath="$PROJECT_DIR$/console/migrations/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/__init__.py" afterPath="$PROJECT_DIR$/wechat/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/migrations/__init__.py" afterPath="$PROJECT_DIR$/wechat/migrations/__init__.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/action-black.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/action-black.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/action-white.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/action-white.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/demo/adds.png" afterPath="$PROJECT_DIR$/staticFiles/assets/demo/adds.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/adds.png" afterPath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/adds.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/ajax-loader.gif" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/ajax-loader.gif" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/alert-black.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/alert-black.png" />
@@ -37,11 +47,13 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/arrow-u-white.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/arrow-u-white.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/audio-black.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/audio-black.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/audio-white.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/audio-white.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/demo/auid.png" afterPath="$PROJECT_DIR$/staticFiles/assets/demo/auid.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/auid.png" afterPath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/auid.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/back-black.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/back-black.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/back-white.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/back-white.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/bars-black.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/bars-black.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/bars-white.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/bars-white.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/demo/book.png" afterPath="$PROJECT_DIR$/staticFiles/assets/demo/book.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/book.png" afterPath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/book.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/bullets-black.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/bullets-black.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/bullets-white.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/bullets-white.png" />
@@ -65,6 +77,7 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/cloud-white.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/cloud-white.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/comment-black.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/comment-black.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/comment-white.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/comment-white.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/demo/del.png" afterPath="$PROJECT_DIR$/staticFiles/assets/demo/del.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/del.png" afterPath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/del.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/delete-black.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/delete-black.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/delete-white.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/delete-white.png" />
@@ -72,6 +85,7 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/edit-white.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/edit-white.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/eye-black.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/eye-black.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/eye-white.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/eye-white.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/demo/fail.png" afterPath="$PROJECT_DIR$/staticFiles/assets/demo/fail.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/font/fontawesome-webfont.eot" afterPath="$PROJECT_DIR$/staticFiles/assets/font/fontawesome-webfont.eot" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/static/wechat/assets/font/fontawesome-webfont.eot" afterPath="$PROJECT_DIR$/wechat/static/wechat/assets/font/fontawesome-webfont.eot" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/font/fontawesome-webfont.ttf" afterPath="$PROJECT_DIR$/staticFiles/assets/font/fontawesome-webfont.ttf" />
@@ -108,7 +122,9 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/phone-white.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/phone-white.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/plus-black.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/plus-black.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/plus-white.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/plus-white.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/demo/pop.png" afterPath="$PROJECT_DIR$/staticFiles/assets/demo/pop.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/pop.png" afterPath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/pop.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/demo/poper.png" afterPath="$PROJECT_DIR$/staticFiles/assets/demo/poper.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/poper.png" afterPath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/poper.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/power-black.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/power-black.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/power-white.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/power-white.png" />
@@ -120,9 +136,11 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/search-white.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/search-white.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/shop-black.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/shop-black.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/shop-white.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/shop-white.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/demo/shop.png" afterPath="$PROJECT_DIR$/staticFiles/assets/demo/shop.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/shop.png" afterPath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/shop.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/star-black.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/star-black.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/star-white.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/star-white.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/demo/sussce.png" afterPath="$PROJECT_DIR$/staticFiles/assets/demo/sussce.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/sussce.png" afterPath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/sussce.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/tag-black.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/tag-black.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/tag-white.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/tag-white.png" />
@@ -130,11 +148,27 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/user-white.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/user-white.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/video-black.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/video-black.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/video-white.png" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-png/video-white.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/demo/红虾.jpg" afterPath="$PROJECT_DIR$/staticFiles/assets/demo/红虾.jpg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/红虾.jpg" afterPath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/红虾.jpg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/console/migrations/0001_initial.py" afterPath="$PROJECT_DIR$/console/migrations/0001_initial.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/console/migrations/0002_order_distributer.py" afterPath="$PROJECT_DIR$/console/migrations/0002_order_distributer.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/console/migrations/0003_batch_distributers.py" afterPath="$PROJECT_DIR$/console/migrations/0003_batch_distributers.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/console/migrations/0004_auto_20160323_0301.py" afterPath="$PROJECT_DIR$/console/migrations/0004_auto_20160323_0301.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/console/migrations/0005_customer_avatar.py" afterPath="$PROJECT_DIR$/console/migrations/0005_customer_avatar.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/console/migrations/0006_remove_commodityinorder_price.py" afterPath="$PROJECT_DIR$/console/migrations/0006_remove_commodityinorder_price.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/1.html" afterPath="$PROJECT_DIR$/staticFiles/1.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/scripts/Cart.js" afterPath="$PROJECT_DIR$/staticFiles/assets/scripts/Cart.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/INSTALLATION.md" afterPath="$PROJECT_DIR$/INSTALLATION.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/action-black.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/action-black.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/action-white.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/action-white.svg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/console/admin.py" afterPath="$PROJECT_DIR$/console/admin.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/admin.py" afterPath="$PROJECT_DIR$/wechat/admin.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/alert-black.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/alert-black.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/alert-white.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/alert-white.svg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/console/apps.py" afterPath="$PROJECT_DIR$/console/apps.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/apps.py" afterPath="$PROJECT_DIR$/wechat/apps.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/arrow-d-black.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/arrow-d-black.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/arrow-d-l-black.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/arrow-d-l-black.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/arrow-d-l-white.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/arrow-d-l-white.svg" />
@@ -153,6 +187,7 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/arrow-u-white.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/arrow-u-white.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/audio-black.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/audio-black.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/audio-white.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/audio-white.svg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/auth.py" afterPath="$PROJECT_DIR$/wechat/auth.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/back-black.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/back-black.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/back-white.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/back-white.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/bars-black.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/bars-black.svg" />
@@ -188,10 +223,13 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/templates/wechat/confirm.html" afterPath="$PROJECT_DIR$/wechat/templates/wechat/confirm.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/confirm.less" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/confirm.less" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/static/wechat/assets/styles/confirm.less" afterPath="$PROJECT_DIR$/wechat/static/wechat/assets/styles/confirm.less" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/scripts/data.josn" afterPath="$PROJECT_DIR$/staticFiles/assets/scripts/data.josn" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/delete-black.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/delete-black.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/delete-white.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/delete-white.svg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/scripts/demo.html" afterPath="$PROJECT_DIR$/staticFiles/assets/scripts/demo.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/edit-black.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/edit-black.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/edit-white.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/edit-white.svg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/.idea/encodings.xml" afterPath="$PROJECT_DIR$/staticFiles/.idea/encodings.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/eye-black.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/eye-black.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/eye-white.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/eye-white.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/font-awesome-ie7.css" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/font-awesome-ie7.css" />
@@ -210,6 +248,7 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/forward-white.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/forward-white.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/gear-black.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/gear-black.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/gear-white.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/gear-white.svg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/goods.css" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/goods.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/grid-black.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/grid-black.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/grid-white.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/grid-white.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/heart-black.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/heart-black.svg" />
@@ -219,10 +258,16 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/index.css" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/index.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/static/wechat/assets/styles/index.css" afterPath="$PROJECT_DIR$/wechat/static/wechat/assets/styles/index.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/index.html" afterPath="$PROJECT_DIR$/staticFiles/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/templates/wechat/index.html" afterPath="$PROJECT_DIR$/wechat/templates/wechat/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/scripts/index.js" afterPath="$PROJECT_DIR$/staticFiles/assets/scripts/index.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/static/wechat/assets/scripts/index.js" afterPath="$PROJECT_DIR$/wechat/static/wechat/assets/scripts/index.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/index.less" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/index.less" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/static/wechat/assets/styles/index.less" afterPath="$PROJECT_DIR$/wechat/static/wechat/assets/styles/index.less" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/templates/wechat/index2.html" afterPath="$PROJECT_DIR$/wechat/templates/wechat/index2.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/indexs.css" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/indexs.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/indexs.html" afterPath="$PROJECT_DIR$/staticFiles/indexs.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/scripts/indexs.js" afterPath="$PROJECT_DIR$/staticFiles/assets/scripts/indexs.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/indexs.less" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/indexs.less" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/info-black.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/info-black.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/info-white.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/info-white.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/scripts/jquery-1.12.1.min.js" afterPath="$PROJECT_DIR$/staticFiles/assets/scripts/jquery-1.12.1.min.js" />
@@ -231,6 +276,8 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/scripts/jquery.mobile-1.4.5.min.js" afterPath="$PROJECT_DIR$/staticFiles/assets/scripts/jquery.mobile-1.4.5.min.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/jquery.mobile.structure-1.4.5.css" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/jquery.mobile.structure-1.4.5.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/jquery.mobile.structure-1.4.5.min.css" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/jquery.mobile.structure-1.4.5.min.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/.idea/jsLibraryMappings.xml" afterPath="$PROJECT_DIR$/staticFiles/.idea/jsLibraryMappings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/json" afterPath="$PROJECT_DIR$/staticFiles/json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/location-black.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/location-black.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/location-white.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/location-white.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/lock-black.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/lock-black.svg" />
@@ -240,9 +287,18 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/manage.py" afterPath="$PROJECT_DIR$/manage.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/minus-black.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/minus-black.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/minus-white.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/minus-white.svg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/.idea/misc.xml" afterPath="$PROJECT_DIR$/staticFiles/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/console/models.py" afterPath="$PROJECT_DIR$/console/models.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/models.py" afterPath="$PROJECT_DIR$/wechat/models.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/.idea/modules.xml" afterPath="$PROJECT_DIR$/staticFiles/.idea/modules.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/navigation-black.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/navigation-black.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/navigation-white.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/navigation-white.svg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/templates/wechat/order_report.html" afterPath="$PROJECT_DIR$/wechat/templates/wechat/order_report.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/orderq.iml" afterPath="$PROJECT_DIR$/.idea/orderq.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/payment_success.css" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/payment_success.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/payment_success.html" afterPath="$PROJECT_DIR$/staticFiles/payment_success.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/payment_success.less" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/payment_success.less" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/phone-black.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/phone-black.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/phone-white.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/phone-white.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/plus-black.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/plus-black.svg" />
@@ -258,18 +314,39 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/static/wechat/assets/styles/report.css" afterPath="$PROJECT_DIR$/wechat/static/wechat/assets/styles/report.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/report.less" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/report.less" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/static/wechat/assets/styles/report.less" afterPath="$PROJECT_DIR$/wechat/static/wechat/assets/styles/report.less" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/reset.css" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/reset.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/static/wechat/assets/styles/reset.css" afterPath="$PROJECT_DIR$/wechat/static/wechat/assets/styles/reset.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/search-black.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/search-black.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/search-white.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/search-white.svg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/OrderQ/settings.py" afterPath="$PROJECT_DIR$/OrderQ/settings.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/shop-black.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/shop-black.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/shop-white.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/shop-white.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/star-black.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/star-black.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/star-white.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/star-white.svg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/.idea/staticFiles.iml" afterPath="$PROJECT_DIR$/staticFiles/.idea/staticFiles.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/success_popup.css" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/success_popup.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/success_popup.html" afterPath="$PROJECT_DIR$/staticFiles/success_popup.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/success_popup.less" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/success_popup.less" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/tag-black.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/tag-black.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/tag-white.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/tag-white.svg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/console/tests.py" afterPath="$PROJECT_DIR$/console/tests.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/tests.py" afterPath="$PROJECT_DIR$/wechat/tests.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/OrderQ/urls.py" afterPath="$PROJECT_DIR$/OrderQ/urls.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/urls.py" afterPath="$PROJECT_DIR$/wechat/urls.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/user-black.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/user-black.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/user-white.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/user-white.svg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/utils.py" afterPath="$PROJECT_DIR$/wechat/utils.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/.idea/vcs.xml" afterPath="$PROJECT_DIR$/staticFiles/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/video-black.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/video-black.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/video-white.svg" afterPath="$PROJECT_DIR$/staticFiles/assets/styles/images/icons-svg/video-white.svg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/console/views.py" afterPath="$PROJECT_DIR$/console/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wechat/views.py" afterPath="$PROJECT_DIR$/wechat/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/.idea/watcherTasks.xml" afterPath="$PROJECT_DIR$/staticFiles/.idea/watcherTasks.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/staticFiles/.idea/workspace.xml" afterPath="$PROJECT_DIR$/staticFiles/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/OrderQ/wsgi.py" afterPath="$PROJECT_DIR$/OrderQ/wsgi.py" />
+      <change type="MOVED" beforePath="\\192.168.102.40\orderq\wechat\static\wechat\assets\demo\1.PNG" afterPath="$PROJECT_DIR$/wechat/static/wechat/assets/demo/1.png" />
     </list>
     <ignored path="orderq.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -288,8 +365,29 @@
   <component name="FavoritesManager">
     <favorites_list name="orderq" />
   </component>
+  <component name="FileEditorManager">
+    <leaf />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Html5" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/staticFiles/assets/styles/indexs.less" />
+        <option value="$PROJECT_DIR$/staticFiles/indexs.html" />
+        <option value="$PROJECT_DIR$/wechat/templates/wechat/Payment_fail.html" />
+        <option value="$PROJECT_DIR$/wechat/static/wechat/assets/styles/index.less" />
+        <option value="$PROJECT_DIR$/wechat/templates/wechat/index.html" />
+      </list>
+    </option>
   </component>
   <component name="JsBuildToolGruntFileManager" detection-done="true" />
   <component name="JsGulpfileManager">
@@ -347,15 +445,30 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="orderq" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="orderq" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wechat" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="E:/www" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="HbShouldOpenHtmlAsHb" value="" />
     <property name="FullScreen" value="false" />
+    <property name="DefaultHtmlFileTemplate" value="Html5" />
   </component>
   <component name="RunManager">
     <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
@@ -388,6 +501,12 @@
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <pass-parent-envs>true</pass-parent-envs>
+      <envs />
       <method />
     </configuration>
   </component>
@@ -405,10 +524,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1696" height="1026" extended-state="6" />
-    <editor active="false" />
+    <frame x="-8" y="-8" width="1696" height="1026" extended-state="7" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14761905" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
