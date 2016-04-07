@@ -177,6 +177,7 @@ def unifiedOrder(request):
 	return HttpResponse(json.dumps(wrap),
 		content_type='application/json')
 
+@csrf_exempt
 def payNotify(request):
 	pdb.set_trace()
 	error = {
