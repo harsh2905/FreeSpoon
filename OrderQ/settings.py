@@ -84,7 +84,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'OrderQ',
 	'USER': 'root',
-	'PASSWORD': 'gopeer.2015',
+	'PASSWORD': '123456',
 	'HOST': '127.0.0.1',
 	'PORT': '3306',
     }
