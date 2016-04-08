@@ -72,6 +72,22 @@ def createQRFromIndexWithRedirect(request):
 	img.save(response, 'PNG')
 	return response
 
+def createQRFromConfirmWithRedirect(request):
+	batch_id = request.GET.get('b', None)
+	dist_id = request.GET.get('d', None)
+	if batch_id is None or dist_id is None:
+		return _error(request, u'非法调用', u'参数不正确')
+	url = 'http://carlinkall.com/wechat/d?b=%s&d=%s' % (batch_id, dist_id)
+	qr = qrcode.QRCode(
+		version=None
+	)
+	qr.add_data(url)
+	qr.make(fit=True)
+	img = qr.make_image()
+	response = HttpResponse(content_type='image/png')
+	img.save(response, 'PNG')
+	return response
+
 def createUrlFromIndex(request):
 	batch_id = request.GET.get('id', None)
 	if batch_id is None:
@@ -214,14 +230,31 @@ def payNotify(request):
 	return HttpResponse(xml,
 		content_type='text/xml')
 
+def redirectToConfirm(request):
+	batch_id = request.GET.get('b', None)
+	dist_id = request.GET.get('d', None)
+	if batch_id is None or dist_id is None:
+		return _error(request, u'非法调用', u'参数异常')
+	confirmUrl = 'http://carlinkall.com/wechat/confirm'
+	state = '%s,%s' % (batch_id, dist_id)
+	url = auth.createAuthorizeRedirectUrl(confirmUrl, state)
+	return HttpResponseRedirect(url)
+
 def confirm(request):
 	code = request.GET.get('code', None)
-	batch_id = request.GET.get('state', None)
-	if code is None or batch_id is None:
+	state = request.GET.get('state', None)
+	if code is None or state is None:
 		return _error(request, u'非法调用', u'参数异常')
+	args = state.split(',')
+	if len(args) <> 2:
+		return _error(request, u'非法调用', u'参数异常')
+	batch_id = int(args[0])
+	dist_id = int(args[1])
 	userInfo = auth.fetchUserInfo(code)
 	openid = userInfo.getOpenId()
 	order = data.fetchOrder(batch_id, openid)
+	if order.distributer.id <> dist_id:
+		return _error(request, u'错误', u'配送点错误')
 	template = loader.get_template('wechat/confirm.html')
 	context = RequestContext(request, {
 		'userInfo': userInfo,
