@@ -283,7 +283,7 @@ class Auth():
 			'body': title,
 			'detail': detail,
 			'attach': attach,
-			'out_trade_no': '%09d' % orderId,
+			'out_trade_no': orderId,
 			'fee_type': 'CNY',
 			'total_fee': str(int(total_fee * 100)),
 			'spbill_create_ip': ipaddress,
@@ -314,7 +314,7 @@ class Auth():
 			return None
 		prepayId = result.get('prepay_id', None)
 		if prepayId is not None:
-			Auth.PrepayIds[str(orderId)] = PrepayInfo(orderId, prepayId)
+			Auth.PrepayIds[orderId] = PrepayInfo(orderId, prepayId)
 		return prepayId
 	
 	def payNotify(self, xmlData):
@@ -327,7 +327,7 @@ class Auth():
 		return requestData.get('out_trade_no', None)
 	
 	def fetchPrepayId(self, orderId):
-		prepayInfo = Auth.PrepayIds.get(str(orderId), None)
+		prepayInfo = Auth.PrepayIds.get(orderId, None)
 		if prepayInfo is None:
 			return None
 		return prepayInfo.getPrepayId()

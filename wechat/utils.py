@@ -4,12 +4,18 @@
 import xml.etree.ElementTree as ET
 import uuid, hashlib
 from datetime import datetime
+import random
 import time
 
 import pdb
 
 def CDATA(text):
 	return '<![CDATA[%s]]>' % text
+
+def createOrderId():
+	prefix = datetime.now().strftime('%Y%m%d%H%M%f')
+	randomNum = '%08' % random.randint(1, 99999999)
+	return '%s%s' % (prefix, randomNum)
 
 def mapToXml(d):
 	xml = ET.Element('xml')

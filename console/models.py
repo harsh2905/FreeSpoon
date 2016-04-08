@@ -80,6 +80,7 @@ class Distributer(models.Model):
 		return self.name
 
 class Order(models.Model):
+	id = models.CharField(max_length=200, primary_key=True)
 	customer = models.ForeignKey(Customer)
 	batch = models.ForeignKey(Batch)
 	distributer = models.ForeignKey(Distributer)

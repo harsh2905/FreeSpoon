@@ -25,6 +25,7 @@ def getOrCreateOrder(batchId, customerId, distId, status):
 		batch_id=batchId,
 		customer_id=customerId,
 		defaults={
+			'id': utils.createOrderId(),
 			'create_time': datetime.now(),
 			'status': status,
 			'distributer_id': distId

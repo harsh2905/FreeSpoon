@@ -131,6 +131,7 @@ def index(request):
 
 @csrf_exempt
 def unifiedOrder(request):
+	pdb.set_trace()
 	if not request.is_ajax():
 		return _error(request, u'非法访问', u'未知错误')
 	if request.method <> 'POST':
