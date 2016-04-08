@@ -97,6 +97,9 @@ def index(request):
 	if userInfo is None:
 		return _error(request, u'非法调用', u'参数异常')
 	openid = userInfo.getOpenId()
+	order = data.fetchOrder(batch_id, openid)
+	if order is not None:
+		return _error(request, u'重复提交订单', u'重复提交订单')
 	tel = data.fetchCustomerTel(openid)
 	tel = tel if tel is not None else ''
 	batch = data.fetchBatch(batch_id)
