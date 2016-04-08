@@ -64,17 +64,18 @@ body {
   height: 100%;
 }
 #Payment_success .share {
-  font-size: 0.29rem;
+  font-size: 0.3rem;
   background: #e5e5e5;
   height: 2rem;
   width: 100%;
   vertical-align: middle;
+  overflow: hidden;
 }
 #Payment_success .share p {
-  padding: 0.6rem 0.8rem 0.6rem 0.4rem;
-  height: 2rem;
-  box-sizing: border-box;
+  position: relative;
+  height: 1rem;
   line-height: 25px;
+  margin: 0.5rem 0.6rem 0.5rem 0.4rem;
 }
 #Payment_success .share p span {
   font-weight: bold;
@@ -94,10 +95,10 @@ body {
   position: absolute;
   right: 0;
   top: 0;
+  margin-right: 0.1rem;
 }
 #Payment_success .main {
   background: white;
-  height: 100%;
 }
 #Payment_success .main .success_box {
   margin: -40% -150px -60% -150px;
@@ -616,6 +617,7 @@ body {
   vertical-align: middle;
 }
 #checkout .main {
+  padding-top: 0;
   margin: 0.8rem 0;
 }
 #checkout .main .user {

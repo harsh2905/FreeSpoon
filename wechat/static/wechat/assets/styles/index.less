@@ -70,16 +70,17 @@ html, body {
 #Payment_success{
   height: 100%;
   .share{
-    font-size: 0.29rem;
+    font-size: 0.3rem;
     background: #e5e5e5;
     height: 2rem;
     width: 100%;
     vertical-align: middle;
+    overflow: hidden;
     p{
-      padding: 0.6rem 0.8rem 0.6rem 0.4rem;
-      height: 2rem;
-      box-sizing: border-box;
+      position: relative;
+      height: 1rem;
       line-height: 25px;
+      margin: 0.5rem 0.6rem 0.5rem 0.4rem;
       span{
         font-weight: bold;
         .more{
@@ -100,11 +101,11 @@ html, body {
       position: absolute;
       right: 0;
       top: 0;
+      margin-right: 0.1rem;
     }
   }
   .main{
     background: white;
-    height: 100%;
     .success_box{
       margin: -40% -150px -60% -150px;
       position: absolute;
@@ -636,6 +637,7 @@ html, body {
     }
   }
   .main {
+    padding-top: 0;
     margin: 0.8rem 0;
     .user {
       @height: 0.9rem;
