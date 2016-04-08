@@ -26,6 +26,9 @@ class Batch(models.Model):
 	start_time = models.DateTimeField(auto_now=True)
 	end_time = models.DateTimeField()
 	status = models.IntegerField(max_length=10)
+	share_title = models.CharField(max_length=200)
+	share_desc = models.CharField(max_length=255)
+	share_img = models.ImageField(upload_to='shareImg', blank=True)
 	def __unicode__(self):
 		return self.title
 

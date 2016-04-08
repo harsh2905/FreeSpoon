@@ -146,8 +146,8 @@ body {
   position: absolute;
   left: 50%;
   top: 50%;
-  margin: -50% -125px;
-  width: 250px;
+  margin: -50% -1.25rem;
+  width: 2.5rem;
 }
 #Payment_fail .main .fail_box div {
   background: url("../demo/fail.png") no-repeat center;
@@ -605,7 +605,7 @@ body {
   float: left;
 }
 #checkout .header .header-content {
-  width: 320px;
+  width: 3.2rem;
   text-align: center;
   font-size: 0.3rem;
   line-height: 0.8rem;
@@ -744,7 +744,7 @@ body {
   float: right;
 }
 #checkout .main .__checkout_detail .__template_checkout_detail_item .__field_checkout_price {
-  margin-right: 30px;
+  margin-right: 0.3rem;
   float: right;
 }
 #checkout .main .moe {

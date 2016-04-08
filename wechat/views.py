@@ -112,6 +112,7 @@ def index(request):
 	distsJson = data.parseToDistJson(batch)
 	wxConfigJson = auth.createWXConfigJson(request.get_raw_uri(), [
 		'chooseWXPay', 'onMenuShareAppMessage', 'closeWindow'])
+	shareUrl = 'http://carlinkall.com/wechat/r?id=%s' % batch_id
 	context = RequestContext(request, {
 		'batch': batch,
 		'commodities': commodities,
@@ -122,7 +123,8 @@ def index(request):
 		'wxConfigJson': SafeString(json.dumps(wxConfigJson)),
 		'userInfo': userInfo,
 		'userInfoJson': SafeString(userInfo.json()),
-		'tel': tel
+		'tel': tel,
+		'shareUrl': shareUrl
 	})
 	template = loader.get_template('wechat/index.html')
 	return HttpResponse(template.render(context))

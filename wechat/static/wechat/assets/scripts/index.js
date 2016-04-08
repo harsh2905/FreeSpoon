@@ -132,7 +132,6 @@
               var that = this;
               var payInfo = this.fetchPayInfo();
               if(payInfo.status == 'failed'){
-                alert(payInfo.msg);
                 return;
               }
               var cart_data = {
@@ -144,23 +143,17 @@
                 dist_id: payInfo.address,
                 commodities: payInfo.commodities
               }
-              alert(JSON.stringify(cart_data));
               $.ajax({
                 data: JSON.stringify(cart_data),
                 dataType: 'text',
                 error: function(){},
                 success: function(data, status, xhr){
-                  alert(data);
                   data = (new Function('', 'return ' + data))();
                   if(!!window.WeChatIsReady && window.WeChatIsReady){
-                    alert(JSON.stringify(data));
                     WeixinJSBridge.invoke(
                       'getBrandWCPayRequest', data.payRequest,
                       function(res){
-                        alert(JSON.stringify(res));
-                        alert(res.err_msg);
                         if(res.err_msg == "get_brand_wcpay_request:ok" ) {
-                          alert('Successfully!');
                           that.pay_callback(data);
                         }
                       }
@@ -211,7 +204,6 @@
                 this.cart = $('.__cart');
                 window.PageManager.switchData['dumpDataToCheckout'] = (function(commodities){
                     var closureMethod = function(){
-                        //alert(JSON.stringify(commodities));
                         if(!that.total || that.total == 0){
                             return false;
                         }
