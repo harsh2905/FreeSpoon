@@ -5,3 +5,11 @@
 
 Visiting https://pillow.readthedocs.org/en/3.0.0/installation.html#linux-installation  
 
+### Create Database
+
+	create database OrderQ character set utf8;
+
+### Migrate Database
+
+	python manage.py makemigrations  
+	python manage.py migrate
