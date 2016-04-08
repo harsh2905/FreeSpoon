@@ -253,7 +253,14 @@ html, body {
       }
     }
     .__cart {
+      max-height: 3.6rem;
       margin: 0 0.2em;
+      position: relative;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow-y: auto;
       li{
         padding: 0.2rem 0;
         border-bottom: 1px solid #CCCCCC;
@@ -647,7 +654,8 @@ html, body {
   }
   .main {
     padding-top: 0;
-    margin: 0.8rem 0;
+    margin-top: 0.8rem;
+    margin-bottom:1rem ;
     .user {
       @height: 0.9rem;
       overflow: hidden;
@@ -795,11 +803,10 @@ html, body {
       }
     }
     .total {
-      margin: 0.2rem 0.3rem;
+      padding: 0.2rem 0.3rem;
       font-weight: 500;
       height: 0.6rem;
       line-height: 0.6rem;
-      padding-bottom: 0.2rem;
       span {
         font-weight: bold;
       }
