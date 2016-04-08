@@ -150,9 +150,9 @@ def parseToCommodities(batch):
 		commodity['unit_price'] = commodityInBatch.unit_price
 		commodity['quota'] = commodityInBatch.quota
 		commodity['globalAmounts'] = \
-			fetchCommodityAmounts(commodityInBatch.commodity.id)
+			fetchCommodityAmounts(commodityInBatch.id)
 		commodity['globalQuantities'] = \
-			fetchCommodityQuantities(commodityInBatch.commodity.id)
+			fetchCommodityQuantities(commodityInBatch.id)
 		commodities.append(commodity)
 	return commodities
 
