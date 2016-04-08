@@ -189,6 +189,7 @@ def payNotify(request):
     		xml = utils.mapToXml(error)
 		return HttpResponse(xml,
 			content_type='text/xml')
+	orderId = int(orderId)
 	order = data.fetchOrder(orderId)
 	if order is None:
 		error['return_msg'] = 'Error'
