@@ -83,12 +83,12 @@ def setOrderStatus(order, status):
 	order.save()
 
 def fetchOrder(batchId, openid):
-	customer = self.fetchCustomer(openid)
+	customer = fetchCustomer(openid)
 	if customer is None:
 		return None
 	try:
 		order = Order.objects.get(
-			batch_id=batch_id, customer_id=customer.id)
+			batch_id=batchId, customer_id=customer.id)
 	except ObjectDoesNotExist:
 		logger.error('Order not found')
 		return None
