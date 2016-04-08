@@ -65,7 +65,7 @@ def fetchDist(distId):
 		return None
 	return dist
 
-def fetchOrder(orderId):
+def fetchOrderById(orderId):
 	try:
 		order = Order.objects.get(pk=orderId)
 	except ObjectDoesNotExist:

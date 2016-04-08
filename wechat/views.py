@@ -179,7 +179,6 @@ def unifiedOrder(request):
 
 @csrf_exempt
 def payNotify(request):
-	pdb.set_trace()
 	error = {
 		"return_code": "FAIL"
 	}
@@ -190,7 +189,7 @@ def payNotify(request):
 		return HttpResponse(xml,
 			content_type='text/xml')
 	orderId = int(orderId)
-	order = data.fetchOrder(orderId)
+	order = data.fetchOrderById(orderId)
 	if order is None:
 		error['return_msg'] = 'Error'
     		xml = utils.mapToXml(error)
