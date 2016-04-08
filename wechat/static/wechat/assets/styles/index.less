@@ -70,16 +70,16 @@ html, body {
 #Payment_success{
   height: 100%;
   .share{
-    position: fixed;
+    font-size: 0.29rem;
     background: #e5e5e5;
     height: 2rem;
     width: 100%;
     vertical-align: middle;
     p{
-      padding: 0.5rem;
+      padding: 0.6rem 0.8rem 0.6rem 0.4rem;
       height: 2rem;
       box-sizing: border-box;
-      line-height: 30px;
+      line-height: 25px;
       span{
         font-weight: bold;
         .more{
@@ -88,7 +88,6 @@ html, body {
           height: 0.2rem;
           width: 8px;
           padding: 0 0.1rem;
-          margin: 0.35px;
         }
       }
 
@@ -99,7 +98,7 @@ html, body {
       width: 1rem;
       background-size: 1rem;
       position: absolute;
-      right: 10px;
+      right: 0;
       top: 0;
     }
   }
@@ -149,9 +148,12 @@ html, body {
   .main{
     background: white;
     height: 100%;
-    div{
-      margin: 0 auto;
-      padding: 2rem 0.5rem;
+    .fail_box{
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      margin: -50% -125px;
+      width: 250px;
       div{
         background: url("../demo/fail.png") no-repeat center;
         background-size: 2rem;
@@ -163,6 +165,7 @@ html, body {
         font-size: 0.5rem;
       }
       p:last-of-type{
+        text-align: center;
         margin-top:0.5rem;
         font-size: 0.3rem;
       }
@@ -654,26 +657,27 @@ html, body {
       }
       span {
         display: block;
-        width: 1rem;
+        max-width: 1rem;
         float: left;
         height: 0.6rem;
         line-height: 0.6rem;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        min-width: 2em;
         text-align: center;
+        margin: 0 0.1rem;
       }
       .tel_border {
         float: left;
         border: 1px solid #ccc;
-        height: 0.3rem;
-        line-height: 0.3rem;
-        margin: 0.15rem 0;
+        height: 0.5rem;
+        line-height: 0.5rem;
+        margin: 0.05rem 0;
         input {
           border: none;
           outline: medium;
-          text-align: center;
-          width: 2rem;
+          text-align: left;
           color: #CCCCCC;
         }
       }
@@ -711,7 +715,7 @@ html, body {
           margin-bottom: 0.2rem;
           .__checkbox__ {
             background: url("../demo/2.png") no-repeat left;
-            background-size: 0.4rem;
+            background-size: 0.3rem;
             padding-left: 0.5rem;
             p{
               font-size: 0.25rem;
@@ -719,7 +723,7 @@ html, body {
           }
           .checked {
             background: url("../demo/3.png") no-repeat left !important;
-            background-size: 0.4rem !important;
+            background-size: 0.3rem !important;
           }
           &:last-child{
             margin-bottom: 0;
@@ -803,14 +807,19 @@ html, body {
     bottom: 0;
     width: 100%;
     z-index: 1100;
-    a {
-      background: #599c3d;
-      margin: 0.1rem 0.1rem;
-      color: white;
-      text-align: center;
-      display: block;
-      height: 0.8rem;
-      line-height: 0.8rem;
+    div{
+      width: 100%;
+      height: 0.9rem;
+      background: white;
+      a {
+        background: #599c3d;
+        margin: 0.1rem 0.1rem;
+        color: white;
+        text-align: center;
+        display: block;
+        height: 0.8rem;
+        line-height: 0.8rem;
+      }
     }
   }
 }
@@ -854,7 +863,7 @@ html, body {
       position: relative;
       overflow: hidden;
       background: white;
-      padding: 0.2rem;
+      padding: 0.4rem 0.2rem;
       span {
         display: inline-block;
       }
@@ -884,7 +893,7 @@ html, body {
           width: 5rem;
           margin: 0.2rem 0.5rem;
           position: absolute;
-          top: 0.4rem;
+          top: 0.6rem;
           .tip_left, .tip_center, .tip_right {
             display: inline-block;
             border: 1px solid #CCCCCC;
@@ -1030,15 +1039,21 @@ html, body {
     bottom: 0;
     width: 100%;
     z-index: 1100;
-    a {
-      background: #599c3d;
-      margin: 0.1rem 0.1rem;
-      color: white;
-      text-align: center;
-      display: block;
-      height: 0.6rem;
-      line-height: 0.6rem;
+    div{
+      width: 100%;
+      height: 0.9rem;
+      background: white;
+      a {
+        background: #599c3d;
+        margin: 0.1rem 0.1rem;
+        color: white;
+        text-align: center;
+        display: block;
+        height: 0.8rem;
+        line-height: 0.8rem;
+      }
     }
+
   }
 }
 

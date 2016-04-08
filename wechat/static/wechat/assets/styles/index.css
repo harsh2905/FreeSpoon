@@ -64,17 +64,17 @@ body {
   height: 100%;
 }
 #Payment_success .share {
-  position: fixed;
+  font-size: 0.29rem;
   background: #e5e5e5;
   height: 2rem;
   width: 100%;
   vertical-align: middle;
 }
 #Payment_success .share p {
-  padding: 0.5rem;
+  padding: 0.6rem 0.8rem 0.6rem 0.4rem;
   height: 2rem;
   box-sizing: border-box;
-  line-height: 30px;
+  line-height: 25px;
 }
 #Payment_success .share p span {
   font-weight: bold;
@@ -85,7 +85,6 @@ body {
   height: 0.2rem;
   width: 8px;
   padding: 0 0.1rem;
-  margin: 0.35px;
 }
 #Payment_success .share .arrow {
   background: url("../demo/arrow.png") no-repeat center;
@@ -93,7 +92,7 @@ body {
   width: 1rem;
   background-size: 1rem;
   position: absolute;
-  right: 10px;
+  right: 0;
   top: 0;
 }
 #Payment_success .main {
@@ -143,21 +142,25 @@ body {
   background: white;
   height: 100%;
 }
-#Payment_fail .main div {
-  margin: 0 auto;
-  padding: 2rem 0.5rem;
+#Payment_fail .main .fail_box {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: -50% -125px;
+  width: 250px;
 }
-#Payment_fail .main div div {
+#Payment_fail .main .fail_box div {
   background: url("../demo/fail.png") no-repeat center;
   background-size: 2rem;
   height: 2.5rem;
   padding: 0;
 }
-#Payment_fail .main div p:first-of-type {
+#Payment_fail .main .fail_box p:first-of-type {
   text-align: center;
   font-size: 0.5rem;
 }
-#Payment_fail .main div p:last-of-type {
+#Payment_fail .main .fail_box p:last-of-type {
+  text-align: center;
   margin-top: 0.5rem;
   font-size: 0.3rem;
 }
@@ -635,27 +638,28 @@ body {
 }
 #checkout .main .user span {
   display: block;
-  width: 1rem;
+  max-width: 1rem;
   float: left;
   height: 0.6rem;
   line-height: 0.6rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  min-width: 2em;
   text-align: center;
+  margin: 0 0.1rem;
 }
 #checkout .main .user .tel_border {
   float: left;
   border: 1px solid #ccc;
-  height: 0.3rem;
-  line-height: 0.3rem;
-  margin: 0.15rem 0;
+  height: 0.5rem;
+  line-height: 0.5rem;
+  margin: 0.05rem 0;
 }
 #checkout .main .user .tel_border input {
   border: none;
   outline: medium;
-  text-align: center;
-  width: 2rem;
+  text-align: left;
   color: #CCCCCC;
 }
 #checkout .main .address_title,
@@ -695,7 +699,7 @@ body {
 }
 #checkout .main .address_list ul li .__checkbox__ {
   background: url("../demo/2.png") no-repeat left;
-  background-size: 0.4rem;
+  background-size: 0.3rem;
   padding-left: 0.5rem;
 }
 #checkout .main .address_list ul li .__checkbox__ p {
@@ -703,7 +707,7 @@ body {
 }
 #checkout .main .address_list ul li .checked {
   background: url("../demo/3.png") no-repeat left !important;
-  background-size: 0.4rem !important;
+  background-size: 0.3rem !important;
 }
 #checkout .main .address_list ul li:last-child {
   margin-bottom: 0;
@@ -783,7 +787,12 @@ body {
   width: 100%;
   z-index: 1100;
 }
-#checkout .footer a {
+#checkout .footer div {
+  width: 100%;
+  height: 0.9rem;
+  background: white;
+}
+#checkout .footer div a {
   background: #599c3d;
   margin: 0.1rem 0.1rem;
   color: white;
@@ -832,7 +841,7 @@ body {
   position: relative;
   overflow: hidden;
   background: white;
-  padding: 0.2rem;
+  padding: 0.4rem 0.2rem;
 }
 #Order_details .main .follow span {
   display: inline-block;
@@ -864,7 +873,7 @@ body {
   width: 5rem;
   margin: 0.2rem 0.5rem;
   position: absolute;
-  top: 0.4rem;
+  top: 0.6rem;
 }
 #Order_details .main .follow .follow_tip .line_tip .tip_left,
 #Order_details .main .follow .follow_tip .line_tip .tip_center,
@@ -1015,12 +1024,17 @@ body {
   width: 100%;
   z-index: 1100;
 }
-#Order_details .footer a {
+#Order_details .footer div {
+  width: 100%;
+  height: 0.9rem;
+  background: white;
+}
+#Order_details .footer div a {
   background: #599c3d;
   margin: 0.1rem 0.1rem;
   color: white;
   text-align: center;
   display: block;
-  height: 0.6rem;
-  line-height: 0.6rem;
+  height: 0.8rem;
+  line-height: 0.8rem;
 }

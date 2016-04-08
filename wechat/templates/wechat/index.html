@@ -185,7 +185,6 @@
                 <li>
                     <div onclick="CheckoutManager.setAddress({{ distributer.id }})" class="__checkbox__">
                         <p>{{ distributer.location }}</p>
-                        <p>预计:3月12日 9:30 </p>
                     </div>
                 </li>
                 {% endfor %}
@@ -205,7 +204,7 @@
             </ul>
         </div>
         <div class="moe">
-            <p>配送费<span>￥10</span></p>
+            <p>配送费<span>￥0</span></p>
         </div>
         <div class="total">
             <span>总计</span>
@@ -215,7 +214,9 @@
         </div>
     </div>
     <div class="footer">
+        <div>
         <a href="javascript:void(0);" onclick="CheckoutManager.pay()">立即支付</a>
+        </div>
     </div>
 </div>
 <div id="Order_details" class="__page__" name="details" jid="4" style="display: none">
@@ -290,11 +291,13 @@
         </div>
     </div>
     <div class="footer">
+        <div>
         <a href="javascript:void(0);">接龙到微信群，邀请群友吧</a>
+        </div>
     </div>
 </div>
 <div id="Payment_success" class="__page__" name="success" jid="3" style="display:none;">
-    <div class="share" style="display:none;">
+    <div class="share">
         <p>恭喜您成为第88位接龙者，快去邀请小伙伴继续接龙！<span>请点击右上角<span class="more"></span>分享</span></p>
         <div class="arrow"></div>
     </div>
