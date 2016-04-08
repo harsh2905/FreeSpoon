@@ -54,7 +54,9 @@ class CommodityInBatch(models.Model):
 	unit_price = models.DecimalField(max_digits=9, decimal_places=2)
 	quota = models.IntegerField(max_length=10)
 	def __unicode__(self):
-		return str(self.id)
+		return self.title()
+	def title(self):
+		return self.commodity.title
 
 class Customer(models.Model):
 	nick_name = models.CharField(max_length=200)
@@ -81,7 +83,7 @@ class Order(models.Model):
 	customer = models.ForeignKey(Customer)
 	batch = models.ForeignKey(Batch)
 	distributer = models.ForeignKey(Distributer)
-	commodities = models.ManyToManyField(Commodity, through='CommodityInOrder')
+	commodities = models.ManyToManyField(CommodityInBatch, through='CommodityInOrder')
 	create_time = models.DateTimeField(auto_now=True)
 	status = models.IntegerField(max_length=10)
 	def __unicode__(self):
@@ -90,9 +92,9 @@ class Order(models.Model):
 
 class CommodityInOrder(models.Model):
 	order = models.ForeignKey(Order)
-	commodity = models.ForeignKey(Commodity)
+	commodity = models.ForeignKey(CommodityInBatch)
 	quantity = models.IntegerField(max_length=10)
 	#price = models.DecimalField(max_digits=9, decimal_places=2)
 	def __unicode__(self):
-		return str(self.id)
+		return self.commodity.title()
 
