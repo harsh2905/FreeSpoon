@@ -14,7 +14,7 @@ def CDATA(text):
 
 def createOrderId():
 	prefix = datetime.now().strftime('%Y%m%d%H%M%f')
-	randomNum = '%08' % random.randint(1, 99999999)
+	randomNum = '%08d' % random.randint(1, 99999999)
 	return '%s%s' % (prefix, randomNum)
 
 def mapToXml(d):
