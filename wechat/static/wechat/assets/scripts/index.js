@@ -63,21 +63,20 @@
             commodities: null,//用户订单信息数据->
             user_info: null,
             batch_id: null,
-            pay_callback: null,
-            init: function(addresses, user_info, batch_id, pay_callback, tel_){
+            init: function(addresses, user_info, batch_id, tel_, form){
                 var that = this;
                 var tel = $('.__checkout_tel');
                 tel.change(function(){
                     that.tel = $(this).val();
                 });
-				if(!!tel_ && tel_.length > 0){
-					that.tel = tel_;
-					tel.val(tel_);
-				}
+		if(!!tel_ && tel_.length > 0){
+			that.tel = tel_;
+			tel.val(tel_);
+		}
                 this.addresses = addresses;
                 this.user_info = user_info;
                 this.batch_id = batch_id;
-                this.pay_callback = pay_callback;
+		this.form = form;
                 this.detail = $('.__checkout_detail');
                 this.detailTemplate = $('.__template_checkout_detail_item');
                 this.detailTemplate.remove();
@@ -91,6 +90,11 @@
                     $(this).addClass('checked');
                 });
             },
+	    formSubmit: function(orderId){
+		var orderIdElement = this.form.find('.__field_orderId');
+		orderIdElement.val(orderId);
+		this.form.submit();
+	    },
             setAddress: function(id){//获取用户选中地址方法
                 var address = this.addresses[id];
                 if(!!address){
@@ -149,16 +153,21 @@
                 error: function(){},
                 success: function(data, status, xhr){
                   data = (new Function('', 'return ' + data))();
-                  if(!!window.WeChatIsReady && window.WeChatIsReady){
-                    WeixinJSBridge.invoke(
-                      'getBrandWCPayRequest', data.payRequest,
-                      function(res){
-                        if(res.err_msg == "get_brand_wcpay_request:ok" ) {
-                          that.pay_callback(data);
-                        }
-                      }
-                    );
-                  }
+		  if(!!data && data.errcode == 0){
+			if(!!data.orderId){
+				that.formSubmit(data.orderId);
+			}
+		  }
+                  //if(!!window.WeChatIsReady && window.WeChatIsReady){
+                  //  WeixinJSBridge.invoke(
+                  //    'getBrandWCPayRequest', data.payRequest,
+                  //    function(res){
+                  //      if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+                  //        that.pay_callback(data);
+                  //      }
+                  //    }
+                  //  );
+                  //}
                 },
                 type: 'POST',
                 url: 'unifiedOrder'

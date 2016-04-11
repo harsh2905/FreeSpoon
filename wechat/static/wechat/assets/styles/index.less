@@ -193,7 +193,7 @@ html, body {
   background: white;
   position: fixed;
   bottom: 0;
-  z-index: 1000;
+  z-index: 999;
   width: 100%;
   margin-bottom: @header-height - 0.2rem;
   .box {
@@ -630,18 +630,19 @@ html, body {
     height: @height;
     background: #e5e5e5;
     border-bottom: solid 1px #c8c8c8;
-    i {
+    .back {
+      background: url("../demo/back.png");
       overflow: hidden;
-      display: block;
+      display: inline-block;
       z-index: 999;
-      height: @height;
-      line-height: @height;
-      vertical-align: middle;
-      padding: 0 0.2rem;
+      height: 0.6rem;
+      line-height: 0.6rem;
+      width: 0.2rem;
       float: left;
+      box-sizing: border-box;
+      margin: 0.1rem 0.3rem;
     }
     .header-content {
-      width: 3.2rem;
       text-align: center;
       font-size: 0.3rem;
       line-height: @height;
@@ -650,6 +651,7 @@ html, body {
       color: #599c3d;
       height: @height;
       vertical-align: middle;
+      margin: 0 @height;
     }
   }
   .main {
@@ -686,6 +688,7 @@ html, body {
         min-width: 2em;
         text-align: center;
         margin: 0 0.1rem;
+        font-size: 0.3rem;
       }
       .tel_border {
         float: left;
@@ -694,6 +697,7 @@ html, body {
         line-height: 0.5rem;
         margin: 0.05rem 0;
         input {
+          margin-left: 0.1rem;
           border: none;
           outline: medium;
           text-align: left;
@@ -732,6 +736,12 @@ html, body {
         li {
           color: #7e7e7e;
           margin-bottom: 0.2rem;
+          .true_image{
+            background: url("../demo/3.png") no-repeat left;
+            background-size: 0.3rem;
+            padding-left: 0.5rem;
+            display: none;
+          }
           .__checkbox__ {
             background: url("../demo/2.png") no-repeat left;
             background-size: 0.3rem;
@@ -853,18 +863,7 @@ html, body {
     height: @height;
     background: #e5e5e5;
     border-bottom: solid 1px #c8c8c8;
-    i {
-      overflow: hidden;
-      display: block;
-      z-index: 999;
-      height: @height;
-      line-height: @height;
-      vertical-align: middle;
-      padding: 0 0.2rem;
-      float: left;
-    }
     .header-content {
-      width: 320px;
       text-align: center;
       font-size: 0.3rem;
       line-height: @height;

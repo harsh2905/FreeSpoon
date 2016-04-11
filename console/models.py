@@ -87,6 +87,7 @@ class Order(models.Model):
 	commodities = models.ManyToManyField(CommodityInBatch, through='CommodityInOrder')
 	create_time = models.DateTimeField(auto_now=True)
 	status = models.IntegerField(max_length=10)
+	prepay_id = models.CharField(max_length=200)
 	def __unicode__(self):
 		return '%s - %s - %s' % (
 			self.batch.title, self.customer.nick_name, self.create_time)

@@ -319,6 +319,16 @@ class Auth():
 	
 	def payNotify(self, xmlData):
 		requestData = utils.xmlToMap(xmlData)
+		rawData = {}
+		rawSign = None
+		for (name, value) in requestData.items():
+			if name <> 'sign':
+				rawData[name] = value
+			else:
+				rawSign = value
+		sign = utils.generateSign(rawData, APPKEY)
+		if rawSign is None or rawSign <> sign:
+			return None
 		return_code = requestData.get('return_code', None)
 		if return_code <> 'SUCCESS':
 			return_msg = requestData.get('return_msg', None)

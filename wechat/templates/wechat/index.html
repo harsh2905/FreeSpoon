@@ -23,29 +23,8 @@
           var userInfo = (new Function('', 'return ' + '{{ userInfoJson }}'))();
           var addresses = (new Function('', 'return ' + '{{ distsJson }}'))();
           CartManager.init(commodities);
-          CheckoutManager.init(addresses, userInfo, {{ batch.id }}, function(data){
-            window.PageManager.jump('success', function(page){
-				var titleObj = page.find('.__field_title');
-				var descObj = page.find('.__field_desc');
-				titleObj.text('支付成功');
-				descObj.text('恭喜您成为第' + data.orderAmounts + '位接龙者，快去邀请小伙伴继续接龙吧！');
-				wx.onMenuShareAppMessage({
-				  title: '{{ batch.share_title }}(我是第' + data.orderAmounts + '位接龙者)', // 分享标题
-				  desc: '{{ batch.share_desc }}', // 分享描述
-				  link: '{{ shareUrl }}', // 分享链接
-				  imgUrl: 'http://{{ request.get_host }}{{ batch.share_img.url }}', // 分享图标
-				  //type: '', // 分享类型,music、video或link，不填默认为link
-				  //dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-				  success: function () {
-					  //wx.closeWindow();
-				  },
-				  cancel: function () {
-					  // 用户取消分享后执行的回调函数
-				  }
-			   	});
-				return true;
-			});
-		  }, '{{ tel }}');//执行checkout下init方法
+          CheckoutManager.init(addresses, userInfo, 
+		{{ batch.id }}, '{{ tel }}', $('.__form_checkout'));//执行checkout下init方法
 
           //configure the fuck WeChat
           (function(){
@@ -188,7 +167,7 @@
 </div>
 <div id="checkout" class="__page__" name="checkout" jid="2" style="display: none">
     <div class="header">
-        <i class="icon-chevron-left icon-large" onclick="PageManager.jump('index')"></i>
+        <span class="back" onclick="PageManager.jump('index')"></span>
         <div class="header-content">订单确认</div>
     </div>
     <div class="main">
@@ -205,6 +184,7 @@
             <ul>
                 {% for distributer in batch.distributers.all %}
                 <li>
+                    <span class="true_image"></span>
                     <div onclick="CheckoutManager.setAddress({{ distributer.id }})" class="__checkbox__">
                         <p>{{ distributer.location }}</p>
                     </div>
@@ -240,12 +220,13 @@
         <a href="javascript:void(0);" onclick="CheckoutManager.pay()">立即支付</a>
         </div>
     </div>
+    <form class="__form_checkout" method="post" action="order">{% csrf_token %}
+	<input type="hidden" name="orderId" class="__field_orderId" />
+	<input type="hidden" name="pay" value="yes" />
+    </form>
 </div>
 <div id="Order_details" class="__page__" name="details" jid="4" style="display: none">
     <div class="header" method="change" target="3">
-        <div class="black">
-            <i class="icon-chevron-left icon-large"></i>
-        </div>
         <div class="header-content">订单详情</div>
     </div>
     <div class="main">

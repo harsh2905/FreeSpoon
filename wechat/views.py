@@ -14,7 +14,9 @@ import logging
 import qrcode
 
 from wechat import data
+from wechat import utils
 from wechat.auth import Auth
+from wechat.cart import Carts
 
 auth = Auth()
 
@@ -23,6 +25,8 @@ import pdb
 # Create your views here.
 
 logger = logging.getLogger('django')
+
+carts = Carts()
 
 def _error(request, title, desc):
 	logger.error('%s: %s' % (title, desc))
@@ -127,7 +131,7 @@ def index(request):
 	commoditiesJson = data.parseToCommoditiesJson(batch)
 	distsJson = data.parseToDistJson(batch)
 	wxConfigJson = auth.createWXConfigJson(request.get_raw_uri(), [
-		'chooseWXPay', 'onMenuShareAppMessage', 'closeWindow'])
+		'onMenuShareAppMessage', 'closeWindow'])
 	shareUrl = 'http://carlinkall.com/wechat/r?id=%s' % batch_id
 	context = RequestContext(request, {
 		'batch': batch,
@@ -156,31 +160,27 @@ def unifiedOrder(request):
 	openid = requestData.get('openid', None)
 	tel = requestData.get('tel', None)
 	if nickname is None or openid is None or tel is None:
-		return _ajaxError(-2, u'参数异常')
+		return _ajaxError(-1, u'参数异常')
 	batch_id = requestData.get('batch_id', None)
 	dist_id = requestData.get('dist_id', None)
 	commodities = requestData.get('commodities', None)
 	ipaddress = requestData.get('ipaddress', None)
 	if batch_id is None or dist_id is None \
 		or commodities is None or ipaddress is None:
-		return _ajaxError(-2, u'参数异常')
+		return _ajaxError(-1, u'参数异常')
 	(customer, iscreated) = data.updateOrCreateCustomer(
 		nickname, openid, tel)
 	batch = data.fetchBatch(batch_id)
 	if batch is None:
-		return _ajaxError(-4, u'团购批次错误')
-	(order, iscreated) = data.getOrCreateOrder(
-		batch_id, customer.id, dist_id, 0)
-	if not iscreated:
-		return _ajaxError(-3, u'重复提交订单')
-	data.createCommoditiesToOrder(commodities, order.id)
+		return _ajaxError(request, -1, u'团购批次错误')
+		return _error(request, u'非法访问', u'团购批次错误')
+	orderId = utils.createOrderId()
 	# TODO Verify
 	total_fee = data.calcTotalFee(commodities)
 	time_start = datetime.now()
 	time_expire = time_start + timedelta(minutes=30)
-	orderAmounts = data.fetchOrderAmounts(batch.id) + 1
 	prepay_id = auth.createPrepayId(
-		orderId=order.id,
+		orderId=orderId,
 		total_fee=total_fee,
 		ipaddress=ipaddress,
 		time_start=time_start,
@@ -190,13 +190,44 @@ def unifiedOrder(request):
 		detail=batch.desc,
 		notify_url='http://carlinkall.com/wechat/payNotify'
 	)
-	payRequest = auth.createPayRequestJson(prepay_id)
-	wrap = {
-		'payRequest': payRequest,
-		'orderAmounts': orderAmounts
+	if prepay_id is None:
+		return _ajaxError(request, -1, u'提交订单错误')
+	(order, iscreated) = data.getOrCreateOrder(
+		orderId, batch_id, customer.id, dist_id, 0, prepay_id)
+	if not iscreated:
+		return _ajaxError(request, -1, u'重复提交订单')
+	data.createCommoditiesToOrder(commodities, order.id)
+	result = {
+		'errcode': 0,
+		'errmsg': '',
+		'orderId': orderId
 	}
-	return HttpResponse(json.dumps(wrap),
+	return HttpResponse(json.dumps(result),
 		content_type='application/json')
+
+def order(request):
+	pdb.set_trace()
+	orderId = request.POST.get('orderId', None)
+	if orderId is None:
+		return _error(request, u'非法调用', u'参数错误')
+	pay = request.POST.get('pay', None)
+	pay = 'false' if pay is None or pay <> 'yes' else 'true'
+	order = data.fetchOrderById(orderId)
+	payRequest = auth.createPayRequestJson(order.prepay_id)
+	orderAmounts = data.fetchOrderAmounts(order.batch.id) + 1
+	wxConfigJson = auth.createWXConfigJson(request.get_raw_uri(), [
+		'chooseWXPay', 'onMenuShareAppMessage', 'closeWindow'])
+	shareUrl = 'http://carlinkall.com/wechat/r?id=%s' % order.batch.id
+	context = RequestContext(request, {
+		'order': order,
+		'payRequest': SafeString(json.dumps(payRequest)),
+		'orderAmounts': orderAmounts,
+		'wxConfigJson': SafeString(json.dumps(wxConfigJson)),
+		'shareUrl': shareUrl,
+		'pay': pay 
+	})
+	template = loader.get_template('wechat/order.html')
+	return HttpResponse(template.render(context))
 
 @csrf_exempt
 def payNotify(request):

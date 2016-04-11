@@ -21,14 +21,15 @@ def updateOrCreateCustomer(nickname, openid, tel):
 		}
 	)
 
-def getOrCreateOrder(batchId, customerId, distId, status):
+def getOrCreateOrder(orderId, batchId, customerId, distId, status, prepayId):
 	return Order.objects.get_or_create(
 		batch_id=batchId,
 		customer_id=customerId,
 		defaults={
-			'id': utils.createOrderId(),
+			'id': orderId,
 			'create_time': datetime.now(),
 			'status': status,
+			'prepay_id': prepayId,
 			'distributer_id': distId
 		}
 	)
