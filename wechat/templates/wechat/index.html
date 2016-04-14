@@ -112,9 +112,9 @@
                             <span class="groupon_icon"><img src="{% static 'wechat/assets/demo/poper.png' %}" alt=""></span>
                             <div class="groupon">
                                 <span>团购价</span>
-                                <span>￥{{ commodity | dict_get:'unit_price' | floatformat:"0" }}</span>
+                                <span>￥{{ commodity | dict_get:'unit_price' | integral_get }}</span>
                                 <span>.</span>
-                                <span>{{ commodity | dict_get:'unit_price' | floatformat:"-2" | slice:"-2:" }}</span>
+                                <span>{{ commodity | dict_get:'unit_price' | decimal_get }}</span>
                             </div>
                         </div>
                     </div>

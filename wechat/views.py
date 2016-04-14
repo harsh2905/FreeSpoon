@@ -16,7 +16,6 @@ import qrcode
 from wechat import data
 from wechat import utils
 from wechat.auth import Auth
-from wechat.cart import Carts
 
 auth = Auth()
 
@@ -25,8 +24,6 @@ import pdb
 # Create your views here.
 
 logger = logging.getLogger('django')
-
-carts = Carts()
 
 def _error(request, title, desc):
 	logger.error('%s: %s' % (title, desc))

@@ -130,7 +130,7 @@ def parseToCommoditiesJson(batch):
 		commodity = {}
 		commodity['id'] = commodityInBatch.id
 		commodity['title'] = commodityInBatch.commodity.title
-		commodity['unit_price'] = int(commodityInBatch.unit_price * 100)
+		commodity['unit_price'] = commodityInBatch.unit_price
 		commodity['quota'] = commodityInBatch.quota
 		commodities[str(commodityInBatch.id)] = commodity
 	commoditiesJson = json.dumps(commodities)
