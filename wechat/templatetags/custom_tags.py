@@ -15,3 +15,8 @@ def integral_get(value):
 @register.filter(name='decimal_get')
 def decimal_get(value):
 	return '%02d' % int(value % 100)
+
+@register.filter(name='convert_money')
+def convert_money(value):
+	return '%.2f' % (value / 100.0)
+

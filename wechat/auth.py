@@ -285,7 +285,7 @@ class Auth():
 			'attach': attach,
 			'out_trade_no': orderId,
 			'fee_type': 'CNY',
-			'total_fee': str(int(total_fee * 100)),
+			'total_fee': str(total_fee),
 			'spbill_create_ip': ipaddress,
 			'time_start': time_start.strftime('%Y%m%d%H%M%S'),
 			'time_expire': time_expire.strftime('%Y%m%d%H%M%S'),
