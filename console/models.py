@@ -51,7 +51,7 @@ class CommodityImage(models.Model):
 class CommodityInBatch(models.Model):
 	batch = models.ForeignKey(Batch)
 	commodity = models.ForeignKey(Commodity)
-	unit_price = models.DecimalField(max_digits=9, decimal_places=2)
+	unit_price = models.IntegerField(max_length=10)
 	quota = models.IntegerField(max_length=10)
 	def __unicode__(self):
 		return self.title()
@@ -88,9 +88,17 @@ class Order(models.Model):
 	create_time = models.DateTimeField(auto_now=True)
 	status = models.IntegerField(max_length=10)
 	prepay_id = models.CharField(max_length=200)
+	total_fee = models.DecimalField(max_digits=9, decimal_places=2)
 	def __unicode__(self):
 		return '%s - %s - %s' % (
 			self.batch.title, self.customer.nick_name, self.create_time)
+	def calc_total_fee(self):
+		total_fee = 0
+		for commodityInOrder in self.commodities:
+			unit_price = commodityInOrder.commodity.unit_price
+			quantity = commodityInOrder.quantity
+			total_fee += unit_price * quantity
+		return total_fee
 
 class CommodityInOrder(models.Model):
 	order = models.ForeignKey(Order)

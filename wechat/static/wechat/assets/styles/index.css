@@ -185,7 +185,7 @@ body {
   background: white;
   position: fixed;
   bottom: 0;
-  z-index: 999;
+  z-index: 1001;
   width: 100%;
   margin-bottom: 1rem;
 }
@@ -248,11 +248,6 @@ body {
 .popup-window-from-bottom .box .__cart {
   max-height: 3.6rem;
   margin: 0 0.2em;
-  position: relative;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   overflow-y: auto;
 }
 .popup-window-from-bottom .box .__cart li {
@@ -280,6 +275,7 @@ body {
   text-align: center;
   vertical-align: middle;
   line-height: 0.5rem;
+  margin-right: 0.1rem;
 }
 .popup-window-from-bottom .box .__cart .__template .popup_reduce .__field_price {
   display: inline-block;
@@ -406,6 +402,9 @@ body {
   margin: 0 0.05rem;
 }
 #index .main {
+  -webkit-overflow-scrolling: touch;
+  -moz-overflow-scrolling: touch;
+  -ms-overflow-scrolling: touch;
   margin-top: 1.2rem;
   margin-bottom: 1rem;
   padding: 0.7rem 0.2rem;
@@ -533,7 +532,7 @@ body {
   color: white;
 }
 #index .footer {
-  z-index: 1500;
+  z-index: 1001;
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -611,16 +610,17 @@ body {
   border-bottom: solid 1px #c8c8c8;
 }
 #checkout .header .back {
-  background: url("../demo/back.png");
+  background: url("../demo/back.png") center center no-repeat;
+  background-size: 0.2rem;
   overflow: hidden;
-  display: inline-block;
+  display: block;
   z-index: 999;
   height: 0.6rem;
-  line-height: 0.6rem;
+  line-height: 0.8rem;
   width: 0.2rem;
-  float: left;
-  box-sizing: border-box;
-  margin: 0.1rem 0.3rem;
+  height: 0.8rem;
+  width: 0.8rem;
+  position: absolute;
 }
 #checkout .header .header-content {
   text-align: center;
@@ -629,14 +629,13 @@ body {
   font-weight: bold;
   -webkit-user-select: none;
   color: #599c3d;
-  height: 0.8rem;
   vertical-align: middle;
-  margin: 0 0.8rem;
+  width: 100%;
+  height: 0.8rem;
 }
 #checkout .main {
   padding-top: 0;
   margin-top: 0.8rem;
-  margin-bottom: 1rem ;
 }
 #checkout .main .user {
   overflow: hidden;
@@ -671,6 +670,7 @@ body {
   font-size: 0.3rem;
 }
 #checkout .main .user .tel_border {
+  width: 2.5rem;
   float: left;
   border: 1px solid #ccc;
   height: 0.5rem;
@@ -683,6 +683,9 @@ body {
   outline: medium;
   text-align: left;
   color: #CCCCCC;
+  width: 2.2rem;
+  vertical-align: middle;
+  font-size: 0.3rem;
 }
 #checkout .main .address_title,
 #checkout .main .shop_title {
@@ -840,6 +843,17 @@ body {
   background: #e5e5e5;
   border-bottom: solid 1px #c8c8c8;
 }
+#Order_details .header .close {
+  background: url("../demo/close.png") center center no-repeat;
+  background-size: 0.2rem;
+  overflow: hidden;
+  display: block;
+  z-index: 999;
+  line-height: 0.8rem;
+  height: 0.8rem;
+  width: 0.8rem;
+  position: absolute;
+}
 #Order_details .header .header-content {
   text-align: center;
   font-size: 0.3rem;
@@ -863,57 +877,92 @@ body {
   display: inline-block;
 }
 #Order_details .main .follow .follow_tip {
-  width: 6rem;
+  width: 100%;
   height: 0.5rem;
+  padding: 0 5%;
+  box-sizing: border-box;
 }
 #Order_details .main .follow .follow_tip .follow_left {
   float: left;
-  width: 1.3rem;
+  width: 33.333333333333336%;
   text-align: left;
 }
 #Order_details .main .follow .follow_tip .follow_center {
-  width: 3rem;
-  margin: 0 0.2rem;
+  width: 33.333333333333336%;
+  margin: auto;
   text-align: center;
 }
 #Order_details .main .follow .follow_tip .follow_right {
   float: right;
-  width: 1.3rem;
+  width: 33.333333333333336%;
   text-align: right;
 }
-#Order_details .main .follow .follow_tip .line {
-  border: 1px solid #CCCCCC;
-  margin: 0.2rem 0.5rem;
+#Order_details .main .follow .line {
+  height: 0.5rem;
+  width: 100%;
 }
-#Order_details .main .follow .follow_tip .line_tip {
-  width: 5rem;
-  margin: 0.2rem 0.5rem;
-  position: absolute;
-  top: 0.6rem;
-}
-#Order_details .main .follow .follow_tip .line_tip .tip_left,
-#Order_details .main .follow .follow_tip .line_tip .tip_center,
-#Order_details .main .follow .follow_tip .line_tip .tip_right {
-  display: inline-block;
-  border: 1px solid #CCCCCC;
-  border-radius: 50%;
-  width: 0.2rem;
-  height: 0.2rem;
-}
-#Order_details .main .follow .follow_tip .line_tip .tip_left {
+#Order_details .main .follow .line .tip_1 {
+  background: url("../demo/tip_y.png") no-repeat left;
+  background-size: 200%;
+  background-origin: content-box;
+  height: 0.5rem;
+  width: 30%;
   float: left;
-  background: #CCCCCC;
+  padding-left: 10%;
+  box-sizing: border-box;
 }
-#Order_details .main .follow .follow_tip .line_tip .tip_center {
-  margin: 0 2rem;
-  background: #CCCCCC;
+#Order_details .main .follow .line .tip_s1 {
+  background: url("../demo/tip_g.png") no-repeat left;
+  background-size: 200%;
+  background-origin: content-box;
+  height: 0.5rem;
+  width: 30%;
+  float: left;
+  padding-left: 10%;
+  box-sizing: border-box;
 }
-#Order_details .main .follow .follow_tip .line_tip .tip_right {
+#Order_details .main .follow .line .tip_2 {
+  background: url("../demo/tip_ch.png") no-repeat center;
+  background-size: 100%;
+  height: 0.5rem;
+  width: 40%;
+  float: left;
+}
+#Order_details .main .follow .line .tip_s2 {
+  background: url("../demo/tip_cy.png") no-repeat center;
+  background-size: 100%;
+  height: 0.5rem;
+  width: 40%;
+  float: left;
+}
+#Order_details .main .follow .line .tip_3 {
+  background: url("../demo/tip_g.png") no-repeat left;
+  background-size: 200%;
+  background-origin: content-box;
+  height: 0.5rem;
+  width: 30%;
   float: right;
-  background: white;
+  padding-left: 10%;
+  box-sizing: border-box;
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+}
+#Order_details .main .follow .line .tip_s3 {
+  background: url("../demo/tip_y.png") no-repeat left;
+  background-size: 200% ;
+  background-origin: content-box;
+  height: 0.5rem;
+  width: 30%;
+  float: right;
+  padding-left: 10%;
+  box-sizing: border-box;
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
 }
 #Order_details .main .follow .follow_text {
-  margin-top: 0.5rem;
+  margin-top: 0.3rem;
 }
 #Order_details .main .follow .follow_text p {
   color: #7e7e7e;

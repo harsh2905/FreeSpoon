@@ -6,7 +6,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>确认收货 - {{ order.batch.title }}</title>
     <link rel="stylesheet" href="{% static 'wechat/assets/styles/buttons.css' %}" />
-    <link rel="stylesheet" href="{% static 'wechat/assets/styles/complete.css' %}" />
+    <link rel="stylesheet" href="{% static 'wechat/assets/styles/confirm.css' %}" />
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script type="text/javascript">
+        //configure the fuck WeChat
+        (function(){
+          var wx_config_data = (new Function('', 'return ' + '{{ wxConfigJson }}'))();
+          wx.config(wx_config_data);
+          wx.ready(function(){
+            function onBridgeReady(){
+	      //		wx.onMenuShareAppMessage({
+	      //		  title: '{{ batch.share_title }}', // 分享标题
+	      //		  desc: '{{ batch.share_desc }}', // 分享描述
+	      //		  link: '{{ shareUrl }}', // 分享链接
+	      //		  imgUrl: 'http://{{ request.get_host }}{{ batch.share_img.url }}', // 分享图标
+	      //		  //type: '', // 分享类型,music、video或link，不填默认为link
+	      //		  //dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+	      //		  success: function () {
+	      //			  //wx.closeWindow();
+	      //		  },
+	      //		  cancel: function () {
+	      //			  // 用户取消分享后执行的回调函数
+	      //		  }
+	      //	   });
+            }
+            if (typeof WeixinJSBridge == "undefined"){
+               if( document.addEventListener ){
+                   document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+               }else if (document.attachEvent){
+                   document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+                   document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+               }
+            }else{
+               onBridgeReady();
+            }
+          });
+        })();
+    </script>
 </head>
 <body>
   <div class="dialog">
@@ -31,7 +67,7 @@
         <div class="ui-block-b">无</div>
       </tr>
     </div>
-    <a href="javascript:void(0);" class="button button-primary button-rounded">关闭</a>
+    <a href="javascript:void(0);" onclick="wx.closeWindow()" class="button button-primary button-rounded">关闭</a>
     <script type="text/javascript">
     </script>
   </div>

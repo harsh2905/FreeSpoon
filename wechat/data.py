@@ -21,7 +21,7 @@ def updateOrCreateCustomer(nickname, openid, tel):
 		}
 	)
 
-def getOrCreateOrder(orderId, batchId, customerId, distId, status, prepayId):
+def getOrCreateOrder(orderId, batchId, customerId, distId, status, prepayId, total_fee):
 	return Order.objects.get_or_create(
 		batch_id=batchId,
 		customer_id=customerId,
@@ -30,7 +30,8 @@ def getOrCreateOrder(orderId, batchId, customerId, distId, status, prepayId):
 			'create_time': datetime.now(),
 			'status': status,
 			'prepay_id': prepayId,
-			'distributer_id': distId
+			'distributer_id': distId,
+			'total_fee': total_fee
 		}
 	)
 

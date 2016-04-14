@@ -193,7 +193,7 @@ html, body {
   background: white;
   position: fixed;
   bottom: 0;
-  z-index: 999;
+  z-index: 1001;
   width: 100%;
   margin-bottom: @header-height - 0.2rem;
   .box {
@@ -255,11 +255,6 @@ html, body {
     .__cart {
       max-height: 3.6rem;
       margin: 0 0.2em;
-      position: relative;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
       overflow-y: auto;
       li{
         padding: 0.2rem 0;
@@ -287,6 +282,7 @@ html, body {
           text-align: center;
           vertical-align: middle;
           line-height: 0.5rem;
+		  margin-right:0.1rem;
           .__field_price {
             display: inline-block;
           }
@@ -419,6 +415,9 @@ html, body {
     }
   }
   .main {
+  	-webkit-overflow-scrolling:touch;
+	-moz-overflow-scrolling:touch;
+	-ms-overflow-scrolling:touch;
     margin-top:@header-height;
     margin-bottom: @header-height - 0.2rem;
     padding: 0.7rem 0.2rem;
@@ -548,7 +547,7 @@ html, body {
     }
   }
   .footer {
-    z-index: 1500;
+    z-index: 1001;
     position: fixed;
     bottom: 0;
     width: 100%;
@@ -631,33 +630,34 @@ html, body {
     background: #e5e5e5;
     border-bottom: solid 1px #c8c8c8;
     .back {
-      background: url("../demo/back.png");
-      overflow: hidden;
-      display: inline-block;
-      z-index: 999;
-      height: 0.6rem;
-      line-height: 0.6rem;
-      width: 0.2rem;
-      float: left;
-      box-sizing: border-box;
-      margin: 0.1rem 0.3rem;
+     background: url("../demo/back.png") center center no-repeat;
+		background-size: 0.2rem;
+		overflow: hidden;
+		display: block;
+		z-index: 999;
+		height: 0.6rem;
+		line-height: 0.8rem;
+		width: 0.2rem;
+		height: 0.8rem;
+		width: 0.8rem;
+		position: absolute;
     }
     .header-content {
-      text-align: center;
-      font-size: 0.3rem;
-      line-height: @height;
-      font-weight: bold;
-      -webkit-user-select: none;
-      color: #599c3d;
-      height: @height;
-      vertical-align: middle;
-      margin: 0 @height;
+		text-align: center;
+		font-size: 0.3rem;
+		line-height: 0.8rem;
+		font-weight: bold;
+		-webkit-user-select: none;
+		color: #599c3d;
+		height: 0.8rem;
+		vertical-align: middle;
+		width: 100%;
+		height: 0.8rem;
     }
   }
   .main {
     padding-top: 0;
     margin-top: 0.8rem;
-    margin-bottom:1rem ;
     .user {
       @height: 0.9rem;
       overflow: hidden;
@@ -691,6 +691,7 @@ html, body {
         font-size: 0.3rem;
       }
       .tel_border {
+		width:2.5rem;
         float: left;
         border: 1px solid #ccc;
         height: 0.5rem;
@@ -702,6 +703,9 @@ html, body {
           outline: medium;
           text-align: left;
           color: #CCCCCC;
+		  width:2.2rem;
+		  vertical-align:middle;
+		  font-size:0.3rem;
         }
       }
     }
@@ -832,7 +836,7 @@ html, body {
   }
   .footer {
     position: fixed;
-    bottom: 0;
+	bottom:0;
     width: 100%;
     z-index: 1100;
     div{
@@ -863,6 +867,17 @@ html, body {
     height: @height;
     background: #e5e5e5;
     border-bottom: solid 1px #c8c8c8;
+	.close{
+		background: url("../demo/close.png") center center no-repeat;
+		background-size: 0.2rem;
+		overflow: hidden;
+		display: block;
+		z-index: 999;
+		line-height: 0.8rem;
+		height: 0.8rem;
+		width: 0.8rem;
+		position: absolute;
+	}
     .header-content {
       text-align: center;
       font-size: 0.3rem;
@@ -885,56 +900,96 @@ html, body {
         display: inline-block;
       }
       .follow_tip {
-        width: 6rem;
+		@width:100%;
+        width: @width;
         height: 0.5rem;
+		padding:0 5%;
+		box-sizing:border-box;
         .follow_left {
           float: left;
-          width: 1.3rem;
+          width: @width/3;
           text-align: left;
         }
         .follow_center {
-          width: 3rem;
-          margin: 0 0.2rem;
+          width:@width/3;
+          margin: auto;
           text-align: center;
         }
         .follow_right {
           float: right;
-          width: 1.3rem;
+          width:@width/3;
           text-align: right;
         }
-        .line {
-          border: 1px solid #CCCCCC;
-          margin: 0.2rem 0.5rem;
-        }
-        .line_tip {
-          width: 5rem;
-          margin: 0.2rem 0.5rem;
-          position: absolute;
-          top: 0.6rem;
-          .tip_left, .tip_center, .tip_right {
-            display: inline-block;
-            border: 1px solid #CCCCCC;
-            border-radius: 50%;
-            width: 0.2rem;
-            height: 0.2rem;
-          }
-          .tip_left {
-            float: left;
-            background: #CCCCCC;
-          }
-          .tip_center {
-            margin: 0 2rem;
-            background: #CCCCCC;
-          }
-          .tip_right {
-            float: right;
-            background: white;
-          }
-        }
-
       }
+	  .line{
+			@width:100%;
+			@pad_width:@width - 90%;
+			height: 0.5rem;
+			width: @width;
+			  .tip_1{
+			  @tip_width:@width - (@width - 90%);
+				background: url("../demo/tip_y.png") no-repeat left;
+				background-size: 200%;
+				background-origin: content-box;
+				height: 0.5rem;
+				width: 30%;
+				float: left;
+				padding-left:10%;
+				box-sizing: border-box;
+			  }
+			  .tip_s1{
+				background: url("../demo/tip_g.png") no-repeat left;
+				background-size: 200%;
+				background-origin: content-box;
+				height: 0.5rem;
+				width: 30%;
+				float: left;
+				padding-left:10%;
+				box-sizing: border-box;
+			  }
+			  .tip_2{
+				    background: url("../demo/tip_ch.png") no-repeat center;
+					background-size: 100%;
+					height: 0.5rem;
+					width: 40%;
+					float: left;
+			  }
+			  .tip_s2{
+					background: url("../demo/tip_cy.png") no-repeat center;
+					background-size: 100%;
+					height: 0.5rem;
+					width: 40%;
+					float: left;
+			  }
+			  .tip_3{
+				background: url("../demo/tip_g.png") no-repeat left;
+				background-size: 200%;
+				background-origin: content-box;
+				height: 0.5rem;
+				width: 30%;
+				float:right;
+				padding-left:10%;
+				box-sizing: border-box;
+				transform:rotateY(180deg);
+				-webkit-transform:rotateY(180deg);
+				-moz-transform:rotateY(180deg);
+			  }
+			  .tip_s3{
+				background: url("../demo/tip_y.png") no-repeat left ;
+				background-size: 200% ;
+				background-origin: content-box;
+				height: 0.5rem;
+				width: 30%;
+				float:right;
+				padding-left:10%;
+				box-sizing: border-box;
+				transform:rotateY(180deg);
+				-webkit-transform:rotateY(180deg);
+				-moz-transform:rotateY(180deg);
+			  }
+        }
       .follow_text {
-        margin-top: 0.5rem;
+	  margin-top:0.3rem;
         p {
           color: #7e7e7e;
           padding: 0.1rem 0;

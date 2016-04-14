@@ -11,11 +11,13 @@
                     status = false;//修改statusde值为false
                     $('.overlay').css('display', 'block');//修改样式名为overlay的行内样式，显示背景弹层
                     $('.popup-window-from-bottom').css("display","block");//调用jQuery中的slideToggle方法，让购物车弹层滑动显示
-                } else {//如果status不是true,那么....
+					$("#index").css("overflow","hidden");
+				} else {//如果status不是true,那么....
                     status = true;//修改status的值为true
                     $('.overlay').css('display', 'none');//修改样式名为overlay的行内样式，隐藏背景弹层
                     $('.popup-window-from-bottom').css('display', 'none');//修改购物车弹层的行内样式
-                }
+					$("#index").css("overflow","auto");
+				}
             }
         })(true);
     });
@@ -324,5 +326,6 @@
                 }
                 return total;
             }
-        };
+		};
     });
+	

@@ -13,6 +13,7 @@
     <script type="text/javascript" src="{% static 'wechat/assets/scripts/jquery-1.12.1.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'wechat/assets/scripts/index.js' %}"></script>
     <script>
+
         var winW = document.documentElement.clientWidth;
         document.documentElement.style.fontSize = winW / 6.4 + "px";
 
@@ -63,6 +64,8 @@
 
         });
     </script>
+
+</script>
 </head>
 <body>
 <div id="index" class="__page__" name="index" jid="1">
@@ -80,7 +83,7 @@
             <div>还有<span>{{ expireTime }}天</span>结束</div>
         </div>
     </div>
-    <div class="main" >
+    <div id="move" class="main" >
         <ul>
             {% for commodity in commodities %}
             <li>
@@ -166,15 +169,15 @@
     </div>
 </div>
 <div id="checkout" class="__page__" name="checkout" jid="2" style="display: none">
-    <div class="header">
-        <span class="back" onclick="PageManager.jump('index')"></span>
+    <div class="header" onclick="PageManager.jump('index')">
+        <span class="back" ></span>
         <div class="header-content">订单确认</div>
     </div>
     <div class="main">
         <div class="user">
             <div class="sculpture"><img src="{{ userInfo.getHeadImgUrl }}" alt=""></div>
             <span>{{ userInfo.getNickName }}</span>
-            <div class="tel_border"><input type="tel" class="__checkout_tel" placeholder="填输入联系方式" /></div>
+            <div id="input"  class="tel_border"><input  type="tel" class="__checkout_tel" placeholder="填输入联系方式" /></div>
         </div>
         <div class="address_title">
             <span class="address_title_img"></span>
@@ -205,7 +208,7 @@
                 </li>
             </ul>
         </div>
-        <div class="moe">
+        <div  class="moe">
             <p>配送费<span>￥0</span></p>
         </div>
         <div class="total">
@@ -215,7 +218,7 @@
             </div>
         </div>
     </div>
-    <div class="footer">
+    <div id="checkout_footer" class="footer">
         <div>
         <a href="javascript:void(0);" onclick="CheckoutManager.pay()">立即支付</a>
         </div>
@@ -227,6 +230,7 @@
 </div>
 <div id="Order_details" class="__page__" name="details" jid="4" style="display: none">
     <div class="header" method="change" target="3">
+		<span class='close'></span>
         <div class="header-content">订单详情</div>
     </div>
     <div class="main">
@@ -235,12 +239,11 @@
                 <span class="follow_left">订单已提交</span>
                 <span class="follow_right">订单完成</span>
                 <span class="follow_center">组团成功</span>
-                <div class="line"></div>
-                <div class="line_tip">
-                    <span class="tip_left"></span>
-                    <span class="tip_right"></span>
-                    <span class="tip_center"></span>
-                </div>
+            </div>
+			 <div class="line">
+                    <div class="tip_1"></div>
+                    <div class="tip_3"></div>
+                    <div class="tip_2"></div>
             </div>
             <div class="follow_text">
                 <p>订单号:<span class="text_margin">123456789</span></p>
@@ -322,7 +325,18 @@
          <div class="footer">接龙到微信群，邀请群友吧！</div>
      </div>
  </div>
-
 <div class="public_overlay"></div>
+<script type="text/javascript">
+ var input=document.getElementById("checkout");
+		 input.onclick=function(e){
+			 if(document.activeElement.tagName=="INPUT"){
+				 $("#checkout_footer").css("display","none");
+				 console.log("none");
+			 }else{
+				 $("#checkout_footer").css("display","block");
+				 console.log("block");
+			 }
+		 };
+</script>
 </body>
 </html>

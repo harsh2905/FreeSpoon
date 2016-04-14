@@ -21,10 +21,10 @@
 		init: function(payRequest, payCallback){
 			this.payRequest = payRequest;
 			this.payCallback = payCallback;
-			this.refreshForm = $('.__refresh_form');
+			this.refreshForm = $('.__form_refresh');
 		},
 		refresh: function(){
-			refreshForm.submit()
+			this.refreshForm.submit();
 		},
 		pay: function(){
 		  var that = this;
@@ -110,6 +110,7 @@
 <body>
 <div id="Order_details" class="__page__" name="details">
     <div class="header" method="change" target="3">
+		<span class='close' onclick="wx.closeWindow()"></span>
         <div class="header-content">订单详情</div>
     </div>
     <div class="main">
@@ -118,16 +119,23 @@
                 <span class="follow_left">订单已提交</span>
                 <span class="follow_right">订单完成</span>
                 <span class="follow_center">组团成功</span>
-                <div class="line"></div>
-                <div class="line_tip">
-                    <span class="tip_left"></span>
-                    <span class="tip_right"></span>
-                    <span class="tip_center"></span>
-                </div>
+            </div>
+			 <div class="line">
+                    <div class="tip_1"></div>
+		{% if order.status > 0 %}
+                    <div class="tip_s2"></div>
+		{% else %}	
+                    <div class="tip_2"></div>
+		{% endif %}
+		{% if order.status > 1 %}
+					 <div class="tip_s3"></div>
+		{% else %}	
+					 <div class="tip_3"></div>
+		{% endif %}
             </div>
             <div class="follow_text">
                 <p>订单号:<span class="text_margin">{{ order.id }}</span></p>
-                <p>下单时间:<span class="text_margin">{{ order.create_time }}</span></p>
+                <p>下单时间:<span class="text_margin">{{ order.create_time | date:"Y-m-d h:i" }}</span></p>
                 <p>支付方式:<span class="text_margin">微信支付</span></p>
             </div>
         </div>
@@ -145,11 +153,11 @@
         </div>
         <div>
             <ul class="inventory_list">
-		{% for commodityInOrder in order.commodities_set %}
+		{% for commodityInOrder in order.commodityinorder_set.all %}
                 <li class="inventory_list_item">
-                    <span class="inventory_list_title">commodityInOrder.commodityInBatch.commodity.title</span>
-                    <span class="inventory_list_quantity">commodityInOrder.quantity</span>
-                    <span class="inventory_list_price">￥commodityInOrder.commodityInBatch.unit_price</span>
+                    <span class="inventory_list_title">{{ commodityInOrder.commodity.commodity.title  }}</span>
+                    <span class="inventory_list_quantity">{{ commodityInOrder.quantity }}</span>
+                    <span class="inventory_list_price">￥{{ commodityInOrder.commodity.unit_price }}</span>
                 </li>
 		{% endfor %}
             </ul>
@@ -160,15 +168,19 @@
         <div class="total">
             <span>总计</span>
             <div>
-                <span>￥456</span>
+                <span>￥{{ order.total_fee | floatformat:"0" }}</span>
                 <span>.</span>
-                <span>00</span>
+                <span>{{ order.total_fee | floatformat:"-2" | slice:"-2:" }}</span>
             </div>
         </div>
     </div>
     <div class="footer">
         <div>
-            <a href="javascript:void(0);">支付</a>
+	    {% if order.status > 0 %}
+            <a href="javascript:void(0);" onclick="wx.closeWindow()">关闭</a>
+	    {% else %}
+            <a href="javascript:void(0);" onclick="window.PayManager.pay()">支付</a>
+	    {% endif %}
         </div>
     </div>
 </div>

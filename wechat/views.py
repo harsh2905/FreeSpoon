@@ -31,9 +31,12 @@ carts = Carts()
 def _error(request, title, desc):
 	logger.error('%s: %s' % (title, desc))
 	template = loader.get_template('wechat/error.html')
+	wxConfigJson = auth.createWXConfigJson(request.get_raw_uri(), [
+		'closeWindow'])
 	context = RequestContext(request, {
 		'title': title,
-		'desc': desc
+		'desc': desc,
+		'wxConfigJson': SafeString(json.dumps(wxConfigJson))
 	})
 	return HttpResponse(template.render(context))
 
@@ -119,7 +122,9 @@ def index(request):
 	openid = userInfo.getOpenId()
 	order = data.fetchOrder(batch_id, openid)
 	if order is not None:
-		return _error(request, u'重复提交订单', u'重复提交订单')
+		#return _error(request, u'重复提交订单', u'重复提交订单')
+		url = 'http://carlinkall.com/wechat/order?orderId=%s' % order.id
+		return HttpResponseRedirect(url)
 	tel = data.fetchCustomerTel(openid)
 	tel = tel if tel is not None else ''
 	batch = data.fetchBatch(batch_id)
@@ -193,7 +198,7 @@ def unifiedOrder(request):
 	if prepay_id is None:
 		return _ajaxError(request, -1, u'提交订单错误')
 	(order, iscreated) = data.getOrCreateOrder(
-		orderId, batch_id, customer.id, dist_id, 0, prepay_id)
+		orderId, batch_id, customer.id, dist_id, 0, prepay_id, total_fee)
 	if not iscreated:
 		return _ajaxError(request, -1, u'重复提交订单')
 	data.createCommoditiesToOrder(commodities, order.id)
@@ -206,8 +211,9 @@ def unifiedOrder(request):
 		content_type='application/json')
 
 def order(request):
-	pdb.set_trace()
-	orderId = request.POST.get('orderId', None)
+	orderId = request.GET.get('orderId', None)
+	if orderId is None:
+		orderId = request.POST.get('orderId', None)
 	if orderId is None:
 		return _error(request, u'非法调用', u'参数错误')
 	pay = request.POST.get('pay', None)
@@ -284,6 +290,8 @@ def confirm(request):
 	userInfo = auth.fetchUserInfo(code)
 	openid = userInfo.getOpenId()
 	order = data.fetchOrder(batch_id, openid)
+	if order.status <> 1:
+		return _error(request, u'服务器错误', u'订单状态错误')
 	if order.distributer.id <> dist_id:
 		return _error(request, u'错误', u'配送点错误')
 	template = loader.get_template('wechat/confirm.html')
@@ -300,16 +308,19 @@ def complete(request):
 	orderId = request.POST.get('order_id', None)
 	if orderId is None:
 		return _error(request, u'非法调用', u'参数异常')
-	order = data.fetchOrder(orderId)
+	order = data.fetchOrderById(orderId)
 	if order is None:
 		return _error(request, u'服务器错误', u'未知订单')
 	if order.status <> 1:
 		return _error(request, u'服务器错误', u'订单状态错误')
 	data.setOrderStatus(order, 2)
 	template = loader.get_template('wechat/complete.html')
+	wxConfigJson = auth.createWXConfigJson(request.get_raw_uri(), [
+		'closeWindow'])
 	context = RequestContext(request, {
 		'order': order,
-		'datetime': datetime.now()
+		'datetime': datetime.now(),
+		'wxConfigJson': SafeString(json.dumps(wxConfigJson))
 	})
 	return HttpResponse(template.render(context))
 
