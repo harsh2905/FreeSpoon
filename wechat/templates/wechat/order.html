@@ -79,7 +79,7 @@
                         title: '{{ order.batch.share_title }}', // 分享标题
                         desc: '{{ order.batch.share_desc }}', // 分享描述
                         link: '{{ shareUrl }}', // 分享链接
-                        imgUrl: 'http://{{ request.get_host }}{{ batch.share_img.url }}', // 分享图标
+                        imgUrl: 'http://{{ request.get_host }}{{ order.batch.share_img.url }}', // 分享图标
                         //type: '', // 分享类型,music、video或link，不填默认为link
                         //dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
                         success: function () {
@@ -118,8 +118,8 @@
         <div class="follow">
             <div class="follow_tip">
                 <span class="follow_left">订单已提交</span>
-                <span class="follow_right">订单完成</span>
-                <span class="follow_center">组团成功</span>
+                <span class="follow_right">支付完成</span>
+                <span class="follow_center">订单完成</span>
             </div>
 			 <div class="line">
                     <div class="tip_1"></div>
@@ -145,8 +145,20 @@
             <span class="delivery_title_text">取货信息</span>
         </div>
         <div class="delivery_list">
-            <p>派发员:<span>{{ order.distributer.name }}</span></p>
-            <p>取货地址:<span>{{ order.distributer.location }}</span></p>
+			<table>
+				<tr>
+					<td class="title">派送员:<td>
+					<td>{{ order.distributer.name }}<td>
+				</tr>
+				<tr>
+					<td class="title">派送员电话:<td>
+					<td>{{ order.distributer.tel }}<td>
+				</tr>
+				<tr>
+					<td class="title">取货地址:<td>
+					<td >{{ order.distributer.location }}<td>
+				</tr>
+			</table>
         </div>
         <div class="inventory_title">
             <span class="inventory_title_img"></span>

@@ -254,6 +254,7 @@
                     }
                     this.render();
                 }
+				
             },
             remove: function(id){
                 var commodity = this.commodities[id];
@@ -265,6 +266,11 @@
                     }
                     this.render();
                 }
+				if(CartManager.total===0){
+					$('.popup-window-from-bottom').css('display', 'none');
+					$('.overlay').css('display', 'none');
+					$("#index").css("overflow","auto");
+				}
             },
             empty: function(){
                 for(var _ in this.commodities){
@@ -274,6 +280,7 @@
                 this.render();
                 $('.overlay').css('display', 'none');
                 $('.popup-window-from-bottom').css('display', 'none');
+				$("#index").css("overflow","auto");
             },
             render: function(){
                 var amount = 0;
