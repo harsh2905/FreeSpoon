@@ -1,0 +1,79 @@
+@import "global";
+@import "component";
+#Payment_success{
+  height: 100%;
+  .share{
+    font-size: 0.3rem;
+    background: @color_misty_gray;
+    height: 2rem;
+    width: 100%;
+    vertical-align: middle;
+    overflow: hidden;
+    p{
+      position: relative;
+      height: 1rem;
+      line-height: 25px;
+      margin: 0.5rem 0.6rem 0.5rem 0.4rem;
+      span{
+        .font_normal_bold;
+        .more{
+          display: inline-block;
+          background: url("../demo/more.png") no-repeat center;
+          height: 0.2rem;
+          width: 8px;
+          padding: 0 0.1rem;
+        }
+      }
+
+    }
+    .arrow{
+      background: url("../demo/arrow.png") no-repeat center;
+      height: 1.5rem;
+      width: 1rem;
+      background-size: 1rem;
+      position: absolute;
+      right: 0;
+      top: 0;
+      margin-right: 0.1rem;
+    }
+  }
+  .main{
+    background: @color_white;
+    .success_box{
+      margin: -40% -150px -60% -150px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 300px;
+      div{
+        background: url("../demo/sussce.png") no-repeat center;
+        background-size: 2rem;
+        height: 2.5rem;
+        padding: 0;
+      }
+      p:first-of-type{
+        text-align: center;
+        .font_xxx_large;
+      }
+      p:last-of-type{
+        margin-top:0.5rem;
+        .font_large;
+      }
+    }
+  }
+  .footer{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1100;
+    a {
+      background: @color_green;
+      margin: 0.1rem 0.1rem;
+      color: @color_white;
+      text-align: center;
+      display: block;
+      height: 0.8rem;
+      line-height: 0.8rem;
+    }
+  }
+}
