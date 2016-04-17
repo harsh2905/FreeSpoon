@@ -127,9 +127,11 @@ def index(request):
 	batch = data.fetchBatch(batch_id)
 	if batch is None:
 		return _error(request, u'服务异常', u'未知的团购批次')
+	expireTime = data.fetchBatchExpireTime(batch.id)
+	if expireTime == 0:
+		return _error(request, u'对不起', u'该团购已经结束')
 	commodities = data.parseToCommodities(batch)
 	orderAmounts = data.fetchOrderAmounts(batch.id)
-	expireTime = data.fetchBatchExpireTime(batch.id)
 	commoditiesJson = data.parseToCommoditiesJson(batch)
 	distsJson = data.parseToDistJson(batch)
 	wxConfigJson = auth.createWXConfigJson(request.get_raw_uri(), [

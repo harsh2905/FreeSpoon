@@ -812,7 +812,6 @@ body {
   font-size: 0.2rem;
 }
 #checkout .footer {
-  position: fixed;
   bottom: 0;
   width: 100%;
   z-index: 1100;
@@ -1015,13 +1014,10 @@ body {
   padding: 0.2rem 0.3rem;
   background: white;
 }
-#Order_details .main .delivery_list p {
-  color: #7e7e7e;
+#Order_details .main .delivery_list .title {
+  color: #c8c8c8;
+  width: 1.5rem;
   padding: 0.1rem 0;
-}
-#Order_details .main .delivery_list p span {
-  display: inline-block;
-  margin: 0 0.15rem;
 }
 #Order_details .main .inventory_list {
   background: white;
