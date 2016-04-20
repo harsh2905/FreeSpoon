@@ -1,6 +1,0 @@
-[
-                {id: 1, title: 'xxxxx大红虾',unit_price:1000},
-                {id: 2, title: 'xxxxx大闸蟹',unit_price:2500},
-                {id: 3, title: 'xxxxx乌贼',unit_price:12530},
-                {id: 4, title: 'xxxxx榴莲',unit_price:800},
-            ];
