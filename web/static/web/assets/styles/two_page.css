@@ -1,0 +1,455 @@
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-decoration: none;
+  color: #000;
+}
+html,
+body {
+  font-size: 0.25rem;
+  height: 100%;
+  font-family: '微软雅黑', Helvetica, Tahoma, Arial, '华文细黑', sans-serif;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-text-size-adjust: 100%;
+}
+.font_small {
+  font-size: 0.2rem;
+  font-weight: normal;
+}
+.font_small_bold {
+  font-size: 0.2rem;
+  font-weight: bold;
+}
+.font_normal {
+  font-size: 0.25rem;
+  font-weight: normal;
+}
+.font_normal_bold {
+  font-size: 0.25rem;
+  font-weight: bold;
+}
+.font_large {
+  font-size: 0.3rem;
+  font-weight: normal;
+}
+.font_large_bold {
+  font-size: 0.3rem;
+  font-weight: bold;
+}
+.font_x_large {
+  font-size: 0.35rem;
+  font-weight: normal;
+}
+.font_x_large_bold {
+  font-size: 0.35rem;
+  font-weight: bold;
+}
+.font_xx_large {
+  font-size: 0.4rem;
+  font-weight: normal;
+}
+.font_xx_large_bold {
+  font-size: 0.4rem;
+  font-weight: bold;
+}
+.font_xxx_large {
+  font-size: 0.5rem;
+  font-weight: normal;
+}
+.font_xxx_large_bold {
+  font-size: 0.5rem;
+  font-weight: bold;
+}
+/*解决模拟页面跳转，scroll不在顶部位置*/
+.page {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow-y: auto;
+}
+/*弹出层遮罩*/
+.matter {
+  display: none;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background: #000;
+  opacity: .26;
+  z-index: 1000;
+  top: 0;
+  bottom: 1.7rem;
+}
+/*通用header头*/
+.header {
+  z-index: 100;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  height: 0.8rem;
+  background: #e5e5e5;
+  border-bottom: solid 1px #c8c8c8;
+}
+.header .ico {
+  overflow: hidden;
+  display: block;
+  z-index: 999;
+  line-height: 0.8rem;
+  height: 0.8rem;
+  width: 0.8rem;
+  position: absolute;
+}
+.header .back {
+  background: url("../demo/back.png") center center no-repeat;
+  background-size: 0.2rem;
+}
+.header .close {
+  background: url("../demo/close.png") center center no-repeat;
+  background-size: 0.2rem;
+}
+.header .text {
+  text-align: center;
+  font-size: 0.3rem;
+  font-weight: bold;
+  line-height: 0.8rem;
+  -webkit-user-select: none;
+  color: #599c3d;
+  height: 0.8rem;
+  vertical-align: middle;
+  width: 100%;
+}
+/*通用button*/
+.button {
+  bottom: 0;
+  width: 100%;
+  z-index: 1100;
+}
+.button .select {
+  width: 100%;
+  height: 0.9rem;
+  background: #ffffff;
+}
+.button .select .text {
+  background: #599c3d;
+  margin: 0.1rem 0.1rem;
+  color: #ffffff;
+  text-align: center;
+  display: block;
+  height: 0.8rem;
+  line-height: 0.8rem;
+}
+.fixed {
+  position: fixed;
+}
+/*标题通栏*/
+.title {
+  background: #f0f2f5;
+  height: 0.5rem;
+  line-height: 0.5rem;
+  padding: 0.2rem 0.3rem;
+}
+.title span {
+  display: inline-block;
+}
+.title .adds {
+  background: url("../demo/adds.png") no-repeat center;
+  background-size: 0.4rem;
+  width: 0.4rem;
+  height: 0.4rem;
+}
+.title .shop {
+  background: url("../demo/1.png") no-repeat center;
+  background-size: 0.4rem;
+  width: 0.4rem !important;
+  height: 0.4rem !important;
+  line-height: 0.4rem !important;
+  margin: 0.04999999999999999rem 0;
+}
+.title .message {
+  background: url("../demo/pop.png") no-repeat center;
+  background-size: 0.4rem;
+}
+.title .img {
+  width: 0.4rem;
+  height: 0.4rem;
+  line-height: 0.4rem;
+  float: left;
+}
+.title .text {
+  height: 0.4rem;
+  line-height: 0.4rem;
+  font-size: 0.25rem;
+  font-weight: bold;
+  margin-left: 0.1rem;
+}
+/*三列列表*/
+.list {
+  background: #ffffff;
+  margin: 0.2rem 0.25rem;
+  border-bottom: 1px solid #cccccc;
+  padding-bottom: 0.3rem;
+}
+.list .row {
+  padding: 0.1rem 0;
+}
+.list .row span {
+  display: inline-block;
+  color: #6d6b6b;
+}
+.list .row .left {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 3rem;
+}
+.list .row .right {
+  float: right;
+}
+.list .row .center {
+  margin-right: 0.3rem;
+  float: right;
+}
+/*单行2列列表*/
+.single_list_border {
+  font-size: 0.25rem;
+  font-weight: normal;
+  margin: 0.2rem 0.3rem;
+  height: 0.6rem;
+  border-bottom: 1px solid #cccccc;
+  line-height: 0.6rem;
+  padding-bottom: 0.2rem;
+}
+.single_list_border p span {
+  display: inline-block;
+  float: right;
+}
+.single_list {
+  padding: 0.2rem 0.3rem;
+  font-size: 0.25rem;
+  font-weight: bold;
+  height: 0.6rem;
+  line-height: 0.6rem;
+}
+.single_list span {
+  font-size: 0.25rem;
+  font-weight: bold;
+}
+.single_list div {
+  font-size: 0.25rem;
+  font-weight: normal;
+  float: right;
+}
+.single_list div .text {
+  font-size: 0.25rem;
+  font-weight: bold;
+  color: #ff9934;
+}
+#Order_details {
+  height: 100%;
+}
+#Order_details .main {
+  margin: 0.8rem 0;
+}
+#Order_details .main .follow {
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+  padding: 0.4rem 0.2rem;
+}
+#Order_details .main .follow span {
+  display: inline-block;
+}
+#Order_details .main .follow .follow_tip {
+  width: 100%;
+  height: 0.5rem;
+  padding: 0 5%;
+  box-sizing: border-box;
+}
+#Order_details .main .follow .follow_tip .follow_left {
+  float: left;
+  width: 33.333333333333336%;
+  text-align: left;
+}
+#Order_details .main .follow .follow_tip .follow_center {
+  width: 33.333333333333336%;
+  margin: auto;
+  text-align: center;
+}
+#Order_details .main .follow .follow_tip .follow_right {
+  float: right;
+  width: 33.333333333333336%;
+  text-align: right;
+}
+#Order_details .main .follow .line {
+  height: 0.5rem;
+  width: 100%;
+}
+#Order_details .main .follow .line .stages_one {
+  background: url("../demo/tip_y.png") no-repeat left;
+  background-size: 200%;
+  background-origin: content-box;
+  height: 0.5rem;
+  width: 30%;
+  float: left;
+  padding-left: 10%;
+  box-sizing: border-box;
+}
+#Order_details .main .follow .line .stages_one_success {
+  background: url("../demo/tip_g.png") no-repeat left;
+  background-size: 200%;
+  background-origin: content-box;
+  height: 0.5rem;
+  width: 30%;
+  float: left;
+  padding-left: 10%;
+  box-sizing: border-box;
+}
+#Order_details .main .follow .line .stages_two {
+  background: url("../demo/tip_ch.png") no-repeat center;
+  background-size: 100%;
+  height: 0.5rem;
+  width: 40%;
+  float: left;
+}
+#Order_details .main .follow .line .stages_two_success {
+  background: url("../demo/tip_cy.png") no-repeat center;
+  background-size: 100%;
+  height: 0.5rem;
+  width: 40%;
+  float: left;
+}
+#Order_details .main .follow .line .stages_three {
+  background: url("../demo/tip_g.png") no-repeat left;
+  background-size: 200%;
+  background-origin: content-box;
+  height: 0.5rem;
+  width: 30%;
+  float: right;
+  padding-left: 10%;
+  box-sizing: border-box;
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+}
+#Order_details .main .follow .line .stages_three_success {
+  background: url("../demo/tip_y.png") no-repeat left;
+  background-size: 200% ;
+  background-origin: content-box;
+  height: 0.5rem;
+  width: 30%;
+  float: right;
+  padding-left: 10%;
+  box-sizing: border-box;
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+}
+#Order_details .main .follow .follow_text {
+  margin-top: 0.3rem;
+}
+#Order_details .main .follow .follow_text p {
+  color: #6d6b6b;
+  padding: 0.1rem 0;
+}
+#Order_details .main .follow .follow_text p .text_margin {
+  color: #6d6b6b;
+  margin: 0 0.15rem;
+}
+#Order_details .main .delivery_list {
+  padding: 0.2rem 0.3rem;
+  background: #ffffff;
+}
+#Order_details .main .delivery_list td {
+  color: #6d6b6b;
+}
+#Order_details .main .delivery_list .message_text {
+  padding: 0.1rem 0;
+  margin-right: 0.15rem;
+  width: 1.5rem;
+  vertical-align: -webkit-baseline-middle;
+}
+#Order_details .main .footer {
+  bottom: 0;
+  width: 100%;
+  z-index: 1100;
+  position: fixed;
+}
+#Order_details .main .footer .select {
+  width: 100%;
+  height: 0.9rem;
+  background: #ffffff;
+}
+#Order_details .main .footer .select .text {
+  background: #599c3d;
+  margin: 0.1rem 0.1rem;
+  color: #ffffff;
+  text-align: center;
+  display: block;
+  height: 0.8rem;
+  line-height: 0.8rem;
+}
+#Payment_success {
+  height: 100%;
+}
+#Payment_success .share {
+  font-size: 0.3rem;
+  background: #e5e5e5;
+  height: 2rem;
+  width: 100%;
+  vertical-align: middle;
+  overflow: hidden;
+}
+#Payment_success .share p {
+  position: relative;
+  height: 1rem;
+  line-height: 25px;
+  margin: 0.5rem 0.6rem 0.5rem 0.4rem;
+}
+#Payment_success .share p span {
+  font-size: 0.25rem;
+  font-weight: bold;
+}
+#Payment_success .share p span .more {
+  display: inline-block;
+  background: url("../demo/more.png") no-repeat center;
+  height: 0.2rem;
+  width: 8px;
+  padding: 0 0.1rem;
+}
+#Payment_success .share .arrow {
+  background: url("../demo/arrow.png") no-repeat center;
+  height: 1.5rem;
+  width: 1rem;
+  background-size: 1rem;
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin-right: 0.1rem;
+}
+#Payment_success .main {
+  background: #ffffff;
+}
+#Payment_success .main .success_box {
+  margin: -40% -150px -60% -150px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 300px;
+}
+#Payment_success .main .success_box div {
+  background: url("../demo/sussce.png") no-repeat center;
+  background-size: 2rem;
+  height: 2.5rem;
+  padding: 0;
+}
+#Payment_success .main .success_box p:first-of-type {
+  text-align: center;
+  font-size: 0.5rem;
+  font-weight: normal;
+}

@@ -1,0 +1,242 @@
+{% load staticfiles %}
+{% load custom_tags %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="height=device-height,width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>{{ batch.title }}</title>
+	<link rel="stylesheet" href="{% static 'web/assets/styles/one_page.css' %}">
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script type="text/javascript" src="{% static 'web/assets/scripts/jquery-1.12.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'web/assets/scripts/index.js' %}"></script>
+    <script>
+
+        var winW = document.documentElement.clientWidth;
+		var winH = document.documentElement.clientHeight;
+		if(winW>winH){
+			document.documentElement.style.fontSize = 50 + "px";
+		}else{
+			document.documentElement.style.fontSize = winW / 6.4 + "px";
+		}
+		
+        //run
+        $(function(){
+          PageManager.init();//调用init方法，开始渲染页面
+          var commodities = (new Function('', 'return ' + '{{ commoditiesJson }}'))();
+          var userInfo = (new Function('', 'return ' + '{{ userInfoJson }}'))();
+          var addresses = (new Function('', 'return ' + '{{ distsJson }}'))();
+          CartManager.init(commodities);
+          CheckoutManager.init(addresses, userInfo, 
+		{{ batch.id }}, '{{ tel }}', $('.__form_checkout'));//执行checkout下init方法
+
+          //configure the fuck WeChat
+          (function(){
+            var wx_config_data = (new Function('', 'return ' + '{{ wxConfigJson }}'))();
+            wx.config(wx_config_data);
+            wx.ready(function(){
+              function onBridgeReady(){
+                window.WeChatIsReady = true;
+				wx.onMenuShareAppMessage({
+				  title: '{{ batch.share_title }}', // 分享标题
+				  desc: '{{ batch.share_desc }}', // 分享描述
+				  link: '{{ shareUrl }}', // 分享链接
+				  imgUrl: 'http://{{ request.get_host }}{{ batch.share_img.url }}', // 分享图标
+				  //type: '', // 分享类型,music、video或link，不填默认为link
+				  //dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+				  success: function () {
+					  //wx.closeWindow();
+				  },
+				  cancel: function () {
+					  // 用户取消分享后执行的回调函数
+				  }
+			   });
+              }
+              if (typeof WeixinJSBridge == "undefined"){
+                 if( document.addEventListener ){
+                     document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+                 }else if (document.attachEvent){
+                     document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+                     document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+                 }
+              }else{
+                 onBridgeReady();
+              }
+            });
+          })();
+
+        });
+    </script>
+</head>
+<body>
+<div id="index" class="__page__" name="index">
+    <div class="board">
+        <div class="left">
+            <div class="sculpture"><img src="{{ batch.leader.avatar.url }}" alt=""></div>
+            <div class="chief">
+                <p><span>{{ batch.leader.name }}</span>帮主</p>
+                <span class="chief_in">{{ batch.leader.tail }}</span>
+            </div>
+        </div>
+        <div class="right">
+            <div class="audio"></div>
+            <div>已有<span>{{ orderAmounts }}人</span>参团</div>
+            <div>还有<span>{{ expireTime }}天</span>结束</div>
+        </div>
+    </div>
+    <div id="move" class="main" >
+        <ul>
+            {% for commodity in commodities %}
+            <li>
+                <div>
+                    <img src="{{ commodity | dict_get:'image' }}" alt="">
+                </div>
+                <div class="content">
+                    <div class="first">
+                        <div>
+                            <h1>{{ commodity | dict_get:'title' }}</h1>
+                            <span>{{ commodity | dict_get:'spec' }}</span>
+                        </div>
+                        <p>{{ commodity | dict_get:'details' }}</p>
+                    </div>
+                    <div class="between clearfloat">
+                        <span>已团{{ commodity | dict_get:'globalQuantities' }}盒</span>
+                        <span>已有{{ commodity | dict_get:'globalAmounts' }}人参团</span>
+                    </div>
+                    <div class="last ">
+                        <div class="counter">
+                            <a class="block left" href="javascript:void(0);" onclick="CartManager.remove({{ commodity | dict_get:'id' }})">-</a>
+                            <span class="block center __field_quantity_{{ commodity | dict_get:'id' }}">0</span>
+                            <a class="block right" href="javascript:void(0);" onclick="CartManager.add({{ commodity | dict_get:'id' }})">+</a>
+                        </div>
+                        <div class="regulator">
+                            <span class="groupon_icon"><img src="{% static 'web/assets/demo/poper.png' %}" alt=""></span>
+                            <div class="groupon">
+                                <span>团购价</span>
+                                <span>￥{{ commodity | dict_get:'unit_price' | integral_get }}</span>
+                                <span>.</span>
+                                <span>{{ commodity | dict_get:'unit_price' | decimal_get }}</span>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="footer">
+        <a class="right" href="javascript:void(0)"
+           onclick="PageManager.jump('checkout', 'dumpDataToCheckout')">去结算</a>
+        <div class="left" onclick="popup_window_from_bottom();">
+            <div class="shop"><span class="__amount"></span></div>
+            <div class="shop_info">
+                <p class="line1">合计:<span class="__total">￥</span></p>
+                <p class="line2">不含运费</p>
+            </div>
+        </div>
+    </div>
+    <div class="__overlay matter"></div>
+    <div class="popup-window-from-bottom" style="display: none">
+        <div class="box">
+            <div class="popup-bottom-title">
+                <div class="del" onclick="CartManager.empty()">
+                    <div class="popup_bottom_del">
+                        <span class="del_text">清空</span>
+                        <span class="del_img"></span>
+                    </div>
+
+                </div>
+                <div class="oder">
+                    <div class="popup_bottom_oder">
+                        <span class="oder_img"></span>
+                        <span class="oder_text">订单详情</span>
+                    </div>
+                </div>
+            </div>
+            <ul  class="__cart cart">
+                <li class="__template template">
+                    <div class="popup_reduce">
+                        <div class="price __field_price"></div>
+                        <div class="regulator_right">
+                            <a href="javascript:void(0);" class="__button_remove">-</a>
+                            <span class="center __field_quantity"></span>
+                            <a href="javascript:void(0);" class="__button_add">+</a>
+                        </div>
+                    </div>
+                    <span class="__field_title field_title"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div id="checkout" class="__page__ page" name="checkout" style="display: none">
+    <div class="header" onclick="PageManager.jump('index')">
+        <span class="ico back" ></span>
+        <div class="text">订单确认</div>
+    </div>
+    <div class="content">
+        <div class="user">
+            <div class="sculpture"><img src="{{ userInfo.getHeadImgUrl }}" alt=""></div>
+            <span>{{ userInfo.getNickName }}</span>
+            <div id="input"  class="tel_border"><input  type="tel" class="__checkout_tel" placeholder="填输入联系方式" /></div>
+        </div>
+        <div class="title">
+            <span class="img adds"></span>
+            <span class="text">取货地</span>
+        </div>
+        <div class="address_list">
+            <ul>
+                {% for distributer in batch.distributers.all %}
+                <li>
+                    <span class="true_image"></span>
+                    <div onclick="CheckoutManager.setAddress({{ distributer.id }})" class="__checkbox__ checkbox">
+                        <p>{{ distributer.location }}</p>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="title">
+            <span class="img shop"></span>
+            <span class="text">商品明细</span>
+        </div>
+        <div>
+            <ul class="__checkout_detail list">
+                <li class="__template_checkout_detail_item row">
+                    <span class="__field_checkout_title left"></span>
+                    <span class="__field_checkout_quantity right"></span>
+                    <span class="__field_checkout_price center"></span>
+                </li>
+            </ul>
+        </div>
+        <div  class="single_list_border">
+            <p>配送费<span>￥0</span></p>
+        </div>
+        <div class="single_list">
+            <span>总计</span>
+            <div>
+                <span class="__checkout_total text"></span>
+            </div>
+        </div>
+    </div>
+    <div id="checkout_footer" class="button">
+        <div class="select">
+        <a class="text" href="javascript:void(0);" onclick="CheckoutManager.pay()">立即支付</a>
+        </div>
+    </div>
+    <form class="__form_checkout" method="post" action="order">{% csrf_token %}
+	<input type="hidden" name="orderId" class="__field_orderId" />
+	<input type="hidden" name="pay" value="yes" />
+    </form>
+</div>
+<div id="success_popup" class="__page__" name="popup" jid="5"  style="display: none">
+     <div>
+         <div class="header">支付成功</div>
+         <div class="main">恭喜您成为第88位接龙者，快去邀请小伙伴继续接龙吧！</div>
+         <div class="footer">接龙到微信群，邀请群友吧！</div>
+     </div>
+ </div>
+<div class="public_overlay"></div>
+</body>
+</html>
