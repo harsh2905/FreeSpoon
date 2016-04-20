@@ -7,10 +7,10 @@
     <meta name="viewport"
           content="height=device-height,width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <title>{{ batch.title }}</title>
-	<link rel="stylesheet" href="{% static 'wechat/assets/styles/one_page.css' %}">
+	<link rel="stylesheet" href="{% static 'web/assets/styles/one_page.css' %}">
     <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-    <script type="text/javascript" src="{% static 'wechat/assets/scripts/jquery-1.12.1.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'wechat/assets/scripts/index.js' %}"></script>
+    <script type="text/javascript" src="{% static 'web/assets/scripts/jquery-1.12.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'web/assets/scripts/index.js' %}"></script>
     <script>
 
         var winW = document.documentElement.clientWidth;
@@ -111,7 +111,7 @@
                             <a class="block right" href="javascript:void(0);" onclick="CartManager.add({{ commodity | dict_get:'id' }})">+</a>
                         </div>
                         <div class="regulator">
-                            <span class="groupon_icon"><img src="{% static 'wechat/assets/demo/poper.png' %}" alt=""></span>
+                            <span class="groupon_icon"><img src="{% static 'web/assets/demo/poper.png' %}" alt=""></span>
                             <div class="groupon">
                                 <span>团购价</span>
                                 <span>￥{{ commodity | dict_get:'unit_price' | integral_get }}</span>

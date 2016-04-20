@@ -5,10 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>订单确认表 - {{ batch.title }}</title>
-    <link rel="stylesheet" href="{% static 'wechat/assets/styles/report.css' %}" />
+    <link rel="stylesheet" href="{% static 'web/assets/styles/report.css' %}" />
 </head>
 <body>
-  <img class="qr" src="/wechat/createQRFromConfirmWithRedirect?b={{ batch.id }}&d={{ distributer.id }}" />
+  <img class="qr" src="/web/createQRFromConfirmWithRedirect?b={{ batch.id }}&d={{ distributer.id }}" />
   <div class="title">
     {{ batch.title }} - {{ distributer.name }}
   </div>

@@ -13,9 +13,9 @@ import json
 import logging
 import qrcode
 
-from wechat import data
-from wechat import utils
-from wechat.auth import Auth
+from web import data
+from web import utils
+from web.auth import Auth
 
 auth = Auth()
 
@@ -27,7 +27,7 @@ logger = logging.getLogger('django')
 
 def _error(request, title, desc):
 	logger.error('%s: %s' % (title, desc))
-	template = loader.get_template('wechat/error.html')
+	template = loader.get_template('web/error.html')
 	wxConfigJson = auth.createWXConfigJson(request.get_raw_uri(), [
 		'closeWindow'])
 	context = RequestContext(request, {
@@ -49,7 +49,7 @@ def createQRFromIndex(request):
 	batch_id = request.GET.get('id', None)
 	if batch_id is None:
 		return _error(request, u'非法调用', u'参数不正确')
-	indexUrl = 'http://carlinkall.com/wechat'
+	indexUrl = 'http://carlinkall.com/web'
 	url = auth.createAuthorizeRedirectUrl(indexUrl, batch_id)
 	qr = qrcode.QRCode(
 		version=None
@@ -65,7 +65,7 @@ def createQRFromIndexWithRedirect(request):
 	batch_id = request.GET.get('id', None)
 	if batch_id is None:
 		return _error(request, u'非法调用', u'参数不正确')
-	url = 'http://carlinkall.com/wechat/r?id=%s' % batch_id
+	url = 'http://carlinkall.com/web/r?id=%s' % batch_id
 	qr = qrcode.QRCode(
 		version=None
 	)
@@ -81,7 +81,7 @@ def createQRFromConfirmWithRedirect(request):
 	dist_id = request.GET.get('d', None)
 	if batch_id is None or dist_id is None:
 		return _error(request, u'非法调用', u'参数不正确')
-	url = 'http://carlinkall.com/wechat/d?b=%s&d=%s' % (batch_id, dist_id)
+	url = 'http://carlinkall.com/web/d?b=%s&d=%s' % (batch_id, dist_id)
 	qr = qrcode.QRCode(
 		version=None
 	)
@@ -96,7 +96,7 @@ def createUrlFromIndex(request):
 	batch_id = request.GET.get('id', None)
 	if batch_id is None:
 		return _error(request, u'非法调用', u'参数异常')
-	indexUrl = 'http://carlinkall.com/wechat'
+	indexUrl = 'http://carlinkall.com/web'
 	url = auth.createAuthorizeRedirectUrl(indexUrl, batch_id)
 	return HttpResponse(url)
 
@@ -104,7 +104,7 @@ def redirectToIndex(request):
 	batch_id = request.GET.get('id', None)
 	if batch_id is None:
 		return _error(request, u'非法调用', u'参数异常')
-	indexUrl = 'http://carlinkall.com/wechat'
+	indexUrl = 'http://carlinkall.com/web'
 	url = auth.createAuthorizeRedirectUrl(indexUrl, batch_id)
 	return HttpResponseRedirect(url)
 
@@ -120,7 +120,7 @@ def index(request):
 	order = data.fetchOrder(batch_id, openid)
 	if order is not None:
 		#return _error(request, u'重复提交订单', u'重复提交订单')
-		url = 'http://carlinkall.com/wechat/order?orderId=%s' % order.id
+		url = 'http://carlinkall.com/web/order?orderId=%s' % order.id
 		return HttpResponseRedirect(url)
 	tel = data.fetchCustomerTel(openid)
 	tel = tel if tel is not None else ''
@@ -136,7 +136,7 @@ def index(request):
 	distsJson = data.parseToDistJson(batch)
 	wxConfigJson = auth.createWXConfigJson(request.get_raw_uri(), [
 		'onMenuShareAppMessage', 'closeWindow'])
-	shareUrl = 'http://carlinkall.com/wechat/r?id=%s' % batch_id
+	shareUrl = 'http://carlinkall.com/web/r?id=%s' % batch_id
 	context = RequestContext(request, {
 		'batch': batch,
 		'commodities': commodities,
@@ -150,7 +150,7 @@ def index(request):
 		'tel': tel,
 		'shareUrl': shareUrl
 	})
-	template = loader.get_template('wechat/index.html')
+	template = loader.get_template('web/index.html')
 	return HttpResponse(template.render(context))
 
 @csrf_exempt
@@ -192,7 +192,7 @@ def unifiedOrder(request):
 		openid=customer.id_wechat,
 		title=batch.title,
 		detail=batch.desc,
-		notify_url='http://carlinkall.com/wechat/payNotify'
+		notify_url='http://carlinkall.com/web/payNotify'
 	)
 	if prepay_id is None:
 		return _ajaxError(request, -1, u'提交订单错误')
@@ -224,7 +224,7 @@ def order(request):
 	orderAmounts = data.fetchOrderAmounts(order.batch.id) + 1
 	wxConfigJson = auth.createWXConfigJson(request.get_raw_uri(), [
 		'chooseWXPay', 'onMenuShareAppMessage', 'closeWindow'])
-	shareUrl = 'http://carlinkall.com/wechat/r?id=%s' % order.batch.id
+	shareUrl = 'http://carlinkall.com/web/r?id=%s' % order.batch.id
 	context = RequestContext(request, {
 		'order': order,
 		'payRequest': SafeString(json.dumps(payRequest)),
@@ -233,7 +233,7 @@ def order(request):
 		'shareUrl': shareUrl,
 		'pay': pay 
 	})
-	template = loader.get_template('wechat/order.html')
+	template = loader.get_template('web/order.html')
 	return HttpResponse(template.render(context))
 
 @csrf_exempt
@@ -273,7 +273,7 @@ def redirectToConfirm(request):
 	dist_id = request.GET.get('d', None)
 	if batch_id is None or dist_id is None:
 		return _error(request, u'非法调用', u'参数异常')
-	confirmUrl = 'http://carlinkall.com/wechat/confirm'
+	confirmUrl = 'http://carlinkall.com/web/confirm'
 	state = '%s,%s' % (batch_id, dist_id)
 	url = auth.createAuthorizeRedirectUrl(confirmUrl, state)
 	return HttpResponseRedirect(url)
@@ -295,7 +295,7 @@ def confirm(request):
 		return _error(request, u'服务器错误', u'订单状态错误')
 	if order.distributer.id <> dist_id:
 		return _error(request, u'错误', u'配送点错误')
-	template = loader.get_template('wechat/confirm.html')
+	template = loader.get_template('web/confirm.html')
 	context = RequestContext(request, {
 		'userInfo': userInfo,
 		'order': order,
@@ -315,7 +315,7 @@ def complete(request):
 	if order.status <> 1:
 		return _error(request, u'服务器错误', u'订单状态错误')
 	data.setOrderStatus(order, 2)
-	template = loader.get_template('wechat/complete.html')
+	template = loader.get_template('web/complete.html')
 	wxConfigJson = auth.createWXConfigJson(request.get_raw_uri(), [
 		'closeWindow'])
 	context = RequestContext(request, {
@@ -329,7 +329,7 @@ def createQRFromConfirm(request):
 	batch_id = request.GET.get('id', None)
 	if batch_id is None:
 		return _error(request, u'非法调用', u'参数不正确')
-	confirmUrl = 'http://carlinkall.com/wechat/confirm'
+	confirmUrl = 'http://carlinkall.com/web/confirm'
 	url = auth.createAuthorizeRedirectUrl(confirmUrl, batch_id)
 	qr = qrcode.QRCode(
 		version=None
@@ -353,7 +353,7 @@ def distReport(request):
 	if dist is None:
 		return _error(request, u'服务器错误', u'派送员不存在')
 	orders = data.fetchOrders(batch_id, dist_id)
-	template = loader.get_template('wechat/distReport.html')
+	template = loader.get_template('web/distReport.html')
 	context = RequestContext(request, {
 		'batch': batch,
 		'distributer': dist,

@@ -6,7 +6,7 @@ import json
 from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist
 from basic.models import *
-from wechat import utils
+from web import utils
 
 import pdb
 

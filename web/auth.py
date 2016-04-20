@@ -13,7 +13,7 @@ import logging
 
 from requests.exceptions import RequestException
 
-from wechat import utils
+from web import utils
 
 import pdb
 
