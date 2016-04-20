@@ -17,7 +17,7 @@ Visiting https://pillow.readthedocs.org/en/3.0.0/installation.html#linux-install
 
 ### Create Database
 
-	create database OrderQ character set utf8;
+	create database FreeSpoon character set utf8;
 
 ### Migrate Database
 
