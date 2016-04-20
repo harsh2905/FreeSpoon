@@ -2,8 +2,7 @@
 @import "component";
 #checkout {
   height: 100%;
-  .header;
-  .main {
+  .content {
     padding-top: 0;
     margin-top: 0.8rem;
     .user {
@@ -26,7 +25,7 @@
       }
       span {
         display: block;
-        max-width: 1rem;
+        max-width: 2rem;
         float: left;
         height: 0.6rem;
         line-height: 0.6rem;
@@ -35,7 +34,7 @@
         white-space: nowrap;
         min-width: 2em;
         text-align: center;
-        margin: 0 0.1rem;
+        margin: 0 0.3rem;
         .font_large;
       }
       .tel_border {
@@ -57,22 +56,12 @@
         }
       }
     }
-    .title;
-    .adds{
-      background: url("../demo/adds.png") no-repeat center;
-      background-size: @height - 0.1rem;
-    }
-    .shop{
-      @shop_height: @height - 0.2rem;
-      background: url("../demo/1.png") no-repeat center;
-      background-size: @height - 0.2rem;
-      margin: (@height - @shop_height)/2rem 0;
-    }
     .address_list {
       ul {
-        background: white;
+        background: @color_white;
         padding: 0.2rem 0.3rem;
         li {
+		  color:@color_smoky_gray;
           margin-bottom: 0.2rem;
           .true_image{
             background: url("../demo/3.png") no-repeat left;
@@ -85,7 +74,7 @@
             background-size: 0.3rem;
             padding-left: 0.5rem;
             p{
-              font-size: 0.25rem;
+			  color:@color_dark_gray;
             }
           }
           .checked {
@@ -98,10 +87,6 @@
         }
       }
     }
-    .list;
-    .single_list_border;
-    .single_list;
   }
-  .button;
 }
 

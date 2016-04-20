@@ -29,7 +29,7 @@
         <td>
           {% for commodity_in_order in order.commodityinorder_set.all %}
           {{ commodity_in_order.quantity }}
-          {{ commodity_in_order.commodity.spec }}
+          {{ commodity_in_order.commodity.commodity.spec }}
           {{ commodity_in_order.commodity.title }}
           <br />
           {% endfor %}

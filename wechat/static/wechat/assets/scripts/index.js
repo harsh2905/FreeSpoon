@@ -2,19 +2,19 @@
         //实现购物车弹层功能
         (function(status){//标识符->方法执行时传入一个参数true
             // TODO clean all touch events
-            $('.overlay').on('click', function(){//TODO WTF click to tap   //给弹出背景绑定点击事件
+            $('.__overlay').on('click', function(){//TODO WTF click to tap   //给弹出背景绑定点击事件
                 status = false;//点击时，让function下的私有status变为false
                 window.popup_window_from_bottom();//触发window下popup_window_from_bottom这个事件
             });
             window.popup_window_from_bottom = function(){
                 if(status&&CartManager.total!=0){//判断，如果status为true
                     status = false;//修改statusde值为false
-                    $('.overlay').css('display', 'block');//修改样式名为overlay的行内样式，显示背景弹层
+                    $('.__overlay').css('display', 'block');//修改样式名为__overlay的行内样式，显示背景弹层
                     $('.popup-window-from-bottom').css("display","block");//调用jQuery中的slideToggle方法，让购物车弹层滑动显示
 					$("#index").css("overflow","hidden");
 				} else {//如果status不是true,那么....
                     status = true;//修改status的值为true
-                    $('.overlay').css('display', 'none');//修改样式名为overlay的行内样式，隐藏背景弹层
+                    $('.__overlay').css('display', 'none');//修改样式名为__overlay的行内样式，隐藏背景弹层
                     $('.popup-window-from-bottom').css('display', 'none');//修改购物车弹层的行内样式
 					$("#index").css("overflow","auto");
 				}
@@ -52,6 +52,10 @@
                         currentPage.css('display', 'none');//让每一项dom元素的display为none->元素不显示
                     }
                     activePage.css('display', 'block');//再让当前项dom元素display为block->元素显示
+					  $('.__overlay').css('display', 'none');//修改样式名为__overlay的行内样式，隐藏背景弹层
+                    $('.popup-window-from-bottom').css('display', 'none');//修改购物车弹层的行内样式
+					$("#index").css("overflow","auto"); 
+					console.log("ok");
                 }
             }
         };
@@ -189,7 +193,7 @@
                     item.find('.__field_checkout_title').text(commodity.title);
                     item.find('.__field_checkout_quantity').text(commodity.quantity);
                     var price = (commodity.quantity * commodity.unit_price / 100).toFixed(2).toString();
-                    item.find('.__field_checkout_price').text(price);
+                    item.find('.__field_checkout_price').text('￥'+price);
                     this.detail.append(item);
                 }
                 this.total.text('￥' + (total / 100).toFixed(2).toString());
@@ -268,7 +272,7 @@
                 }
 				if(CartManager.total===0){
 					$('.popup-window-from-bottom').css('display', 'none');
-					$('.overlay').css('display', 'none');
+					$('.__overlay').css('display', 'none');
 					$("#index").css("overflow","auto");
 				}
             },
@@ -278,7 +282,7 @@
                     commodity.quantity = 0;
                 }
                 this.render();
-                $('.overlay').css('display', 'none');
+                $('.__overlay').css('display', 'none');
                 $('.popup-window-from-bottom').css('display', 'none');
 				$("#index").css("overflow","auto");
             },

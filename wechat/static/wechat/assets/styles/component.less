@@ -34,7 +34,6 @@
   background: @color_misty_gray;
   border-bottom: solid 1px @color_smoky_gray;
   .ico {
-    background-size: 0.2rem;
     overflow: hidden;
     display: block;
     z-index: 999;
@@ -42,13 +41,15 @@
     height: 0.8rem;
     width: 0.8rem;
     position: absolute;
-    .back {
-      background: url("../demo/back.png") center center no-repeat;
-    }
-    .close {
-      background: url("../demo/close.png") center center no-repeat;
-    }
   }
+  .back {
+      background: url("../demo/back.png") center center no-repeat;
+	   background-size: 0.2rem;
+    }
+   .close {
+      background: url("../demo/close.png") center center no-repeat;
+	   background-size: 0.2rem;
+    }
   .text {
     text-align: center;
     .font_large_bold;
@@ -66,11 +67,11 @@
   bottom: 0;
   width: 100%;
   z-index: 1100;
-  div {
+  .select {
     width: 100%;
     height: 0.9rem;
     background: @color_white;
-    a {
+    .text {
       background: @color_green;
       margin: 0.1rem 0.1rem;
       color: @color_white;
@@ -81,17 +82,41 @@
     }
   }
 }
+.fixed{
+ position:fixed;
+}
 
 /*标题通栏*/
 .title {
-  @height: 0.6rem;
+  @height: 0.5rem;
   background: @color_light_gray;
   height: @height;
+  line-height:@height;
   line-height: @height;
-  padding: 0.2rem 0.3rem;
+  padding:0.2rem 0.3rem;
   span {
     display: inline-block;
   }
+  	 .adds{
+      background:url("../demo/adds.png") no-repeat center;
+      background-size:@height - 0.1rem;
+	   width: @height - 0.1rem;
+      height: @height - 0.1rem;
+    }
+    .shop{
+      @shop_height:@height - 0.1rem;
+      background:url("../demo/1.png") no-repeat center;
+      background-size:@height - 0.1rem;
+	  width: @shop_height !important;
+      height: @shop_height !important;
+      line-height: @height - 0.1rem !important;
+      margin:(@height - @shop_height)/2rem 0;
+	  
+    }
+	 .message{
+      background: url("../demo/pop.png") no-repeat center;
+      background-size: @height - 0.1rem;
+    }
   .img {
     width: @height - 0.1rem;
     height: @height - 0.1rem;
@@ -101,21 +126,22 @@
   .text {
     height: @height - 0.1rem;
     line-height: @height - 0.1rem;
-    .font_large;
+    .font_normal_bold;
     margin-left: 0.1rem;
   }
 }
 
 /*三列列表*/
 .list {
-  background: @color_white;
-  margin: 0.2rem 0.25rem;
+  background:@color_white;
+  margin:0.2rem 0.25rem;
   border-bottom: 1px solid @color_gray;
   padding-bottom: 0.3rem;
   .row {
     padding: 0.1rem 0;
     span {
-      display: inline-block
+      display: inline-block;
+	  color:@color_dark_gray;
     }
     .left {
       overflow: hidden;
@@ -135,13 +161,13 @@
 
 /*单行2列列表*/
 .single_list_border{
+  .font_normal;
   margin: 0.2rem 0.3rem;
   height: 0.6rem;
   border-bottom: 1px solid @color_gray;
   line-height: 0.6rem;
   padding-bottom: 0.2rem;
   p {
-    .font_normal_bold;
     span {
       display: inline-block;
       float: right;
@@ -150,18 +176,18 @@
 }
 .single_list{
   padding: 0.2rem 0.3rem;
-  font-weight: 500;
+  .font_normal_bold;
   height: 0.6rem;
   line-height: 0.6rem;
   span {
     .font_normal_bold;
   }
   div {
-    color: @color_orange;
     .font_normal;
     float: right;
-    span:nth-child(3) {
-      font-size: 0.2rem;
+    .text{
+      .font_normal_bold;
+	  color:@color_orange;
     }
   }
 }

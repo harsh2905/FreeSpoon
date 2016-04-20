@@ -2,7 +2,6 @@
 @import "component";
 #Order_details {
   height: 100%;
-  .header;
   .main {
     margin: 0.8rem 0;
     .follow {
@@ -105,37 +104,31 @@
       .follow_text {
         margin-top:0.3rem;
         p {
-          color: @color_smoky_gray;
+		  color:@color_dark_gray;
           padding: 0.1rem 0;
           .text_margin {
+		    color:@color_dark_gray;
             margin: 0 0.15rem;
           }
         }
       }
     }
-    .title;
-    .message{
-      background: url("../demo/pop.png") no-repeat center;
-      background-size: @height - 0.1rem;
-    }
-    .shop{
-      @shop_height: @height - 0.2rem;
-      background: url("../demo/1.png") no-repeat center;
-      background-size: @height - 0.2rem;
-      margin: (@height - @shop_height)/2rem 0;
-    }
     .delivery_list {
       padding: 0.2rem 0.3rem;
       background: @color_white;
-      .title {
-        color: @color_smoky_gray;
+	  td{
+		color:@color_dark_gray;
+	  }
+      .message_text {
         padding: 0.1rem 0;
         margin-right:0.15rem;
+		width:1.5rem;
+		vertical-align: -webkit-baseline-middle;
       }
     }
-    .list;
-   .single_list_border;
-   .single_list;
+	.footer{
+		.button;
+		position:fixed;
+	}
   }
-  .button;
 }

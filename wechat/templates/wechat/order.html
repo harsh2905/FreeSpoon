@@ -2,18 +2,24 @@
 {% load custom_tags %}
 <!DOCTYPE html>
 <html>
-<head lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <link rel="stylesheet" href="{% static 'wechat/assets/styles/index.css' %}">
+    <link rel="stylesheet" href="{% static 'wechat/assets/styles/two_page.css' %}">
     <title></title>
     <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     <script type="text/javascript" src="{% static 'wechat/assets/scripts/jquery-1.12.1.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'wechat/assets/scripts/index.js' %}"></script>
     <script>
-        var winW = document.documentElement.clientWidth;
-        document.documentElement.style.fontSize = winW / 6.4 + "px";
+         var winW = document.documentElement.clientWidth;
+		var winH = document.documentElement.clientHeight;
+		if(winW>winH){
+			document.documentElement.style.fontSize = 50 + "px";
+		}else{
+			document.documentElement.style.fontSize = winW / 6.4 + "px";
+		}
+		
 
 	var PayManager = window.PayManager = {
 		payRequest: null,
@@ -109,29 +115,29 @@
     </script>
 </head>
 <body>
-<div id="Order_details" class="__page__" name="details">
-    <div class="header" method="change" target="3">
-		<span class='close' onclick="wx.closeWindow()"></span>
-        <div class="header-content">订单详情</div>
+<div id="Order_details" class="__page__ page" name="details">
+    <div class="header">
+		<span class='ico close' onclick="wx.closeWindow()"></span>
+        <div class="text">订单详情</div>
     </div>
     <div class="main">
         <div class="follow">
             <div class="follow_tip">
                 <span class="follow_left">订单已提交</span>
-                <span class="follow_right">支付完成</span>
-                <span class="follow_center">订单完成</span>
+                <span class="follow_right">订单完成</span>
+                <span class="follow_center">支付完成</span>
             </div>
 			 <div class="line">
-                    <div class="tip_1"></div>
+                    <div class="stages_one"></div>
 		{% if order.status > 0 %}
-                    <div class="tip_s2"></div>
+                    <div class="stages_two_success"></div>
 		{% else %}	
-                    <div class="tip_2"></div>
+                    <div class="stages_two"></div>
 		{% endif %}
 		{% if order.status > 1 %}
-					 <div class="tip_s3"></div>
+					 <div class="stages_three_success"></div>
 		{% else %}	
-					 <div class="tip_3"></div>
+					 <div class="stages_three"></div>
 		{% endif %}
             </div>
             <div class="follow_text">
@@ -140,64 +146,64 @@
                 <p>支付方式:<span class="text_margin">微信支付</span></p>
             </div>
         </div>
-        <div class="delivery_title">
-            <span class="delivery_title_img"></span>
-            <span class="delivery_title_text">取货信息</span>
+        <div class="title">
+            <span class="img message"></span>
+            <span class="text">取货信息</span>
         </div>
         <div class="delivery_list">
 			<table>
 				<tr>
-					<td class="title">派送员:<td>
+					<td class="message_text">派送员:<td>
 					<td>{{ order.distributer.name }}<td>
 				</tr>
 				<tr>
-					<td class="title">派送员电话:<td>
+					<td class="message_text">派送员电话:<td>
 					<td>{{ order.distributer.tel }}<td>
 				</tr>
 				<tr>
-					<td class="title">取货地址:<td>
+					<td class="message_text">取货地址:<td>
 					<td >{{ order.distributer.location }}<td>
 				</tr>
 			</table>
         </div>
-        <div class="inventory_title">
-            <span class="inventory_title_img"></span>
-            <span class="inventory_title_text">商品明细</span>
+        <div class="title">
+            <span class="img shop"></span>
+            <span class="text">商品明细</span>
         </div>
         <div>
-            <ul class="inventory_list">
+            <ul class="list">
 		{% for commodityInOrder in order.commodityinorder_set.all %}
-                <li class="inventory_list_item">
-                    <span class="inventory_list_title">{{ commodityInOrder.commodity.commodity.title  }}</span>
-                    <span class="inventory_list_quantity">{{ commodityInOrder.quantity }}</span>
-                    <span class="inventory_list_price">￥{{ commodityInOrder.commodity.unit_price | convert_money }}</span>
+                <li class="row">
+                    <span class="left">{{ commodityInOrder.commodity.commodity.title  }}</span>
+                    <span class="right">{{ commodityInOrder.quantity }}</span>
+                    <span class="center">￥{{ commodityInOrder.commodity.unit_price | convert_money }}</span>
                 </li>
 		{% endfor %}
             </ul>
         </div>
-        <div class="moe">
+        <div class="single_list_border">
             <p>配送费<span>￥0</span></p>
         </div>
-        <div class="total">
+        <div class="single_list">
             <span>总计</span>
             <div>
-                <span>￥{{ order.total_fee | integral_get }}</span>
-                <span>.</span>
-                <span>{{ order.total_fee | decimal_get }}</span>
+                <span class="text">￥{{ order.total_fee | integral_get }}</span>
+                <span class="text">.</span>
+                <span class="text">{{ order.total_fee | decimal_get }}</span>
             </div>
         </div>
     </div>
-    <div class="footer">
-        <div>
+    <div class="button">
+        <div class="select">
 	    {% if order.status > 0 %}
-            <a href="javascript:void(0);" onclick="wx.closeWindow()">关闭</a>
+            <a class="text" href="javascript:void(0);" onclick="wx.closeWindow()">关闭</a>
 	    {% else %}
-            <a href="javascript:void(0);" onclick="window.PayManager.pay()">支付</a>
+            <a class="text" href="javascript:void(0);" onclick="window.PayManager.pay()">支付</a>
 	    {% endif %}
         </div>
     </div>
 </div>
-<div id="Payment_success" class="__page__" name="success" jid="3" style="display:none;">
+<div id="Payment_success" class="__page__ page" name="success" style="display:none;">
     <div class="share">
         <p>恭喜您成为第{{ orderAmounts }}位接龙者，快去邀请小伙伴继续接龙！<span>请点击右上角<span class="more"></span>分享</span></p>
         <div class="arrow"></div>
@@ -208,8 +214,10 @@
             <p>支付成功</p>
         </div>
     </div>
-    <div class="footer">
-        <a href="javascript:void(0);" onclick="window.PayManager.refresh()">前往订单详情</a>
+    <div class="button fixed">
+	<div class="select">
+        <a class="text" href="javascript:void(0);" onclick="window.PayManager.refresh()">前往订单详情</a>
+	</div>	
     </div>
     <form class="__form_refresh" method="post" action="order">{% csrf_token %}
 	<input type="hidden" name="orderId" value="{{ order.id }}" />

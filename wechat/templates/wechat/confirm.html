@@ -19,7 +19,7 @@
       <p class="topic">收到包裹：</p>
       <ul class="list">
         {% for commodity_in_order in order.commodityinorder_set.all %}
-          <li>{{commodity_in_order.commodity.title}} {{ commodity_in_order.quantity}} {{commodity_in_order.commodity.spec}}</li>
+          <li>{{commodity_in_order.commodity.title}} {{ commodity_in_order.quantity}} {{commodity_in_order.commodity.commodity.spec}}</li>
         {% endfor %}
       </ul>
     </div>

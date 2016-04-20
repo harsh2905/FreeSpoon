@@ -218,6 +218,8 @@ def order(request):
 	pay = request.POST.get('pay', None)
 	pay = 'false' if pay is None or pay <> 'yes' else 'true'
 	order = data.fetchOrderById(orderId)
+	if order is None:
+		return _error(request, u'非法调用', u'订单不存在')
 	payRequest = auth.createPayRequestJson(order.prepay_id)
 	orderAmounts = data.fetchOrderAmounts(order.batch.id) + 1
 	wxConfigJson = auth.createWXConfigJson(request.get_raw_uri(), [
