@@ -49,7 +49,7 @@ def createQRFromIndex(request):
 	batch_id = request.GET.get('id', None)
 	if batch_id is None:
 		return _error(request, u'非法调用', u'参数不正确')
-	indexUrl = 'http://carlinkall.com/web'
+	indexUrl = 'http://yijiayinong.com/web'
 	url = auth.createAuthorizeRedirectUrl(indexUrl, batch_id)
 	qr = qrcode.QRCode(
 		version=None
@@ -65,7 +65,7 @@ def createQRFromIndexWithRedirect(request):
 	batch_id = request.GET.get('id', None)
 	if batch_id is None:
 		return _error(request, u'非法调用', u'参数不正确')
-	url = 'http://carlinkall.com/web/r?id=%s' % batch_id
+	url = 'http://yijiayinong.com/web/r?id=%s' % batch_id
 	qr = qrcode.QRCode(
 		version=None
 	)
@@ -81,7 +81,7 @@ def createQRFromConfirmWithRedirect(request):
 	dist_id = request.GET.get('d', None)
 	if batch_id is None or dist_id is None:
 		return _error(request, u'非法调用', u'参数不正确')
-	url = 'http://carlinkall.com/web/d?b=%s&d=%s' % (batch_id, dist_id)
+	url = 'http://yijiayinong.com/web/d?b=%s&d=%s' % (batch_id, dist_id)
 	qr = qrcode.QRCode(
 		version=None
 	)
@@ -96,7 +96,7 @@ def createUrlFromIndex(request):
 	batch_id = request.GET.get('id', None)
 	if batch_id is None:
 		return _error(request, u'非法调用', u'参数异常')
-	indexUrl = 'http://carlinkall.com/web'
+	indexUrl = 'http://yijiayinong.com/web'
 	url = auth.createAuthorizeRedirectUrl(indexUrl, batch_id)
 	return HttpResponse(url)
 
@@ -104,7 +104,7 @@ def redirectToIndex(request):
 	batch_id = request.GET.get('id', None)
 	if batch_id is None:
 		return _error(request, u'非法调用', u'参数异常')
-	indexUrl = 'http://carlinkall.com/web'
+	indexUrl = 'http://yijiayinong.com/web'
 	url = auth.createAuthorizeRedirectUrl(indexUrl, batch_id)
 	return HttpResponseRedirect(url)
 
@@ -120,7 +120,7 @@ def index(request):
 	order = data.fetchOrder(batch_id, openid)
 	if order is not None:
 		#return _error(request, u'重复提交订单', u'重复提交订单')
-		url = 'http://carlinkall.com/web/order?orderId=%s' % order.id
+		url = 'http://yijiayinong.com/web/order?orderId=%s' % order.id
 		return HttpResponseRedirect(url)
 	tel = data.fetchCustomerTel(openid)
 	tel = tel if tel is not None else ''
@@ -136,7 +136,7 @@ def index(request):
 	distsJson = data.parseToDistJson(batch)
 	wxConfigJson = auth.createWXConfigJson(request.get_raw_uri(), [
 		'onMenuShareAppMessage', 'closeWindow'])
-	shareUrl = 'http://carlinkall.com/web/r?id=%s' % batch_id
+	shareUrl = 'http://yijiayinong.com/web/r?id=%s' % batch_id
 	context = RequestContext(request, {
 		'batch': batch,
 		'commodities': commodities,
@@ -192,7 +192,7 @@ def unifiedOrder(request):
 		openid=customer.id_wechat,
 		title=batch.title,
 		detail=batch.desc,
-		notify_url='http://carlinkall.com/web/payNotify'
+		notify_url='http://yijiayinong.com/web/payNotify'
 	)
 	if prepay_id is None:
 		return _ajaxError(request, -1, u'提交订单错误')
@@ -224,7 +224,7 @@ def order(request):
 	orderAmounts = data.fetchOrderAmounts(order.batch.id) + 1
 	wxConfigJson = auth.createWXConfigJson(request.get_raw_uri(), [
 		'chooseWXPay', 'onMenuShareAppMessage', 'closeWindow'])
-	shareUrl = 'http://carlinkall.com/web/r?id=%s' % order.batch.id
+	shareUrl = 'http://yijiayinong.com/web/r?id=%s' % order.batch.id
 	context = RequestContext(request, {
 		'order': order,
 		'payRequest': SafeString(json.dumps(payRequest)),
@@ -273,7 +273,7 @@ def redirectToConfirm(request):
 	dist_id = request.GET.get('d', None)
 	if batch_id is None or dist_id is None:
 		return _error(request, u'非法调用', u'参数异常')
-	confirmUrl = 'http://carlinkall.com/web/confirm'
+	confirmUrl = 'http://yijiayinong.com/web/confirm'
 	state = '%s,%s' % (batch_id, dist_id)
 	url = auth.createAuthorizeRedirectUrl(confirmUrl, state)
 	return HttpResponseRedirect(url)
@@ -329,7 +329,7 @@ def createQRFromConfirm(request):
 	batch_id = request.GET.get('id', None)
 	if batch_id is None:
 		return _error(request, u'非法调用', u'参数不正确')
-	confirmUrl = 'http://carlinkall.com/web/confirm'
+	confirmUrl = 'http://yijiayinong.com/web/confirm'
 	url = auth.createAuthorizeRedirectUrl(confirmUrl, batch_id)
 	qr = qrcode.QRCode(
 		version=None
