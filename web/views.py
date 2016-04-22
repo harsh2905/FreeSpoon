@@ -9,6 +9,7 @@ from django.template import RequestContext, loader
 from django.utils.safestring import SafeString
 from django.views.decorators.csrf import csrf_exempt
 
+import os
 import json
 import logging
 import qrcode
@@ -22,6 +23,9 @@ auth = Auth()
 import pdb
 
 # Create your views here.
+
+DOMAIN_NAME = os.getenv('DOMAINNAME')
+DOMAIN_URL = 'http://%s/web' % DOMAIN_NAME
 
 logger = logging.getLogger('django')
 
@@ -49,7 +53,7 @@ def createQRFromIndex(request):
 	batch_id = request.GET.get('id', None)
 	if batch_id is None:
 		return _error(request, u'非法调用', u'参数不正确')
-	indexUrl = 'http://yijiayinong.com/web'
+	indexUrl = DOMAIN_URL
 	url = auth.createAuthorizeRedirectUrl(indexUrl, batch_id)
 	qr = qrcode.QRCode(
 		version=None
@@ -65,7 +69,7 @@ def createQRFromIndexWithRedirect(request):
 	batch_id = request.GET.get('id', None)
 	if batch_id is None:
 		return _error(request, u'非法调用', u'参数不正确')
-	url = 'http://yijiayinong.com/web/r?id=%s' % batch_id
+	url = '%s/r?id=%s' % (DOMAIN_URL, batch_id)
 	qr = qrcode.QRCode(
 		version=None
 	)
@@ -81,7 +85,7 @@ def createQRFromConfirmWithRedirect(request):
 	dist_id = request.GET.get('d', None)
 	if batch_id is None or dist_id is None:
 		return _error(request, u'非法调用', u'参数不正确')
-	url = 'http://yijiayinong.com/web/d?b=%s&d=%s' % (batch_id, dist_id)
+	url = '%s/d?b=%s&d=%s' % (DOMAIN_URL, batch_id, dist_id)
 	qr = qrcode.QRCode(
 		version=None
 	)
@@ -96,7 +100,7 @@ def createUrlFromIndex(request):
 	batch_id = request.GET.get('id', None)
 	if batch_id is None:
 		return _error(request, u'非法调用', u'参数异常')
-	indexUrl = 'http://yijiayinong.com/web'
+	indexUrl = DOMAIN_URL
 	url = auth.createAuthorizeRedirectUrl(indexUrl, batch_id)
 	return HttpResponse(url)
 
@@ -104,7 +108,7 @@ def redirectToIndex(request):
 	batch_id = request.GET.get('id', None)
 	if batch_id is None:
 		return _error(request, u'非法调用', u'参数异常')
-	indexUrl = 'http://yijiayinong.com/web'
+	indexUrl = DOMAIN_URL
 	url = auth.createAuthorizeRedirectUrl(indexUrl, batch_id)
 	return HttpResponseRedirect(url)
 
@@ -120,7 +124,7 @@ def index(request):
 	order = data.fetchOrder(batch_id, openid)
 	if order is not None:
 		#return _error(request, u'重复提交订单', u'重复提交订单')
-		url = 'http://yijiayinong.com/web/order?orderId=%s' % order.id
+		url = '%s/order?orderId=%s' % (DOMAIN_URL, order.id)
 		return HttpResponseRedirect(url)
 	tel = data.fetchCustomerTel(openid)
 	tel = tel if tel is not None else ''
@@ -136,7 +140,7 @@ def index(request):
 	distsJson = data.parseToDistJson(batch)
 	wxConfigJson = auth.createWXConfigJson(request.get_raw_uri(), [
 		'onMenuShareAppMessage', 'closeWindow'])
-	shareUrl = 'http://yijiayinong.com/web/r?id=%s' % batch_id
+	shareUrl = '%s/r?id=%s' % (DOMAIN_URL, batch_id)
 	context = RequestContext(request, {
 		'batch': batch,
 		'commodities': commodities,
@@ -192,7 +196,7 @@ def unifiedOrder(request):
 		openid=customer.id_wechat,
 		title=batch.title,
 		detail=batch.desc,
-		notify_url='http://yijiayinong.com/web/payNotify'
+		notify_url='%s/payNotify' % DOMAIN_URL
 	)
 	if prepay_id is None:
 		return _ajaxError(request, -1, u'提交订单错误')
@@ -224,7 +228,7 @@ def order(request):
 	orderAmounts = data.fetchOrderAmounts(order.batch.id) + 1
 	wxConfigJson = auth.createWXConfigJson(request.get_raw_uri(), [
 		'chooseWXPay', 'onMenuShareAppMessage', 'closeWindow'])
-	shareUrl = 'http://yijiayinong.com/web/r?id=%s' % order.batch.id
+	shareUrl = '%s/r?id=%s' % (DOMAIN_URL, order.batch.id)
 	context = RequestContext(request, {
 		'order': order,
 		'payRequest': SafeString(json.dumps(payRequest)),
@@ -273,7 +277,7 @@ def redirectToConfirm(request):
 	dist_id = request.GET.get('d', None)
 	if batch_id is None or dist_id is None:
 		return _error(request, u'非法调用', u'参数异常')
-	confirmUrl = 'http://yijiayinong.com/web/confirm'
+	confirmUrl = '%s/confirm' % DOMAIN_URL
 	state = '%s,%s' % (batch_id, dist_id)
 	url = auth.createAuthorizeRedirectUrl(confirmUrl, state)
 	return HttpResponseRedirect(url)
@@ -329,7 +333,7 @@ def createQRFromConfirm(request):
 	batch_id = request.GET.get('id', None)
 	if batch_id is None:
 		return _error(request, u'非法调用', u'参数不正确')
-	confirmUrl = 'http://yijiayinong.com/web/confirm'
+	confirmUrl = '%s/confirm' % DOMAIN_URL
 	url = auth.createAuthorizeRedirectUrl(confirmUrl, batch_id)
 	qr = qrcode.QRCode(
 		version=None
