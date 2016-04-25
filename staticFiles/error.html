@@ -1,0 +1,73 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>错误</title>
+    <meta name="viewport"
+          content="height=device-height,width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <link rel="stylesheet" href="assets/css/error.min.css">
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script>
+		
+		var winW = document.documentElement.clientWidth;
+		var winH = document.documentElement.clientHeight;
+		if(winW>winH){
+			document.documentElement.style.fontSize = 50 + "px";
+		}else{
+			document.documentElement.style.fontSize = winW / 6.4 + "px";
+		}
+		
+
+        //configure the fuck WeChat
+ /*       (function(){
+          var wx_config_data = (new Function('', 'return ' + '{{ wxConfigJson }}'))();
+          wx.config(wx_config_data);
+          wx.ready(function(){
+            function onBridgeReady(){
+	      //		wx.onMenuShareAppMessage({
+	      //		  title: '{{ batch.share_title }}', // 分享标题
+	      //		  desc: '{{ batch.share_desc }}', // 分享描述
+	      //		  link: '{{ shareUrl }}', // 分享链接
+	      //		  imgUrl: 'http://{{ request.get_host }}{{ batch.share_img.url }}', // 分享图标
+	      //		  //type: '', // 分享类型,music、video或link，不填默认为link
+	      //		  //dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+	      //		  success: function () {
+	      //			  //wx.closeWindow();
+	      //		  },
+	      //		  cancel: function () {
+	      //			  // 用户取消分享后执行的回调函数
+	      //		  }
+	      //	   });
+            }
+            if (typeof WeixinJSBridge == "undefined"){
+               if( document.addEventListener ){
+                   document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+               }else if (document.attachEvent){
+                   document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+                   document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+               }
+            }else{
+               onBridgeReady();
+            }
+          });
+        })();*/
+
+    </script>
+</head>
+<body>
+<div id="Payment_fail" class="__page__ page" name="fail" >
+    <div class="main">
+        <div  class="fail_box">
+            <div></div>
+            <p>参数错误</p>
+            <p>未知的团购批次</p>
+        </div>
+    </div>
+    <div class="button fixed">
+	<div class="select">
+        <a class="text" href="javascript:void(0);" onclick="wx.closeWindow()">关闭</a>
+    </div>
+</div>
+</body>
+</html>

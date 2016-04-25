@@ -1,0 +1,134 @@
+@import "global";
+@import "component";
+#Order_details {
+  height: 100%;
+  .main {
+    margin: 0.8rem 0;
+    .follow {
+      position: relative;
+      overflow: hidden;
+      background: @color_white;
+      padding: 0.4rem 0.2rem;
+      span {
+        display: inline-block;
+      }
+      .follow_tip {
+        @width:100%;
+        width: @width;
+        height: 0.5rem;
+        padding:0 5%;
+        box-sizing:border-box;
+        .follow_left {
+          float: left;
+          width: @width/3;
+          text-align: left;
+        }
+        .follow_center {
+          width:@width/3;
+          margin: auto;
+          text-align: center;
+        }
+        .follow_right {
+          float: right;
+          width:@width/3;
+          text-align: right;
+        }
+      }
+      .line{
+        @width:100%;
+        @pad_width:@width - 90%;
+        height: 0.5rem;
+        width: @width;
+        .stages_one{
+          @tip_width:@width - (@width - 90%);
+          background: url("../images/tip_y.png") no-repeat left;
+          background-size: 200%;
+          background-origin: content-box;
+          height: 0.5rem;
+          width: 30%;
+          float: left;
+          padding-left:10%;
+          box-sizing: border-box;
+        }
+        .stages_one_success{
+          background: url("../images/tip_g.png") no-repeat left;
+          background-size: 200%;
+          background-origin: content-box;
+          height: 0.5rem;
+          width: 30%;
+          float: left;
+          padding-left:10%;
+          box-sizing: border-box;
+        }
+        .stages_two{
+          background: url("../images/tip_ch.png") no-repeat center;
+          background-size: 100%;
+          height: 0.5rem;
+          width: 40%;
+          float: left;
+        }
+        .stages_two_success{
+          background: url("../images/tip_cy.png") no-repeat center;
+          background-size: 100%;
+          height: 0.5rem;
+          width: 40%;
+          float: left;
+        }
+        .stages_three{
+          background: url("../images/tip_g.png") no-repeat left;
+          background-size: 200%;
+          background-origin: content-box;
+          height: 0.5rem;
+          width: 30%;
+          float:right;
+          padding-left:10%;
+          box-sizing: border-box;
+          transform:rotateY(180deg);
+          -webkit-transform:rotateY(180deg);
+          -moz-transform:rotateY(180deg);
+        }
+        .stages_three_success{
+          background: url("../images/tip_y.png") no-repeat left ;
+          background-size: 200% ;
+          background-origin: content-box;
+          height: 0.5rem;
+          width: 30%;
+          float:right;
+          padding-left:10%;
+          box-sizing: border-box;
+          transform:rotateY(180deg);
+          -webkit-transform:rotateY(180deg);
+          -moz-transform:rotateY(180deg);
+        }
+      }
+      .follow_text {
+        margin-top:0.3rem;
+        p {
+		  color:@color_dark_gray;
+          padding: 0.1rem 0;
+          .text_margin {
+		    color:@color_dark_gray;
+            margin: 0 0.15rem;
+          }
+        }
+      }
+    }
+    .delivery_list {
+      padding: 0.2rem 0.3rem;
+      background: @color_white;
+	  td{
+		color:@color_dark_gray;
+	  }
+      .message_text {
+        padding: 0.1rem 0;
+        margin-right:0.15rem;
+		width:1.5rem;
+		vertical-align: -webkit-baseline-middle;
+      }
+    }
+	.footer{
+		.button;
+		position:fixed;
+	}
+  }
+}

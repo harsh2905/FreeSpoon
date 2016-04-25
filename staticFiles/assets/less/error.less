@@ -1,0 +1,31 @@
+@import "global";
+@import "component";
+#Payment_fail {
+  height: 100%;
+  .main {
+    background: white;
+    height: 100%;
+    .fail_box {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      margin: -50% -1.25rem;
+      width: 2.5rem;
+      div {
+        background: url("../images/fail.png") no-repeat center;
+        background-size: 2rem;
+        height: 2.5rem;
+        padding: 0;
+      }
+      p:first-of-type {
+        text-align: center;
+        font-size: 0.5rem;
+      }
+      p:last-of-type {
+        text-align: center;
+        margin-top: 0.5rem;
+        .font_large;
+      }
+    }
+  }
+}
