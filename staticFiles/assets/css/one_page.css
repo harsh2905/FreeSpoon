@@ -526,6 +526,23 @@ body {
   color: white;
   vertical-align: middle;
 }
+#index .order_button {
+  font-size: 0.35rem;
+  font-weight: normal;
+  position: fixed;
+  bottom: 2rem;
+  right: 0;
+  width: 1.2rem;
+  height: 1rem;
+  line-height: 1rem;
+  border-radius: 50px 0px 0px 50px;
+  background: url("../images/order.png") no-repeat 20% center #5EA7FB;
+  background-size: 0.3rem;
+  color: white;
+  text-align: left;
+  padding-left: 1rem;
+  opacity: 0.8;
+}
 #index .popup-window-from-bottom {
   display: none;
   background: white;
@@ -720,6 +737,24 @@ body {
   outline: medium;
   text-align: left;
   color: #CCCCCC;
+  width: 2.2rem;
+  vertical-align: middle;
+  font-size: 0.3rem;
+  font-weight: normal;
+}
+#checkout .content .user .new_input_style {
+  width: 2.5rem;
+  border: 1px solid #CCCCCC;
+  height: 0.5rem;
+  line-height: 0.5rem;
+  margin: 0.1rem 1.2rem;
+}
+#checkout .content .user .new_input_style input {
+  margin-left: 0.1rem;
+  border: none;
+  outline: medium;
+  text-align: left;
+  scolor: #CCCCCC;
   width: 2.2rem;
   vertical-align: middle;
   font-size: 0.3rem;

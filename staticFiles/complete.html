@@ -1,16 +1,15 @@
-{% load staticfiles %}
 <!doctype html>
 <html lang="zh-cn">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>确认收货 - {{ order.batch.title }}</title>
-    <link rel="stylesheet" href="{% static 'web/assets/styles/buttons.css' %}" />
-    <link rel="stylesheet" href="{% static 'web/assets/styles/confirm.css' %}" />
+    <title>确认收货</title>
+    <link rel="stylesheet" href="assets/css/buttons.css" />
+    <link rel="stylesheet" href="assets/css/confirm.css" />
     <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     <script type="text/javascript">
         //configure the fuck WeChat
-        (function(){
+    /*    (function(){
           var wx_config_data = (new Function('', 'return ' + '{{ wxConfigJson }}'))();
           wx.config(wx_config_data);
           wx.ready(function(){
@@ -41,28 +40,26 @@
                onBridgeReady();
             }
           });
-        })();
+        })();*/
     </script>
 </head>
 <body>
   <div class="dialog">
     <div class="header">
       <p class="title">订单完成</p>
-      <p class="datetime">{{ datetime | date:"m-d h:i" }}</p>
+      <p class="datetime">2016-4-26 8:58</p>
     </div>
     <div class="detail">
       <p class="topic">感谢您的购买：</p>
       <ul class="list">
-        {% for commodity_in_order in order.commodityinorder_set.all %}
-          <li>{{commodity_in_order.commodity.title}} {{ commodity_in_order.quantity}} {{commodity_in_order.commodity.commodity.spec}}</li>
-        {% endfor %}
+          <li>小龙虾 2kg</li>
       </ul>
     </div>
     <div class="info ui-grid-a">
         <div class="ui-block-a">订单号：</div>
-        <div class="ui-block-b">{{ order.id }}</div>
+        <div class="ui-block-b">12456789</div>
         <div class="ui-block-a">团购批次：</div>
-        <div class="ui-block-b">{{ order.batch.title }}</div>
+        <div class="ui-block-b">生鲜购</div>
         <div class="ui-block-a">备注：</div>
         <div class="ui-block-b">无</div>
       </tr>

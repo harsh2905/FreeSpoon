@@ -1,0 +1,120 @@
+@import "global";
+@import "component";
+.main{
+	margin-top: 0.8rem;
+	margin-bottom: 0.3rem;
+	.user{
+		@height:1rem;
+		height: @height;
+		.left{
+			width: 4rem;
+			height: @height;
+			line-height: @height;
+			img{
+				@img_size:0.7rem;
+				width: @img_size;
+				height: @img_size;
+				background: yellow;
+				float: left;
+				border-radius: 50%;
+				margin: (@height - @img_size)/2; 
+			}
+			.text{
+				.font_x_large ;
+				display:block;
+				max-width: 1.5rem;
+				overflow: hidden;
+                text-overflow: ellipsis;
+    			white-space: nowrap;
+    			float: left;
+    			margin-right:0.1rem; 
+				}
+			.min_text{
+				.font_large;
+			}
+		}
+		.right{
+			@height:1rem;
+			.font_x_large;
+			height: @height;
+			line-height: @height;
+			width: auto;
+			float: right;
+			margin-right:0.2rem;
+		}
+	}
+	.content{
+		background:@color_misty_gray;
+		height: 2rem ;
+		line-height: 2rem;
+		padding: 0.25rem 0;
+		box-sizing: border-box;
+		.imgbox{
+			width: 6rem;
+			height: 1.5rem;
+			line-height: 1.5rem;
+			img{
+				width: 1.5rem;
+				height: 1.5rem;
+				margin-left: 0.2rem;
+			}
+		}
+		.back{
+			background:url("../images/back_right.png") no-repeat center; 
+			background-size: 0.3rem;
+			height: 1.5rem;
+			width: 0.5rem;
+			float: right;
+			margin-right: 0.2rem;
+		}
+	}
+	.footer{
+		@box_height:1.5rem;
+		@height:0.6rem;
+		height:@box_height;
+		border-bottom: 1px solid #ccc;
+		p{
+			margin-left:0.2rem; 
+			height: @height;
+			line-height: @height;
+			float:right;
+			.font_large;
+			.total{
+				margin-left:0.2rem
+			}
+			.price{
+				margin-right:0.2rem;
+				.font_x_large_bold;
+				color:@color_orange;
+			}
+			.other{
+				margin-right: 0.2rem;
+				color:@color_dark_gray;
+			}
+		}
+		.btn{
+			clear: both;
+			height: @box_height - @height;
+			line-height:@box_height - @height;
+			background:white;
+			float: right;
+			margin-right: 0.2rem;
+			.button{
+				@btn_height:0.6rem;
+				.font_large;
+				text-align: center;
+				width: 1.5rem;
+				height: @btn_height;
+				line-height: @btn_height;
+				border: 1px solid #ccc;
+				border-radius: 10px;
+				float: left;
+				margin: (@box_height - @height - @btn_height)/2  0.1rem;
+			}
+			.button:active{
+				background:@color_orange;
+				color:@color_white;
+			}
+		}
+	}
+} 
