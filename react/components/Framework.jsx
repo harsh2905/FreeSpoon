@@ -1,6 +1,6 @@
 //Framework
 
-import { If, Then, Else } from 'react-if';
+import React from 'react';
 
 export default class Framework extends React.Component {
 	constructor() {
