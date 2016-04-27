@@ -92,16 +92,17 @@ body {
   position: fixed;
   width: 100%;
   top: 0;
-  height: 0.8rem;
+  height: 1rem;
   background: #e5e5e5;
   border-bottom: solid 1px #c8c8c8;
+  line-height: 1rem;
 }
 .header .ico {
   overflow: hidden;
   display: block;
   z-index: 999;
-  line-height: 0.8rem;
-  height: 0.8rem;
+  line-height: 1rem;
+  height: 1rem;
   width: 0.8rem;
   position: absolute;
 }
@@ -117,10 +118,10 @@ body {
   text-align: center;
   font-size: 0.3rem;
   font-weight: bold;
-  line-height: 0.8rem;
+  line-height: 1rem;
   -webkit-user-select: none;
   color: #599c3d;
-  height: 0.8rem;
+  height: 1rem;
   vertical-align: middle;
   width: 100%;
 }
@@ -254,7 +255,7 @@ body {
   height: 100%;
 }
 #Order_details .main {
-  margin: 0.8rem 0;
+  margin: 1rem 0 0.8rem 0;
 }
 #Order_details .main .follow {
   position: relative;

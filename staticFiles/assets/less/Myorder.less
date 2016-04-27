@@ -1,10 +1,10 @@
 @import "global";
 @import "component";
 .main{
-	margin-top: 0.8rem;
+	@height:1rem;
+	margin-top: @height;
 	margin-bottom: 0.3rem;
 	.user{
-		@height:1rem;
 		height: @height;
 		.left{
 			width: 4rem;
@@ -20,7 +20,7 @@
 				margin: (@height - @img_size)/2; 
 			}
 			.text{
-				.font_x_large ;
+				.font_large_bold;
 				display:block;
 				max-width: 1.5rem;
 				overflow: hidden;
@@ -30,12 +30,12 @@
     			margin-right:0.1rem; 
 				}
 			.min_text{
-				.font_large;
+				.font_normal;
 			}
 		}
 		.right{
 			@height:1rem;
-			.font_x_large;
+			.font_large_bold;
 			height: @height;
 			line-height: @height;
 			width: auto;
@@ -69,7 +69,7 @@
 		}
 	}
 	.footer{
-		@box_height:1.5rem;
+		@box_height:1.8rem;
 		@height:0.6rem;
 		height:@box_height;
 		border-bottom: 1px solid #ccc;

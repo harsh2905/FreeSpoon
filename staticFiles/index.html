@@ -66,6 +66,18 @@
           })();*/
 
         });
+        (function(){
+            $.ajax({
+                type:"GET",
+                url:"assets/js/test.json",
+                dataType:"json",
+                success:function(data,cb){
+                    console.log(data);
+                    return data;
+                }
+            })
+        })();
+
     </script>
 </head>
 <body>

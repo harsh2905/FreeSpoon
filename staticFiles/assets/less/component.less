@@ -25,7 +25,7 @@
 
 /*通用header头*/
 .header {
-  @height: 0.8rem;
+  @height: 1rem;
   z-index: 100;
   position: fixed;
   width: 100%;
@@ -33,12 +33,13 @@
   height: @height;
   background: @color_misty_gray;
   border-bottom: solid 1px @color_smoky_gray;
+  line-height: @height;
   .ico {
     overflow: hidden;
     display: block;
     z-index: 999;
-    line-height: 0.8rem;
-    height: 0.8rem;
+    line-height: @height;
+    height: @height;
     width: 0.8rem;
     position: absolute;
   }
@@ -53,10 +54,10 @@
   .text {
     text-align: center;
     .font_large_bold;
-    line-height: 0.8rem;
+    line-height: @height;
     -webkit-user-select: none;
     color: @color_green;
-    height: 0.8rem;
+    height: @height;
     vertical-align: middle;
     width: 100%;
   }
