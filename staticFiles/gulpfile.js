@@ -41,11 +41,7 @@ gulp.task('watch-js', function(){
 
 gulp.task('run', ['compile', 'connect', 'watch']);
 
-gulp.task('fast-run', ['fast-compile', 'connect', 'watch']);
-
-gulp.task('compile', ['less', 'browserify', 'uglify']);
-
-gulp.task('fast-compile', ['less', 'browserify']);
+gulp.task('compile', ['less', 'browserify']);
 
 gulp.task('vendor', function(){
 	return gulp.src('./vendor/**/*')
