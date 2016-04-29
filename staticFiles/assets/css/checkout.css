@@ -1,0 +1,359 @@
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-decoration: none;
+  color: #000;
+}
+html,
+body {
+  font-size: 0.25rem;
+  height: 100%;
+  font-family: '微软雅黑', Helvetica, Tahoma, Arial, '华文细黑', sans-serif;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-text-size-adjust: 100%;
+}
+.font_small {
+  font-size: 0.2rem;
+  font-weight: normal;
+}
+.font_small_bold {
+  font-size: 0.2rem;
+  font-weight: bold;
+}
+.font_normal {
+  font-size: 0.25rem;
+  font-weight: normal;
+}
+.font_normal_bold {
+  font-size: 0.25rem;
+  font-weight: bold;
+}
+.font_large {
+  font-size: 0.3rem;
+  font-weight: normal;
+}
+.font_large_bold {
+  font-size: 0.3rem;
+  font-weight: bold;
+}
+.font_x_large {
+  font-size: 0.35rem;
+  font-weight: normal;
+}
+.font_x_large_bold {
+  font-size: 0.35rem;
+  font-weight: bold;
+}
+.font_xx_large {
+  font-size: 0.4rem;
+  font-weight: normal;
+}
+.font_xx_large_bold {
+  font-size: 0.4rem;
+  font-weight: bold;
+}
+.font_xxx_large {
+  font-size: 0.5rem;
+  font-weight: normal;
+}
+.font_xxx_large_bold {
+  font-size: 0.5rem;
+  font-weight: bold;
+}
+/*解决模拟页面跳转，scroll不在顶部位置*/
+.page {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow-y: auto;
+}
+/*弹出层遮罩*/
+.matter {
+  display: none;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background: #000;
+  opacity: .26;
+  z-index: 1000;
+  top: 0;
+  bottom: 1.7rem;
+}
+/*通用header头*/
+.header {
+  z-index: 100;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  height: 1rem;
+  background: #e5e5e5;
+  border-bottom: solid 1px #c8c8c8;
+  line-height: 1rem;
+}
+.header .ico {
+  overflow: hidden;
+  display: block;
+  z-index: 999;
+  line-height: 1rem;
+  height: 1rem;
+  width: 0.8rem;
+  position: absolute;
+}
+.header .back {
+  background: url("../images/back.png") center center no-repeat;
+  background-size: 0.2rem;
+}
+.header .close {
+  background: url("../images/close.png") center center no-repeat;
+  background-size: 0.2rem;
+}
+.header .text {
+  text-align: center;
+  font-size: 0.3rem;
+  font-weight: bold;
+  line-height: 1rem;
+  -webkit-user-select: none;
+  color: #599c3d;
+  height: 1rem;
+  vertical-align: middle;
+  width: 100%;
+}
+/*通用button*/
+.button {
+  bottom: 0;
+  width: 100%;
+  z-index: 1100;
+}
+.button .select {
+  width: 100%;
+  height: 0.9rem;
+  background: white;
+}
+.button .select .text {
+  background: #599c3d;
+  margin: 0.1rem 0.1rem;
+  color: white;
+  text-align: center;
+  display: block;
+  height: 0.8rem;
+  line-height: 0.8rem;
+}
+.fixed {
+  position: fixed;
+}
+/*标题通栏*/
+.title {
+  background: #f0f2f5;
+  height: 0.5rem;
+  line-height: 0.5rem;
+  padding: 0.2rem 0.3rem;
+}
+.title span {
+  display: inline-block;
+}
+.title .adds {
+  background: url("../images/adds.png") no-repeat center;
+  background-size: 0.4rem;
+  width: 0.4rem;
+  height: 0.4rem;
+}
+.title .shop {
+  background: url("../images/1.png") no-repeat center;
+  background-size: 0.4rem;
+  width: 0.4rem !important;
+  height: 0.4rem !important;
+  line-height: 0.4rem !important;
+  margin: 0.05rem 0;
+}
+.title .message {
+  background: url("../images/pop.png") no-repeat center;
+  background-size: 0.4rem;
+}
+.title .img {
+  width: 0.4rem;
+  height: 0.4rem;
+  line-height: 0.4rem;
+  float: left;
+}
+.title .text {
+  height: 0.4rem;
+  line-height: 0.4rem;
+  font-size: 0.25rem;
+  font-weight: bold;
+  margin-left: 0.1rem;
+}
+/*三列列表*/
+.list {
+  background: white;
+  margin: 0.2rem 0.25rem;
+  border-bottom: 1px solid #CCCCCC;
+  padding-bottom: 0.3rem;
+}
+.list .row {
+  padding: 0.1rem 0;
+}
+.list .row span {
+  display: inline-block;
+  color: #6D6B6B;
+}
+.list .row .left {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 3rem;
+}
+.list .row .right {
+  float: right;
+}
+.list .row .center {
+  margin-right: 0.3rem;
+  float: right;
+}
+/*单行2列列表*/
+.single_list_border {
+  font-size: 0.25rem;
+  font-weight: normal;
+  margin: 0.2rem 0.3rem;
+  height: 0.6rem;
+  border-bottom: 1px solid #CCCCCC;
+  line-height: 0.6rem;
+  padding-bottom: 0.2rem;
+}
+.single_list_border p span {
+  display: inline-block;
+  float: right;
+}
+.single_list {
+  padding: 0.2rem 0.3rem;
+  font-size: 0.25rem;
+  font-weight: bold;
+  height: 0.6rem;
+  line-height: 0.6rem;
+}
+.single_list span {
+  font-size: 0.25rem;
+  font-weight: bold;
+}
+.single_list div {
+  font-size: 0.25rem;
+  font-weight: normal;
+  float: right;
+}
+.single_list div .text {
+  font-size: 0.25rem;
+  font-weight: bold;
+  color: #ff9934;
+}
+#checkout {
+  height: 100%;
+}
+#checkout .content {
+  padding-top: 0;
+  margin-top: 1rem;
+}
+#checkout .content .user {
+  overflow: hidden;
+  background: white;
+  padding: 0.2rem 0.25rem;
+}
+#checkout .content .user .sculpture {
+  overflow: hidden;
+  width: 0.6rem;
+  height: 0.6rem;
+  float: left;
+  border-radius: 50%;
+  vertical-align: middle;
+  line-height: 0.6rem;
+}
+#checkout .content .user .sculpture img {
+  max-width: 100%;
+  height: 100%;
+}
+#checkout .content .user span {
+  display: block;
+  max-width: 2rem;
+  float: left;
+  height: 0.6rem;
+  line-height: 0.6rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 2em;
+  text-align: center;
+  margin: 0 0.3rem;
+  font-size: 0.3rem;
+  font-weight: normal;
+}
+#checkout .content .user .tel_border {
+  width: 2.5rem;
+  float: left;
+  border: 1px solid #CCCCCC;
+  height: 0.5rem;
+  line-height: 0.5rem;
+  margin: 0.05rem 0;
+}
+#checkout .content .user .tel_border input {
+  margin-left: 0.1rem;
+  border: none;
+  outline: medium;
+  text-align: left;
+  color: #CCCCCC;
+  width: 2.2rem;
+  vertical-align: middle;
+  font-size: 0.3rem;
+  font-weight: normal;
+}
+#checkout .content .user .new_input_style {
+  width: 2.5rem;
+  border: 1px solid #CCCCCC;
+  height: 0.5rem;
+  line-height: 0.5rem;
+  margin: 0.1rem 1.2rem;
+}
+#checkout .content .user .new_input_style input {
+  margin-left: 0.1rem;
+  border: none;
+  outline: medium;
+  text-align: left;
+  scolor: #CCCCCC;
+  width: 2.2rem;
+  vertical-align: middle;
+  font-size: 0.3rem;
+  font-weight: normal;
+}
+#checkout .content .address_list ul {
+  background: white;
+  padding: 0.2rem 0.3rem;
+}
+#checkout .content .address_list ul li {
+  color: #c8c8c8;
+  margin-bottom: 0.2rem;
+}
+#checkout .content .address_list ul li .true_image {
+  background: url("../images/3.png") no-repeat left;
+  background-size: 0.3rem;
+  padding-left: 0.5rem;
+  display: none;
+}
+#checkout .content .address_list ul li .checkbox {
+  background: url("../images/2.png") no-repeat left;
+  background-size: 0.3rem;
+  padding-left: 0.5rem;
+}
+#checkout .content .address_list ul li .checkbox p {
+  color: #6D6B6B;
+}
+#checkout .content .address_list ul li .checked {
+  background: url("../images/3.png") no-repeat left !important;
+  background-size: 0.3rem !important;
+}
+#checkout .content .address_list ul li:last-child {
+  margin-bottom: 0;
+}

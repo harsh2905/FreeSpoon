@@ -9,15 +9,24 @@
     <script type="text/javascript">
 	angular.element(document.getElementsByTagName('head')).append(
 		angular.element('<base href="' + window.location.pathname + '" />'));
+
+      var winW = document.documentElement.clientWidth;
+        var winH = document.documentElement.clientHeight;
+        if(winW>winH){
+            document.documentElement.style.fontSize = winW / 6.4 + "px";
+        }else{
+             document.documentElement.style.fontSize = 50 + "px";
+        }
     </script>
 </head>
-<body ng-app="app1">
-  <div ng-controller="MenuController">
-	Choose({{state}}):
-	<a href="#page1">Page1</a>
-	<a href="#page2">Page2</a>
-	<a href="#page3">Page3</a>
-	<div ng-view></div>
-  </div>
+<body ng-app="app">
+<div ng-controller="MenuController">
+   <!-- Choose({{state}}): -->
+   <!-- <a href="#content">Page1</a>
+   <a href="#checkout">Page2</a>
+   <a href="#order">Page3</a>
+   <a href="#orders">Page4</a> -->
+<div ng-view></div>
+</div> 
 </body>
 </html>

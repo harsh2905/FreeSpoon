@@ -1,0 +1,67 @@
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-decoration: none;
+  color: #000;
+}
+html,
+body {
+  font-size: 0.25rem;
+  height: 100%;
+  font-family: '微软雅黑', Helvetica, Tahoma, Arial, '华文细黑', sans-serif;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-text-size-adjust: 100%;
+}
+.font_small {
+  font-size: 0.2rem;
+  font-weight: normal;
+}
+.font_small_bold {
+  font-size: 0.2rem;
+  font-weight: bold;
+}
+.font_normal {
+  font-size: 0.25rem;
+  font-weight: normal;
+}
+.font_normal_bold {
+  font-size: 0.25rem;
+  font-weight: bold;
+}
+.font_large {
+  font-size: 0.3rem;
+  font-weight: normal;
+}
+.font_large_bold {
+  font-size: 0.3rem;
+  font-weight: bold;
+}
+.font_x_large {
+  font-size: 0.35rem;
+  font-weight: normal;
+}
+.font_x_large_bold {
+  font-size: 0.35rem;
+  font-weight: bold;
+}
+.font_xx_large {
+  font-size: 0.4rem;
+  font-weight: normal;
+}
+.font_xx_large_bold {
+  font-size: 0.4rem;
+  font-weight: bold;
+}
+.font_xxx_large {
+  font-size: 0.5rem;
+  font-weight: normal;
+}
+.font_xxx_large_bold {
+  font-size: 0.5rem;
+  font-weight: bold;
+}

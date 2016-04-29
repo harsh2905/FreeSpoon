@@ -1,0 +1,686 @@
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-decoration: none;
+  color: #000;
+}
+html,
+body {
+  font-size: 0.25rem;
+  height: 100%;
+  font-family: '微软雅黑', Helvetica, Tahoma, Arial, '华文细黑', sans-serif;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-text-size-adjust: 100%;
+}
+.font_small {
+  font-size: 0.2rem;
+  font-weight: normal;
+}
+.font_small_bold {
+  font-size: 0.2rem;
+  font-weight: bold;
+}
+.font_normal {
+  font-size: 0.25rem;
+  font-weight: normal;
+}
+.font_normal_bold {
+  font-size: 0.25rem;
+  font-weight: bold;
+}
+.font_large {
+  font-size: 0.3rem;
+  font-weight: normal;
+}
+.font_large_bold {
+  font-size: 0.3rem;
+  font-weight: bold;
+}
+.font_x_large {
+  font-size: 0.35rem;
+  font-weight: normal;
+}
+.font_x_large_bold {
+  font-size: 0.35rem;
+  font-weight: bold;
+}
+.font_xx_large {
+  font-size: 0.4rem;
+  font-weight: normal;
+}
+.font_xx_large_bold {
+  font-size: 0.4rem;
+  font-weight: bold;
+}
+.font_xxx_large {
+  font-size: 0.5rem;
+  font-weight: normal;
+}
+.font_xxx_large_bold {
+  font-size: 0.5rem;
+  font-weight: bold;
+}
+/*解决模拟页面跳转，scroll不在顶部位置*/
+.page {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow-y: auto;
+}
+/*弹出层遮罩*/
+.matter {
+  display: none;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background: #000;
+  opacity: .26;
+  z-index: 1000;
+  top: 0;
+  bottom: 1.7rem;
+}
+/*通用header头*/
+.header {
+  z-index: 100;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  height: 1rem;
+  background: #e5e5e5;
+  border-bottom: solid 1px #c8c8c8;
+  line-height: 1rem;
+}
+.header .ico {
+  overflow: hidden;
+  display: block;
+  z-index: 999;
+  line-height: 1rem;
+  height: 1rem;
+  width: 0.8rem;
+  position: absolute;
+}
+.header .back {
+  background: url("../images/back.png") center center no-repeat;
+  background-size: 0.2rem;
+}
+.header .close {
+  background: url("../images/close.png") center center no-repeat;
+  background-size: 0.2rem;
+}
+.header .text {
+  text-align: center;
+  font-size: 0.3rem;
+  font-weight: bold;
+  line-height: 1rem;
+  -webkit-user-select: none;
+  color: #599c3d;
+  height: 1rem;
+  vertical-align: middle;
+  width: 100%;
+}
+/*通用button*/
+.button {
+  bottom: 0;
+  width: 100%;
+  z-index: 1100;
+}
+.button .select {
+  width: 100%;
+  height: 0.9rem;
+  background: white;
+}
+.button .select .text {
+  background: #599c3d;
+  margin: 0.1rem 0.1rem;
+  color: white;
+  text-align: center;
+  display: block;
+  height: 0.8rem;
+  line-height: 0.8rem;
+}
+.fixed {
+  position: fixed;
+}
+/*标题通栏*/
+.title {
+  background: #f0f2f5;
+  height: 0.5rem;
+  line-height: 0.5rem;
+  padding: 0.2rem 0.3rem;
+}
+.title span {
+  display: inline-block;
+}
+.title .adds {
+  background: url("../images/adds.png") no-repeat center;
+  background-size: 0.4rem;
+  width: 0.4rem;
+  height: 0.4rem;
+}
+.title .shop {
+  background: url("../images/1.png") no-repeat center;
+  background-size: 0.4rem;
+  width: 0.4rem !important;
+  height: 0.4rem !important;
+  line-height: 0.4rem !important;
+  margin: 0.05rem 0;
+}
+.title .message {
+  background: url("../images/pop.png") no-repeat center;
+  background-size: 0.4rem;
+}
+.title .img {
+  width: 0.4rem;
+  height: 0.4rem;
+  line-height: 0.4rem;
+  float: left;
+}
+.title .text {
+  height: 0.4rem;
+  line-height: 0.4rem;
+  font-size: 0.25rem;
+  font-weight: bold;
+  margin-left: 0.1rem;
+}
+/*三列列表*/
+.list {
+  background: white;
+  margin: 0.2rem 0.25rem;
+  border-bottom: 1px solid #CCCCCC;
+  padding-bottom: 0.3rem;
+}
+.list .row {
+  padding: 0.1rem 0;
+}
+.list .row span {
+  display: inline-block;
+  color: #6D6B6B;
+}
+.list .row .left {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 3rem;
+}
+.list .row .right {
+  float: right;
+}
+.list .row .center {
+  margin-right: 0.3rem;
+  float: right;
+}
+/*单行2列列表*/
+.single_list_border {
+  font-size: 0.25rem;
+  font-weight: normal;
+  margin: 0.2rem 0.3rem;
+  height: 0.6rem;
+  border-bottom: 1px solid #CCCCCC;
+  line-height: 0.6rem;
+  padding-bottom: 0.2rem;
+}
+.single_list_border p span {
+  display: inline-block;
+  float: right;
+}
+.single_list {
+  padding: 0.2rem 0.3rem;
+  font-size: 0.25rem;
+  font-weight: bold;
+  height: 0.6rem;
+  line-height: 0.6rem;
+}
+.single_list span {
+  font-size: 0.25rem;
+  font-weight: bold;
+}
+.single_list div {
+  font-size: 0.25rem;
+  font-weight: normal;
+  float: right;
+}
+.single_list div .text {
+  font-size: 0.25rem;
+  font-weight: bold;
+  color: #ff9934;
+}
+#index {
+  background: #f0f2f5;
+}
+#index .board {
+  position: fixed;
+  top: 0;
+  background: #599c3d;
+  width: 100%;
+  z-index: 100;
+}
+#index .board .left {
+  width: 100%;
+  float: left;
+}
+#index .board .left .sculpture {
+  overflow: hidden;
+  width: 0.8rem;
+  height: 0.8rem;
+  margin: 0.2rem;
+  float: left;
+  border-radius: 50%;
+}
+#index .board .left .sculpture img {
+  max-width: 100%;
+  height: 100%;
+}
+#index .board .left .chief {
+  height: 1rem;
+  padding: 0.1rem 0;
+}
+#index .board .left .chief p {
+  color: white;
+  margin-top: 0.1rem;
+}
+#index .board .left .chief p span {
+  color: white;
+  font-size: 0.3rem;
+  margin: 0 0.1rem;
+}
+#index .board .left .chief .chief_in {
+  padding: 0.1rem 0.1rem 0 0.1rem;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 45%;
+  color: #c8c8c8;
+}
+#index .board .right {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 2.5rem;
+  padding: 0.2rem 0.1rem;
+}
+#index .board .right .audio {
+  width: 0.5rem;
+  height: 0.5rem;
+  background: url("../images/auid.png") no-repeat center;
+  background-size: 0.3rem;
+  -webkit-background-size: 0.3rem;
+  float: left;
+}
+#index .board .right div {
+  color: white;
+  text-align: center;
+}
+#index .board .right div span {
+  color: #fff100;
+  font-size: 0.3rem;
+  margin: 0 0.05rem;
+}
+#index .main {
+  overflow: hidden;
+  padding: 0rem 0.2rem;
+}
+#index .main ul {
+  margin-top: 1.8rem;
+  margin-bottom: 1.6rem;
+}
+#index .main ul li {
+  margin-bottom: 0.8rem;
+  border: 1px solid #CCCCCC;
+}
+#index .main ul li div {
+  background: white;
+}
+#index .main ul li div img {
+  max-height: 100%;
+  max-width: 100%;
+}
+#index .main ul li .content {
+  padding: 0.3rem 0;
+}
+#index .main ul li .first,
+#index .main ul li .between {
+  margin: 0 0.2rem;
+}
+#index .main ul li .first div,
+#index .main ul li .between div {
+  position: relative;
+  margin-bottom: 0.2rem;
+  overflow: hidden;
+}
+#index .main ul li .first div h1,
+#index .main ul li .between div h1 {
+  font-size: 0.3rem;
+  font-weight: bold;
+  float: left;
+}
+#index .main ul li .first div span,
+#index .main ul li .between div span {
+  display: inline-block;
+  color: #ff9934;
+  font-size: 0.2rem;
+  font-weight: normal;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+#index .main ul li .first p,
+#index .main ul li .between p {
+  font-size: 0.25rem;
+  font-weight: normal;
+  line-height: 170%;
+  color: #6D6B6B;
+}
+#index .main ul li .between {
+  height: 1rem;
+  line-height: 1rem;
+  overflow: hidden;
+}
+#index .main ul li .between span {
+  float: right;
+  margin-left: 0.4rem;
+  color: #CCCCCC;
+}
+#index .main ul li .last .regulator {
+  width: 100%;
+  margin-right: 2rem;
+  height: 0.8rem;
+}
+#index .main ul li .last .regulator .groupon_icon {
+  background: #313131;
+  width: 0.8rem;
+  height: 0.8rem;
+  float: left;
+}
+#index .main ul li .last .regulator .groupon_icon img {
+  margin: 0.05rem;
+  width: 0.7rem;
+  height: 0.7rem;
+}
+#index .main ul li .last .regulator .groupon {
+  height: 0.8rem;
+  width: auto;
+  background: #599c3d;
+  float: left;
+  border-radius: 0 3.5rem 3.5rem 0;
+  z-index: 101;
+  padding-right: 0.1rem;
+}
+#index .main ul li .last .regulator .groupon span {
+  display: inline-block;
+  height: 0.8rem;
+  line-height: 0.8rem;
+  text-align: center;
+  color: white;
+  font-size: 0.3rem;
+  font-weight: normal;
+}
+#index .main ul li .last .regulator .groupon span:nth-child(1) {
+  margin-left: 0.1rem;
+}
+#index .main ul li .last .regulator .groupon span:nth-child(2) {
+  font-size: 0.35rem;
+}
+#index .main ul li .last .regulator .groupon span:nth-child(3) {
+  margin: 0 -0.01rem;
+}
+#index .main ul li .last .counter {
+  height: 0.55rem;
+  line-height: 0.55rem;
+  vertical-align: middle;
+  float: right;
+  margin: 0.125rem 0.2rem;
+}
+#index .main ul li .last .counter span,
+#index .main ul li .last .counter a {
+  float: left;
+  width: 0.5rem;
+  height: 0.5rem;
+  text-align: center;
+  line-height: 0.5rem;
+  font-size: 0.3rem;
+  font-weight: normal;
+}
+#index .main ul li .last .counter a {
+  border: 1px solid #ff9934;
+}
+#index .main ul li .last .counter span {
+  border-top: 1px solid #ff9934;
+  border-bottom: 1px solid #ff9934;
+}
+#index .main ul li .last .counter a:active {
+  background: #ff9934;
+  color: white;
+}
+#index .footer {
+  z-index: 1001;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 1rem;
+  background: white;
+  border-top: 1px solid #CCCCCC;
+}
+#index .footer .left {
+  background: white;
+  width: auto;
+  margin-right: 2rem;
+  height: 1rem;
+}
+#index .footer .left .shop {
+  position: relative;
+  float: left;
+  width: 1rem;
+  height: 1rem;
+  background: url("../images/shop.png") no-repeat center;
+  background-size: 0.7rem;
+}
+#index .footer .left .shop span {
+  display: none;
+  width: 0.4rem;
+  height: 0.4rem;
+  line-height: 0.4rem;
+  border-radius: 50%;
+  background: #ff9934;
+  color: white;
+  text-align: center;
+  vertical-align: middle;
+  position: absolute;
+  top: 0.1rem;
+  right: 0;
+  font-size: 0.2rem;
+}
+#index .footer .left .shop_info {
+  width: auto;
+  margin-left: 1.2rem;
+  padding: 0.15rem 0;
+  height: 0.7rem;
+}
+#index .footer .left .shop_info p.line1 {
+  height: 0.4rem;
+  line-height: 0.4rem;
+  font-size: 0.3rem;
+  font-size: 0.25rem;
+  font-weight: bold;
+}
+#index .footer .left .shop_info p.line2 {
+  height: 0.3rem;
+  line-height: 0.3rem;
+  font-size: 0.2rem;
+}
+#index .footer .right {
+  height: 1rem;
+  float: right;
+  width: 2rem;
+  background: #ff9934;
+  text-align: center;
+  font-size: 0.4rem;
+  font-weight: normal;
+  line-height: 1rem;
+  color: white;
+  vertical-align: middle;
+}
+#index .order_button {
+  font-size: 0.35rem;
+  font-weight: normal;
+  position: fixed;
+  bottom: 2rem;
+  right: 0;
+  width: 1.2rem;
+  height: 1rem;
+  line-height: 1rem;
+  border-radius: 50px 0px 0px 50px;
+  background: url("../images/order.png") no-repeat 20% center #5EA7FB;
+  background-size: 0.3rem;
+  color: white;
+  text-align: left;
+  padding-left: 1rem;
+  opacity: 0.8;
+}
+#index .popup-window-from-bottom {
+  display: none;
+  background: white;
+  position: fixed;
+  bottom: 0;
+  z-index: 1001;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+#index .popup-window-from-bottom .box {
+  margin: 0.25rem 0.2rem 0 0.2rem;
+}
+#index .popup-window-from-bottom .box .popup-bottom-title {
+  height: 0.6rem;
+  padding-right: 0.1rem;
+  background: #f0f2f5;
+}
+#index .popup-window-from-bottom .box .popup-bottom-title .oder {
+  width: auto;
+  height: 0.6rem;
+}
+#index .popup-window-from-bottom .box .popup-bottom-title .oder .popup_bottom_oder {
+  padding: 0.1rem;
+}
+#index .popup-window-from-bottom .box .popup-bottom-title .oder .popup_bottom_oder .oder_img {
+  display: inline-block;
+  width: 0.4rem;
+  height: 0.4rem;
+  background: url("../images/book.png") no-repeat center;
+  background-size: 0.4rem;
+  float: left;
+}
+#index .popup-window-from-bottom .box .popup-bottom-title .oder .popup_bottom_oder .oder_text {
+  margin-left: 0.1rem;
+  display: inline-block;
+  font-size: 0.3rem;
+  font-weight: bold;
+  text-align: center;
+  vertical-align: middle;
+}
+#index .popup-window-from-bottom .box .popup-bottom-title .del {
+  float: right;
+  width: 3rem;
+  height: 0.6rem;
+}
+#index .popup-window-from-bottom .box .popup-bottom-title .del .popup_bottom_del {
+  height: 0.4rem;
+  padding: 0.1rem;
+}
+#index .popup-window-from-bottom .box .popup-bottom-title .del .popup_bottom_del .del_img {
+  display: inline-block;
+  background: url("../images/del.png") no-repeat center;
+  width: 0.4rem;
+  height: 0.4rem;
+  background-size: 0.4rem;
+  float: right;
+}
+#index .popup-window-from-bottom .box .popup-bottom-title .del .popup_bottom_del .del_text {
+  line-height: 0.4rem;
+  display: inline-block;
+  font-size: 0.2rem;
+  font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+  float: right;
+}
+#index .popup-window-from-bottom .box .cart {
+  max-height: 3.6rem;
+  margin: 0 0.2em;
+  overflow-y: auto;
+}
+#index .popup-window-from-bottom .box .cart li {
+  padding: 0.2rem 0;
+  border-bottom: 1px solid #CCCCCC;
+}
+#index .popup-window-from-bottom .box .cart li:last-child {
+  border-bottom: none;
+}
+#index .popup-window-from-bottom .box .cart .template .field_title {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  width: auto;
+  margin-right: 3rem;
+  overflow: hidden;
+  line-height: 0.5rem;
+  height: 0.5rem;
+  vertical-align: middle;
+}
+#index .popup-window-from-bottom .box .cart .template .popup_reduce {
+  width: 2.5rem;
+  float: right;
+  height: 0.5rem;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 0.5rem;
+  margin-right: 0.1rem;
+}
+#index .popup-window-from-bottom .box .cart .template .popup_reduce .field_price {
+  display: inline-block;
+}
+#index .popup-window-from-bottom .box .cart .template .popup_reduce .price {
+  height: 0.5rem;
+  text-align: left;
+  line-height: 0.5rem;
+  vertical-align: middle;
+  width: 1.1rem;
+  float: left;
+}
+#index .popup-window-from-bottom .box .cart .template .popup_reduce .regulator_right {
+  display: inline-block;
+  float: right;
+  width: 1.4rem;
+}
+#index .popup-window-from-bottom .box .cart .template .popup_reduce .regulator_right a {
+  box-sizing: border-box;
+  display: block;
+  border: 1px solid #ff9934;
+  width: 0.5rem;
+  height: 0.5rem;
+  text-align: center;
+  border-radius: 50%;
+  line-height: 0.5rem;
+  vertical-align: middle;
+  overflow: hidden;
+  float: left;
+}
+#index .popup-window-from-bottom .box .cart .template .popup_reduce .regulator_right span {
+  display: block;
+  width: 0.4rem;
+  height: 0.5rem;
+  line-height: 0.5rem;
+  vertical-align: middle;
+  float: left;
+  overflow: hidden;
+}
+#index .popup-window-from-bottom .box .cart .template .popup_reduce .regulator_right a:active {
+  background: #ff9934;
+  color: white;
+}

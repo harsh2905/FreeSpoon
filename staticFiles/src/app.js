@@ -1,10 +1,11 @@
 'use strict';
 
-require('jquery-browserify');
+var $ = require('jquery-browserify');
 var angular = require('angular');
 var angular_route = require('angular-route');
+var a = require('./modules/a');
 
-var app = angular.module('app1', ['ngRoute']);
+var app = angular.module('app', ['ngRoute']);
 
 app.controller('MenuController', function($scope, $route, $routeParams, $location){
 	$scope.$route = $route;
@@ -15,9 +16,13 @@ app.controller('MenuController', function($scope, $route, $routeParams, $locatio
 	}, 3000);
 });
 
-app.controller('Page1Controller', function($scope, $routeParams){
-	$scope.name = 'Page1Controller';
+app.controller('IndexController', function($scope, $routeParams){
+	$scope.name = 'IndexController';
 	$scope.title = 'ERROR';
+	$scope.x = {
+		a: 123,
+		b: 'aaaa'
+	};
 	$scope.desc = 'Order not found';
 	window.setInterval(function(){
 		$scope.title = 'ERROR again';
@@ -25,27 +30,54 @@ app.controller('Page1Controller', function($scope, $routeParams){
 	}, 3000);
 });
 
-app.controller('Page2Controller', function($scope, $routeParams){
-	$scope.name = 'Page2Controller';
+app.controller('CheckController', function($scope, $routeParams){
+	//$scope.name = 'Page2Controller';
+	//alert(2);
 });
 
-app.controller('Page3Controller', function($scope, $routeParams){
+app.controller('OrderController', function($scope, $routeParams){
+	//$scope.name = 'Page2Controller';
+	//alert(2);
+});
+
+app.controller('ShareController', function($scope, $routeParams){
+	//$scope.name = 'Page2Controller';
+	//alert(2);
+});
+
+app.controller('OrdersController', function($scope, $routeParams){
+	$scope.name = 'Page3Controller';
+});
+
+app.controller('ErrorController', function($scope, $routeParams){
 	$scope.name = 'Page3Controller';
 });
 
 app.config(function($routeProvider, $locationProvider){
 	$routeProvider
-		.when('/page1', {
-			templateUrl: 'html/page1.html',
-			controller: 'Page1Controller'
+		.when('/index', {
+			templateUrl: 'html/index.html',
+			controller: 'IndexController'
 		})
-		.when('/page2', {
-			templateUrl: 'html/page2.html',
-			controller: 'Page2Controller'
+		.when('/checkout', {
+			templateUrl: 'html/checkout.html',
+			controller: 'CheckController'
 		})
-		.when('/page3', {
-			templateUrl: 'html/page3.html',
-			controller: 'Page3Controller'
+		.when('/order', {
+			templateUrl: 'html/order.html',
+			controller: 'OrderController'
+		})
+		.when('/share', {
+			templateUrl: 'html/share.html',
+			controller: 'ShareController'
+		})
+		.when('/orders', {
+			templateUrl: 'html/orders.html',
+			controller: 'OrdersController'
+		})
+		.when('/error', {
+			templateUrl: 'html/error.html',
+			controller: 'ErrorController'
 		})
 	//$locationProvider.html5Mode(true);
 });
