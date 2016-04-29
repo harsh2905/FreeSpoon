@@ -1,0 +1,5 @@
+[
+{"id":1,"title":"美味小黄鱼","describle":"小黄鱼历来是高蛋白的滋补佳品，其含丰富的蛋白质和微量元素硒。肉质细嫩，肥腴诱人，适合青少年儿童及老年人食用。小黄鱼做法简单，清蒸，煎烤炸皆可。","imgAddress":"assets/images/xia.jpg","company":"kg","price":999,"peopleCount":12,"commodityCount":10},
+{"id":2,"title":"新鲜扇贝肉","describle":"贝类软体动物有抑制胆固醇在肝脏合成和加速排泄胆固醇的独特作用，从而使体内胆固醇下降。且功效比常用的降胆固醇的药物谷固醇更强，食用贝类后，有一种清爽宜人的感觉。","imgAddress":"assets/images/xia.jpg","company":"盒","price":299,"peopleCount":5,"commodityCount":5},
+{"id":3,"title":"冰鲜三文鱼","describle":"由于生长地靠近北极，温度更低更寒冷，三文鱼肉质柔软紧实，肥美嫩滑，也更干净健康，因此特别适合生食，全程冰鲜快运，确保真正新鲜。","imgAddress":"assets/images/xia.jpg","company":"kg","price":0.01,"peopleCount":1,"commodityCount":4}
+]

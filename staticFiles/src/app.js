@@ -10,24 +10,22 @@ var app = angular.module('app', ['ngRoute']);
 app.controller('MenuController', function($scope, $route, $routeParams, $location){
 	$scope.$route = $route;
 	$scope.state = 1;
-	window.setInterval(function(){
-		$scope.state = 2;
-		$scope.$apply();
-	}, 3000);
+	//window.setInterval(function(){
+	//	$scope.state = 2;
+	//	$scope.$apply();
+	//}, 3000);
 });
 
-app.controller('IndexController', function($scope, $routeParams){
-	$scope.name = 'IndexController';
-	$scope.title = 'ERROR';
-	$scope.x = {
-		a: 123,
-		b: 'aaaa'
-	};
-	$scope.desc = 'Order not found';
-	window.setInterval(function(){
-		$scope.title = 'ERROR again';
-		$scope.$apply();
-	}, 3000);
+app.controller('IndexController', function($scope, $routeParams, $http, $timeout){
+  $http.get("/src/modules/data.json")
+       .success(function (response) {
+       	alert(response);
+      	$scope.commodities = response;
+      	//alert($scope.$$phase);
+      	//$timeout(function(){
+      	//	$scope.$apply();
+      	//});
+      });
 });
 
 app.controller('CheckController', function($scope, $routeParams){

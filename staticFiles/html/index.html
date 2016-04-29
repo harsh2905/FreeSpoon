@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="zh-cn">
 <head>
@@ -23,23 +22,23 @@
             <div>还有<span>5天</span>结束</div>
         </div>
     </div>
-    <div id="move" class="main">
+    <div id="move" class="main" >
         <ul>    
-            <li>
+            <li ng-repeat="x in commodities">
                 <div>
-                    <img src="assets/images/xia.jpg"  alt="">
+                    <img ng-src="{{x.imgAddress}}"  alt="">
                 </div>
                 <div class="content">
                     <div class="first">
                         <div>
-                            <h1>味美小黄鱼</h1>
-                            <span>kg</span>
+                            <h1>{{x.title}}</h1>
+                            <span>{{x.company}}</span>
                         </div>
-                        <p>小黄鱼历来是高蛋白的滋补佳品，其含丰富的蛋白质和微量元素硒。肉质细嫩，肥腴诱人，适合青少年儿童及老年人食用。小黄鱼做法简单，清蒸，煎烤炸皆可。</p>
+                        <p>{{x.describle}}</p>
                     </div>
                     <div class="between clearfloat">
-                        <span>已团0盒</span>
-                        <span>已有0人参团</span>
+                        <span>已团{{x.commodityCount}}盒</span>
+                        <span>已有{{x.peopleCount}}人参团</span>
                     </div>
                     <div class="last ">
                         <div class="counter">
@@ -58,113 +57,7 @@
                         </div>
                     </div>
                  </div>
-            </li>
-            
-            <li>
-                <div>
-                    <img src="assets/images/xia.jpg" alt="">
-                </div>
-                <div class="content">
-                    <div class="first">
-                        <div>
-                            <h1>新鲜扇贝肉</h1>
-                            <span>袋</span>
-                        </div>
-                        <p>贝类软体动物有抑制胆固醇在肝脏合成和加速排泄胆固醇的独特作用，从而使体内胆固醇下降。且功效比常用的降胆固醇的药物谷固醇更强，食用贝类后，有一种清爽宜人的感觉。</p>
-                    </div>
-                    <div class="between clearfloat">
-                        <span>已团0盒</span>
-                        <span>已有0人参团</span>
-                    </div>
-                    <div class="last ">
-                        <div class="counter">
-                            <a class="block left" href="javascript:void(0);" onclick="CartManager.remove(30)">-</a>
-                            <span class="block center __field_quantity_30">0</span>
-                            <a class="block right" href="javascript:void(0);" onclick="CartManager.add(30)">+</a>
-                        </div>
-                        <div class="regulator">
-                            <span class="groupon_icon"><img src="assets/images/poper.png" alt=""></span>
-                            <div class="groupon">
-                                <span>团购价</span>
-                                <span>￥0</span>
-                                <span>.</span>
-                                <span>01</span>
-                            </div>
-                        </div>
-                    </div>
-                 </div>
-            </li>
-            
-            <li>
-                <div>
-                    <img src="assets/images/xia.jpg" alt="">
-                </div>
-                <div class="content">
-                    <div class="first">
-                        <div>
-                            <h1>冰鲜三文鱼</h1>
-                            <span>克</span>
-                        </div>
-                        <p>由于生长地靠近北极，温度更低更寒冷，三文鱼肉质柔软紧实，肥美嫩滑，也更干净健康，因此特别适合生食，全程冰鲜快运，确保真正新鲜。</p>
-                    </div>
-                    <div class="between clearfloat">
-                        <span>已团0盒</span>
-                        <span>已有0人参团</span>
-                    </div>
-                    <div class="last ">
-                        <div class="counter">
-                            <a class="block left" href="javascript:void(0);" onclick="CartManager.remove(31)">-</a>
-                            <span class="block center __field_quantity_31">0</span>
-                            <a class="block right" href="javascript:void(0);" onclick="CartManager.add(31)">+</a>
-                        </div>
-                        <div class="regulator">
-                            <span class="groupon_icon"><img src="assets/images/poper.png" alt=""></span>
-                            <div class="groupon">
-                                <span>团购价</span>
-                                <span>￥0</span>
-                                <span>.</span>
-                                <span>01</span>
-                            </div>
-                        </div>
-                    </div>
-                 </div>
-            </li>
-            
-            <li>
-                <div>
-                    <img src="assets/images/xia.jpg" alt="">
-                </div>
-                <div class="content">
-                    <div class="first">
-                        <div>
-                            <h1>翡翠青提</h1>
-                            <span>1箱</span>
-                        </div>
-                        <p>每一颗都青翠欲滴，在阳光的照耀下就像透明的绿翡翠。含一颗在嘴里，嚼一嚼，很脆口的感觉，鲜甜可口，没有青涩的感觉。最重要的是青提里面没！有！籽！</p>
-                    </div>
-                    <div class="between clearfloat">
-                        <span>已团0盒</span>
-                        <span>已有0人参团</span>
-                    </div>
-                    <div class="last ">
-                        <div class="counter">
-                            <a class="block left" href="javascript:void(0);" onclick="CartManager.remove(32)">-</a>
-                            <span class="block center __field_quantity_32">0</span>
-                            <a class="block right" href="javascript:void(0);" onclick="CartManager.add(32)">+</a>
-                        </div>
-                        <div class="regulator">
-                            <span class="groupon_icon"><img src="assets/images/poper.png" alt=""></span>
-                            <div class="groupon">
-                                <span>团购价</span>
-                                <span>￥0</span>
-                                <span>.</span>
-                                <span>01</span>
-                            </div>
-                        </div>
-                    </div>
-                 </div>
-            </li>
-            
+            </li>         
         </ul>
     </div>
     <div class="footer">
