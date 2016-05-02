@@ -11,6 +11,7 @@ A group purchase website based on WeChat.
 	sudo pip install MySQL-python  
 	sudo pip install qrcode  
 	sudo pip install Pillow  
+	sudo pip install openpyxl  
 
 ### About install Pillow
 
