@@ -23,7 +23,6 @@ class Report():
 			charset='utf8')
 		self.conn.select_db('FreeSpoon')
 		self.cellDatas = {}
-		self.width = 26
 
 	def generate(self, path):
 		if not os.path.exists(path):
@@ -33,13 +32,10 @@ class Report():
 			return
 		ws = wb.active
 		wss = wb.create_sheet()
-		r = 0
 		position = 0
-		while True:
-			r = r + 1
-			isEmpty = True
+		for r in range(1, ws.max_row + 1):
 			repeatNum = 0
-			for c in range(0, self.width):
+			for c in range(0, ws.max_column):
 				cellName = chr(ord('A') + c) + str(r)
 				newCellName = chr(ord('A') + c) + str(r + position)
 				val = ws[cellName].value
@@ -47,23 +43,30 @@ class Report():
 				val = str(val)
 				if val is None or len(val.strip()) == 0:
 					continue
-				isEmpty = False
 				(newVal, repeatNum_) = self.calcExp(cellName, val)#TODO
 				repeatNum = repeatNum_ if repeatNum_ > repeatNum else repeatNum
-				pdb.set_trace()
 				self.copyStyles(ws[newCellName], wss[newCellName])
 				wss[newCellName] = newVal
 			if repeatNum > 0:
 				position = position + repeatNum
 				for _ in range(0, repeatNum):
-					for c in range(0, self.width):
+					for c in range(0, ws.max_column):
 						rawCellName = chr(ord('A') + c) + str(r)
 						cellName_ = chr(ord('A') + c) + str(r + 1 + _)
 						(newVal_, __) = self.calcExp(cellName_, rawCellName=rawCellName)
 						self.copyStyles(ws[rawCellName], wss[cellName_])
 						wss[cellName_] = newVal_
-			if isEmpty:
-				break
+		for c in range(0, ws.max_column):
+			colName = chr(ord('A') + c)
+			rawWidth = ws.column_dimensions[colName].width
+			if rawWidth is not None:
+				wss.column_dimensions[colName].width = rawWidth
+		for r in range(1, ws.max_row + 1):
+			rawHeight = ws.row_dimensions[r].height
+			if rawHeight is not None:
+				wss.row_dimensions[r].height = rawHeight
+		pdb.set_trace()
+		wss.sheet_view.showGridLines = ws.sheet_view.showGridLines
 		wb.save(path + '.' + datetime.strftime(datetime.now(), '%Y%m%d%H%M%S'))
 		self.cellDatas = {}
 
