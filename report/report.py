@@ -23,7 +23,7 @@ class Report():
 			charset='utf8')
 		self.conn.select_db('FreeSpoon')
 		self.cellDatas = {}
-		self.width = 2
+		self.width = 26
 
 	def generate(self, path):
 		if not os.path.exists(path):
@@ -33,9 +33,10 @@ class Report():
 			return
 		ws = wb.active
 		wss = wb.create_sheet()
-		r = 1
+		r = 0
 		position = 0
 		while True:
+			r = r + 1
 			isEmpty = True
 			repeatNum = 0
 			for c in range(0, self.width):
@@ -50,43 +51,53 @@ class Report():
 				(newVal, repeatNum_) = self.calcExp(cellName, val)#TODO
 				repeatNum = repeatNum_ if repeatNum_ > repeatNum else repeatNum
 				pdb.set_trace()
+				self.copyStyles(ws[newCellName], wss[newCellName])
 				wss[newCellName] = newVal
-			r = r + 1
 			if repeatNum > 0:
 				position = position + repeatNum
 				for _ in range(0, repeatNum):
 					for c in range(0, self.width):
-						cellName_ = chr(ord('A') + c) + str(r + _)
-						(newVal_, __) = self.calcExp(cellName_)
+						rawCellName = chr(ord('A') + c) + str(r)
+						cellName_ = chr(ord('A') + c) + str(r + 1 + _)
+						(newVal_, __) = self.calcExp(cellName_, rawCellName=rawCellName)
+						self.copyStyles(ws[rawCellName], wss[cellName_])
 						wss[cellName_] = newVal_
 			if isEmpty:
 				break
 		wb.save(path + '.' + datetime.strftime(datetime.now(), '%Y%m%d%H%M%S'))
+		self.cellDatas = {}
 
-	def calcExp(self, cellName, cellVal=None):
+	def copyStyles(self, cell, newCell):
+		newCell.font = cell.font
+		newCell.border = cell.border
+		newCell.fill = cell.fill
+		newCell.number_format = cell.number_format
+		newCell.protection = cell.protection
+		newCell.alignment = cell.alignment
+
+	def calcExp(self, cellName, cellVal=None, rawCellName=None):
 		# Database Column Name: SQL statement
 		rexp = r'\{\{(.+)\}\}'
 		if cellVal is None:
-			#TODO
-			rawRowIndex = int(cellName[1:])
-			rowIndex = rawRowIndex
-			while (rowIndex > 0):
-				rowIndex = rowIndex - 1
-				cellData = self.cellDatas.get(cellName[0] + str(rowIndex), None)
-				if cellData is None:
-					continue
-				sqlData = cellData.get('sqlData', None)
-				template = cellData.get('template', None)
-				columnName = cellData.get('columnName', None)
-				lineNum = rawRowIndex - rowIndex
-				if len(sqlData) <= lineNum:
-					return (template, 0)
-				rowData = sqlData[lineNum]
-				val = rowData.get(columnName, None)
-				val = val if val is not None else '' # !
-				newVal = re.sub(rexp, val, template)
-				return (newVal, 0)
-			return ('', 0)
+			if rawCellName is None:
+				return ('', 0)
+			cellData = self.cellDatas.get(rawCellName, None)
+			if cellData is None:
+				return ('', 0)
+			sqlData = cellData.get('sqlData', None)
+			template = cellData.get('template', None)
+			columnName = cellData.get('columnName', None)
+			rawRowIndex = int(rawCellName[1:])
+			currentRowIndex = int(cellName[1:])
+			lineNum = currentRowIndex - rawRowIndex
+			if len(sqlData) <= lineNum:
+				return (template, 0)
+			rowData = sqlData[lineNum]
+			val = rowData.get(columnName, None)
+			val = val if val is not None else '' # !
+			val = str(val)
+			newVal = re.sub(rexp, val, template)
+			return (newVal, 0)
 		matchGroup = re.search(rexp, cellVal, re.M|re.I)
 		if matchGroup is None:
 			return (cellVal, 0)
@@ -122,6 +133,7 @@ class Report():
 		rowData = sqlData[0]
 		val = rowData.get(columnName, None)
 		val = val if val is not None else '' # !
+		val = str(val)
 		newVal = re.sub(rexp, val, cellVal)
 		return (newVal, len(sqlData) - 1)
 
