@@ -9,17 +9,17 @@
 <body>
     <div id="index">
     <div class="board">
-        <div class="left">
-            <div class="sculpture"><img src="../../assets/images/headerPri.jpg"  alt=""></div>
+        <div class="left" ng-repeat="s in sponsor">
+            <div class="sculpture"><img ng-src="{{s.img}}"  alt=""></div>
             <div class="chief">
-                <p><span>宋仲基</span>帮主</p>
-                <span class="chief_in">好吃不贵，先买先送</span>
+                <p><span>{{s.name}}</span>帮主</p>
+                <span class="chief_in">{{s.note}}</span>
             </div>
         </div> 
-        <div class="right">
+        <div class="right" ng-repeat="o in offered">
             <div class="audio"></div>
-            <div>已有<span>12人</span>参团</div>
-            <div>还有<span>5天</span>结束</div>
+            <div>已有<span>{{o.offeredTotal}}人</span>参团</div>
+            <div>还有<span>{{o.date}}天</span>结束</div>
         </div>
     </div>
     <div id="move" class="main" >
@@ -42,9 +42,9 @@
                     </div>
                     <div class="last ">
                         <div class="counter">
-                            <a class="block left" href="javascript:void(0);" onclick="CartManager.remove(29)">-</a>
-                            <span class="block center __field_quantity_29">0</span>
-                            <a class="block right" href="javascript:void(0);" onclick="CartManager.add(29)">+</a>
+                            <a class="block left" href="javascript:void(0);" ng-click="removeCommodity(x);">-</a>
+                            <span class="block center">{{x.num | safenum}}</span>
+                            <a class="block right" href="javascript:void(0);" ng-click="addCommodity(x);">+</a>
                         </div>
                         <div class="regulator">
                             <span class="groupon_icon"><img src="assets/images/poper.png" alt=""></span>
@@ -75,7 +75,7 @@
       订单
     </a>
     <div class="__overlay matter"></div>
-    <div class="popup-window-from-bottom" style="display: none">
+    <div class="popup-window-from-bottom">
         <div class="box">
             <div class="popup-bottom-title">
                 <div class="del" onclick="CartManager.empty()">
@@ -92,17 +92,17 @@
                     </div>
                 </div>
             </div>
-            <ul  class="__cart cart">
-                <li class="__template template">
+            <ul  class="cart">
+                <li class="template" ng-repeat="x in commodities" ng-if="!!x.num">
                     <div class="popup_reduce">
-                        <div class="price __field_price"></div>
+                        <div class="price">{{x.price}}</div>
                         <div class="regulator_right">
-                            <a href="javascript:void(0);" class="__button_remove">-</a>
-                            <span class="center __field_quantity"></span>
-                            <a href="javascript:void(0);" class="__button_add">+</a>
+                            <a href="javascript:void(0);" ng-click="removeCommodity(x);">-</a>
+                            <span class="center">{{x.num | safenum}}</span>
+                            <a href="javascript:void(0);" ng-click="addCommodity(x);">+</a>
                         </div>
                     </div>
-                    <span class="__field_title field_title"></span>
+                    <span class="field_title">{{x.title}}</span>
                 </li>
             </ul>
         </div>

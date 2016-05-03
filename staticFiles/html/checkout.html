@@ -32,24 +32,10 @@
         <div class="address_list">
             <ul>
                 
-                <li>
+                <li ng-repeat="p in Pickpoint">
                     <span class="true_image"></span>
                     <div onclick="CheckoutManager.setAddress(2)" class="__checkbox__ checkbox">
-                        <p>北京市海淀区上地七街汇众大厦713室</p>
-                    </div>
-                </li>
-                
-                <li>
-                    <span class="true_image"></span>
-                    <div onclick="CheckoutManager.setAddress(3)" class="__checkbox__ checkbox">
-                        <p>北京市丰台区槐房西路南庭新苑北区西门</p>
-                    </div>
-                </li>
-                
-                <li>
-                    <span class="true_image"></span>
-                    <div onclick="CheckoutManager.setAddress(4)" class="__checkbox__ checkbox">
-                        <p>北京市昌平区北京人家22号楼</p>
+                        <p>{{p.address}}</p>
                     </div>
                 </li>
             </ul>
@@ -60,20 +46,20 @@
         </div>
         <div>
             <ul class="__checkout_detail list">
-                <li class="__template_checkout_detail_item row">
-                    <span class="__field_checkout_title left"></span>
-                    <span class="__field_checkout_quantity right"></span>
-                    <span class="__field_checkout_price center"></span>
+                <li class="__template_checkout_detail_item row" ng-repeat="x in commodityList">
+                    <span class="__field_checkout_title left">{{x.title}}</span>
+                    <span class="__field_checkout_quantity right">{{x.count}}</span>
+                    <span class="__field_checkout_price center">{{x.price}}</span>
                 </li>
             </ul>
         </div>
-        <div  class="single_list_border">
-            <p>配送费<span>￥0</span></p>
+        <div  class="single_list_border" ng-repeat="c in constList">
+            <p>配送费<span>{{c.freight}}</span></p>
         </div>
-        <div class="single_list">
+        <div class="single_list" ng-repeat="c in constList">
             <span>总计</span>
             <div>
-                <span class="__checkout_total text"></span>
+                <span class="__checkout_total text">{{c.total}}</span>
             </div>
         </div>
     </div>

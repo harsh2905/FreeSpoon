@@ -12,13 +12,13 @@
       <span class='ico back' onclick=""></span>
         <div class="text">我的订单</div> 
    </div>
-   <div class="main">
-       <div>
+   <div class="main" >
+       <div ng-repeat="o in orders">
            <div class="user">
-               <span class="right">待付款</span>
+               <span class="right">{{o.state}}</span>
                <div class="left">
                    <img src="assets/images/headerPri.jpg" alt="">
-                   <span class="text">宋仲基</span>
+                   <span class="text">{{o.name}}</span>
                    <span class="min_text">团主</span>
                </div>
               
@@ -26,9 +26,7 @@
            <div class="content">
                <div class="back"></div>
                <div class="imgbox">
-                   <img src="assets/images/1.jpg"alt="">
-                   <img src="assets/images/2.jpg"alt="">
-                   <img src="assets/images/3.jpg"alt="">
+                   <img ng-src="img" alt="" ng-repeat="img in o.imgs track by $index">
                </div>
            </div>
             <div class="footer">
@@ -36,60 +34,6 @@
                <div class="btn">
                    <div class="button">取消订单</div>
                    <div class="button">付款</div>
-               </div>
-           </div>
-       </div>
-       
-       <div>
-           <div class="user">
-               <span class="right">待收货</span>
-               <div class="left">
-                   <img src="assets/images/headerPri.jpg" alt="">
-                   <span class="text">宋仲基</span>
-                   <span class="min_text">团主</span>
-               </div>
-              
-           </div>
-           <div class="content">
-               <div class="back"></div>
-               <div class="imgbox">
-                   <img src="assets/images/4.jpg"alt="">
-                   <img src="assets/images/5.jpg"alt="">
-                   <img src="assets/images/6.jpg"alt="">
-               </div>
-           </div>
-            <div class="footer">
-                <p>共3件商品<span class="total">合计:</span><span class="price">￥999.99</span><span class="other">(含运费￥0.00)</span></p>
-               <div class="btn">
-                   <div class="button">取消订单</div>
-                   <div class="button">付款</div>
-                   <div class="button">查看订单</div>     
-               </div>
-           </div>
-       </div>
-
-       <div>
-           <div class="user">
-               <span class="right">待付款</span>
-               <div class="left">
-                   <img src="assets/images/headerPri.jpg" alt="">
-                   <span class="text">宋仲基</span>
-                   <span class="min_text">团主</span>
-               </div>
-              
-           </div>
-           <div class="content">
-               <div class="back"></div>
-               <div class="imgbox">
-                   <img src="assets/images/1.jpg"alt="">
-                   <img src="assets/images/2.jpg"alt="">
-                   <img src="assets/images/3.jpg"alt="">
-               </div>
-           </div>
-            <div class="footer">
-                <p>共3件商品<span class="total">合计:</span><span class="price">￥999.99</span><span class="other">(含运费￥0.00)</span></p>
-               <div class="btn">
-                   <div class="button">评价</div>
                </div>
            </div>
        </div>

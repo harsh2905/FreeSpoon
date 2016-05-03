@@ -1,0 +1,9 @@
+{
+	"order":[{"id":123456789,"orderTime":"2016-04-25 06:28","payment":"微信支付"}],
+
+	"pickup":[{"courier":"崔丽媛","address":"北京市海淀区上地七街1号713室","tell":"15209633819"}],
+
+	"commodityList":[{"title":"美味小黄鱼","price":999,"count":2},{"title":"美味小黄鱼1","price":9.9,"count":3},{"title":"美味小黄鱼2","price":89,"count":4}],
+
+	"constList":[{"freight":10,"total":200}]
+}
