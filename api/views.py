@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 import os
 import qrcode
+from decimal import Decimal
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 
@@ -31,7 +32,6 @@ def redirector(request, relativePath):
 	return HttpReponseRedirect(redirectUrl)
 
 def createQR(request, relativePath):
-	pdb.set_trace()
 	if request.method <> 'GET':
 		return error()
 	state = request.GET.get('s', None)
@@ -52,13 +52,16 @@ def createQR(request, relativePath):
 
 @csrf_exempt
 def batch(request):
+	if request.method == 'OPTIONS':
+		return CrossDomainResponse() 
 	if request.method <> 'POST':
 		return JSONResponse(ResObject('InvalidRequest'))
-	batchId = request.POST.get('batchId', None)
+	requestData = json.loads(request.body, parse_float=Decimal)
+	batchId = requestData.get('batchId', None)
 	if batchId is None:
 		return JSONResponse(ResObject('InvalidRequest'))
-	res = ResObject(0)
-	code = request.POST.get('code', None)
+	res = ResObject('Success')
+	code = requestData.get('code', None)
 	if code is not None:
 		openId = wxAuth.fetchOpenId(code)
 		if openId is not None:
@@ -71,12 +74,15 @@ def batch(request):
 
 @csrf_exempt
 def checkout(request):
+	if request.method == 'OPTIONS':
+		return CrossDomainResponse() 
 	if request.method <> 'POST':
 		return JSONResponse(ResObject('InvalidRequest'))
-	batchId = request.POST.get('batchId', None)
+	requestData = json.loads(request.body, parse_float=Decimal)
+	batchId = requestData.get('batchId', None)
 	if batchId is None:
 		return JSONResponse(ResObject('InvalidRequest'))
-	res = ResObject(0)
+	res = ResObject('Success')
 	do = data.createCheckoutInfo(batchId)
 	if do is None:
 		return JSONResponse(ResObject('InvalidRequest'))

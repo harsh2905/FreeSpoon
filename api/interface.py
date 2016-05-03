@@ -33,4 +33,16 @@ class JSONResponse(HttpResponse):
 		kwargs['content_type'] = 'application/json'
 		super(JSONResponse, self).__init__(content, **kwargs)
 		super(JSONResponse, self).__setitem__('Access-Control-Allow-Origin', '*')
+		super(JSONResponse, self).__setitem__('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
+		super(JSONResponse, self).__setitem__('Access-Control-Allow-Headers', 'Content-Type')
+		super(JSONResponse, self).__setitem__('Access-Control-Max-Age', '180')
+
+class CrossDomainResponse(HttpResponse):
+	def __init__(self, **kwargs):
+		super(CrossDomainResponse, self).__init__(**kwargs)
+		super(CrossDomainResponse, self).__setitem__('Access-Control-Allow-Origin', '*')
+		super(CrossDomainResponse, self).__setitem__(
+			'Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
+		super(CrossDomainResponse, self).__setitem__('Access-Control-Allow-Headers', 'Content-Type')
+		super(CrossDomainResponse, self).__setitem__('Access-Control-Max-Age', '180')
 
