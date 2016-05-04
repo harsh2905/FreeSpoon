@@ -28,4 +28,5 @@ WORKDIR /FreeSpoon
 #CMD /usr/bin/python manage.py runserver 0.0.0.0:80
 
 ENTRYPOINT /bin/bash ./wait-for-it.sh db:3306 -- python manage.py migrate && \
+		/bin/bash load_data.sh && \
 		python manage.py runserver 0.0.0.0:80
