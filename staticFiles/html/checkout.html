@@ -21,9 +21,9 @@
            <span>巴卫</span>
            <div id="input"  class="tel_border"><input  type="tel" class="__checkout_tel" placeholder="填输入联系方式" /></div> -->
            <span>姓名</span>
-           <div id="input"  class="new_input_style" ><input  type="tel" class="" placeholder="填填写姓名" /></div> 
+           <div id="input"  class="new_input_style" ><input  type="text"  placeholder="填写姓名" ng-model="nickName"/></div> 
            <span >电话</span>
-           <div id="input"  class="new_input_style"><input  type="tel" class="__checkout_tel" placeholder="填输入联系方式" /></div>
+           <div id="input"  class="new_input_style"><input  type="tel"  placeholder="填输入联系方式" ng-model="tel"/></div>
        </div> 
         <div class="title">
             <span class="img adds"></span>
@@ -32,9 +32,9 @@
         <div class="address_list">
             <ul>
                 
-                <li ng-repeat="p in Pickpoint">
+                <li ng-repeat="p in address">
                     <span class="true_image"></span>
-                    <div onclick="CheckoutManager.setAddress(2)" class="__checkbox__ checkbox">
+                    <div class="checkbox" ng-click="submit(address)">
                         <p>{{p.address}}</p>
                     </div>
                 </li>
@@ -46,26 +46,26 @@
         </div>
         <div>
             <ul class="__checkout_detail list">
-                <li class="__template_checkout_detail_item row" ng-repeat="x in commodityList">
+                <li class=" row" ng-repeat="x in commodities" ng-if="!!x.num">
                     <span class="__field_checkout_title left">{{x.title}}</span>
-                    <span class="__field_checkout_quantity right">{{x.count}}</span>
-                    <span class="__field_checkout_price center">{{x.price}}</span>
+                    <span class="__field_checkout_quantity right">{{x.num}}</span>
+                    <span class="__field_checkout_price center">{{x.price | convert}}</span>
                 </li>
             </ul>
         </div>
-        <div  class="single_list_border" ng-repeat="c in constList">
-            <p>配送费<span>{{c.freight}}</span></p>
+        <div  class="single_list_border">
+            <p>配送费<span>10</span></p>
         </div>
-        <div class="single_list" ng-repeat="c in constList">
+        <div class="single_list">
             <span>总计</span>
             <div>
-                <span class="__checkout_total text">{{c.total}}</span>
+                <span class="__checkout_total text">{{total | convert}}</span>
             </div>
         </div>
     </div>
     <div id="checkout_footer" class="button">
         <div class="select">
-        <a class="text" href="javascript:void(0);" onclick="CheckoutManager.pay()">立即支付</a>
+        <a class="text" href="javascript:void(0);" ng-click="pay(commodities);">立即支付</a>
         </div>
     </div>
 </div>

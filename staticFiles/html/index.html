@@ -9,30 +9,30 @@
 <body>
     <div id="index">
     <div class="board">
-        <div class="left" ng-repeat="s in sponsor">
-            <div class="sculpture"><img ng-src="{{s.img}}"  alt=""></div>
+        <div class="left" >
+            <div class="sculpture"><img ng-src="{{sponsor.img}}"  alt=""></div>
             <div class="chief">
-                <p><span>{{s.name}}</span>帮主</p>
-                <span class="chief_in">{{s.note}}</span>
+                <p><span>{{sponsor.name}}</span>帮主</p>
+                <span class="chief_in">{{sponsor.note}}</span>
             </div>
         </div> 
-        <div class="right" ng-repeat="o in offered">
+        <div class="right" >
             <div class="audio"></div>
-            <div>已有<span>{{o.offeredTotal}}人</span>参团</div>
-            <div>还有<span>{{o.date}}天</span>结束</div>
+            <div>已有<span>{{offered.offeredTotal}}人</span>参团</div>
+            <div>还有<span>{{offered.date}}天</span>结束</div>
         </div>
     </div>
     <div id="move" class="main" >
         <ul>    
             <li ng-repeat="x in commodities">
                 <div>
-                    <img ng-src="{{x.imgAddress}}"  alt="">
+                    <img ng-src="{{x.img}}"  alt="">
                 </div>
                 <div class="content">
                     <div class="first">
                         <div>
                             <h1>{{x.title}}</h1>
-                            <span>{{x.company}}</span>
+                            <span>{{x.spec}}</span>
                         </div>
                         <p>{{x.describle}}</p>
                     </div>
@@ -50,9 +50,9 @@
                             <span class="groupon_icon"><img src="assets/images/poper.png" alt=""></span>
                             <div class="groupon">
                                 <span>团购价</span>
-                                <span>￥0</span>
+                                <span>￥{{x.price | int}}</span>
                                 <span>.</span>
-                                <span>01</span>
+                                <span>{{x.price | fraction}}</span>
                             </div>
                         </div>
                     </div>
@@ -61,8 +61,7 @@
         </ul>
     </div>
     <div class="footer">
-        <a class="right" href="#checkout"
-           onclick="PageManager.jump('checkout', 'dumpDataToCheckout')">去结算</a>
+        <a class="right" href="#checkout">去结算</a>
         <div class="left" onclick="popup_window_from_bottom();">
             <div class="shop"><span class="__amount"></span></div>
             <div class="shop_info">
@@ -78,9 +77,9 @@
     <div class="popup-window-from-bottom">
         <div class="box">
             <div class="popup-bottom-title">
-                <div class="del" onclick="CartManager.empty()">
+                <div class="del" ng-click="del(commodities);">
                     <div class="popup_bottom_del">
-                        <span class="del_text">清空</span>
+                        <span class="del_text" >清空</span>
                         <span class="del_img"></span>
                     </div>
 

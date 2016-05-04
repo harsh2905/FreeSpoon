@@ -7,15 +7,21 @@ var a = require('./modules/a');
 
 var app = angular.module('app', ['ngRoute']);
 
-app.service('$data',function($http){
+app.service('$data',function($http,$location){
 	var that = this;
+    this.getBatchId=function(){
+		var params=$location.search();	
+        that.batchId=params.state;
+	    return that.batchId;
+    }
+
 	this.fetchBatchInfo = function(cb){
-		if(!!that.batchInfo){
-			cb(that.batchInfo);
-			return;
-		}
+		//if(!!that.batchInfo){
+		//	cb(that.batchInfo);
+		//	return;
+		//}
 		$http.post("http://192.168.102.21/api/batch", {
-			batchId: 2,
+			batchId: that.getBatchId(),
 			code: ''
 		})
 		.success(function(response){
@@ -23,7 +29,30 @@ app.service('$data',function($http){
 			cb(response);
 		});
 	};
+	this.getAddress=function(cb){
+		if(!!that.addressInfo){
+			cb(that.addressInfo);
+			return;
+		}
+		$http.post("http://192.168.102.21/api/checkout",{
+			batchId:2,
+			code:''
+		})
+		.success(function(response){
+			that.addressInfo=response;
+			cb(response);
+		});
+	};
 });
+
+app.filter('convert',function(){
+	return function(price){
+		if(!!price){
+			price=(price/100).toFixed(2);
+		}
+		return price;
+	}
+})
 
 app.filter('safenum', function(){
 	return function(input){
@@ -34,20 +63,63 @@ app.filter('safenum', function(){
 	}
 });
 
+app.filter('int',function(){
+	return function(price){
+		if(!!price){
+			price=parseInt(price/100);
+		}
+		return price;
+	}
+})
+
+app.filter('fraction',function(){
+	return function(price){
+		if(!!price){
+			price=(price%100);
+			if(price==0){
+				price="0"+price;
+			}
+		}
+		return price;
+	}
+})
+
 app.controller('MenuController', function($scope, $route, $routeParams, $location){
 	$scope.$route = $route;
 	$scope.state = 1;
-	//window.setInterval(function(){
-	//	$scope.state = 2;
-	//	$scope.$apply();
-	//}, 3000);
 });
 
-app.controller('IndexController', function($scope, $routeParams, $data){
+app.controller('IndexController', function($location,$scope, $routeParams, $data){
+	if(!$data.getBatchId()){
+			$location.path("/error");
+			return;
+		}
 	$data.fetchBatchInfo(function(response){
-      	$scope.commodities = response.commodity;
-      	$scope.sponsor=response.sponsor;
-      	$scope.offered=response.offered;
+		if(!response){
+			$location.path("/error");
+			return;
+		}
+		if(response.errcode!="Success"){
+			$location.path("/error");
+			return;
+		}
+		if(!response.res){
+			$location.path("/error");
+			return;
+		}
+		if(!response.res.data){
+			$location.path("/error");
+			return;
+		}
+		if(!response.res.data.commodities 
+			|| !response.res.data.sponsor 
+			|| !response.res.data.offered){
+			$location.path("/error");
+			return;
+		}
+      	$scope.commodities = response.res.data.commodities;
+      	$scope.sponsor=response.res.data.sponsor;
+      	$scope.offered=response.res.data.offered;
 	});
 	$scope.addCommodity = function(commodity){
 		if(!commodity.num){
@@ -90,22 +162,61 @@ app.controller('IndexController', function($scope, $routeParams, $data){
 		    }
 		}
 	})(true);
-  
+
+  	$scope.del=function(commodities){
+  		for(var i=0;i<commodities.length;i++){
+  			var cur=commodities[i];
+  			if(!!cur.num){
+  				cur.num=0;
+  				 $('.__overlay').css('display', 'none');
+		        $('.popup-window-from-bottom').css('display', 'none');
+  			}
+  		}
+	}
 });
 
-app.controller('CheckController', function($scope, $routeParams,$http, $data){
-	$data.fetchBatchInfo(function(response){
-		alert(response);
+app.controller('CheckController', function($scope, $routeParams,$data,$location){
+	var dist_id=null;
+	$data.getAddress(function(response){
+		$scope.address=response.res.data;
+		$scope.submit=function(address){
+			dist_id=this.p.id;
+			return dist_id;
+		}
 	});
-	$http.get("../assets/json/checkout.json")
-	   .success(function(response){
-	   	$scope.Pickpoint=response.Pickpoint;
-	   	$scope.address=response.address;
-	   	$scope.commodityList=response.commodityList;
-	   	$scope.constList=response.constList;
-	   })
-	//$scope.name = 'Page2Controller';
-	//alert(2);
+	$data.fetchBatchInfo(function(response){
+		var total=0;
+		$scope.commodities = response.res.data.commodities;
+		var data=response.res.data.commodities;
+		for(var i=0;i<data.length;i++){
+			var cur=data[i];
+			if(!!cur.num){
+				total+=cur.num*cur.price;
+			}
+		}
+        $scope.total=total;
+	});
+	var obj={};
+	$scope.pay=function(commodities){	
+		obj.openid=1,
+		obj.nickname=$scope.nickName,
+		obj.tel=$scope.tel,
+		obj.batch_id=$data.getBatchId(),
+		obj.dist_id=dist_id,
+		obj.puchared=[],
+		obj.ipaddress="locahoost";
+
+		for(var i=0;i<commodities.length;i++){
+			var cur=commodities[i]; 
+			if(!!cur.num){
+				var oder={};
+				oder.id=cur.id;
+				oder.num=cur.num;
+				obj.puchared.push(oder);
+			}
+		}
+		console.log(obj);
+	}
 });
 
 app.controller('OrderController', function($scope, $routeParams,$http){
