@@ -6,7 +6,7 @@ import json
 from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist
 from basic.models import *
-from . import utils
+from . import utils, config
 
 import pdb
 
@@ -64,8 +64,10 @@ def createBatchInfo(batchId):
 		commodity = DataObject()
 		commodity.id = commodityInBatch.id
 		commodity.title = commodityInBatch.commodity.title
-		commodity.describle = commodityInBatch.commodity.desc
-		commodity.img = commodityInBatch.commodity.commodityimage_set.first().image.url
+		commodity.describle = commodityInBatch.commodity.details
+		img = commodityInBatch.commodity.commodityimage_set.first().image.url
+		img = '%s%s' % (config.DOMAIN_URL, img)
+		commodity.img = img
 		commodity.spec = commodityInBatch.commodity.spec
 		commodity.price = commodityInBatch.unit_price
 		commodity.peopleCount = fetchCommodityAmounts(commodityInBatch.id)
@@ -74,7 +76,7 @@ def createBatchInfo(batchId):
 	w.sponsor = DataObject(
 		name=batch.leader.name,
 		note=batch.leader.tail,
-		img=batch.leader.avatar.url)
+		img= '%s%s' % (config.DOMAIN_URL, batch.leader.avatar.url))
 	w.offered = DataObject(
 		offeredTotal=fetchOrderAmounts(batch.id),
 		date=fetchBatchExpireTime(batch.id))

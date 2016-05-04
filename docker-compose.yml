@@ -1,0 +1,21 @@
+version: '2'
+services:
+  db:
+    build: db
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=FreeSpoon
+    ports:
+      - "3366:3306"
+  freespoon:
+    build: .
+    links:
+      - db:db
+    environment:
+      - DOMAINNAME=localhost
+      - DBHOST=db
+      - DBPASSWD=123456
+    ports:
+      - "80:80"
+    depends_on:
+      - db

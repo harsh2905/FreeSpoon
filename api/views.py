@@ -1,16 +1,12 @@
 from django.shortcuts import render
 
-import os
 import qrcode
 from decimal import Decimal
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 
-from . import wx, utils, data
+from . import wx, utils, data, config
 from .interface import *
-
-DOMAIN_NAME = os.getenv('DOMAINNAME')
-DOMAIN_URL = 'http://%s/api' % DOMAIN_NAME
 
 wxAuth = wx.Auth()
 
@@ -27,7 +23,7 @@ def redirector(request, relativePath):
 	state = request.GET.get('s', None)
 	if state is None:
 		return error()
-	targetUrl = '%s/%s' % (DOMAIN_URL, relativePath)
+	targetUrl = '%s/%s' % (config.API_URL, relativePath)
 	redirectUrl = wxAuth.createAuthorizeBaseRedirectUrl(targetUrl, state)
 	return HttpReponseRedirect(redirectUrl)
 
@@ -40,7 +36,7 @@ def createQR(request, relativePath):
 	qr = qrcode.QRCode(
 		version=None
 	)
-	targetUrl = '%s/%s?s=%s' % (DOMAIN_URL, relativePath, state)
+	targetUrl = '%s/%s?s=%s' % (config.API_URL, relativePath, state)
 	qr.add_data(targetUrl)
 	qr.make(fit=True)
 	img = qr.make_image()

@@ -85,8 +85,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'FreeSpoon',
 	'USER': 'root',
-	'PASSWORD': '123456',
-	'HOST': '127.0.0.1',
+	'PASSWORD': os.getenv('DBPASSWD'),
+	'HOST': os.getenv('DBHOST'),
 	'PORT': '3306',
     }
 }
@@ -118,7 +118,7 @@ LANGUAGE_CODE = 'zh-CN'
 
 TIME_ZONE = 'Asia/Shanghai'
 
-USE_I18N = True
+USE_I18N = False
 
 USE_L10N = True
 
