@@ -13,3 +13,7 @@ script:
 
 after_failure:
     - timeout 10s docker-compose logs freespoon db
+
+branches:
+  only:
+    - dev
