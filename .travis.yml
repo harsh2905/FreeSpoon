@@ -1,24 +1,15 @@
 sudo: required
 
-env:
-  DOCKER_COMPOSE_VERSION: 1.7.0
-
 services:
     - docker
 
 before_install:
-    - sudo apt-get -qq update
-    - sudo apt-get install -qq docker-engine
-    - sudo rm /usr/local/bin/docker-compose
-    - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-    - chmod +x docker-compose
-    - sudo mv docker-compose /usr/local/bin
     - ln -s docker-compose.yml.template docker-compose.yml
     - docker-compose up
     - sleep 10
 
-#script:
-#    - curl http://localhost/admin/basic
+script:
+    - curl http://localhost/admin/basic
 
 after_failure:
     - timeout 10s docker-compose logs freespoon db
