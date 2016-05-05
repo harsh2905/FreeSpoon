@@ -1,0 +1,15 @@
+sudo: required
+
+services:
+    - docker
+
+before_install:
+    - ln -s docker-compose.yml.template docker-compose.yml
+    - docker-compose up -d
+    - sleep 10
+
+script:
+    - curl http://localhost/admin/basic
+
+after_failure:
+    - timeout 10s docker-compose logs freespoon db
