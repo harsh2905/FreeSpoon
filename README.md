@@ -1,5 +1,7 @@
 # Free Spoon  
 
+[![Build Status](https://travis-ci.org/codemeow5/FreeSpoon.svg?branch=dev)](https://travis-ci.org/codemeow5/FreeSpoon)
+
 A group purchase website based on WeChat.
 
 ### Install
