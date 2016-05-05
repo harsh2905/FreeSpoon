@@ -12,11 +12,11 @@ before_install:
     - chmod +x docker-compose
     - sudo mv docker-compose /usr/local/bin
     - ln -s docker-compose.yml.template docker-compose.yml
-    - docker-compose up -d
+    - docker-compose up
     - sleep 10
 
-script:
-    - curl http://localhost/admin/basic
+#script:
+#    - curl http://localhost/admin/basic
 
 after_failure:
     - timeout 10s docker-compose logs freespoon db
