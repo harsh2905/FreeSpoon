@@ -6,7 +6,7 @@ services:
 before_install:
     - ln -s docker-compose.yml.template docker-compose.yml
     - docker-compose up -d
-    - sleep 10
+    - sleep 300
 
 script:
     - curl http://localhost/admin/basic
