@@ -10,17 +10,19 @@ var app = angular.module('app', ['ngRoute']);
 app.service('$data',function($http,$location){
 	var that = this;
     this.getBatchId=function(){
-		var params=$location.search();	
-        that.batchId=params.state;
+    	if(!that.batchId){
+			var params=$location.search();	
+        	that.batchId=params.state;
+    	}
 	    return that.batchId;
     }
 
 	this.fetchBatchInfo = function(cb){
-		//if(!!that.batchInfo){
-		//	cb(that.batchInfo);
-		//	return;
-		//}
-		$http.post("http://192.168.102.21/api/batch", {
+		if(!!that.batchInfo){
+			cb(that.batchInfo);
+			return;
+		}
+		$http.post("http://yijiayinong.com/api/batch", {
 			batchId: that.getBatchId(),
 			code: ''
 		})
@@ -34,8 +36,8 @@ app.service('$data',function($http,$location){
 			cb(that.addressInfo);
 			return;
 		}
-		$http.post("http://192.168.102.21/api/checkout",{
-			batchId:2,
+		$http.post("http://yijiayinong.com/api/checkout",{
+			batchId:that.getBatchId(),
 			code:''
 		})
 		.success(function(response){
@@ -121,6 +123,23 @@ app.controller('IndexController', function($location,$scope, $routeParams, $data
       	$scope.sponsor=response.res.data.sponsor;
       	$scope.offered=response.res.data.offered;
 	});
+	$scope.statement=function(){
+		var commodities=$data.batchInfo.res.data.commodities;
+		var num=0;
+		for(var i=0;i<commodities.length;i++){
+			var cur=commodities[i];
+			if(cur.num){
+				num+=cur.num;
+			}				
+		}
+		if(!num){
+				alert("请选择商品");
+				return;
+			}
+		if(num>0){
+			$location.path("/checkout");
+		}
+	}
 	$scope.addCommodity = function(commodity){
 		if(!commodity.num){
 			commodity.num = 0;
@@ -168,30 +187,86 @@ app.controller('IndexController', function($location,$scope, $routeParams, $data
   			var cur=commodities[i];
   			if(!!cur.num){
   				cur.num=0;
-  				 $('.__overlay').css('display', 'none');
-		        $('.popup-window-from-bottom').css('display', 'none');
   			}
   		}
 	}
+
+	$scope.$watch('commodities',function(newValue, oldValue){
+		var num=0;
+		var total=0;
+		if(!newValue){
+			return;	
+		}
+		for(var i=0;i<newValue.length;i++){
+			var cur=newValue[i];
+			if(!!cur.num){
+				total+=cur.num*cur.price;
+				num+=cur.num;
+			}
+			if(num==0){
+				$(".__amount").css('display', 'none');
+				$('.__overlay').css('display', 'none');
+		        $('.popup-window-from-bottom').css('display', 'none');
+			}
+			if(num>0){
+				$(".__amount").css('display', 'block');
+				$scope.num=num;	
+			}
+		}
+        $scope.total=total;
+	}, true)
 });
 
 app.controller('CheckController', function($scope, $routeParams,$data,$location){
+	if(!$data.getBatchId()){
+			$location.path("/error");
+			return;
+		}
 	var dist_id=null;
 	$data.getAddress(function(response){
+		if(!response){
+			$location.path("/error");
+			return;
+		}
+		if(response.errcode!="Success"){
+			$location.path("/error");
+			return;
+		}
+		if(!response.res){
+			$location.path("/error");
+			return;
+		}
+		if(!response.res.data){
+			$location.path("/error");
+			return;
+		}
 		$scope.address=response.res.data;
 		$scope.submit=function(address){
+			for(var i=0;i<address.length;i++){
+				$scope.ischecked=false;
+			}
+			this.ischecked=true;
+			//$scope.ischecked=this.ischecked;
 			dist_id=this.p.id;
+			console.log(dist_id);
+			console.log(this);
 			return dist_id;
 		}
 	});
 	$data.fetchBatchInfo(function(response){
 		var total=0;
+		var num=0;
 		$scope.commodities = response.res.data.commodities;
 		var data=response.res.data.commodities;
 		for(var i=0;i<data.length;i++){
 			var cur=data[i];
 			if(!!cur.num){
+				num+=cur.num;
 				total+=cur.num*cur.price;
+			}
+			if(num==0){		
+				$location.path("/error");
+				return;
 			}
 		}
         $scope.total=total;
@@ -215,7 +290,7 @@ app.controller('CheckController', function($scope, $routeParams,$data,$location)
 				obj.puchared.push(oder);
 			}
 		}
-		console.log(obj);
+		alert(JSON.stringify(obj));
 	}
 });
 

@@ -34,7 +34,7 @@
                 
                 <li ng-repeat="p in address">
                     <span class="true_image"></span>
-                    <div class="checkbox" ng-click="submit(address)">
+                    <div class="checkbox" ng-class="{true:'checked',false:'null'}[ischecked]" ng-click="submit(address)">
                         <p>{{p.address}}</p>
                     </div>
                 </li>
@@ -54,7 +54,7 @@
             </ul>
         </div>
         <div  class="single_list_border">
-            <p>配送费<span>10</span></p>
+            <p>配送费<span>0</span></p>
         </div>
         <div class="single_list">
             <span>总计</span>

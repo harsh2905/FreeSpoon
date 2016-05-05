@@ -61,11 +61,11 @@
         </ul>
     </div>
     <div class="footer">
-        <a class="right" href="#checkout">去结算</a>
+        <a class="right"  ng-click="statement ();">去结算</a>
         <div class="left" onclick="popup_window_from_bottom();">
-            <div class="shop"><span class="__amount"></span></div>
+            <div class="shop"><span class="__amount">{{num}}</span></div>
             <div class="shop_info">
-                <p class="line1">合计:<span class="__total">￥</span></p>
+                <p class="line1">合计:<span class="__total">￥{{total | convert}}</span></p>
                 <p class="line2">不含运费</p>
             </div>
         </div>
@@ -94,7 +94,7 @@
             <ul  class="cart">
                 <li class="template" ng-repeat="x in commodities" ng-if="!!x.num">
                     <div class="popup_reduce">
-                        <div class="price">{{x.price}}</div>
+                        <div class="price">{{x.price | convert}}</div>
                         <div class="regulator_right">
                             <a href="javascript:void(0);" ng-click="removeCommodity(x);">-</a>
                             <span class="center">{{x.num | safenum}}</span>
