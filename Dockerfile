@@ -21,8 +21,7 @@ EXPOSE 80
 RUN echo Asia/Shanghai > /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata
 
 RUN mkdir /FreeSpoon
-COPY / /FreeSpoon/
-WORKDIR /FreeSpoon
+VOLUME /FreeSpoon
 
 # SSH
 

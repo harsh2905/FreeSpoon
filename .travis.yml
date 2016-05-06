@@ -4,7 +4,7 @@ services:
     - docker
 
 before_install:
-    - ln -s docker-compose.yml.template docker-compose.yml
+    - ln -s docker-compose.yml.production docker-compose.yml
     - cp Dockerfile.production Dockerfile
     - docker-compose up -d
     - sleep 300
