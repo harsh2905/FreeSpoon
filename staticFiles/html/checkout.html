@@ -31,10 +31,9 @@
         </div>
         <div class="address_list">
             <ul>
-                
                 <li ng-repeat="p in address">
-                    <span class="true_image"></span>
-                    <div class="checkbox" ng-class="{true:'checked',false:'null'}[ischecked]" ng-click="submit(address)">
+                    <span class="true_image" ></span>
+                    <div class="checkbox" ng-class="{checked: p.id == selectedAddress.id}" ng-click="submit(p)">
                         <p>{{p.address}}</p>
                     </div>
                 </li>

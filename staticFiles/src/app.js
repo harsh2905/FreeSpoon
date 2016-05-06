@@ -16,7 +16,13 @@ app.service('$data',function($http,$location){
     	}
 	    return that.batchId;
     }
-
+    this.getOrderId=function(){
+    	if(!that.orderId){
+    		var orderid=$location.search();
+    		that.orderId=orderid.useroder;
+    	}
+    	return that.orderId;
+    }
 	this.fetchBatchInfo = function(cb){
 		if(!!that.batchInfo){
 			cb(that.batchInfo);
@@ -45,7 +51,37 @@ app.service('$data',function($http,$location){
 			cb(response);
 		});
 	};
+	this.getOrders=function(cb){       
+		if(!!that.ordersInfo){
+			cb(that.ordersInfo);
+			return;
+		}
+		$http.get("../assets/json/orders.json",{
+			batchId:that.getBatchId(),
+			code:''
+		})
+		.success(function(response){
+			that.ordersInfo=response;
+			cb(response);
+		});
+    };
+    	this.getOrder=function(cb){       
+		if(!!that.orderInfo){
+			cb(that.orderInfo);
+			return;
+		}
+		$http.get("../assets/json/order.json",{
+			batchId:that.getBatchId(),
+			code:''
+		})
+		.success(function(response){
+			that.orderInfo=response;
+			cb(response);
+		});
+    };
 });
+
+
 
 app.filter('convert',function(){
 	return function(price){
@@ -222,7 +258,6 @@ app.controller('CheckController', function($scope, $routeParams,$data,$location)
 			$location.path("/error");
 			return;
 		}
-	var dist_id=null;
 	$data.getAddress(function(response){
 		if(!response){
 			$location.path("/error");
@@ -241,16 +276,8 @@ app.controller('CheckController', function($scope, $routeParams,$data,$location)
 			return;
 		}
 		$scope.address=response.res.data;
-		$scope.submit=function(address){
-			for(var i=0;i<address.length;i++){
-				$scope.ischecked=false;
-			}
-			this.ischecked=true;
-			//$scope.ischecked=this.ischecked;
-			dist_id=this.p.id;
-			console.log(dist_id);
-			console.log(this);
-			return dist_id;
+		$scope.submit=function(p){
+			$scope.selectedAddress = p;
 		}
 	});
 	$data.fetchBatchInfo(function(response){
@@ -273,14 +300,25 @@ app.controller('CheckController', function($scope, $routeParams,$data,$location)
 	});
 	var obj={};
 	$scope.pay=function(commodities){	
+		if(!$scope.nickName ||$scope.nickName.length==0){
+			alert("昵称不存在");
+			return;
+		}
+		if(!$scope.tel ||$scope.tel.length==0){
+			alert("电话不存在");
+			return;
+		}
+		if(!$scope.selectedAddress){
+			alert("请选择取货地址");
+			return;
+		}
 		obj.openid=1,
 		obj.nickname=$scope.nickName,
 		obj.tel=$scope.tel,
 		obj.batch_id=$data.getBatchId(),
-		obj.dist_id=dist_id,
+		obj.dist_id=$scope.selectedAddress.id,
 		obj.puchared=[],
-		obj.ipaddress="locahoost";
-
+		obj.ipaddress="localhost";
 		for(var i=0;i<commodities.length;i++){
 			var cur=commodities[i]; 
 			if(!!cur.num){
@@ -294,16 +332,17 @@ app.controller('CheckController', function($scope, $routeParams,$data,$location)
 	}
 });
 
-app.controller('OrderController', function($scope, $routeParams,$http){
-	$http.get("../assets/json/order.json")
-	   .success(function(response){
-	   	$scope.order=response.order;
-	   	$scope.pickup=response.pickup;
-	   	$scope.commodityList=response.commodityList;
-	   	$scope.constList=response.constList;
-	   })
-	//$scope.name = 'Page2Controller';
-	//alert(2);
+app.controller('OrderController', function($scope, $routeParams,$http,$data,$location){
+	if(!$data.getOrderId()){
+			$location.path("/error");
+			return;
+		}
+		$data.getOrder(function(response){
+			$scope.order=response.order;
+		   	$scope.pickup=response.pickup;
+		   	$scope.commodityList=response.commodityList;
+		   	$scope.constList=response.constList;
+		});
 });
 
 app.controller('ShareController', function($scope, $routeParams){
@@ -311,12 +350,17 @@ app.controller('ShareController', function($scope, $routeParams){
 	//alert(2);
 });
 
-app.controller('OrdersController', function($scope, $routeParams,$http){
-	$http.get("../assets/json/orders.json")
-	.success(function(response){
-		$scope.orders=response;
-	})
-	$scope.name = 'Page3Controller';
+app.controller('OrdersController', function($scope, $routeParams,$data,$location){
+		if(!$data.getOrderId()){
+			$location.path("/error");
+			return;
+		}
+		$data.getOrders(function(response){
+			$scope.orders=response;
+		});
+		$scope.order=function(orderId){
+			alert("11");
+		}
 });
 
 app.controller('ErrorController', function($scope, $routeParams){

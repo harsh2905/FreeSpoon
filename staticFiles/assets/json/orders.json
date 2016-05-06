@@ -1,5 +1,5 @@
-	[{"id":1,"name":"宋慧琼","state":"代付款","imgs":["assets/images/4.jpg","assets/images/4.jpg","assets/images/4.jpg"],"total":"999.00","number":"5"},
+	[{"id":1,"name":"宋慧琼","state":"代付款","imgs":["assets/images/1.jpg","assets/images/2.jpg","assets/images/3.jpg"],"total":"999.00","number":"5","headerimg":"/assets/images/headerPri.jpg"},
 
-	{"id":2,"name":"宋慧琼","state":"代收货","imgs":["assets/images/4.jpg","assets/images/4.jpg","assets/images/4.jpg"],"total":"888.00","number":"2"},
+	{"id":2,"name":"宋慧琼","state":"代收货","imgs":["assets/images/4.jpg","assets/images/5.jpg","assets/images/6.jpg"],"total":"888.00","number":"2","headerimg":"assets/images/headerPri.jpg"},
          
-    {"id":3,"name":"宋慧琼","state":"代付款","imgs":["assets/images/4.jpg","assets/images/4.jpg","assets/images/4.jpg"], "total":"777.00","number":"3"}]
+    {"id":3,"name":"宋慧琼","state":"代付款","imgs":["assets/images/1.jpg","assets/images/2.jpg","assets/images/3.jpg"], "total":"777.00","number":"3","headerimg":"assets/images/headerPri.jpg"}]

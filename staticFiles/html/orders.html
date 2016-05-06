@@ -8,29 +8,31 @@
     <title></title>
 </head>
 <body>
+  <a href="#index">
     <div class="header">
-      <span class='ico back' onclick=""></span>
+      <span class='ico back'></span>
         <div class="text">我的订单</div> 
+  </a>      
    </div>
    <div class="main" >
        <div ng-repeat="o in orders">
            <div class="user">
                <span class="right">{{o.state}}</span>
                <div class="left">
-                   <img src="assets/images/headerPri.jpg" alt="">
+                   <img ng-src="{{o.headerimg}}" alt="">
                    <span class="text">{{o.name}}</span>
                    <span class="min_text">团主</span>
                </div>
               
            </div>
            <div class="content">
-               <div class="back"></div>
+               <div class="back" ng-click="order(orderId)"></div>
                <div class="imgbox">
-                   <img ng-src="img" alt="" ng-repeat="img in o.imgs track by $index">
+                   <img ng-src="{{img}}" alt="" ng-repeat="img in o.imgs track by $index">
                </div>
            </div>
             <div class="footer">
-                <p>共3件商品<span class="total">合计:</span><span class="price">￥999.99</span><span class="other">(含运费￥0.00)</span></p>
+                <p>共{{o.number}}件商品<span class="total">合计:</span><span class="price">￥{{o.total}}</span><span class="other">(含运费￥0.00)</span></p>
                <div class="btn">
                    <div class="button">取消订单</div>
                    <div class="button">付款</div>
