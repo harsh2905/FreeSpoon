@@ -24,15 +24,6 @@ RUN mkdir /FreeSpoon
 COPY / /FreeSpoon/
 WORKDIR /FreeSpoon
 
-# SSH
-
-RUN apt-get install -y openssh-server
-RUN mkdir /var/run/sshd
-RUN echo 'root:root' | chpasswd
-
-RUN sed -ri 's/^PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
-RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
-
-EXPOSE 22
-
-CMD ["/usr/sbin/sshd", "-D"]
+ENTRYPOINT /bin/bash ./wait-for-it.sh db:3306 -- python manage.py migrate && \
+		/bin/bash load_data.sh && \
+		python manage.py runserver 0.0.0.0:80
