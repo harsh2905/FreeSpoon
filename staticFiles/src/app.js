@@ -9,6 +9,13 @@ var app = angular.module('app', ['ngRoute']);
 
 app.service('$data',function($http,$location){
 	var that = this;
+	this.getCode=function(){
+		if(!that.codeId){
+			var code=$location.search();
+			that.codeId=code.code;
+		}
+		return that.codeId;
+	}
     this.getBatchId=function(){
     	if(!that.batchId){
 			var params=$location.search();	
@@ -24,15 +31,17 @@ app.service('$data',function($http,$location){
     	return that.orderId;
     }
 	this.fetchBatchInfo = function(cb){
+
 		if(!!that.batchInfo){
 			cb(that.batchInfo);
 			return;
 		}
 		$http.post("http://yijiayinong.com/api/batch", {
 			batchId: that.getBatchId(),
-			code: ''
+			code: that.getCode(),
 		})
 		.success(function(response){
+			that.openId=response.res.openId;
 			that.batchInfo = response;
 			cb(response);
 		});
@@ -239,16 +248,16 @@ app.controller('IndexController', function($location,$scope, $routeParams, $data
 				total+=cur.num*cur.price;
 				num+=cur.num;
 			}
-			if(num==0){
-				$(".__amount").css('display', 'none');
-				$('.__overlay').css('display', 'none');
-		        $('.popup-window-from-bottom').css('display', 'none');
-			}
-			if(num>0){
-				$(".__amount").css('display', 'block');
-				$scope.num=num;	
-			}
 		}
+		if(num==0){
+					$(".__amount").css('display', 'none');
+					$('.__overlay').css('display', 'none');
+			        $('.popup-window-from-bottom').css('display', 'none');
+				}
+				if(num>0){
+					$(".__amount").css('display', 'block');
+					$scope.num=num;
+				}
         $scope.total=total;
 	}, true)
 });
@@ -311,14 +320,14 @@ app.controller('CheckController', function($scope, $routeParams,$data,$location)
 		if(!$scope.selectedAddress){
 			alert("请选择取货地址");
 			return;
-		}
-		obj.openid=1,
-		obj.nickname=$scope.nickName,
-		obj.tel=$scope.tel,
-		obj.batch_id=$data.getBatchId(),
-		obj.dist_id=$scope.selectedAddress.id,
-		obj.puchared=[],
-		obj.ipaddress="localhost";
+		}	
+			obj.openid=$data.openId,
+			obj.nickname=$scope.nickName,
+			obj.tel=$scope.tel,
+			obj.batch_id=$data.getBatchId(),
+			obj.dist_id=$scope.selectedAddress.id,
+			obj.puchared=[],
+			obj.ipaddress="127.0.0.1";
 		for(var i=0;i<commodities.length;i++){
 			var cur=commodities[i]; 
 			if(!!cur.num){
@@ -328,6 +337,15 @@ app.controller('CheckController', function($scope, $routeParams,$data,$location)
 				obj.puchared.push(oder);
 			}
 		}
+		$http.post('',{
+			orderInfo:obj
+		})
+		.success(function(){
+			
+		})
+		.error(function(){
+			
+		});
 		alert(JSON.stringify(obj));
 	}
 });
@@ -351,14 +369,14 @@ app.controller('ShareController', function($scope, $routeParams){
 });
 
 app.controller('OrdersController', function($scope, $routeParams,$data,$location){
-		if(!$data.getOrderId()){
+		if(!$data.openId){
 			$location.path("/error");
 			return;
 		}
 		$data.getOrders(function(response){
 			$scope.orders=response;
 		});
-		$scope.order=function(orderId){
+		$scope.order = function(orderId){
 			alert("11");
 		}
 });
@@ -369,7 +387,7 @@ app.controller('ErrorController', function($scope, $routeParams){
 
 app.config(function($routeProvider, $locationProvider){
 	$routeProvider
-		.when('/index', {
+		.when('/', {
 			templateUrl: 'html/index.html',
 			controller: 'IndexController'
 		})
@@ -393,5 +411,7 @@ app.config(function($routeProvider, $locationProvider){
 			templateUrl: 'html/error.html',
 			controller: 'ErrorController'
 		})
-	//$locationProvider.html5Mode(true);
+	$locationProvider.html5Mode(true);
 });
+
+
