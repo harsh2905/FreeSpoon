@@ -17,26 +17,27 @@ import pdb
 def error():
 	return HttpResponse('Bad Request')
 
+def main(request):
+	return HttpResponse('FreeSpoon API v0.0.1')
+
 def redirector(request, relativePath):
 	if request.method <> 'GET':
 		return error()
-	state = request.GET.get('s', None)
+	state = request.GET.get('state', None)
 	if state is None:
 		return error()
-	targetUrl = '%s/%s' % (config.API_URL, relativePath)
+	targetUrl = '%s%s' % (config.DOMAIN_URL, relativePath)
 	redirectUrl = wxAuth.createAuthorizeBaseRedirectUrl(targetUrl, state)
-	return HttpReponseRedirect(redirectUrl)
+	return HttpResponseRedirect(redirectUrl)
 
-def createQR(request, relativePath):
+def createQR(request):
 	if request.method <> 'GET':
-		return error()
-	state = request.GET.get('s', None)
-	if state is None:
 		return error()
 	qr = qrcode.QRCode(
 		version=None
 	)
-	targetUrl = '%s/%s?s=%s' % (config.API_URL, relativePath, state)
+	targetUrl = request.get_raw_uri()
+	targetUrl = targetUrl.replace('/q/', '/')
 	qr.add_data(targetUrl)
 	qr.make(fit=True)
 	img = qr.make_image()
@@ -85,6 +86,62 @@ def checkout(request):
 	res.put('data', do)
 	return JSONResponse(res)
 	
+@csrf_exempt
+def unifiedOrder(request):
+	if request.method <> 'POST':
+		return JSONResponse(ResObject('InvalidRequest'))
+	requestData = json.loads(request.body, parse_float=Decimal)
+	puchared = requestData.get('puchared', None)
+	if puchared is None:
+		return JSONResponse(ResObject('InvalidRequest'))
+	ipaddress = requestData.get('ipaddress', None)
+	if ipaddress is None:
+		return JSONResponse(ResObject('InvalidRequest'))
+	openid = requestData.get('openid', None)
+	if openid is None:
+		return JSONResponse(ResObject('InvalidRequest'))
+	nickname = requestData.get('nickname', None)
+	if nickname is None:
+		return JSONResponse(ResObject('InvalidRequest'))
+	tel = requestData.get('tel', None)
+	if tel is None:
+		return JSONResponse(ResObject('InvalidRequest'))
+	(customer, iscreated) = data.updateOrCreateCustomer(
+		nickname, tel, openid)
+	batchId = requestData.get('batch_id', None)
+	if batchId is None:
+		return JSONResponse(ResObject('InvalidRequest'))
+	batch = data.fetchBatch(batchId)
+	if batch is None:
+		return JSONResponse(ResObject('InvalidRequest'))
+	distId = requestData.get('dist_id', None)
+	if distId is None:
+		return JSONResponse(ResObject('InvalidRequest'))
+	totalFee = data.calcTotalFee(commodities)
+	time_start = datetime.now()
+	time_expire = time_start + timedelta(minutes=30)
+	orderId = utils.createOrderId()
+	prepayId = wxAuth.createPrepayId(
+		orderId=orderId,
+		total_fee=totalFee,
+		ipaddress=ipaddress,
+		time_start=time_start,
+		time_expire=time_expire,
+		openid=openid,
+		title=batch.title,
+		detail=batch.desc,
+		notify_url='%s/payNotify' % DOMAIN_URL
+	)
+	if prepay_id is None:
+		return JSONResponse(ResObject('InvalidRequest'))
+	(order, iscreated) = data.getOrCreateOrder(
+		orderId, batchId, customer.id, distId, 0, prepayId, totalFee)
+	if not iscreated:
+		return JSONResponse(ResObject('InvalidRequest'))
+	data.createCommoditiesToOrder(commodities, order.id)
+	res = ResObject('Success')
+	res.put('orderId', orderId)
+	return JSONResponse(res)
 
 @csrf_exempt
 def payNotify(request):

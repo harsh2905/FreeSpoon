@@ -1,3 +1,16 @@
+web:
+  build: web
+  #ports:
+  #  - "80:80"
+nginx:
+  build: nginx
+  links:
+    - web:web
+    - freespoon:freespoon
+  environment:
+    - NGINX_DOMAIN=yourdomain
+  ports:
+    - "80:80"
 db:
   build: db
   volumes:
@@ -18,5 +31,5 @@ freespoon:
   links:
     - db:db
   ports:
-    - "80:80"
+    #- "80:80"
     - "23:22"

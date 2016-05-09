@@ -94,16 +94,17 @@ def createCheckoutInfo(batchId):
 		w.append(dist)
 	return w
 
-# Old Method
-
-def updateOrCreateCustomer(nickname, openid, tel):
-	return Customer.objects.update_or_create(
-		id_wechat=openid,
-		defaults={
-			'nick_name': nickname,
-			'tel': tel
-		}
-	)
+def calcTotalFee(puchared):
+	totalFee = 0
+	for _ in puchared:
+		id_ = _.get('id', None)
+		if id_ is None:
+			continue
+		commodityInBatch = CommodityInBatch.objects.get(pk=id_)
+		if commodityInBatch is not None:
+			num = _.get('num', 0)
+			totalFee += num * commodityInBatch.unit_price
+	return totalFee
 
 def getOrCreateOrder(orderId, batchId, customerId, distId, status, prepayId, total_fee):
 	return Order.objects.get_or_create(
@@ -118,6 +119,28 @@ def getOrCreateOrder(orderId, batchId, customerId, distId, status, prepayId, tot
 			'total_fee': total_fee
 		}
 	)
+
+def updateOrCreateCustomer(nickname, tel, openid):
+	return Customer.objects.update_or_create(
+		id_wechat=openid,
+		defaults={
+			'nick_name': nickname,
+			'tel': tel
+		}
+	)
+
+def createCommoditiesToOrder(commodities, orderId):
+	for commodity in commodities:
+		id_ = commodity.get('id', None)
+		if id_ is None:
+			continue
+		num = commodity.get('num', None)
+		(commodityInOrder, iscreated) = CommodityInOrder.objects.get_or_create(
+			quantity=num,
+			commodity_id=id_,
+			order_id=orderId)
+
+# Old Method
 
 def fetchCustomerTel(openid):
 	if openid is None:
@@ -174,28 +197,6 @@ def fetchOrder(batchId, openid):
 		return None
 	return order
 
-def createCommoditiesToOrder(commodities, orderId):
-	for commodity in commodities:
-		id_ = commodity.get('id', None)
-		if id_ is None:
-			continue
-		quantity = commodity.get('quantity', None)
-		(commodityInOrder, iscreated) = CommodityInOrder.objects.get_or_create(
-			quantity=quantity,
-			commodity_id=id_,
-			order_id=orderId)
-
-def calcTotalFee(commodities):
-	totalFee = 0
-	for commodity in commodities:
-		id_ = commodity.get('id', None)
-		if id_ is None:
-			continue
-		quantity = commodity.get('quantity', None)
-		commodityInBatch = CommodityInBatch.objects.get(pk=id_)
-		if commodityInBatch is not None:
-			totalFee += quantity * commodityInBatch.unit_price
-	return totalFee
 
 def parseToCommoditiesJson(batch):
 	if batch is None:

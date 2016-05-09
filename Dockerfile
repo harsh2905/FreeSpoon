@@ -23,6 +23,11 @@ RUN echo Asia/Shanghai > /etc/timezone && dpkg-reconfigure --frontend noninterac
 RUN mkdir /FreeSpoon
 VOLUME /FreeSpoon
 
+# Dev Tools
+
+RUN apt-get install git -y
+RUN apt-get install vim -y
+
 # SSH
 
 RUN apt-get install -y openssh-server
