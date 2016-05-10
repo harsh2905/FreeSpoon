@@ -69,7 +69,7 @@ def createOrderInfo(orderId):
 		commodity.quantity = commodityInOrder.quantity
 		w.commodities.append(commodity)
 	w.id = orderId
-	w.createTime = time.mktime(order.create_time.timetuple())
+	w.createTime = time.mktime(order.create_time.timetuple()) * 1000
 	w.nickName = order.distributer.nick_name
 	w.address = order.distributer.location
 	w.tel = order.distributer.tel
