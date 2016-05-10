@@ -16,8 +16,8 @@ echo -e "
   force group = root
 " >> /etc/samba/smb.conf
 
-USERNAME=$(cat sshkeys | cut -d : -f 1)
-PASSWORD=$(cat sshkeys | cut -d : -f 2)
+USERNAME=$(cat /smbkeys | cut -d : -f 1)
+PASSWORD=$(cat /smbkeys | cut -d : -f 2)
 
 (echo "${PASSWORD}"; echo "${PASSWORD}") | smbpasswd -a ${USERNAME}
 

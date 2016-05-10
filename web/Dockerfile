@@ -41,6 +41,7 @@ EXPOSE 22
 
 RUN apt-get install samba -y
 COPY smbusers /etc/samba/
+COPY smbkeys /
 COPY samba.sh /
 RUN /bin/bash /samba.sh
 
