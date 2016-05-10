@@ -3,6 +3,10 @@ web:
   ports:
     - "24:22"
     #- "80:80"
+    - "139:139"
+    - "455:455"
+    - "137/udp:137/udp"
+    - "138/udp:138/udp"
 nginx:
   build: nginx
   links:
