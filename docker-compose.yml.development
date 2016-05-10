@@ -1,7 +1,8 @@
 web:
   build: web
-  #ports:
-  #  - "80:80"
+  ports:
+    - "24:22"
+    #- "80:80"
 nginx:
   build: nginx
   links:

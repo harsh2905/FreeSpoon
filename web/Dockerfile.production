@@ -20,21 +20,4 @@ EXPOSE 80
 
 RUN echo Asia/Shanghai > /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata
 
-# Dev Tools
-
-RUN apt-get install git -y
-RUN apt-get install vim -y
-
-# SSH
-
-RUN apt-get install -y openssh-server
-RUN mkdir /var/run/sshd
-COPY sshkeys /
-RUN cat /sshkeys | chpasswd
-
-RUN sed -ri 's/^PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
-RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
-
-EXPOSE 22
-
-CMD ["/usr/sbin/sshd", "-D"]
+CMD ["gulp", "run"]
