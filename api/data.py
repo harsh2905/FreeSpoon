@@ -3,8 +3,10 @@
 
 import logging
 import json
+import time
 from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
 from basic.models import *
 from . import utils, config
 
@@ -53,6 +55,26 @@ def fetchBatchExpireTime(batchId):
 		return delta.days + 1
 	else:
 		return 0
+
+def createOrderInfo(orderId):
+	order = fetchOrderById(orderId)
+	if order is None:
+		return None
+	w = DataObject()
+	w.commodities = []
+	for commodityInOrder in order.commodityinorder_set.all():
+		commodity = DataObject()
+		commodity.title = commodityInOrder.commodity.commodity.title
+		commodity.price = commodityInOrder.commodity.unit_price
+		commodity.quantity = commodityInOrder.quantity
+		w.commodities.append(commodity)
+	w.id = orderId
+	w.createTime = time.mktime(order.create_time.timetuple())
+	w.nickName = order.distributer.nick_name
+	w.address = order.distributer.location
+	w.tel = order.distributer.tel
+	w.totalFee = int(order.total_fee)
+	return w
 
 def createBatchInfo(batchId):
 	batch = fetchBatch(batchId)
@@ -106,19 +128,20 @@ def calcTotalFee(puchared):
 			totalFee += num * commodityInBatch.unit_price
 	return totalFee
 
-def getOrCreateOrder(orderId, batchId, customerId, distId, status, prepayId, total_fee):
-	return Order.objects.get_or_create(
-		batch_id=batchId,
-		customer_id=customerId,
-		defaults={
-			'id': orderId,
-			'create_time': datetime.now(),
-			'status': status,
-			'prepay_id': prepayId,
-			'distributer_id': distId,
-			'total_fee': total_fee
-		}
-	)
+def createOrder(orderId, batchId, customerId, distId, status, prepayId, total_fee):
+	try:
+		return Order.objects.create(
+			batch_id=batchId,
+			customer_id=customerId,
+			id=orderId,
+			create_time=datetime.now(),
+			status=status,
+			prepay_id=prepayId,
+			distributer_id=distId,
+			total_fee=total_fee
+		)
+	except IntegrityError:
+		return None
 
 def updateOrCreateCustomer(nickname, tel, openid):
 	return Customer.objects.update_or_create(
@@ -139,6 +162,14 @@ def createCommoditiesToOrder(commodities, orderId):
 			quantity=num,
 			commodity_id=id_,
 			order_id=orderId)
+
+def fetchOrderById(orderId):
+	try:
+		order = Order.objects.get(pk=orderId)
+	except ObjectDoesNotExist:
+		logger.error('Order id \'%s\' not found' % orderId)
+		return None
+	return order
 
 # Old Method
 
@@ -167,14 +198,6 @@ def fetchDist(distId):
 		logger.error('Distributer id \'%s\' not found' % distId)
 		return None
 	return dist
-
-def fetchOrderById(orderId):
-	try:
-		order = Order.objects.get(pk=orderId)
-	except ObjectDoesNotExist:
-		logger.error('Order id \'%s\' not found' % orderId)
-		return None
-	return order
 
 def fetchOrders(batchId, distId):
 	orders = Order.objects.filter(

@@ -12,6 +12,7 @@ nginx:
   links:
     - web:web
     - freespoon:freespoon
+    - wx:wx
   environment:
     - NGINX_DOMAIN=yourdomain
   ports:
@@ -38,3 +39,8 @@ freespoon:
   ports:
     #- "80:80"
     - "23:22"
+wx:
+  build: wx
+  ports:
+    - "25:22"
+    #- "8081:80"

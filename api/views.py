@@ -1,6 +1,7 @@
 from django.shortcuts import render
 
 import qrcode
+from datetime import datetime, timedelta
 from decimal import Decimal
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
@@ -117,7 +118,7 @@ def unifiedOrder(request):
 	distId = requestData.get('dist_id', None)
 	if distId is None:
 		return JSONResponse(ResObject('InvalidRequest'))
-	totalFee = data.calcTotalFee(commodities)
+	totalFee = data.calcTotalFee(puchared)
 	time_start = datetime.now()
 	time_expire = time_start + timedelta(minutes=30)
 	orderId = utils.createOrderId()
@@ -130,17 +131,39 @@ def unifiedOrder(request):
 		openid=openid,
 		title=batch.title,
 		detail=batch.desc,
-		notify_url='%s/payNotify' % DOMAIN_URL
+		notify_url='%s/payNotify' % config.DOMAIN_URL
 	)
-	if prepay_id is None:
+	if prepayId is None:
 		return JSONResponse(ResObject('InvalidRequest'))
-	(order, iscreated) = data.getOrCreateOrder(
+	order = data.createOrder(
 		orderId, batchId, customer.id, distId, 0, prepayId, totalFee)
-	if not iscreated:
+	if order is None:
 		return JSONResponse(ResObject('InvalidRequest'))
-	data.createCommoditiesToOrder(commodities, order.id)
+	data.createCommoditiesToOrder(puchared, order.id)
 	res = ResObject('Success')
 	res.put('orderId', orderId)
+	return JSONResponse(res)
+
+@csrf_exempt
+def order(request):
+	if request.method <> 'POST':
+		return JSONResponse(ResObject('InvalidRequest'))
+	requestData = json.loads(request.body, parse_float=Decimal)
+	orderId = requestData.get('orderId', None)
+	if orderId is None:
+		return JSONResponse(ResObject('InvalidRequest'))
+	order = data.fetchOrderById(orderId)
+	if order is None:
+		return JSONResponse(ResObject('InvalidRequest'))
+	payRequest = wxAuth.createPayRequestJson(order.prepay_id)
+	if payRequest is None:
+		return JSONResponse(ResObject('InvalidRequest'))
+	res = ResObject('Success')
+	do = data.createOrderInfo(orderId)
+	if do is None:
+		return JSONResponse(ResObject('InvalidRequest'))
+	res.put('data', do)
+	res.put('payRequest', payRequest)
 	return JSONResponse(res)
 
 @csrf_exempt
