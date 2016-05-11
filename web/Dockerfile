@@ -45,5 +45,7 @@ COPY smbkeys /
 COPY samba.sh /
 RUN /bin/bash /samba.sh
 
+EXPOSE 35729
+
 ENTRYPOINT smbd && \
 	/usr/sbin/sshd -D

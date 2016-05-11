@@ -49,6 +49,20 @@ def createQR(request):
 # Business Views
 
 @csrf_exempt
+def wxConfig(request):
+	if request.method == 'OPTIONS':
+		return CrossDomainResponse() 
+	if request.method <> 'POST':
+		return JSONResponse(ResObject('InvalidRequest'))
+	jsApiList = json.loads(request.body, parse_float=Decimal)
+	if jsApiList is None:
+		return JSONResponse(ResObject('InvalidRequest'))
+	wxConfig = wxAuth.createWXConfig(request.get_raw_uri(), jsApiList)
+	res = ResObject('Success')
+	res.put('wxConfig', wxConfig)
+	return JSONResponse(res)
+
+@csrf_exempt
 def batch(request):
 	if request.method == 'OPTIONS':
 		return CrossDomainResponse() 

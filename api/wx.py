@@ -192,7 +192,7 @@ class Auth():
 		self.jsApiTicketExpiresTime = datetime.now() + timedelta(seconds=expires_in * 0.8)
 		return ticket
 	
-	def createWXConfigJson(self, url, jsApiList):
+	def createWXConfig(self, url, jsApiList):
 		index = url.find('#')
 		if index <> -1:
 			url = url[:index + 1]
