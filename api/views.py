@@ -186,7 +186,6 @@ def order(request):
 
 @csrf_exempt
 def payNotify(request):
-	pdb.set_trace()
 	error = {
 		"return_code": "FAIL"
 	}
