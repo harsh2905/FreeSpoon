@@ -149,7 +149,7 @@ def unifiedOrder(request):
 		openid=openid,
 		title=batch.title,
 		detail=batch.desc,
-		notify_url='%s/payNotify' % config.DOMAIN_URL
+		notify_url='%s/api/payNotify' % config.DOMAIN_URL
 	)
 	if prepayId is None:
 		return JSONResponse(ResObject('InvalidRequest'))
@@ -186,10 +186,11 @@ def order(request):
 
 @csrf_exempt
 def payNotify(request):
+	pdb.set_trace()
 	error = {
 		"return_code": "FAIL"
 	}
-	orderId = auth.payNotify(request.body)
+	orderId = wxAuth.payNotify(request.body)
 	if orderId is None:
 		error['return_msg'] = 'Error'
     		xml = utils.mapToXml(error)

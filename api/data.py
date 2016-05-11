@@ -172,6 +172,10 @@ def fetchOrderById(orderId):
 		return None
 	return order
 
+def setOrderStatus(order, status):
+	order.status = status
+	order.save()
+
 # Old Method
 
 def fetchCustomerTel(openid):
@@ -204,10 +208,6 @@ def fetchOrders(batchId, distId):
 	orders = Order.objects.filter(
 		batch_id=batchId, distributer_id=distId).all()
 	return orders
-
-def setOrderStatus(order, status):
-	order.status = status
-	order.save()
 
 def fetchOrder(batchId, openid):
 	customer = fetchCustomer(openid)
