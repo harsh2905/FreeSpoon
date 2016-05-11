@@ -185,6 +185,21 @@ def order(request):
 	return JSONResponse(res)
 
 @csrf_exempt
+def orders(request):
+	if request.method <> 'POST':
+		return JSONResponse(ResObject('InvalidRequest'))
+	requestData = json.loads(request.body, parse_float=Decimal)
+	openId = requestData.get('openId', None)
+	if openId is None:
+		return JSONResponse(ResObject('InvalidRequest'))
+	res = ResObject('Success')
+	do = data.createOrdersInfo(openId)
+	if do is None:
+		return JSONResponse(ResObject('InvalidRequest'))
+	res.put('data', do)
+	return JSONResponse(res)
+
+@csrf_exempt
 def payNotify(request):
 	error = {
 		"return_code": "FAIL"

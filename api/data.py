@@ -60,6 +60,46 @@ def createOrderInfo(orderId):
 	order = fetchOrderById(orderId)
 	if order is None:
 		return None
+	return createOrderInfo_(order)
+
+def createOrdersInfo(openId):
+	ws = []
+	customer = None
+	try:
+		customer = Customer.objects.get(id_wechat=openId)
+	except ObjectDoesNotExist:
+		return ws
+	if customer is None:
+		return ws
+	orders = Order.objects.filter(
+		customer_id=customer.id).all()
+	for order in orders:
+		w = createSimpleOrderInfo_(order)
+		ws.append(w)
+	return ws
+
+def createSimpleOrderInfo_(order):
+	if order is None:
+		return None
+	w = DataObject()
+	w.id = order.id
+	w.leader = order.batch.leader.name
+	w.status = order.status
+	w.totalFee = int(order.total_fee)
+	w.avatar = order.batch.leader.avatar.url
+	pics = []
+	total = 0
+	for commodityInOrder in order.commodityinorder_set.all():
+		img = commodityInOrder.commodity.commodity.commodityimage_set.first().image.url
+		total = total + commodityInOrder.quantity
+		pics.append(img)
+	w.pics = pics
+	w.total = total
+	return w
+
+def createOrderInfo_(order):
+	if order is None:
+		return None
 	w = DataObject()
 	w.commodities = []
 	for commodityInOrder in order.commodityinorder_set.all():
@@ -68,7 +108,7 @@ def createOrderInfo(orderId):
 		commodity.price = commodityInOrder.commodity.unit_price
 		commodity.quantity = commodityInOrder.quantity
 		w.commodities.append(commodity)
-	w.id = orderId
+	w.id = order.id
 	w.createTime = time.mktime(order.create_time.timetuple()) * 1000
 	w.nickName = order.distributer.nick_name
 	w.address = order.distributer.location
