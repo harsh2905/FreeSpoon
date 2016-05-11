@@ -74,7 +74,7 @@ def createOrderInfo(orderId):
 	w.address = order.distributer.location
 	w.tel = order.distributer.tel
 	w.totalFee = int(order.total_fee)
-	w.state = order.state
+	w.status = order.status
 	return w
 
 def createBatchInfo(batchId):
