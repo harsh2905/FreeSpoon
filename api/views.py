@@ -54,10 +54,14 @@ def wxConfig(request):
 		return CrossDomainResponse() 
 	if request.method <> 'POST':
 		return JSONResponse(ResObject('InvalidRequest'))
-	jsApiList = json.loads(request.body, parse_float=Decimal)
+	requestData = json.loads(request.body, parse_float=Decimal)
+	jsApiList = requestData.get('jsApiList', None)
 	if jsApiList is None:
 		return JSONResponse(ResObject('InvalidRequest'))
-	wxConfig = wxAuth.createWXConfig(request.get_raw_uri(), jsApiList)
+	url = requestData.get('url', None)
+	if url is None:
+		return JSONResponse(ResObject('InvalidRequest'))
+	wxConfig = wxAuth.createWXConfig(url, jsApiList)
 	res = ResObject('Success')
 	res.put('wxConfig', wxConfig)
 	return JSONResponse(res)
