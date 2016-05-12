@@ -38,7 +38,7 @@ server {
         proxy_temp_file_write_size	64k;
     }
 
-    location ~ ^/(api|media)/ {
+    location ~ ^/(api|media|admin|static)/ {
         proxy_pass http://api;
 
         proxy_redirect		default;
