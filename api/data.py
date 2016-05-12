@@ -145,16 +145,22 @@ def createBatchInfo(batchId):
 		date=fetchBatchExpireTime(batch.id))
 	return w
 
-def createCheckoutInfo(batchId):
+def createCheckoutInfo(batchId, openId):
 	batch = fetchBatch(batchId)
 	if batch is None:
 		return None
-	w = []
+	w = DataObject()
+	dists = []
 	for distributer in batch.distributers.all():
 		dist = DataObject(
 			id=distributer.id,
 			address=distributer.location)
-		w.append(dist)
+		dists.append(dist)
+	w.dists = dists
+	customer = fetchCustomer(openId)
+	if customer is not None:
+		w.nickName = customer.nick_name
+		w.tel = customer.tel
 	return w
 
 def calcTotalFee(puchared):
@@ -212,9 +218,37 @@ def fetchOrderById(orderId):
 		return None
 	return order
 
+def deleteOrderById(orderId):
+	try:
+		order = Order.objects.get(pk=orderId)
+		order.delete()
+	except ObjectDoesNotExist:
+		logger.error('Order id \'%s\' not found' % orderId)
+	CommodityInOrder.objects.filter(order_id=orderId).delete()
+
 def setOrderStatus(order, status):
 	order.status = status
 	order.save()
+
+def fetchCustomer(openid):
+	if openid is None:
+		return None
+	try:
+		customer = Customer.objects.get(id_wechat=openid)
+	except ObjectDoesNotExist:
+		return None
+	return customer
+
+def createShareInfo(batchId):
+	batch = fetchBatch(batchId)
+	if batch is None:
+		return None
+	w = DataObject()
+	w.title = batch.share_title
+	w.desc = batch.share_desc
+	w.imgUrl = '%s%s' % (config.DOMAIN_URL, batch.share_img.url)
+	w.shareUrl = '%s/api/r?state=%s' % (config.DOMAIN_URL, batchId)
+	return w
 
 # Old Method
 
@@ -226,15 +260,6 @@ def fetchCustomerTel(openid):
 	except ObjectDoesNotExist:
 		return None
 	return customer.tel
-
-def fetchCustomer(openid):
-	if openid is None:
-		return None
-	try:
-		customer = Customer.objects.get(id_wechat=openid)
-	except ObjectDoesNotExist:
-		return None
-	return customer
 
 def fetchDist(distId):
 	try:

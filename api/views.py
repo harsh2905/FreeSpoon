@@ -98,8 +98,9 @@ def checkout(request):
 	batchId = requestData.get('batchId', None)
 	if batchId is None:
 		return JSONResponse(ResObject('InvalidRequest'))
+	openId = requestData.get('openId', None)
 	res = ResObject('Success')
-	do = data.createCheckoutInfo(batchId)
+	do = data.createCheckoutInfo(batchId, openId)
 	if do is None:
 		return JSONResponse(ResObject('InvalidRequest'))
 	res.put('data', do)
@@ -194,6 +195,46 @@ def orders(request):
 		return JSONResponse(ResObject('InvalidRequest'))
 	res = ResObject('Success')
 	do = data.createOrdersInfo(openId)
+	if do is None:
+		return JSONResponse(ResObject('InvalidRequest'))
+	res.put('data', do)
+	return JSONResponse(res)
+
+@csrf_exempt
+def undo(request):
+	if request.method <> 'POST':
+		return JSONResponse(ResObject('InvalidRequest'))
+	requestData = json.loads(request.body, parse_float=Decimal)
+	orderId = requestData.get('orderId', None)
+	if orderId is None:
+		return JSONResponse(ResObject('InvalidRequest'))
+	data.deleteOrderById(orderId)
+	res = ResObject('Success')
+	return JSONResponse(res)
+
+@csrf_exempt
+def orderAmount(request):
+	if request.method <> 'POST':
+		return JSONResponse(ResObject('InvalidRequest'))
+	requestData = json.loads(request.body, parse_float=Decimal)
+	batchId = requestData.get('batchId', None)
+	if batchId is None:
+		return JSONResponse(ResObject('InvalidRequest'))
+	res = ResObject('Success')
+	orderAmount = data.fetchOrderAmounts(batchId)
+	res.put('orderAmount', orderAmount)
+	return JSONResponse(res)
+
+@csrf_exempt
+def shareInfo(request):
+	if request.method <> 'POST':
+		return JSONResponse(ResObject('InvalidRequest'))
+	requestData = json.loads(request.body, parse_float=Decimal)
+	batchId = requestData.get('batchId', None)
+	if batchId is None:
+		return JSONResponse(ResObject('InvalidRequest'))
+	res = ResObject('Success')
+	do = data.createShareInfo(batchId)
 	if do is None:
 		return JSONResponse(ResObject('InvalidRequest'))
 	res.put('data', do)

@@ -14,5 +14,8 @@ urlpatterns = [
 	url(r'^unifiedOrder$', views.unifiedOrder, name='unifiedOrder'),
 	url(r'^order$', views.order, name='order'),
 	url(r'^orders$', views.orders, name='orders'),
+	url(r'^orderAmount$', views.orderAmount, name='orderAmount'),
+	url(r'^shareInfo$', views.shareInfo, name='shareInfo'),
+	url(r'^undo$', views.undo, name='undo'),
 	url(r'^payNotify$', views.payNotify, name='payNotify'),
 ]
