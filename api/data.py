@@ -122,6 +122,7 @@ def createBatchInfo(batchId):
 	if batch is None:
 		return None
 	w = DataObject()
+	w.id = batchId
 	w.commodities = []
 	for commodityInBatch in batch.commodityinbatch_set.all():
 		commodity = DataObject()

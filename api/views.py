@@ -217,11 +217,14 @@ def orderAmount(request):
 	if request.method <> 'POST':
 		return JSONResponse(ResObject('InvalidRequest'))
 	requestData = json.loads(request.body, parse_float=Decimal)
-	batchId = requestData.get('batchId', None)
-	if batchId is None:
+	orderId = requestData.get('orderId', None)
+	if orderId is None:
+		return JSONResponse(ResObject('InvalidRequest'))
+	order = data.fetchOrderById(orderId)
+	if order is None:
 		return JSONResponse(ResObject('InvalidRequest'))
 	res = ResObject('Success')
-	orderAmount = data.fetchOrderAmounts(batchId)
+	orderAmount = data.fetchOrderAmounts(order.batch_id)
 	res.put('orderAmount', orderAmount)
 	return JSONResponse(res)
 
