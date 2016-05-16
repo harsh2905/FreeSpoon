@@ -1,5 +1,7 @@
 web:
   build: web
+  volumes:
+    - /your/path:/FreeSpoonUI
   ports:
     - "35729:35729"
     - "24:22"
@@ -42,6 +44,8 @@ freespoon:
     - "23:22"
 wx:
   build: wx
+  volumes:
+    - /your/path:/WeChatAPI
   ports:
     - "25:22"
     #- "8081:80"

@@ -8,12 +8,11 @@ RUN apt-get update && apt-get install wget -y
 
 RUN apt-get install git -y
 RUN apt-get install curl -y
-RUN git clone https://github.com/cuilyGitHub/FreeSpoonUI.git
-WORKDIR /FreeSpoonUI
+RUN mkdir /FreeSpoonUI
+VOLUME /FreeSpoonUI
 
 RUN curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
 RUN apt-get install nodejs -y
-RUN npm install
 RUN npm install -g gulp
 
 EXPOSE 80
