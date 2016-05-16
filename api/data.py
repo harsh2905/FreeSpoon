@@ -87,6 +87,7 @@ def createSimpleOrderInfo_(order):
 	w.status = order.status
 	w.totalFee = int(order.total_fee)
 	w.avatar = order.batch.leader.avatar.url
+	w.createTime = time.mktime(order.create_time.timetuple()) * 1000
 	pics = []
 	total = 0
 	for commodityInOrder in order.commodityinorder_set.all():
