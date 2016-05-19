@@ -207,7 +207,7 @@ class Auth():
 		}
 		signature = utils.generateSHA1Sign(d)
 		dd = {
-			'debug': True,
+			'debug': False,
 			'appId': APPID,
 			'timestamp': timestamp,
 			'nonceStr': nonceStr,

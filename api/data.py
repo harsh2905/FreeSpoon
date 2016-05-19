@@ -56,6 +56,47 @@ def fetchBatchExpireTime(batchId):
 	else:
 		return 0
 
+def createConfirmInfo(batchId, distId, openId):
+	customer = None
+	try:
+		customer = Customer.objects.get(id_wechat=openId)
+	except ObjectDoesNotExist:
+		return None
+	if customer is None:
+		return None
+	batch = fetchBatch(batchId)
+	if batch is None:
+		return None
+	w = DataObject()
+	w.batch = batch.title
+	w.note = ''
+	w.date = time.mktime(datetime.now().timetuple()) * 1000
+	orders = Order.objects.filter(
+		id=orderId,
+		distributer_id=distId,
+		customer_id=customer.id).all()
+	if orders is None:
+		return None
+	orderIds = []
+	commodities = {}
+	for order in orders:
+		orderIds.append(order.id)
+		for commodityInOrder in order.commodityinorder_set.all():
+			commodityInBatchId = commodityInOrder.commodity.id
+			if commodityInBatchId in commodities:
+				commodity = commodities.get(commodityInBatchId, None)
+				if commodity is not None:
+					commodity.num = commodity.num + commodityInOrder.quantity
+				continue
+			commodity = DataObject()
+			commodity.title = commodityInOrder.commodity.commodity.title
+			commodity.spec = commodityInOrder.commodity.commodity.spec
+			commodity.num = commodityInOrder.quantity
+			commodities[commodityInBatchId] = commodity
+	w.orderIds = orderIds
+	w.commodities = commodities.values()
+	return w
+
 def createOrderInfo(orderId):
 	order = fetchOrderById(orderId)
 	if order is None:
