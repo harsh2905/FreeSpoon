@@ -13,8 +13,8 @@ RUN echo Asia/Shanghai > /etc/timezone && dpkg-reconfigure --frontend noninterac
 RUN apt-get install subversion -y
 RUN apt-get install vim -y
 RUN apt-get install curl -y
-RUN mkdir /WeChatAPI
-VOLUME /WeChatAPI
+RUN mkdir /CuisineBook
+VOLUME /CuisineBook
 
 # Dev
 
