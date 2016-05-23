@@ -16,6 +16,7 @@ nginx:
     - web:web
     - freespoon:freespoon
     - wx:wx
+    - cookbook:cookbook
   environment:
     - NGINX_DOMAIN=yourdomain
   ports:
@@ -42,6 +43,19 @@ freespoon:
   ports:
     #- "80:80"
     - "23:22"
+cookbook:
+  build: cookbook
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - /home/sam/workspace/CuisineBook:/CuisineBook
+  links:
+    - db:db
+  environment:
+    - DBHOST=db
+    - DBPASSWD=123456
+  ports:
+    - "26:22"
+    #- "8082:80"
 wx:
   build: wx
   volumes:
