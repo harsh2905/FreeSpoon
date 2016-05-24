@@ -244,30 +244,6 @@ def shareInfo(request):
 	return JSONResponse(res)
 
 @csrf_exempt
-def confirm(request):
-	if request.method <> 'POST':
-		return JSONResponse(ResObject('InvalidRequest'))
-	requestData = json.loads(request.body, parse_float=Decimal)
-	batchId = requestData.get('batchId', None)
-	if batchId is None:
-		return JSONResponse(ResObject('InvalidRequest'))
-	distId = requestData.get('distId', None)
-	if distId is None:
-		return JSONResponse(ResObject('InvalidRequest'))
-	code = requestData.get('code', None)
-	if code is None:
-		return JSONResponse(ResObject('InvalidRequest'))
-	openId = wxAuth.fetchOpenId(code)
-	if openId is None:
-		return JSONResponse(ResObject('InvalidRequest'))
-	do = data.createConfirmInfo(batchId, distId, openId)
-	if do is None:
-		return JSONResponse(ResObject('InvalidRequest'))
-	res = ResObject('Success')
-	res.put('data', do)
-	return JSONResponse(res)
-
-@csrf_exempt
 def payNotify(request):
 	error = {
 		"return_code": "FAIL"
