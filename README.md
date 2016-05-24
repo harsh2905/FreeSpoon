@@ -30,3 +30,11 @@ Visiting https://pillow.readthedocs.org/en/3.0.0/installation.html#linux-install
 
 	python manage.py makemigrations  
 	python manage.py migrate
+
+### Import & Export Data  
+
+	python manage.py dumpdata auth > /your/path/auth.json  
+	python manage.py dumpdata basic > /your/path/basic.json  
+	python manage.py loaddata /your/path/auth.json  
+	python manage.py loaddata /your/path/basic.json  
+
