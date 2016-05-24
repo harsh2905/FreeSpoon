@@ -56,6 +56,7 @@ class User(models.Model):
 	name = models.CharField(max_length=200)
 	id_wechat = models.CharField(max_length=200, unique=True)
 	avatar = models.CharField(max_length=200)
+	create_time = models.DateTimeField(auto_now=True)
 	def render(self):
 		return u'<img style="max-height:150px;" src="%s" />' % self.avatar.url
 	render.allow_tags = True
