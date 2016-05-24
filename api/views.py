@@ -149,7 +149,7 @@ def unifiedOrder(request):
 		time_expire=time_expire,
 		openid=openid,
 		title=batch.title,
-		detail=batch.desc,
+		detail=batch.detail,
 		notify_url='%s/api/payNotify' % config.DOMAIN_URL
 	)
 	if prepayId is None:

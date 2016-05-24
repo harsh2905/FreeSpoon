@@ -111,7 +111,7 @@ def createOrderInfo_(order):
 		w.commodities.append(commodity)
 	w.id = order.id
 	w.createTime = time.mktime(order.create_time.timetuple()) * 1000
-	w.nickName = order.distributer.nick_name
+	w.nickName = order.distributer.name
 	w.address = order.distributer.location
 	w.tel = order.distributer.tel
 	w.totalFee = int(order.total_fee)
