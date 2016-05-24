@@ -1,0 +1,65 @@
+web:
+  build: web
+  volumes:
+    - /your/path:/FreeSpoonUI
+  ports:
+    - "35729:35729"
+    - "24:22"
+    #- "80:80"
+    - "139:139"
+    - "455:455"
+    - "137/udp:137/udp"
+    - "138/udp:138/udp"
+nginx:
+  build: nginx
+  links:
+    - web:web
+    - freespoon:freespoon
+    - wx:wx
+    - cookbook:cookbook
+  environment:
+    - NGINX_DOMAIN=yourdomain
+  ports:
+    - "80:80"
+db:
+  build: db
+  volumes:
+    - /var/lib/mysql:/var/lib/mysql
+    - /etc/localtime:/etc/localtime:ro
+  environment:
+    - MYSQL_ROOT_PASSWORD=123456
+    - MYSQL_DATABASE=FreeSpoon
+  ports:
+    - "3306:3306"
+freespoon:
+  build: .
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - /your/path:/FreeSpoon
+    - /freespoon_data:/FreeSpoon/data
+    - /freespoon_media:/FreeSpoon/media
+  links:
+    - db:db
+  ports:
+    #- "80:80"
+    - "23:22"
+cookbook:
+  build: cookbook
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - /home/sam/workspace/CuisineBook:/CuisineBook
+  links:
+    - db:db
+  environment:
+    - DBHOST=db
+    - DBPASSWD=123456
+  ports:
+    - "26:22"
+    #- "8082:80"
+wx:
+  build: wx
+  volumes:
+    - /your/path:/WeChatAPI
+  ports:
+    - "25:22"
+    #- "8081:80"

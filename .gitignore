@@ -61,5 +61,8 @@ target/
 #Ipython Notebook
 .ipynb_checkpoints
 
-# Upload Dir
+#
 media/
+data/
+docker-compose.yml
+sshkeys

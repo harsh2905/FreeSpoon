@@ -1,5 +1,7 @@
 # Free Spoon  
 
+[![Build Status](https://travis-ci.org/codemeow5/FreeSpoon.svg?branch=dev)](https://travis-ci.org/codemeow5/FreeSpoon)
+
 A group purchase website based on WeChat.
 
 ### Install
@@ -11,6 +13,7 @@ A group purchase website based on WeChat.
 	sudo pip install MySQL-python  
 	sudo pip install qrcode  
 	sudo pip install Pillow  
+	sudo pip install openpyxl  
 
 ### About install Pillow
 

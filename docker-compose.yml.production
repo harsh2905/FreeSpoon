@@ -1,0 +1,47 @@
+web:
+  build: web
+  #ports:
+  #  - "80:80"
+nginx:
+  build: nginx
+  links:
+    - web:web
+    - freespoon:freespoon
+    - wx:wx
+  environment:
+    - NGINX_DOMAIN=yourdomain
+  ports:
+    - "80:80"
+db:
+  build: db
+  volumes:
+    - /var/lib/mysql:/var/lib/mysql
+    - /etc/localtime:/etc/localtime:ro
+  environment:
+    - MYSQL_ROOT_PASSWORD=123456
+    - MYSQL_DATABASE=FreeSpoon
+  ports:
+    - "3306:3306"
+freespoon:
+  build: .
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - /freespoon_data:/FreeSpoon/data
+    - /freespoon_media:/FreeSpoon/media
+  links:
+    - db:db
+  environment:
+    - DOMAINNAME=localhost
+    - DBHOST=db
+    - DBPASSWD=123456
+    - APPID=yourappid
+    - APPSECRET=yourappsecret
+    - MCHID=yourmchid
+    - APPKEY=yourappkey
+  ports:
+    #- "80:80"
+wx:
+  build: wx
+  ports:
+    - "25:22"
+    #- "8081:80"
