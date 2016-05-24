@@ -86,12 +86,19 @@ def createSimpleOrderInfo_(order):
 	w.leader = order.batch.leader.name
 	w.status = order.status
 	w.totalFee = int(order.total_fee)
-	w.avatar = order.batch.leader.avatar.url
+	try:
+		w.avatar = order.batch.leader.avatar.url
+	except ValueError:
+		w.avatar = ''
 	w.createTime = time.mktime(order.create_time.timetuple()) * 1000
 	pics = []
 	total = 0
 	for commodityInOrder in order.commodityinorder_set.all():
-		img = commodityInOrder.commodity.commodity.commodityimage_set.first().image.url
+		img = ''
+		try:
+			img = commodityInOrder.commodity.commodity.image.url
+		except ValueError:
+			img = ''
 		total = total + commodityInOrder.quantity
 		pics.append(img)
 	w.pics = pics
@@ -130,18 +137,26 @@ def createBatchInfo(batchId):
 		commodity.id = commodityInBatch.id
 		commodity.title = commodityInBatch.commodity.title
 		commodity.describle = commodityInBatch.commodity.details
-		img = commodityInBatch.commodity.commodityimage_set.first().image.url
-		img = '%s%s' % (config.DOMAIN_URL, img)
-		commodity.img = img
+		try:
+			img = commodityInBatch.commodity.image.url
+			img = '%s%s' % (config.DOMAIN_URL, img)
+			commodity.img = img
+		except ValueError:
+			commodity.img = ''
 		commodity.spec = commodityInBatch.commodity.spec
 		commodity.price = commodityInBatch.unit_price
 		commodity.peopleCount = fetchCommodityAmounts(commodityInBatch.id)
 		commodity.commodityCount = fetchCommodityQuantities(commodityInBatch.id)
 		w.commodities.append(commodity)
+	img = ''
+	try:
+		img = batch.leader.avatar.url
+	except ValueError:
+		img = ''
 	w.sponsor = DataObject(
 		name=batch.leader.name,
 		note=batch.leader.tail,
-		img= '%s%s' % (config.DOMAIN_URL, batch.leader.avatar.url))
+		img= '%s%s' % (config.DOMAIN_URL, img))
 	w.offered = DataObject(
 		offeredTotal=fetchOrderAmounts(batch.id),
 		date=fetchBatchExpireTime(batch.id))
@@ -252,76 +267,3 @@ def createShareInfo(batchId):
 	w.shareUrl = '%s/api/r?state=%s' % (config.DOMAIN_URL, batchId)
 	return w
 
-# Old Method
-
-def fetchCustomerTel(openid):
-	if openid is None:
-		return None
-	try:
-		customer = Customer.objects.get(id_wechat=openid)
-	except ObjectDoesNotExist:
-		return None
-	return customer.tel
-
-def fetchDist(distId):
-	try:
-		dist = Distributer.objects.get(pk=distId)
-	except ObjectDoesNotExist:
-		logger.error('Distributer id \'%s\' not found' % distId)
-		return None
-	return dist
-
-def fetchOrders(batchId, distId):
-	orders = Order.objects.filter(
-		batch_id=batchId, distributer_id=distId).all()
-	return orders
-
-def fetchOrder(batchId, openid):
-	customer = fetchCustomer(openid)
-	if customer is None:
-		return None
-	try:
-		order = Order.objects.get(
-			batch_id=batchId, customer_id=customer.id)
-	except ObjectDoesNotExist:
-		logger.error('Order not found')
-		return None
-	return order
-
-
-def parseToCommoditiesJson(batch):
-	if batch is None:
-		logger.error('Batch is null')
-		return None
-	commodities = {}
-	for commodityInBatch in batch.commodityinbatch_set.all():
-		commodity = {}
-		commodity['id'] = commodityInBatch.id
-		commodity['title'] = commodityInBatch.commodity.title
-		commodity['unit_price'] = commodityInBatch.unit_price
-		commodity['quota'] = commodityInBatch.quota
-		commodities[str(commodityInBatch.id)] = commodity
-	commoditiesJson = json.dumps(commodities)
-	return commoditiesJson
-
-def parseToDistJson(batch):
-	if batch is None:
-		logger.error('Batch is null')
-		return None
-	dists = {}
-	for distributer in batch.distributers.all():
-		dist = {}
-		dist['id'] = distributer.id
-		dist['name'] = distributer.name
-		dist['location'] = distributer.location
-		dists[str(distributer.id)] = dist
-	distsJson = json.dumps(dists)
-	return distsJson
-
-def fetchRecentTel(customerId):
-	try:
-		customer = Customer.objects.get(pk=customerId)
-	except ObjectDoesNotExist:
-		logger.error('Customer id \'%s\' not found' % customerId)
-		return None
-	return customer.tel

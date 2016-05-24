@@ -4,7 +4,6 @@ from django.contrib import admin
 
 from .models import Batch
 from .models import Commodity
-from .models import CommodityImage
 from .models import CommodityInBatch
 from .models import CommodityInOrder
 from .models import Customer
@@ -12,13 +11,14 @@ from .models import Distributer
 from .models import Leader
 from .models import Order
 
-class CommodityImageInline(admin.TabularInline):
-	model = CommodityImage
-	extra = 1
+class CommodityAdmin(admin.ModelAdmin):
 	readonly_fields = ('render',)
 
-class CommodityAdmin(admin.ModelAdmin):
-	inlines = [CommodityImageInline]
+class LeaderAdmin(admin.ModelAdmin):
+	readonly_fields = ('render',)
+
+class DistributerAdmin(admin.ModelAdmin):
+	readonly_fields = ('render',)
 
 class CommodityInBatchInline(admin.TabularInline):
 	model = CommodityInBatch
@@ -47,7 +47,7 @@ class OrderAdmin(admin.ModelAdmin):
 admin.site.register(Commodity, CommodityAdmin)
 admin.site.register(Batch, BatchAdmin)
 admin.site.register(Customer)
-admin.site.register(Distributer)
-admin.site.register(Leader)
+admin.site.register(Distributer, DistributerAdmin)
+admin.site.register(Leader, LeaderAdmin)
 admin.site.register(Order, OrderAdmin)
 

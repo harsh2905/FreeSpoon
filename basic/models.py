@@ -9,6 +9,9 @@ class Leader(models.Model):
 	tel = models.CharField(max_length=20, unique=True)
 	id_wechat = models.CharField(max_length=200, unique=True)
 	avatar = models.ImageField(upload_to='avatars', blank=True)
+	def render(self):
+		return u'<img style="max-height:150px;" src="%s" />' % self.avatar.url
+	render.allow_tags = True
 	tail = models.CharField(max_length=255, blank=True)
 	create_time = models.DateTimeField(auto_now=True)
 	def __unicode__(self):
@@ -33,15 +36,12 @@ class Commodity(models.Model):
 	title = models.CharField(max_length=200)
 	details = models.TextField()
 	spec = models.CharField(max_length=200)
-	def __unicode__(self):
-		return self.title
-
-class CommodityImage(models.Model):
-	commodity = models.ForeignKey(Commodity)
 	image = models.ImageField(upload_to='images/commodity/%Y/%m/%d')
 	def render(self):
 		return u'<img style="max-height:150px;" src="%s" />' % self.image.url
 	render.allow_tags = True
+	def __unicode__(self):
+		return self.title
 
 class CommodityInBatch(models.Model):
 	batch = models.ForeignKey(Batch)
@@ -63,6 +63,9 @@ class Distributer(models.Model):
 	tel = models.CharField(max_length=20, unique=True)
 	id_wechat = models.CharField(max_length=200, unique=True)
 	avatar = models.ImageField(upload_to='avatars', blank=True)
+	def render(self):
+		return u'<img style="max-height:150px;" src="%s" />' % self.avatar.url
+	render.allow_tags = True
 	tail = models.CharField(max_length=255, blank=True)
 	create_time = models.DateTimeField(auto_now=True)
 	location = models.TextField()
