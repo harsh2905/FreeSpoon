@@ -50,10 +50,25 @@ class CommodityInBatch(models.Model):
 	def __unicode__(self):
 		return self.commodity.title
 
+class User(models.Model):
+	tel = models.CharField(max_length=20, unique=True)
+	passwd = models.CharField(max_length=100)
+	name = models.CharField(max_length=200)
+	id_wechat = models.CharField(max_length=200, unique=True)
+	avatar = models.CharField(max_length=200)
+	def render(self):
+		return u'<img style="max-height:150px;" src="%s" />' % self.avatar.url
+	render.allow_tags = True
+	def __unicode__(self):
+		return self.name
+
 class Customer(models.Model):
 	nick_name = models.CharField(max_length=200)
 	id_wechat = models.CharField(max_length=200, unique=True)
 	avatar = models.CharField(max_length=200)
+	def render(self):
+		return u'<img style="max-height:150px;" src="%s" />' % self.avatar.url
+	render.allow_tags = True
 	tel = models.CharField(max_length=20, unique=True)
 	def __unicode__(self):
 		return self.nick_name
@@ -85,19 +100,11 @@ class Order(models.Model):
 	def __unicode__(self):
 		return '%s - %s - %s' % (
 			self.batch.title, self.customer.nick_name, self.create_time)
-	#def calc_total_fee(self):
-	#	total_fee = 0
-	#	for commodityInOrder in self.commodities:
-	#		unit_price = commodityInOrder.commodity.unit_price
-	#		quantity = commodityInOrder.quantity
-	#		total_fee += unit_price * quantity
-	#	return total_fee
 
 class CommodityInOrder(models.Model):
 	order = models.ForeignKey(Order)
 	commodity = models.ForeignKey(CommodityInBatch)
 	quantity = models.IntegerField(max_length=10)
-	#price = models.DecimalField(max_digits=9, decimal_places=2)
 	def __unicode__(self):
 		return self.commodity.commodity.title
 
