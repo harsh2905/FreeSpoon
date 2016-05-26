@@ -2,6 +2,7 @@
 
 from django.conf.urls import url
 
+from rest_framework_jwt.views import obtain_jwt_token
 from . import views
 
 urlpatterns = [
@@ -18,4 +19,5 @@ urlpatterns = [
 	url(r'^shareInfo$', views.shareInfo, name='shareInfo'),
 	url(r'^undo$', views.undo, name='undo'),
 	url(r'^payNotify$', views.payNotify, name='payNotify'),
+	url(r'^auth$', obtain_jwt_token),
 ]

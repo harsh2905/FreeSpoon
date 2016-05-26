@@ -1,8 +1,56 @@
 from __future__ import unicode_literals
 
+from django.conf import settings
+from django.contrib.auth.models import (
+	BaseUserManager, AbstractBaseUser)
 from django.db import models
 
 # Create your models here.
+
+class UserManager(BaseUserManager):
+	def create_user(self, tel, password=None):
+		if not tel:
+			raise ValueError('Users must have an telephone number')
+		user = self.model(
+			tel=tel
+		)
+		user.set_password(password)
+		user.save(using=self._db)
+		return user
+
+	def create_superuser(self, tel, password):
+		user = self.create_user(tel, password=password)
+		user.is_admin = True
+		user.save(using=self._db)
+		return user
+
+class User(AbstractBaseUser):
+	tel = models.CharField(max_length=20, unique=True)
+	USERNAME_FIELD = 'tel'
+	name = models.CharField(max_length=200)
+	id_wechat = models.CharField(max_length=200)
+	avatar = models.CharField(max_length=200)
+	create_time = models.DateTimeField(auto_now=True)
+	is_active = models.BooleanField(default=True)
+	is_admin = models.BooleanField(default=False)
+	objects = UserManager()
+	def get_full_name(self):
+		return self.name
+	def get_short_name(self):
+		return self.name
+	def has_perm(self, perm, obj=None):
+		return True
+	def has_module_perms(self, app_label):
+		return True
+	def render(self):
+		return u'<img style="max-height:150px;" src="%s" />' % self.avatar.url
+	render.allow_tags = True
+	def __unicode__(self):
+		return self.tel
+
+	@property
+	def is_staff(self):
+		return self.is_admin
 
 class Leader(models.Model):
 	name = models.CharField(max_length=200)
@@ -50,20 +98,9 @@ class CommodityInBatch(models.Model):
 	def __unicode__(self):
 		return self.commodity.title
 
-class User(models.Model):
-	tel = models.CharField(max_length=20, unique=True)
-	passwd = models.CharField(max_length=100)
-	name = models.CharField(max_length=200)
-	id_wechat = models.CharField(max_length=200, unique=True)
-	avatar = models.CharField(max_length=200)
-	create_time = models.DateTimeField(auto_now=True)
-	def render(self):
-		return u'<img style="max-height:150px;" src="%s" />' % self.avatar.url
-	render.allow_tags = True
-	def __unicode__(self):
-		return self.name
-
 class Customer(models.Model):
+	user = models.OneToOneField(
+		settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
 	nick_name = models.CharField(max_length=200)
 	id_wechat = models.CharField(max_length=200, unique=True)
 	avatar = models.CharField(max_length=200)
