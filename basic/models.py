@@ -64,8 +64,8 @@ class CommodityInBatch(models.Model):
 		return self.commodity.title
 
 class Customer(models.Model):
-	user = models.OneToOneField(
-		settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+	#user = models.OneToOneField(
+	#	settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
 	nick_name = models.CharField(max_length=200)
 	id_wechat = models.CharField(max_length=200, unique=True)
 	avatar = models.CharField(max_length=200)

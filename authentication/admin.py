@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
-from .models import SmsUser
+from .models import *
 
 # Register your models here.
 
@@ -13,7 +13,7 @@ class UserCreationForm(forms.ModelForm):
     password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
 
     class Meta:
-        model = SmsUser
+        model = MobUser
         fields = ('mob', 'name', 'avatar')
 
     def clean_password2(self):
@@ -34,7 +34,7 @@ class UserChangeForm(forms.ModelForm):
     password = ReadOnlyPasswordHashField()
 
     class Meta:
-        model = SmsUser
+        model = MobUser
         fields = ('mob', 'password', 'name', 'avatar', 'is_active', 'is_admin')
 
     def clean_password(self):
@@ -61,5 +61,5 @@ class UserAdmin(BaseUserAdmin):
     ordering = ('mob',)
     filter_horizontal = ()
 
-admin.site.register(SmsUser, UserAdmin)
+admin.site.register(MobUser, UserAdmin)
 admin.site.unregister(Group)

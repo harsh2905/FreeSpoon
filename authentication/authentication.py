@@ -12,7 +12,7 @@ class SmsBackend(object):
 		# TODO Check Sms verificate code
 		if code is not None and code == '123456':
 			try:
-				user = SmsUser.objects.get(mob=mob)
+				user = MobUser.objects.get(mob=mob)
 				return user
 			except ObjectDoesNotExist:
 				print('User not found')
@@ -20,6 +20,6 @@ class SmsBackend(object):
 
 	def get_user(self, user_id):
 		try:
-			return SmsUser.objects.get(pk=user_id)
+			return MobUser.objects.get(pk=user_id)
 		except ObjectDoesNotExist:
 			return None

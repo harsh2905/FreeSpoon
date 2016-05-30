@@ -10,7 +10,7 @@ import pdb
 
 # Create your models here.
 
-class SmsUserManager(BaseUserManager):
+class MobUserManager(BaseUserManager):
 	
 	def create_user(self, mob):
 		user = self.model(mob=mob)
@@ -24,7 +24,7 @@ class SmsUserManager(BaseUserManager):
 		user.save(using=self._db)
 		return user
 
-class SmsUser(AbstractBaseUser):
+class MobUser(AbstractBaseUser):
 	mob = models.CharField(max_length=20, unique=True)
 	USERNAME_FIELD = 'mob'
 	name = models.CharField(max_length=100, null=True, blank=True)
@@ -33,7 +33,7 @@ class SmsUser(AbstractBaseUser):
 
 	is_active = models.BooleanField(default=True)
 	is_admin = models.BooleanField(default=False)
-	objects = SmsUserManager()
+	objects = MobUserManager()
 
 	def __unicode__(self):
 		return self.mob

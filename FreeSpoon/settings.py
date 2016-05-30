@@ -154,4 +154,4 @@ AUTHENTICATION_BACKENDS = (
     'authentication.authentication.SmsBackend',
 )
 
-AUTH_USER_MODEL = 'authentication.SmsUser'
+AUTH_USER_MODEL = 'authentication.MobUser'
