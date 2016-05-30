@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'authentication',
     'basic',
     'api',
 ]
@@ -148,4 +149,9 @@ LOGGING = {
     },
 }
 
-AUTH_USER_MODEL = 'basic.User'
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'authentication.authentication.SmsBackend',
+)
+
+AUTH_USER_MODEL = 'authentication.SmsUser'
