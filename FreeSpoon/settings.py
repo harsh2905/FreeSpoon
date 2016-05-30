@@ -48,7 +48,7 @@ INSTALLED_APPS = [
 
     'django.contrib.sites',
     'allauth',
-    #'allauth.account',
+    'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.weixin_mp',
 
@@ -167,4 +167,16 @@ AUTHENTICATION_BACKENDS = (
     'authentication.authentication.SmsBackend',
 )
 
+REST_USE_JWT = True
+
+REST_AUTH_SERIALIZERS = {
+    'JWT_SERIALIZER': 'authentication.serializers.JWTSerializer',
+    'USER_DETAILS_SERIALIZER': 'authentication.serializers.MobUserSerializer',
+}
+
 AUTH_USER_MODEL = 'authentication.MobUser'
+ACCOUNT_USER_MODEL_USERNAME_FIELD = 'mob'
+ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+
