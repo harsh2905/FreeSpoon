@@ -22,6 +22,7 @@ RUN apt-get install python-dev python-pip -y
 RUN apt-get install redis-server -y
 RUN apt-get install mysql-client -y
 RUN pip install tornado
+RUN pip install MySQL-python
 RUN pip install BeautifulSoup4
 RUN pip install Tornado-MySQL
 RUN pip install redis
