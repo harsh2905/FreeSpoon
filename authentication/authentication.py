@@ -1,12 +1,9 @@
 from django.core.exceptions import ObjectDoesNotExist
 from .models import *
 
-import pdb
-
 class SmsBackend(object):
 
 	def authenticate(self, mob=None, code=None):
-		pdb.set_trace()
 		# TODO Check mobile phone format
 		
 		# TODO Check Sms verificate code

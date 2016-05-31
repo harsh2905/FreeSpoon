@@ -46,8 +46,3 @@ class WeixinOAuth2CallbackView(WeixinOAuth2ClientMixin, OAuth2CallbackView):
 
 oauth2_login = WeixinOAuth2LoginView.adapter_view(WeixinOAuth2Adapter)
 oauth2_callback = WeixinOAuth2CallbackView.adapter_view(WeixinOAuth2Adapter)
-
-# Auth API
-
-class LoginView(BaseLoginView):
-	pass

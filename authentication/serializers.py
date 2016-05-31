@@ -18,8 +18,6 @@ class LoginSerializer(serializers.Serializer):
 	code = serializers.CharField(required=True, allow_blank=False)
 
 	def validate(self, attrs):
-		import pdb
-		pdb.set_trace()
 		mob = attrs.get('mob')
 		code = attrs.get('code')
 
