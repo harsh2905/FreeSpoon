@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
+import datetime
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -173,6 +174,26 @@ REST_AUTH_SERIALIZERS = {
     'JWT_SERIALIZER': 'authentication.serializers.JWTSerializer',
     'USER_DETAILS_SERIALIZER': 'authentication.serializers.MobUserSerializer',
     'LOGIN_SERIALIZER': 'authentication.serializers.LoginSerializer',
+}
+
+REST_SESSION_LOGIN = False
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    ),
+}
+
+JWT_AUTH = {
+    'JWT_PAYLOAD_GET_USERNAME_HANDLER':
+    'authentication.utils.jwt_get_username_from_payload_handler',
+
+    'JWT_ALLOW_REFRESH': True,
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=30),
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=999),
 }
 
 AUTH_USER_MODEL = 'authentication.MobUser'
