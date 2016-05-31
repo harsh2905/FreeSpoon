@@ -5,6 +5,8 @@ from rest_auth.registration.views import SocialLoginView
 from allauth.socialaccount.providers.oauth2.views import (OAuth2Adapter,
                                                           OAuth2LoginView,
                                                           OAuth2CallbackView)
+from rest_auth.views import LoginView as BaseLoginView
+
 from django.shortcuts import render
 
 # Create your views here.
@@ -44,3 +46,8 @@ class WeixinOAuth2CallbackView(WeixinOAuth2ClientMixin, OAuth2CallbackView):
 
 oauth2_login = WeixinOAuth2LoginView.adapter_view(WeixinOAuth2Adapter)
 oauth2_callback = WeixinOAuth2CallbackView.adapter_view(WeixinOAuth2Adapter)
+
+# Auth API
+
+class LoginView(BaseLoginView):
+	pass

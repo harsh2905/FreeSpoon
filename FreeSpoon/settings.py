@@ -172,6 +172,7 @@ REST_USE_JWT = True
 REST_AUTH_SERIALIZERS = {
     'JWT_SERIALIZER': 'authentication.serializers.JWTSerializer',
     'USER_DETAILS_SERIALIZER': 'authentication.serializers.MobUserSerializer',
+    'LOGIN_SERIALIZER': 'authentication.serializers.LoginSerializer',
 }
 
 AUTH_USER_MODEL = 'authentication.MobUser'

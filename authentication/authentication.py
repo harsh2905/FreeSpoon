@@ -15,6 +15,7 @@ class SmsBackend(object):
 				user = MobUser.objects.get(mob=mob)
 				return user
 			except ObjectDoesNotExist:
+				# TODO register
 				print('User not found')
 		return None
 
