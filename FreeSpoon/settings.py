@@ -55,6 +55,7 @@ INSTALLED_APPS = [
 
     'basic',
     'api',
+    'business',
 ]
 
 SITE_ID = 1

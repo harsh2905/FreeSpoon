@@ -19,4 +19,6 @@ def api_root(request, format=None):
 		'bind': reverse('bind', request=request, format=format),
 
 		'wxConfig': reverse('wxConfig2', request=request, format=format),
+		'userLogin': reverse('userLogin', request=request, format=format),
+		'userSocialLogin': reverse('userSociallogin', request=request, format=format),
 	})

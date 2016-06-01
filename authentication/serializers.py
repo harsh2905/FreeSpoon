@@ -12,7 +12,7 @@ from .models import *
 class MobUserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = MobUser
-		fields = ('id', 'mob', 'name')
+		fields = ('id', 'mob')
 
 	def __init__(self, instance=None, data=empty, **kwargs):
 		if instance and instance.parent:

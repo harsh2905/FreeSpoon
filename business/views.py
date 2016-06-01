@@ -1,17 +1,27 @@
 from django.http import HttpResponseRedirect
 from django.views.decorators.http import require_GET
 
+from rest_framework import status
+from rest_framework import viewsets
+from rest_framework.response import Response
 from rest_framework.decorators import (
 	api_view,
 	permission_classes,
 )
-from rest_framework.response import Response
+
+from rest_auth.views import LoginView as BaseLoginView
+from authentication.views import WeixinLogin as BaseWeixinLogin
 
 from django.shortcuts import render
 
 from . import config
 from wx import Auth as wxAuthClass
 from .exceptions import *
+from .serializers import (
+	UserLoginSerializer,
+	UserSocialLoginSerializer,
+	JWTSerializer,
+)
 
 wx = wxAuthClass()
 
@@ -34,10 +44,41 @@ def redirect(request, relativePath):
 
 # REST API
 
+# Authentication
+
+#class UserLoginView(BaseLoginView):
+class UserLoginViewMixIn(object):
+
+	def get_response(self):
+		user = self.serializer.validated_data['wrap_user']
+
+        	data = {
+        	    'user': user,
+        	    'token': self.token
+        	}
+        	serializer = JWTSerializer(instance=data, context={'request': self.request})
+
+        	return Response(serializer.data, status=status.HTTP_200_OK)
+
+class UserLoginView(
+	UserLoginViewMixIn,
+	BaseLoginView):
+	serializer_class = UserLoginSerializer
+
+class WeixinLogin(
+	UserLoginViewMixIn,
+	BaseWeixinLogin):
+	serializer_class = UserSocialLoginSerializer
+	pass
+
 # Web Only
 
 @api_view(['POST'])
 def wxConfig(request):
+
+	"""
+	Web Only"""
+
 	jsApiList = request.data.get('jsApiList', None)
 	if jsApiList is None:
 		raise BadRequestException('jsApiList is required')
@@ -46,3 +87,6 @@ def wxConfig(request):
 		raise BadRequestException('url is required')
 	wxConfig = wx.createWXConfig(url, jsApiList)
 	return Response(wxConfig)
+
+class BatchViewSet(viewsets.ViewSet):
+	pass

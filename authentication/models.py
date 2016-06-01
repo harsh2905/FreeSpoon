@@ -28,8 +28,8 @@ class MobUser(AbstractBaseUser):
 	mob = models.CharField(max_length=20, unique=True)
 	USERNAME_FIELD = 'mob'
 	parent = models.ForeignKey('MobUser', on_delete=models.CASCADE, null=True)
-	name = models.CharField(max_length=100, null=True, blank=True)
-	avatar = models.ImageField(upload_to='avatars', null=True, blank=True)
+	#name = models.CharField(max_length=100, null=True, blank=True)
+	#avatar = models.ImageField(upload_to='avatars', null=True, blank=True)
 	create_time = models.DateTimeField(auto_now=True)
 
 	is_active = models.BooleanField(default=True)
@@ -40,10 +40,10 @@ class MobUser(AbstractBaseUser):
 		return self.mob
 
 	def get_full_name(self):
-		return self.name
+		return self.mob
 
 	def get_short_name(self):
-		return self.name
+		return self.mob
 
 	def has_perm(self, perm, obj=None):
 		return True

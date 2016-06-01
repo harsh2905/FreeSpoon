@@ -11,13 +11,11 @@ class SmsBackend(object):
 		user = None
 
 		if code is not None and code == '123456':
-			try:
-				user = MobUser.objects.get(mob=mob)
-			except ObjectDoesNotExist:
-				# TODO register
-				print('User not found')
-		if user:
-			return user
+			user, created = MobUser.objects.get_or_create(
+				mob=mob,
+				defaults={},
+			)
+		return user
 
 	def get_user(self, user_id):
 		try:
