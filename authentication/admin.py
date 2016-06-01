@@ -14,7 +14,7 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = MobUser
-        fields = ('mob', 'name', 'avatar')
+        fields = ('mob', 'parent', 'name', 'avatar')
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
@@ -35,7 +35,7 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = MobUser
-        fields = ('mob', 'password', 'name', 'avatar', 'is_active', 'is_admin')
+        fields = ('mob', 'parent', 'password', 'name', 'avatar', 'is_active', 'is_admin')
 
     def clean_password(self):
         return self.initial["password"]
@@ -44,17 +44,17 @@ class UserAdmin(BaseUserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
 
-    list_display = ('mob', 'name', 'avatar', 'is_admin')
+    list_display = ('mob', 'parent', 'name', 'avatar', 'is_admin')
     list_filter = ('is_admin',)
     fieldsets = (
-        (None, {'fields': ('mob', 'password')}),
+        (None, {'fields': ('mob', 'password', 'parent')}),
         ('Personal info', {'fields': ('name', 'avatar')}),
         ('Permissions', {'fields': ('is_admin',)}),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('mob', 'name', 'avatar', 'password1', 'password2')}
+            'fields': ('mob', 'parent', 'name', 'avatar', 'password1', 'password2')}
         ),
     )
     search_fields = ('mob',)

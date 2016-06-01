@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.weixin_mp',
+    'allauth.socialaccount.providers.weixin',
 
     'basic',
     'api',
@@ -178,9 +178,16 @@ REST_AUTH_SERIALIZERS = {
 
 REST_SESSION_LOGIN = False
 
+SOCIALACCOUNT_PROVIDERS = {
+    'weixin': {
+	'AUTHORIZE_URL': 'https://open.weixin.qq.com/connect/oauth2/authorize',
+	'SCOPE': ('snsapi_userinfo',),
+    }
+}
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
@@ -197,6 +204,7 @@ JWT_AUTH = {
 }
 
 AUTH_USER_MODEL = 'authentication.MobUser'
+
 ACCOUNT_USER_MODEL_USERNAME_FIELD = 'mob'
 ACCOUNT_EMAIL_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = 'none'

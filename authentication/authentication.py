@@ -7,14 +7,17 @@ class SmsBackend(object):
 		# TODO Check mobile phone format
 		
 		# TODO Check Sms verificate code
+
+		user = None
+
 		if code is not None and code == '123456':
 			try:
 				user = MobUser.objects.get(mob=mob)
-				return user
 			except ObjectDoesNotExist:
 				# TODO register
 				print('User not found')
-		return None
+		if user:
+			return user
 
 	def get_user(self, user_id):
 		try:

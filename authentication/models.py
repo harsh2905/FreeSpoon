@@ -27,6 +27,7 @@ class MobUserManager(BaseUserManager):
 class MobUser(AbstractBaseUser):
 	mob = models.CharField(max_length=20, unique=True)
 	USERNAME_FIELD = 'mob'
+	parent = models.ForeignKey('MobUser', on_delete=models.CASCADE, null=True)
 	name = models.CharField(max_length=100, null=True, blank=True)
 	avatar = models.ImageField(upload_to='avatars', null=True, blank=True)
 	create_time = models.DateTimeField(auto_now=True)
