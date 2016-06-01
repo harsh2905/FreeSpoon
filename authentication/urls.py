@@ -10,7 +10,6 @@ from rest_framework_jwt.views import refresh_jwt_token
 from .views import *
 
 urlpatterns = [
-	url(r'^$', api_root),
 	url(r'^login$', LoginView.as_view(), name='login'),
 	url(r'^refresh$', refresh_jwt_token, name='refresh'),
 	url(r'^user$', UserDetailsView.as_view(), name='details'),
