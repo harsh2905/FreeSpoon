@@ -1,7 +1,9 @@
 from django.http import HttpResponseRedirect
 from django.views.decorators.http import require_GET
+from django.shortcuts import get_object_or_404
 
 from rest_framework import status
+from rest_framework import mixins
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import (
@@ -117,14 +119,12 @@ class BulkViewSet(viewsets.ModelViewSet):
 	queryset = Bulk.objects.all()
 	serializer_class = BulkSerializer
 
-class ResellerViewSet(viewsets.ModelViewSet):
+class ResellerViewSet(
+	mixins.RetrieveModelMixin,
+	mixins.ListModelMixin,
+	viewsets.GenericViewSet):
 	queryset = Reseller.objects.all()
 	serializer_class = ResellerSerializer
-
-
-
-
-
-
+	pass
 
 
