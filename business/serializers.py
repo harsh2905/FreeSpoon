@@ -4,37 +4,113 @@ from rest_framework import serializers
 from authentication.serializers import LoginSerializer as BaseLoginSerializer
 from rest_auth.registration.serializers import SocialLoginSerializer as BaseSocialLoginSerializer
 
-from .models import User, Reseller, Dispatcher
+from .models import *
 from .fields import TimestampField
 
-class UserSerializer(serializers.ModelSerializer):
-	mob = serializers.CharField(source='mob_user.mob')
+from collections import OrderedDict
+from rest_framework.relations import PKOnlyObject
+from rest_framework.fields import SkipField
+
+class RemoveNullSerializerMixIn(serializers.Serializer):
+	def to_representation(self, instance):
+		"""
+		Object instance -> Dict of primitive datatypes.
+		"""
+		ret = OrderedDict()
+		fields = self._readable_fields
+		
+		for field in fields:
+			try:
+				attribute = field.get_attribute(instance)
+			except SkipField:
+				continue
+			
+			# We skip `to_representation` for `None` values so that fields do
+			# not have to explicitly deal with that case.
+			#
+			# For related fields with `use_pk_only_optimization` we need to
+			# resolve the pk value.
+			check_for_none = attribute.pk if isinstance(attribute, PKOnlyObject) else attribute
+			if check_for_none is None:
+				ret[field.field_name] = None
+			else:
+				value = field.to_representation(attribute)
+				if value:
+					ret[field.field_name] = value
+		
+		return ret
+
+class WeixinSerializerMixIn(RemoveNullSerializerMixIn, serializers.Serializer):
+	wx_nickname = serializers.SerializerMethodField(method_name='get_real_wx_nickname')
+	wx_headimgurl = serializers.SerializerMethodField(method_name='get_real_wx_headimgurl')
+
+        def get_real_wx_extra_data(self, obj):
+		if not hasattr(obj, 'mob_user'):
+			return None
+		obj = obj.mob_user
+		if not obj:
+			return None
+                extra_data = None
+                socialaccounts = obj.socialaccount_set.all()
+                for socialaccount in socialaccounts:
+                        provider = socialaccount.provider
+                        if provider == 'weixin': # Could be configuration
+                                extra_data = socialaccount.extra_data
+                                if extra_data:
+                                        break
+                if extra_data:
+                        return extra_data
+                else:
+                        children = obj.mobuser_set.all()
+                        for child in children:
+                                extra_data = self.get_real_wx_extra_data(child)
+                                if extra_data:
+                                        break
+                return extra_data
+
+        def get_real_wx_nickname(self, obj):
+                extra_data = self.get_real_wx_extra_data(obj)
+                if extra_data:
+                        return extra_data.get('nickname', None)
+                return None
+
+        def get_real_wx_headimgurl(self, obj):
+                extra_data = self.get_real_wx_extra_data(obj)
+                if extra_data:
+                        return extra_data.get('headimgurl', None)
+                return None
+
+class UserSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
+	mob = serializers.CharField(source='mob_user.real_mob')
 	create_time = TimestampField()
 	class Meta:
 		model = User
-		fields = ('id', 'name', 'create_time', 'mob')
+		fields = ('id', 'name', 'create_time', 'mob', 
+			'wx_nickname', 'wx_headimgurl')
 
 class UserJWTSerializer(serializers.Serializer):
 	token = serializers.CharField()
 	user = UserSerializer()
 
-class ResellerSerializer(serializers.ModelSerializer):
-	mob = serializers.CharField(source='mob_user.mob')
+class ResellerSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
+	mob = serializers.CharField(source='mob_user.real_mob')
 	create_time = TimestampField()
 	class Meta:
 		model = Reseller
-		fields = ('id', 'name', 'tail', 'create_time', 'mob')
+		fields = ('id', 'name', 'tail', 'create_time', 
+			'mob', 'wx_nickname', 'wx_headimgurl')
 
 class ResellerJWTSerializer(serializers.Serializer):
 	token = serializers.CharField()
 	user = ResellerSerializer()
 
-class DispatcherSerializer(serializers.ModelSerializer):
-	mob = serializers.CharField(source='mob_user.mob')
+class DispatcherSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
+	mob = serializers.CharField(source='mob_user.real_mob')
 	create_time = TimestampField()
 	class Meta:
 		model = Dispatcher
-		fields = ('id', 'name', 'tail', 'address', 'create_time', 'mob')
+		fields = ('id', 'name', 'tail', 'address', 
+			'create_time', 'mob', 'wx_nickname', 'wx_headimgurl')
 
 class DispatcherJWTSerializer(serializers.Serializer):
 	token = serializers.CharField()
@@ -107,6 +183,20 @@ class DispatcherSocialLoginSerializer(
 	parentClass = BaseSocialLoginSerializer
 	defaultFieldNames = ['name', 'tail', 'address']
 	mainModel = Dispatcher
+
+# Business Serializer model
+
+class BulkSerializer(serializers.ModelSerializer):
+	reseller = ResellerSerializer()
+	dispatchers = DispatcherSerializer(many=True)
+
+	class Meta:
+		model = Bulk
+		fields = ('id', 'title', 'reseller', 'dispatchers', 
+			'products', 'dead_time', 'arrived_time',
+			'status', 'card_title', 'card_desc',
+			'card_icon', 'create_time')
+
 
 
 

@@ -55,3 +55,12 @@ class MobUser(AbstractBaseUser):
 	def is_staff(self):
 		return self.is_admin
 
+	@property
+	def real_mob(self):
+		if self.parent:
+			return self.parent.mob
+		return self.mob
+
+
+
+

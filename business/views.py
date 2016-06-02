@@ -17,17 +17,8 @@ from django.shortcuts import render
 from . import config
 from wx import Auth as wxAuthClass
 from .exceptions import *
-from .serializers import (
-	UserLoginSerializer,
-	UserSocialLoginSerializer,
-	UserJWTSerializer,
-	ResellerLoginSerializer,
-	ResellerSocialLoginSerializer,
-	ResellerJWTSerializer,
-	DispatcherLoginSerializer,
-	DispatcherSocialLoginSerializer,
-	DispatcherJWTSerializer,
-)
+from .models import *
+from .serializers import *
 
 wx = wxAuthClass()
 
@@ -88,7 +79,7 @@ class ResellerLoginView(
 class ResellerWeixinLogin(
 	LoginViewMixIn,
 	BaseWeixinLogin):
-	serializer_class = ResellerLoginSerializer
+	serializer_class = ResellerSocialLoginSerializer
 	jwtSerializerClass = ResellerJWTSerializer
 
 class DispatcherLoginView(
@@ -100,7 +91,7 @@ class DispatcherLoginView(
 class DispatcherWeixinLogin(
 	LoginViewMixIn,
 	BaseWeixinLogin):
-	serializer_class = DispatcherLoginSerializer
+	serializer_class = DispatcherSocialLoginSerializer
 	jwtSerializerClass = DispatcherJWTSerializer
 
 # Web Only
@@ -122,9 +113,13 @@ def wxConfig(request):
 
 # General API
 
-class BatchViewSet(viewsets.ViewSet):
-	pass
+class BulkViewSet(viewsets.ModelViewSet):
+	queryset = Bulk.objects.all()
+	serializer_class = BulkSerializer
 
+class ResellerViewSet(viewsets.ModelViewSet):
+	queryset = Reseller.objects.all()
+	serializer_class = ResellerSerializer
 
 
 
