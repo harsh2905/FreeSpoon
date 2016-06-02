@@ -20,5 +20,9 @@ def api_root(request, format=None):
 
 		'wxConfig': reverse('wxConfig2', request=request, format=format),
 		'userLogin': reverse('userLogin', request=request, format=format),
-		'userSocialLogin': reverse('userSociallogin', request=request, format=format),
+		'userSocialLogin': reverse('userWeixinLogin', request=request, format=format),
+		'resellerLogin': reverse('resellerLogin', request=request, format=format),
+		'resellerWeixinLogin': reverse('resellerWeixinLogin', request=request, format=format),
+		'dispatcherLogin': reverse('dispatcherLogin', request=request, format=format),
+		'dispatcherWeixinLogin': reverse('dispatcherWeixinLogin', request=request, format=format),
 	})

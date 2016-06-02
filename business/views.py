@@ -20,7 +20,13 @@ from .exceptions import *
 from .serializers import (
 	UserLoginSerializer,
 	UserSocialLoginSerializer,
-	JWTSerializer,
+	UserJWTSerializer,
+	ResellerLoginSerializer,
+	ResellerSocialLoginSerializer,
+	ResellerJWTSerializer,
+	DispatcherLoginSerializer,
+	DispatcherSocialLoginSerializer,
+	DispatcherJWTSerializer,
 )
 
 wx = wxAuthClass()
@@ -46,8 +52,9 @@ def redirect(request, relativePath):
 
 # Authentication
 
-#class UserLoginView(BaseLoginView):
-class UserLoginViewMixIn(object):
+class LoginViewMixIn(object):
+
+	jwtSerializerClass = None # Must implement it in sub class
 
 	def get_response(self):
 		user = self.serializer.validated_data['wrap_user']
@@ -56,20 +63,45 @@ class UserLoginViewMixIn(object):
         	    'user': user,
         	    'token': self.token
         	}
-        	serializer = JWTSerializer(instance=data, context={'request': self.request})
+        	serializer = self.jwtSerializerClass(instance=data, context={'request': self.request})
 
         	return Response(serializer.data, status=status.HTTP_200_OK)
 
 class UserLoginView(
-	UserLoginViewMixIn,
+	LoginViewMixIn,
 	BaseLoginView):
 	serializer_class = UserLoginSerializer
+	jwtSerializerClass = UserJWTSerializer
 
 class WeixinLogin(
-	UserLoginViewMixIn,
+	LoginViewMixIn,
 	BaseWeixinLogin):
 	serializer_class = UserSocialLoginSerializer
-	pass
+	jwtSerializerClass = UserJWTSerializer
+
+class ResellerLoginView(
+	LoginViewMixIn,
+	BaseLoginView):
+	serializer_class = ResellerLoginSerializer
+	jwtSerializerClass = ResellerJWTSerializer
+
+class ResellerWeixinLogin(
+	LoginViewMixIn,
+	BaseWeixinLogin):
+	serializer_class = ResellerLoginSerializer
+	jwtSerializerClass = ResellerJWTSerializer
+
+class DispatcherLoginView(
+	LoginViewMixIn,
+	BaseLoginView):
+	serializer_class = DispatcherLoginSerializer
+	jwtSerializerClass = DispatcherJWTSerializer
+
+class DispatcherWeixinLogin(
+	LoginViewMixIn,
+	BaseWeixinLogin):
+	serializer_class = DispatcherLoginSerializer
+	jwtSerializerClass = DispatcherJWTSerializer
 
 # Web Only
 

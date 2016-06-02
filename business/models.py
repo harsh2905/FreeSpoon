@@ -10,16 +10,30 @@ class User(models.Model):
 		settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 	name = models.CharField(max_length=100, null=True, blank=True)
 	avatar = models.ImageField(upload_to='avatars', null=True, blank=True)
+	create_time = models.DateTimeField(auto_now=True)
 	def __unicode__(self):
 		return self.name
 
-#class Reseller(models.Model):
-#	mob_user = models.OneToOneField(
-#		settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
-#	
-#class Dispatcher(models.Model):
-#	mob_user = models.OneToOneField(
-#		settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+class Reseller(models.Model):
+	mob_user = models.OneToOneField(
+		settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+	name = models.CharField(max_length=100, null=True, blank=True)
+	avatar = models.ImageField(upload_to='avatars', null=True, blank=True)
+	tail = models.CharField(max_length=255, blank=True)
+	create_time = models.DateTimeField(auto_now=True)
+	def __unicode__(self):
+		return self.name
+	
+class Dispatcher(models.Model):
+	mob_user = models.OneToOneField(
+		settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+	name = models.CharField(max_length=100, null=True, blank=True)
+	avatar = models.ImageField(upload_to='avatars', null=True, blank=True)
+	tail = models.CharField(max_length=255, blank=True)
+	address = models.TextField()
+	create_time = models.DateTimeField(auto_now=True)
+	def __unicode__(self):
+		return self.name
 
 #class Bulk(models.Model):
 #	title = models.CharField(max_length=200)

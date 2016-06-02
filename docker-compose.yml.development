@@ -47,7 +47,7 @@ cookbook:
   build: cookbook
   volumes:
     - /etc/localtime:/etc/localtime:ro
-    - /home/sam/workspace/CuisineBook:/CuisineBook
+    - /your/path:/CuisineBook
   links:
     - db:db
   environment:
