@@ -120,5 +120,16 @@ def wxConfig(request):
 	wxConfig = wx.createWXConfig(url, jsApiList)
 	return Response(wxConfig)
 
+# General API
+
 class BatchViewSet(viewsets.ViewSet):
 	pass
+
+
+
+
+
+
+
+
+
