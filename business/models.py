@@ -37,11 +37,11 @@ class Dispatcher(models.Model):
 
 class Product(models.Model):
 	title = models.CharField(max_length=200)
-	details = models.TextField()
+	desc = models.TextField()
 	unit_price = models.IntegerField(max_length=11)
 	market_price = models.IntegerField(max_length=11)
 	spec = models.CharField(max_length=100)
-	spec_details = models.CharField(max_length=100)
+	spec_desc = models.CharField(max_length=100)
 	cover = models.ImageField(upload_to='images/product/%Y/%m/%d')
 	is_snapshot = models.BooleanField(default=False)
 	create_time = models.DateTimeField(auto_now=True)
