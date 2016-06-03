@@ -16,6 +16,6 @@ urlpatterns = [
 ]
 
 router = DefaultRouter()
-router.register(r'resellers', views.ResellerViewSet, base_name='resellers')
-router.register(r'bulks', views.BulkViewSet)
+#router.register(r'resellers', views.ResellerViewSet, base_name='resellers')
+router.register(r'bulks', views.BulkViewSet, base_name='bulk')
 urlpatterns.extend(router.urls)

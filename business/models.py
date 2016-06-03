@@ -83,7 +83,6 @@ class Order(models.Model):
 	user = models.ForeignKey('User')
 	bulk = models.ForeignKey('Bulk')
 	dispatcher = models.ForeignKey('Dispatcher')
-	products = models.ManyToManyField('Product', through='Goods')
 	status = models.IntegerField(max_length=10)
 	prepay_id = models.CharField(max_length=200)
 	freight = models.IntegerField(max_length=11)
@@ -94,6 +93,7 @@ class Order(models.Model):
 			self.bulk.title, self.user.name, self.create_time)
 
 class Goods(models.Model):
+	user = models.ForeignKey('User')
 	order = models.ForeignKey('Order')
 	product = models.ForeignKey('Product')
 	quantity = models.IntegerField(max_length=11)

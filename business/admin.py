@@ -14,6 +14,15 @@ class ProductAdmin(admin.ModelAdmin):
 		ProductDetailsInline,
 	]
 
+class GoodsInline(admin.TabularInline):
+	model = Goods
+	extra = 1
+
+class OrderAdmin(admin.ModelAdmin):
+	inlines = [
+		GoodsInline,
+	]
+
 admin.site.register(User)
 admin.site.register(Reseller)
 admin.site.register(Dispatcher)
@@ -21,5 +30,5 @@ admin.site.register(Dispatcher)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductDetails)
 admin.site.register(Bulk)
-admin.site.register(Order)
+admin.site.register(Order, OrderAdmin)
 admin.site.register(Goods)

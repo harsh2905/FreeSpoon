@@ -1,3 +1,5 @@
+import datetime
+
 from django.http import HttpResponseRedirect
 from django.views.decorators.http import require_GET
 from django.shortcuts import get_object_or_404
@@ -115,16 +117,57 @@ def wxConfig(request):
 
 # General API
 
-class BulkViewSet(viewsets.ModelViewSet):
-	queryset = Bulk.objects.all()
-	serializer_class = BulkSerializer
+#class BulkViewSet(viewsets.ModelViewSet):
+#	queryset = Bulk.objects.all()
+#	serializer_class = BulkListSerializer
 
-class ResellerViewSet(
-	mixins.RetrieveModelMixin,
-	mixins.ListModelMixin,
-	viewsets.GenericViewSet):
-	queryset = Reseller.objects.all()
-	serializer_class = ResellerSerializer
-	pass
+class DateTimePaginationMixIn(object):
+	pageinationLimitField = 'create_time'
+	pageinationLimitQueryParamName = 'time'
+	pageinationSizeQueryParamName = 'size'
+	pageinationModel = None
+	pageinationSerializerClass = None
+	
+	def list(self, request):
+		limitName = request.data.get(self.pageinationLimitQueryParamName, 'time')
+		sizeName = request.data.get(self.pageinationLimitQueryParamName, 'size')
+		limit = request.query_params.get(limitName, 0)
+		limit = datetime.datetime.fromtimestamp(int(limit))
+		size = request.query_params.get(sizeName, 10)
+		size = int(size)
+		queryset = self.pageinationModel.objects.filter(**{
+			'%s__gt' % self.pageinationLimitField: limit
+		}).order_by('-%s' % self.pageinationLimitField)[:size]
+		serializer = self.pageinationSerializerClass(queryset,
+			many=True, context={'request': request})
+		return Response(serializer.data)
+
+class BulkViewSet(DateTimePaginationMixIn, viewsets.ViewSet):
+
+	pageinationLimitField = 'create_time'
+	pageinationLimitQueryParamName = 'time'
+	pageinationModel = Bulk
+	pageinationSerializerClass = BulkListSerializer
+
+	#def list(self, request):
+	#	queryset = Bulk.objects.all()
+	#	serializer = BulkListSerializer(queryset, 
+	#		many=True, context={'request': request})
+	#	return Response(serializer.data)
+
+	def retrieve(self, request, pk=None):
+		queryset = Bulk.objects.all()
+		bulk = get_object_or_404(queryset, pk=pk)
+		serializer = BulkSerializer(bulk)
+		return Response(serializer.data)
+
+
+#class ResellerViewSet(
+#	mixins.RetrieveModelMixin,
+#	mixins.ListModelMixin,
+#	viewsets.GenericViewSet):
+#	queryset = Reseller.objects.all()
+#	serializer_class = ResellerSerializer
+#	pass
 
 

@@ -61,6 +61,44 @@ class MobUser(AbstractBaseUser):
 			return self.parent.mob
 		return self.mob
 
+        def real_wx_extra_data(self):
+		if not hasattr(self, 'mob_user'):
+			return None
+		self = self.mob_user
+		if not self:
+			return None
+                extra_data = None
+                socialaccounts = self.socialaccount_set.all()
+                for socialaccount in socialaccounts:
+                        provider = socialaccount.provider
+                        if provider == 'weixin': # Could be configuration
+                                extra_data = socialaccount.extra_data
+                                if extra_data:
+                                        break
+                if extra_data:
+                        return extra_data
+                else:
+                        children = self.mobuser_set.all()
+                        for child in children:
+                                extra_data = child.get_real_wx_extra_data()
+                                if extra_data:
+                                        break
+                return extra_data
+
+	@property
+        def real_wx_nickname(self):
+                extra_data = self.real_wx_extra_data()
+                if extra_data:
+                        return extra_data.get('nickname', None)
+                return None
+
+	@property
+        def real_wx_headimgurl(self):
+                extra_data = self.real_wx_extra_data()
+                if extra_data:
+                        return extra_data.get('headimgurl', None)
+                return None
+
 
 
 
