@@ -9,6 +9,11 @@ import time
 
 import pdb
 
+def total_microseconds(td):
+	return (td.microseconds + (td.seconds + 
+		#td.days * 24 * 3600) * 10**6) / 10**3
+		td.days * 24 * 3600) * 10**6)
+
 def object2dict(obj):
 	t = type(obj)
 	if 'class' in str(t):
