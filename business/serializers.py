@@ -206,11 +206,6 @@ class BulkListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModel
 	#)
 	reseller = serializers.SerializerMethodField(method_name='get_reseller_name')
 	covers = serializers.SerializerMethodField(method_name='get_product_covers')
-	#products = serializers.SlugRelatedField(
-	#	many=True,
-	#	read_only=True,
-	#	slug_field='cover'
-	#)
 	create_time = TimestampField()
 	dead_time = TimestampField()
 	arrived_time = TimestampField()
@@ -218,7 +213,6 @@ class BulkListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModel
 	class Meta:
 		model = Bulk
 		fields = ('url', 'id', 'title', 'reseller', 'covers',
-		#fields = ('url', 'id', 'title', 'reseller', 'products',
 			'dead_time', 'arrived_time', 'status',
 			'create_time')
 		#extra_kwargs = {
@@ -234,10 +228,14 @@ class BulkListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModel
 			return ''
 		return obj.real_wx_nickname
 
-	def get_product_covers(self, obj):
-		return map(lambda p: p.cover.url 
+	def get_product_covers(self, obj): # So ugly :(
+		request = self.context.get('request', None)
+		return map(lambda url: 
+			url if not request else
+			request.build_absolute_uri(url),
+			map(lambda p: p.cover.url 
 			if hasattr(p.cover, 'url') 
-			else '', obj.products.all())
+			else '', obj.products.all()))
 
 class ProductListSerializer(serializers.ModelSerializer):
 	create_time = TimestampField()
