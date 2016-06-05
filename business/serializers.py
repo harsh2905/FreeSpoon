@@ -258,13 +258,17 @@ class ProductListSerializer(serializers.ModelSerializer):
 		return result.get('quantity__sum', 0)
 
 	def get_participant_avatars(self, obj):
+		request = self.context.get('request', None)
 		avatars = dict()
 
 		goods = Goods.objects.filter(product_id=obj.pk)
 		for _ in goods:
 			user = _.order.user
 			if user.avatar:
-				avatars[user.pk] = user.avatar.url
+				url = user.avatar.url
+				if request:
+					url = request.build_absolute_uri(url)
+				avatars[user.pk] = url
 		return avatars.values()
 		
 
