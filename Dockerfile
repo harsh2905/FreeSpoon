@@ -23,10 +23,20 @@ RUN echo Asia/Shanghai > /etc/timezone && dpkg-reconfigure --frontend noninterac
 RUN mkdir /FreeSpoon
 VOLUME /FreeSpoon
 
+# Chinese Enviroment
+
+RUN apt-get install locales -y
+WORKDIR /usr/share/locales
+RUN ./install-language-pack en_US.UTF-8
+RUN dpkg-reconfigure locales
+RUN export LC_ALL=en_US.UTF-8
+RUN echo "export LC_ALL=en_US.UTF-8" >> /etc/bash.bashrc
+
 # Dev Tools
 
 RUN apt-get install git -y
 RUN apt-get install vim -y
+RUN apt-get install mysql-client -y
 
 # SSH
 

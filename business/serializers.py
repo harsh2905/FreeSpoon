@@ -206,6 +206,11 @@ class BulkListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModel
 	#)
 	reseller = serializers.SerializerMethodField(method_name='get_reseller_name')
 	covers = serializers.SerializerMethodField(method_name='get_product_covers')
+	#products = serializers.SlugRelatedField(
+	#	many=True,
+	#	read_only=True,
+	#	slug_field='cover'
+	#)
 	create_time = TimestampField()
 	dead_time = TimestampField()
 	arrived_time = TimestampField()
@@ -213,6 +218,7 @@ class BulkListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModel
 	class Meta:
 		model = Bulk
 		fields = ('url', 'id', 'title', 'reseller', 'covers',
+		#fields = ('url', 'id', 'title', 'reseller', 'products',
 			'dead_time', 'arrived_time', 'status',
 			'create_time')
 		#extra_kwargs = {

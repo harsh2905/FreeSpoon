@@ -158,7 +158,8 @@ class BulkViewSet(DateTimePaginationMixIn, viewsets.ViewSet):
 	def retrieve(self, request, pk=None):
 		queryset = Bulk.objects.all()
 		bulk = get_object_or_404(queryset, pk=pk)
-		serializer = BulkSerializer(bulk)
+		serializer = BulkSerializer(bulk, 
+			context={'request': request})
 		return Response(serializer.data)
 
 
