@@ -6,6 +6,8 @@ import uuid, hashlib
 from datetime import datetime
 import random
 import time
+import urlparse
+from urllib import urlencode
 
 import pdb
 
@@ -94,5 +96,12 @@ def now():
 
 def nonceStr():
 	return str(uuid.uuid1()).replace('-', '')
+
+def addQueryParams(url, params):
+	url_parts = list(urlparse.urlparse(url))
+	query = urlparse.parse_qs(url_parts[4])
+	query.update(params)
+	url_parts[4] = urlencode(query)
+	return urlparse.urlunparse(url_parts)
 
 

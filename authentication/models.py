@@ -62,9 +62,9 @@ class MobUser(AbstractBaseUser):
 		return self.mob
 
         def real_wx_extra_data(self):
-		if not hasattr(self, 'mob_user'):
-			return None
-		self = self.mob_user
+		#if not hasattr(self, 'mob_user'):
+		#	return None
+		#self = self.mob_user
 		if not self:
 			return None
                 extra_data = None

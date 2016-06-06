@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework import status
 from rest_framework import mixins
+from rest_framework import views
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import (
@@ -159,7 +160,7 @@ class BulkViewSet(DateTimePaginationMixIn, viewsets.ViewSet):
 		queryset = Bulk.objects.all()
 		bulk = get_object_or_404(queryset, pk=pk)
 		serializer = BulkSerializer(bulk, 
-			context={'request': request})
+			context={'request': request, 'pk': pk})
 		return Response(serializer.data)
 
 class ProductViewSet(viewsets.ViewSet):
@@ -171,12 +172,37 @@ class ProductViewSet(viewsets.ViewSet):
 			context={'request': request})
 		return Response(serializer.data)
 
-#class ResellerViewSet(
-#	mixins.RetrieveModelMixin,
-#	mixins.ListModelMixin,
-#	viewsets.GenericViewSet):
-#	queryset = Reseller.objects.all()
-#	serializer_class = ResellerSerializer
-#	pass
+#class PurchasedProductHistoryViewSet(viewsets.ViewSet):
+#
+#	def list(self, request):
+#		product_id = request.query_params.get('product_id', None)
+#		if not product_id:
+#			raise BadRequestException('Product id is required')
+#		order_id = request.query_params.get('order_id', None)
+#		if not order_id:
+#			raise BadRequestException('Order id is required')
+#		queryset = PurchasedProductHistory.objects.filter(
+#			product_id=product_id, order_id=order_id)
+#		serializer = PurchasedProductHistorySerializer(
+#			queryset, many=True, context={'request': request})
+#		return Response(serializer.data)
+
+class PurchasedProductHistoryView(views.APIView):
+	
+	def get(self, request, format=None):
+		product_id = request.query_params.get('product_id', None)
+		if not product_id:
+			raise BadRequestException('Product id is required')
+		bulk_id = request.query_params.get('bulk_id', None)
+		if not bulk_id:
+			raise BadRequestException('Bulk id is required')
+		queryset = PurchasedProductHistory.objects.filter(
+			product_id=product_id, bulk_id=bulk_id)
+		serializer = PurchasedProductHistorySerializer(
+			queryset, many=True, context={'request': request})
+		return Response(serializer.data)
+		
+
+
 
 

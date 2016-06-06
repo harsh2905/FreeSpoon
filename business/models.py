@@ -93,7 +93,7 @@ class Order(models.Model):
 			self.bulk.title, self.user.name, self.create_time)
 
 class Goods(models.Model):
-	user = models.ForeignKey('User')
+	user = models.ForeignKey('User') # TODO Remove it
 	order = models.ForeignKey('Order')
 	product = models.ForeignKey('Product')
 	quantity = models.IntegerField(max_length=11)
@@ -102,4 +102,22 @@ class Goods(models.Model):
 	class Meta:
 		verbose_name = 'Goods'
 		verbose_name_plural = 'Goods'
+
+# Views
+
+class PurchasedProductHistory(models.Model):
+	order = models.ForeignKey('Order', primary_key=True)
+	product = models.ForeignKey('Product')
+	bulk = models.ForeignKey('Bulk')
+	mob_user = models.ForeignKey(settings.AUTH_USER_MODEL)
+	name = models.CharField(max_length=100, null=True, blank=True)
+	quantity = models.IntegerField(max_length=11)
+	spec = models.CharField(max_length=100)
+	create_time = models.DateTimeField()
+
+	class Meta:
+		managed = False
+		db_table = 'view_history_purchased_products'
+
+
 

@@ -2,11 +2,13 @@ from django.db.models import Sum
 from rest_framework import exceptions
 
 from rest_framework import serializers
+from rest_framework.reverse import reverse
 from authentication.serializers import LoginSerializer as BaseLoginSerializer
 from rest_auth.registration.serializers import SocialLoginSerializer as BaseSocialLoginSerializer
 
 from .models import *
 from .fields import *
+from . import utils
 
 from collections import OrderedDict
 from rest_framework.relations import PKOnlyObject
@@ -33,7 +35,8 @@ class RemoveNullSerializerMixIn(serializers.Serializer):
 			# resolve the pk value.
 			check_for_none = attribute.pk if isinstance(attribute, PKOnlyObject) else attribute
 			if check_for_none is None:
-				ret[field.field_name] = None
+				#ret[field.field_name] = None
+				pass
 			else:
 				value = field.to_representation(attribute)
 				if value:
@@ -42,56 +45,8 @@ class RemoveNullSerializerMixIn(serializers.Serializer):
 		return ret
 
 class WeixinSerializerMixIn(RemoveNullSerializerMixIn, serializers.Serializer):
-	wx_nickname = serializers.SerializerMethodField(method_name='get_real_wx_nickname')
-	wx_headimgurl = serializers.SerializerMethodField(method_name='get_real_wx_headimgurl')
-
-        def get_real_wx_extra_data(self, obj):
-		if not hasattr(obj, 'mob_user'):
-			return None
-		obj = obj.mob_user
-		if not obj:
-			return None
-                extra_data = None
-                socialaccounts = obj.socialaccount_set.all()
-                for socialaccount in socialaccounts:
-                        provider = socialaccount.provider
-                        if provider == 'weixin': # Could be configuration
-                                extra_data = socialaccount.extra_data
-                                if extra_data:
-                                        break
-                if extra_data:
-                        return extra_data
-                else:
-                        children = obj.mobuser_set.all()
-                        for child in children:
-                                extra_data = self.get_real_wx_extra_data(child)
-                                if extra_data:
-                                        break
-                return extra_data
-
-        def get_real_wx_nickname(self, obj):
-		if not hasattr(obj, 'mob_user'):
-			return None
-		obj = obj.mob_user
-		if not obj:
-			return None
-		return obj.real_wx_nickname
-                #extra_data = self.get_real_wx_extra_data(obj)
-                #if extra_data:
-                #        return extra_data.get('nickname', None)
-                #return None
-
-        def get_real_wx_headimgurl(self, obj):
-		if not hasattr(obj, 'mob_user'):
-			return None
-		obj = obj.mob_user
-		if not obj:
-			return None
-		return obj.real_wx_headimgurl
-                #extra_data = self.get_real_wx_extra_data(obj)
-                #if extra_data:
-                #        return extra_data.get('headimgurl', None)
-                #return None
+	wx_nickname = serializers.CharField(source='mob_user.real_wx_nickname', read_only=True) # TODO not null
+	wx_headimgurl = serializers.CharField(source='mob_user.real_wx_headimgurl', read_only=True)
 
 class UserSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
 	mob = serializers.CharField(source='mob_user.real_mob')
@@ -237,18 +192,19 @@ class BulkListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModel
 			if hasattr(p.cover, 'url') 
 			else '', obj.products.all()))
 
-class ProductListSerializer(serializers.HyperlinkedModelSerializer):
+class ProductListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	create_time = TimestampField()
 	participant_count = serializers.SerializerMethodField()
 	purchased_count = serializers.SerializerMethodField()
 	participant_avatars = serializers.SerializerMethodField()
+	history = serializers.SerializerMethodField()
 
 	class Meta:
 		model = Product
 		fields = ('url', 'id', 'title', 'desc', 'unit_price', 'market_price',
 			'spec', 'spec_desc', 'cover', 'create_time',
 			'participant_count', 'purchased_count',
-			'participant_avatars')
+			'participant_avatars', 'history')
 
 	def get_participant_count(self, obj):
 		return Goods.objects.filter(product_id=obj.pk).count()
@@ -269,7 +225,21 @@ class ProductListSerializer(serializers.HyperlinkedModelSerializer):
 				if request:
 					url = request.build_absolute_uri(url)
 				avatars[user.pk] = url
-		return avatars.values()
+		return avatars.values()[:6]
+
+	def get_history(self, obj):
+		request = self.context.get('request', None)
+		if not request:
+			return None
+		pk = self.context.get('pk', None)
+		if not pk:
+			return None
+		params = {
+			'product_id': obj.id,
+			'bulk_id': pk,
+		}
+		url = reverse('purchaseproducthistorys', request=request)
+		return utils.addQueryParams(url, params)
 
 class ProductDetailsSerializer(serializers.ModelSerializer):
 	
@@ -306,7 +276,19 @@ class BulkSerializer(serializers.HyperlinkedModelSerializer):
 	def get_participant_count(self, obj):
 		return Order.objects.filter(bulk_id=obj.pk).count()
 
+class PurchasedProductHistorySerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
+	order_id = serializers.ReadOnlyField()
+	bulk_id = serializers.ReadOnlyField()
+	product_id = serializers.ReadOnlyField()
+	name = serializers.ReadOnlyField()
+	quantity = serializers.ReadOnlyField()
+	spec = serializers.ReadOnlyField()
+	create_time = serializers.ReadOnlyField()
 
+	class Meta:
+		model = PurchasedProductHistory
+		fields = ('order_id', 'bulk_id', 'product_id', 'name', 'quantity', 'spec', 'create_time',
+			'wx_nickname', 'wx_headimgurl')
 
 
 
