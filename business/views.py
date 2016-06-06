@@ -133,7 +133,9 @@ class DateTimePaginationMixIn(object):
 		limitName = request.data.get(self.pageinationLimitQueryParamName, 'time')
 		sizeName = request.data.get(self.pageinationLimitQueryParamName, 'size')
 		limit = request.query_params.get(limitName, 0)
-		limit = datetime.datetime.fromtimestamp(int(limit))
+		limit = int(limit)
+		limit = limit / 10**6
+		limit = datetime.datetime.fromtimestamp(limit)
 		size = request.query_params.get(sizeName, 10)
 		size = int(size)
 		queryset = self.pageinationModel.objects.filter(**{
@@ -158,19 +160,25 @@ class BulkViewSet(DateTimePaginationMixIn, viewsets.ViewSet):
 
 	def retrieve(self, request, pk=None):
 		queryset = Bulk.objects.all()
-		bulk = get_object_or_404(queryset, pk=pk)
-		serializer = BulkSerializer(bulk, 
-			context={'request': request, 'pk': pk})
-		return Response(serializer.data)
+		try:
+			bulk = queryset.get(pk=pk)
+			serializer = BulkSerializer(bulk, 
+				context={'request': request, 'pk': pk})
+			return Response(serializer.data)
+		except queryset.model.DoesNotExist:
+			return Response(status=status.HTTP_204_NO_CONTENT)
 
 class ProductViewSet(viewsets.ViewSet):
 	
 	def retrieve(self, request, pk=None):
 		queryset = Product.objects.all()
-		product = get_object_or_404(queryset, pk=pk)
-		serializer = ProductSerializer(product,
-			context={'request': request})
-		return Response(serializer.data)
+		try:
+			product = queryset.get(pk=pk)
+			serializer = ProductSerializer(product,
+				context={'request': request})
+			return Response(serializer.data)
+		except queryset.model.DoesNotExist:
+			return Response(status=status.HTTP_204_NO_CONTENT)
 
 #class PurchasedProductHistoryViewSet(viewsets.ViewSet):
 #
