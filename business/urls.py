@@ -14,8 +14,8 @@ urlpatterns = [
 	url(r'^dispatcherLogin$', views.DispatcherLoginView.as_view(), name='dispatcherLogin'),
 	url(r'^dispatcherWeixinLogin$', views.DispatcherWeixinLogin.as_view(), name='dispatcherWeixinLogin'),
 
-	url(r'^purchaseproducthistorys/$', views.PurchasedProductHistoryView.as_view(), 
-		name='purchaseproducthistorys'),
+	url(r'^purchasedproducthistorys/$', views.PurchasedProductHistoryView.as_view(), 
+		name='purchasedproducthistorys'),
 ]
 
 router = DefaultRouter()

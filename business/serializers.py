@@ -238,7 +238,7 @@ class ProductListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedMo
 			'product_id': obj.id,
 			'bulk_id': pk,
 		}
-		url = reverse('purchaseproducthistorys', request=request)
+		url = reverse('purchasedproducthistorys', request=request)
 		return utils.addQueryParams(url, params)
 
 class ProductDetailsSerializer(serializers.ModelSerializer):
@@ -283,7 +283,7 @@ class PurchasedProductHistorySerializer(WeixinSerializerMixIn, serializers.Model
 	name = serializers.ReadOnlyField()
 	quantity = serializers.ReadOnlyField()
 	spec = serializers.ReadOnlyField()
-	create_time = serializers.ReadOnlyField()
+	create_time = TimestampField(read_only=True)
 
 	class Meta:
 		model = PurchasedProductHistory
