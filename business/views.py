@@ -162,6 +162,14 @@ class BulkViewSet(DateTimePaginationMixIn, viewsets.ViewSet):
 			context={'request': request})
 		return Response(serializer.data)
 
+class ProductViewSet(viewsets.ViewSet):
+	
+	def retrieve(self, request, pk=None):
+		queryset = Product.objects.all()
+		product = get_object_or_404(queryset, pk=pk)
+		serializer = ProductSerializer(product,
+			context={'request': request})
+		return Response(serializer.data)
 
 #class ResellerViewSet(
 #	mixins.RetrieveModelMixin,

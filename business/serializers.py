@@ -237,7 +237,7 @@ class BulkListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModel
 			if hasattr(p.cover, 'url') 
 			else '', obj.products.all()))
 
-class ProductListSerializer(serializers.ModelSerializer):
+class ProductListSerializer(serializers.HyperlinkedModelSerializer):
 	create_time = TimestampField()
 	participant_count = serializers.SerializerMethodField()
 	purchased_count = serializers.SerializerMethodField()
@@ -245,7 +245,7 @@ class ProductListSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Product
-		fields = ('id', 'title', 'desc', 'unit_price', 'market_price',
+		fields = ('url', 'id', 'title', 'desc', 'unit_price', 'market_price',
 			'spec', 'spec_desc', 'cover', 'create_time',
 			'participant_count', 'purchased_count',
 			'participant_avatars')
@@ -270,9 +270,23 @@ class ProductListSerializer(serializers.ModelSerializer):
 					url = request.build_absolute_uri(url)
 				avatars[user.pk] = url
 		return avatars.values()
-		
 
-class BulkSerializer(serializers.ModelSerializer):
+class ProductDetailsSerializer(serializers.ModelSerializer):
+	
+	class Meta:
+		model = ProductDetails
+		fields = ('image', 'plain', 'seq')
+
+class ProductSerializer(serializers.HyperlinkedModelSerializer):
+	details = ProductDetailsSerializer(source='productdetails_set', many=True)
+
+	class Meta:
+		model = Product
+		fields = ('url', 'id', 'title', 'desc', 'unit_price', 'market_price',
+			'spec', 'spec_desc', 'cover', 'create_time',
+			'details')
+
+class BulkSerializer(serializers.HyperlinkedModelSerializer):
 	reseller = ResellerSerializer()
 	dispatchers = DispatcherSerializer(many=True)
 	create_time = TimestampField()
@@ -284,7 +298,7 @@ class BulkSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Bulk
-		fields = ('id', 'title', 'reseller', 'dispatchers', 
+		fields = ('url', 'id', 'title', 'reseller', 'dispatchers', 
 			'products', 'standard_time', 'dead_time', 
 			'arrived_time', 'status', 'card_title', 'card_desc',
 			'card_icon', 'create_time', 'participant_count')
