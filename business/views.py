@@ -9,6 +9,7 @@ from rest_framework import mixins
 from rest_framework import views
 from rest_framework import viewsets
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import (
 	api_view,
 	permission_classes,
@@ -180,20 +181,41 @@ class ProductViewSet(viewsets.ViewSet):
 		except queryset.model.DoesNotExist:
 			return Response(status=status.HTTP_204_NO_CONTENT)
 
-#class PurchasedProductHistoryViewSet(viewsets.ViewSet):
-#
-#	def list(self, request):
-#		product_id = request.query_params.get('product_id', None)
-#		if not product_id:
-#			raise BadRequestException('Product id is required')
-#		order_id = request.query_params.get('order_id', None)
-#		if not order_id:
-#			raise BadRequestException('Order id is required')
-#		queryset = PurchasedProductHistory.objects.filter(
-#			product_id=product_id, order_id=order_id)
-#		serializer = PurchasedProductHistorySerializer(
-#			queryset, many=True, context={'request': request})
-#		return Response(serializer.data)
+class ShippingAddressViewSet(viewsets.ModelViewSet):
+
+	queryset = ShippingAddress.objects.all()
+	serializer_class = ShippingAddressSerializer
+	permission_classes = [IsAuthenticated]
+
+	def list(self, request):
+		mob_user = request.user
+		if mob_user is None:
+			raise BadRequestException('Mob user not found')
+		user = User.objects.filter(mob_user_id=mob_user.id).first()
+		if user is None:
+			raise BadRequestException('User not found')
+		queryset = ShippingAddress.objects.filter(user_id=user.id)
+		serializer = ShippingAddressSerializer(queryset,
+			many=True, context={'request': request})
+		return Response(serializer.data)
+
+	def retrieve(self, request, pk=None):
+		mob_user = request.user
+		if mob_user is None:
+			raise BadRequestException('Mob user not found')
+		user = User.objects.filter(mob_user_id=mob_user.id).first()
+		if user is None:
+			raise BadRequestException('User not found')
+		queryset = ShippingAddress.objects.filter(user_id=user.id)
+		try:
+			shippingAddress = queryset.get(pk=pk)
+			serializer = ShippingAddressSerializer(shippingAddress,
+				context={'request': request})
+			return Response(serializer.data)
+		except queryset.model.DoesNotExist:
+			return Response(status=status.HTTP_204_NO_CONTENT)
+		
+
 
 class PurchasedProductHistoryView(views.APIView):
 	

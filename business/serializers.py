@@ -277,6 +277,11 @@ class BulkSerializer(serializers.HyperlinkedModelSerializer):
 	def get_participant_count(self, obj):
 		return Order.objects.filter(bulk_id=obj.pk).count()
 
+class ShippingAddressSerializer(serializers.HyperlinkedModelSerializer):
+	class Meta:
+		model = ShippingAddress
+		fields = ('url', 'id', 'name', 'mob', 'address')
+
 class PurchasedProductHistorySerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
 	order_id = serializers.ReadOnlyField()
 	bulk_id = serializers.ReadOnlyField()

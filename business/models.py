@@ -105,6 +105,14 @@ class Goods(models.Model):
 		verbose_name = 'Goods'
 		verbose_name_plural = 'Goods'
 
+class ShippingAddress(models.Model):
+	user = models.ForeignKey('User')
+	name = models.CharField(max_length=200)
+	mob = models.CharField(max_length=20)
+	address = models.TextField()
+	def __unicode__(self):
+		return self.address
+
 # Views
 
 class PurchasedProductHistory(models.Model):

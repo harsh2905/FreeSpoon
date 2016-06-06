@@ -22,6 +22,7 @@ router = DefaultRouter()
 #router.register(r'resellers', views.ResellerViewSet, base_name='resellers')
 router.register(r'bulks', views.BulkViewSet, base_name='bulk')
 router.register(r'products', views.ProductViewSet, base_name='product')
+router.register(r'shippingaddresses', views.ShippingAddressViewSet, base_name='shippingaddress')
 #router.register(r'purchasedproducthistorys', views.PurchasedProductHistoryViewSet, 
 #		base_name='purchasedproducthistory')
 urlpatterns.extend(router.urls)
