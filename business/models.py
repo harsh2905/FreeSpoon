@@ -31,6 +31,8 @@ class Dispatcher(models.Model):
 	avatar = models.ImageField(upload_to='avatars', null=True, blank=True)
 	tail = models.CharField(max_length=255, blank=True)
 	address = models.TextField()
+	opening_time = models.IntegerField(max_length=11)
+	closing_time = models.IntegerField(max_length=11)
 	create_time = models.DateTimeField(auto_now=True)
 	def __unicode__(self):
 		return self.name

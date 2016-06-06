@@ -39,7 +39,7 @@ class RemoveNullSerializerMixIn(serializers.Serializer):
 				pass
 			else:
 				value = field.to_representation(attribute)
-				if value:
+				if value is not None:
 					ret[field.field_name] = value
 		
 		return ret
@@ -78,7 +78,8 @@ class DispatcherSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
 	class Meta:
 		model = Dispatcher
 		fields = ('id', 'name', 'tail', 'address', 
-			'create_time', 'mob', 'wx_nickname', 'wx_headimgurl')
+			'create_time', 'mob', 'opening_time', 
+			'closing_time', 'wx_nickname', 'wx_headimgurl')
 
 class DispatcherJWTSerializer(serializers.Serializer):
 	token = serializers.CharField()
