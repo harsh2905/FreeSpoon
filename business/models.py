@@ -95,7 +95,6 @@ class Order(models.Model):
 			self.bulk.title, self.user.name, self.create_time)
 
 class Goods(models.Model):
-	user = models.ForeignKey('User') # TODO Remove it
 	order = models.ForeignKey('Order')
 	product = models.ForeignKey('Product')
 	quantity = models.IntegerField(max_length=11)
