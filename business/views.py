@@ -133,7 +133,9 @@ class BulkViewSet(ModelViewSet):
 	pagination_field_name = 'create_time'
 	pagination_lookup_type = 'gt'
 
-	filter_backends = (FieldOrderBackend,)
+	filter_backends = (filters.SearchFilter, FieldOrderBackend,)
+
+	search_fields = ('$products__title',)
 
 	order_fields = ['-create_time']
 
