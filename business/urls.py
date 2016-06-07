@@ -21,4 +21,5 @@ router.register(r'products', views.ProductViewSet, base_name='product')
 router.register(r'shippingaddresses', views.ShippingAddressViewSet, base_name='shippingaddress')
 router.register(r'purchasedproducthistorys', views.PurchasedProductHistoryViewSet, 
 		base_name='purchasedproducthistory')
+router.register(r'orders', views.OrderViewSet, base_name='order')
 urlpatterns.extend(router.urls)

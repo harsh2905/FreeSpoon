@@ -1,6 +1,7 @@
 from django.db.models import Sum
 from rest_framework import exceptions
 
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 from authentication.serializers import LoginSerializer as BaseLoginSerializer
@@ -8,11 +9,15 @@ from rest_auth.registration.serializers import SocialLoginSerializer as BaseSoci
 
 from .models import *
 from .fields import *
+from .exceptions import *
 from . import utils
 
 from collections import OrderedDict
 from rest_framework.relations import PKOnlyObject
 from rest_framework.fields import SkipField
+
+from wx import Auth as wxAuthClass
+wx = wxAuthClass()
 
 class RemoveNullSerializerMixIn(serializers.Serializer):
 	def to_representation(self, instance):
@@ -54,6 +59,7 @@ class UserSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
 	class Meta:
 		model = User
 		fields = ('id', 'name', 'create_time', 'mob', 
+			'recent_obtain_name', 'recent_obtain_mob', 
 			'wx_nickname', 'wx_headimgurl')
 
 class UserJWTSerializer(serializers.Serializer):
@@ -253,25 +259,51 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
 			'spec', 'spec_desc', 'cover', 'create_time',
 			'details')
 
-class BulkSerializer(serializers.HyperlinkedModelSerializer):
+class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	reseller = ResellerSerializer()
 	dispatchers = DispatcherSerializer(many=True)
 	create_time = TimestampField()
 	dead_time = TimestampField()
 	standard_time = StandardTimeField(source='*')
 	arrived_time = TimestampField()
-	products = ProductListSerializer(many=True)
+	products = ProductSerializer(many=True)
 	participant_count = serializers.SerializerMethodField()
+	recent_obtain_name = serializers.SerializerMethodField()
+	recent_obtain_mob = serializers.SerializerMethodField()
 
 	class Meta:
 		model = Bulk
 		fields = ('url', 'id', 'title', 'reseller', 'dispatchers', 
 			'products', 'standard_time', 'dead_time', 
 			'arrived_time', 'status', 'card_title', 'card_desc',
-			'card_icon', 'create_time', 'participant_count')
+			'card_icon', 'create_time', 'participant_count',
+			'recent_obtain_name', 'recent_obtain_mob')
 
 	def get_participant_count(self, obj):
 		return Order.objects.filter(bulk_id=obj.pk).count()
+
+	def get_recent_obtain_name(self, obj):
+		request = self.context.get('request', None)
+		if request is None:
+			return None
+		mob_user = request.user
+		if mob_user:
+			user = User.first(mob_user)
+			if user:
+				return user.recent_obtain_name
+		return None
+
+	def get_recent_obtain_mob(self, obj):
+		request = self.context.get('request', None)
+		if request is None:
+			return None
+		mob_user = request.user
+		if mob_user:
+			user = User.first(mob_user)
+			if user:
+				return user.recent_obtain_mob
+		return None
+
 
 class ShippingAddressSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
@@ -289,10 +321,107 @@ class PurchasedProductHistorySerializer(WeixinSerializerMixIn, serializers.Model
 
 	class Meta:
 		model = PurchasedProductHistory
-		fields = ('order_id', 'bulk_id', 'product_id', 'name', 'quantity', 'spec', 'create_time',
+		fields = ('order_id', 'bulk_id', 'product_id', 
+			'name', 'quantity', 'spec', 'create_time',
 			'wx_nickname', 'wx_headimgurl')
 
+class GoodsCreateSerializer(serializers.Serializer):
+	product_id = serializers.IntegerField()
+	quantity = serializers.IntegerField()
 
+class OrderCreateSerializer(serializers.Serializer):
+	goods = GoodsCreateSerializer(many=True)
+	ipaddress = serializers.CharField()
+	obtain_name = serializers.CharField()
+	obtain_mob = serializers.CharField()
+	bulk_id = serializers.IntegerField()
+	dispatcher_id = serializers.IntegerField()
+
+	def create(self, validated_data):
+		openid = None
+		request = self.context.get('request', None)
+		if request is None:
+			raise BadRequestException('User not found')
+		mob_user = request.user
+		if mob_user:
+			openid = mob_user.real_wx_openid
+		if openid is None:
+			raise BadRequestException('User not found')
+		user = User.first(mob_user)
+		if user is None:
+			raise BadRequestException('User not found')
+		bulk_id = validated_data.get('bulk_id')
+		bulk = None
+		try:
+			bulk = Bulk.objects.get(pk=bulk_id)
+		except ObjectDoesNotExist:
+			raise BadRequestException('Bulk not found')
+		if bulk is None:
+			raise BadRequestException('Bulk not found')
+		dispatcher_id = validated_data.get('dispatcher_id')
+		dispatcher = None
+		try:
+			dispatcher = Dispatcher.objects.get(pk=dispatcher_id)
+		except ObjectDoesNotExist:
+			raise BadRequestException('Dispatcher not found')
+		if dispatcher is None:
+			raise BadRequestException('Dispatcher not found')
+		obtain_name = validated_data.get('obtain_name')
+		obtain_mob = validated_data.get('obtain_mob')
+		ipaddress = validated_data.get('ipaddress')
+		goods = validated_data.get('goods')
+		total_fee = 0
+		for _ in goods:
+			product_id = _.get('product_id')
+			quantity = _.get('quantity')
+			try:
+				product = Product.objects.get(pk=product_id)
+				total_fee = product.unit_price * quantity
+			except ObjectDoesNotExist:
+				raise BadRequestException('Product not found')
+		time_start = datetime.datetime.now()
+		time_expire = time_start + datetime.timedelta(minutes=30)
+		order_id = utils.createOrderId()
+		prepay_id = wx.createPrepayId(
+			orderId=order_id,
+			total_fee=total_fee,
+			ipaddress=ipaddress,
+			time_start=time_start,
+			time_expire=time_expire,
+			openid=openid,
+			title=bulk.title,
+			detail=bulk.details,
+			notify_url='http://yijiayinong.com/api/payNotify'
+		)
+		order = Order.objects.create(
+			id=order_id,
+			status=0,
+			prepay_id=prepay_id,
+			freight=0,
+			total_fee=total_fee,
+			bulk_id=bulk_id,
+			dispatcher_id=dispatcher_id,
+			user_id=user.id,
+			obtain_name=obtain_name,
+			obtain_mob=obtain_mob
+		)
+		for _ in goods:
+			product_id = _.get('product_id')
+			quantity = _.get('quantity')
+			Goods.objects.create(
+				quantity=quantity,
+				order_id=order.id,
+				product_id=product_id
+			)
+		return order
+			
+	
+class OrderSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Order
+		fields = ('id', 'user', 'bulk', 'dispatcher', 
+			'status', 'prepay_id', 'freight', 'total_fee',
+			'obtain_name', 'obtain_mob',)
 
 
 

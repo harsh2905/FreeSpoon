@@ -3,6 +3,9 @@ from __future__ import unicode_literals
 from django.conf import settings
 from django.db import models
 
+from authentication.models import MobUser
+from django.core.exceptions import ObjectDoesNotExist
+
 # Create your models here.
 
 class AssociatedMixIn(object):
@@ -14,12 +17,26 @@ class AssociatedMixIn(object):
 			return self
 		return self.objects.filter(mob_user__in=self.mob_user.associated)
 
+	@classmethod
+	def first(cls, mob_user):
+		if not isinstance(mob_user, MobUser):
+			return None
+		if mob_user.parent:
+			parent = mob_user.parent
+			try:
+				return cls.objects.get(mob_user=parent)
+			except ObjectDoesNotExist:
+				pass
+		return cls.objects.filter(mob_user__in=mob_user.associated).first()
+
 class User(AssociatedMixIn, models.Model):
 	related_field_name = 'user'
 	mob_user = models.OneToOneField(
 		settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 	name = models.CharField(max_length=100, null=True, blank=True)
 	avatar = models.ImageField(upload_to='avatars', null=True, blank=True)
+	recent_obtain_name = models.CharField(max_length=100, null=True, blank=True)
+	recent_obtain_mob = models.CharField(max_length=20, null=True, blank=True)
 	create_time = models.DateTimeField(auto_now=True)
 	def __unicode__(self):
 		return self.name
@@ -79,6 +96,7 @@ class ProductDetails(models.Model):
 
 class Bulk(models.Model):
 	title = models.CharField(max_length=200)
+	details = models.TextField()
 	reseller = models.ForeignKey('Reseller')
 	dispatchers = models.ManyToManyField('Dispatcher')
 	products = models.ManyToManyField('Product')
@@ -102,6 +120,8 @@ class Order(models.Model):
 	freight = models.IntegerField(max_length=11)
 	total_fee = models.IntegerField(max_length=11)
 	create_time = models.DateTimeField(auto_now=True)
+	obtain_name = models.CharField(max_length=100)
+	obtain_mob = models.CharField(max_length=20)
 	def __unicode__(self):
 		return '%s(User: %s, Date: %s)' % (
 			self.bulk.title, self.user.name, self.create_time)

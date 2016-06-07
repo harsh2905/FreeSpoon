@@ -76,7 +76,9 @@ class MobUser(AbstractBaseUser):
 	@property
         def real_wx_extra_data(self):
 		social_account = SocialAccount.objects.filter(user__in=self.associated).first()
-		return social_account
+		if hasattr(social_account, 'extra_data'):
+			return social_account.extra_data
+		return None
 
 	@property
         def real_wx_nickname(self):
@@ -90,6 +92,13 @@ class MobUser(AbstractBaseUser):
                 extra_data = self.real_wx_extra_data
                 if extra_data:
                         return extra_data.get('headimgurl', None)
+                return None
+
+	@property
+        def real_wx_openid(self):
+                extra_data = self.real_wx_extra_data
+                if extra_data:
+                        return extra_data.get('openid', None)
                 return None
 
 

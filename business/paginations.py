@@ -3,10 +3,15 @@ from rest_framework.response import Response
 
 import datetime
 
+from .utils import total_microseconds
+
 class TimestampPagination(BasePagination):
 
 	def paginate_queryset(self, queryset, request, view=None):
-                limit = request.query_params.get('time', 0)
+		max_value = datetime.datetime(2050, 1, 1)
+		epoch = datetime.datetime(1970, 1, 1)
+		defaultLimit = int(total_microseconds(max_value - epoch))
+                limit = request.query_params.get('time', defaultLimit)
                 limit = int(limit)
                 limit = limit / 10**6
                 limit = datetime.datetime.fromtimestamp(limit)

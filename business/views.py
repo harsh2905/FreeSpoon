@@ -131,7 +131,7 @@ class BulkViewSet(ModelViewSet):
 	pagination_class = TimestampPagination
 
 	pagination_field_name = 'create_time'
-	pagination_lookup_type = 'gt'
+	pagination_lookup_type = 'lt'
 
 	filter_backends = (filters.SearchFilter, FieldOrderBackend,)
 
@@ -157,6 +157,11 @@ class PurchasedProductHistoryViewSet(ReadOnlyModelViewSet):
 	filter_fields = ['product_id']
 	filter_field_raise_exception = True
 	
+class OrderViewSet(ModelViewSet):
+	queryset = Order.objects.all()
+	serializer_class = OrderSerializer
+	serializer_class_create = OrderCreateSerializer
+
 
 
 
