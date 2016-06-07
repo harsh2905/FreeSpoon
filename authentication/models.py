@@ -1,10 +1,12 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.db.models import Q
 from django.contrib.auth.models import (
 	BaseUserManager,
 	AbstractBaseUser
 )
+from allauth.socialaccount.models import SocialAccount
 
 import pdb
 
@@ -28,8 +30,6 @@ class MobUser(AbstractBaseUser):
 	mob = models.CharField(max_length=20, unique=True)
 	USERNAME_FIELD = 'mob'
 	parent = models.ForeignKey('MobUser', on_delete=models.CASCADE, null=True)
-	#name = models.CharField(max_length=100, null=True, blank=True)
-	#avatar = models.ImageField(upload_to='avatars', null=True, blank=True)
 	create_time = models.DateTimeField(auto_now=True)
 
 	is_active = models.BooleanField(default=True)
@@ -56,45 +56,38 @@ class MobUser(AbstractBaseUser):
 		return self.is_admin
 
 	@property
+	def associated(self):
+		mob_users = None
+		if self.parent is None:
+			mob_users = MobUser.objects.filter(Q(id=self.id) 
+				| Q(parent=self)) 
+		else:
+			mob_users = MobUser.objects.filter(Q(id=self.id) 
+				| Q(parent=self) 
+				| Q(parent=self.parent))
+		return mob_users
+
+	@property
 	def real_mob(self):
 		if self.parent:
 			return self.parent.mob
 		return self.mob
 
+	@property
         def real_wx_extra_data(self):
-		#if not hasattr(self, 'mob_user'):
-		#	return None
-		#self = self.mob_user
-		if not self:
-			return None
-                extra_data = None
-                socialaccounts = self.socialaccount_set.all()
-                for socialaccount in socialaccounts:
-                        provider = socialaccount.provider
-                        if provider == 'weixin': # Could be configuration
-                                extra_data = socialaccount.extra_data
-                                if extra_data:
-                                        break
-                if extra_data:
-                        return extra_data
-                else:
-                        children = self.mobuser_set.all()
-                        for child in children:
-                                extra_data = child.get_real_wx_extra_data()
-                                if extra_data:
-                                        break
-                return extra_data
+		social_account = SocialAccount.objects.filter(user__in=self.associated).first()
+		return social_account
 
 	@property
         def real_wx_nickname(self):
-                extra_data = self.real_wx_extra_data()
+                extra_data = self.real_wx_extra_data
                 if extra_data:
                         return extra_data.get('nickname', None)
                 return None
 
 	@property
         def real_wx_headimgurl(self):
-                extra_data = self.real_wx_extra_data()
+                extra_data = self.real_wx_extra_data
                 if extra_data:
                         return extra_data.get('headimgurl', None)
                 return None

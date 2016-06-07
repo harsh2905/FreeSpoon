@@ -5,7 +5,17 @@ from django.db import models
 
 # Create your models here.
 
-class User(models.Model):
+class AssociatedMixIn(object):
+	related_field_name = None
+
+	@property
+	def associated(self):
+		if not self.mob_user:
+			return self
+		return self.objects.filter(mob_user__in=self.mob_user.associated)
+
+class User(AssociatedMixIn, models.Model):
+	related_field_name = 'user'
 	mob_user = models.OneToOneField(
 		settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 	name = models.CharField(max_length=100, null=True, blank=True)
@@ -14,7 +24,8 @@ class User(models.Model):
 	def __unicode__(self):
 		return self.name
 
-class Reseller(models.Model):
+class Reseller(AssociatedMixIn, models.Model):
+	related_field_name = 'reseller'
 	mob_user = models.OneToOneField(
 		settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 	name = models.CharField(max_length=100, null=True, blank=True)
@@ -24,7 +35,8 @@ class Reseller(models.Model):
 	def __unicode__(self):
 		return self.name
 	
-class Dispatcher(models.Model):
+class Dispatcher(AssociatedMixIn, models.Model):
+	related_field_name = 'dispatcher'
 	mob_user = models.OneToOneField(
 		settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 	name = models.CharField(max_length=100, null=True, blank=True)

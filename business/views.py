@@ -7,7 +7,9 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework import mixins
 from rest_framework import views
-from rest_framework import viewsets
+from rest_framework import filters
+#from rest_framework import viewsets
+from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import (
@@ -21,11 +23,14 @@ from authentication.views import WeixinLogin as BaseWeixinLogin
 from django.shortcuts import render
 
 from . import config
-from wx import Auth as wxAuthClass
 from .exceptions import *
 from .models import *
 from .serializers import *
+from .paginations import *
+from .viewsets import *
+from .filters import *
 
+from wx import Auth as wxAuthClass
 wx = wxAuthClass()
 
 # Create your views here.
@@ -119,119 +124,37 @@ def wxConfig(request):
 
 # General API
 
-#class BulkViewSet(viewsets.ModelViewSet):
-#	queryset = Bulk.objects.all()
-#	serializer_class = BulkListSerializer
+class BulkViewSet(ModelViewSet):
+	queryset = Bulk.objects.all()
+	serializer_class_list = BulkListSerializer
+	serializer_class_retrieve = BulkSerializer
+	pagination_class = TimestampPagination
 
-class DateTimePaginationMixIn(object):
-	pageinationLimitField = 'create_time'
-	pageinationLimitQueryParamName = 'time'
-	pageinationSizeQueryParamName = 'size'
-	pageinationModel = None
-	pageinationSerializerClass = None
-	
-	def list(self, request):
-		limitName = request.data.get(self.pageinationLimitQueryParamName, 'time')
-		sizeName = request.data.get(self.pageinationLimitQueryParamName, 'size')
-		limit = request.query_params.get(limitName, 0)
-		limit = int(limit)
-		limit = limit / 10**6
-		limit = datetime.datetime.fromtimestamp(limit)
-		size = request.query_params.get(sizeName, 10)
-		size = int(size)
-		queryset = self.pageinationModel.objects.filter(**{
-			'%s__gt' % self.pageinationLimitField: limit
-		}).order_by('-%s' % self.pageinationLimitField)[:size]
-		serializer = self.pageinationSerializerClass(queryset,
-			many=True, context={'request': request})
-		return Response(serializer.data)
+	pagination_field_name = 'create_time'
+	pagination_lookup_type = 'gt'
 
-class BulkViewSet(DateTimePaginationMixIn, viewsets.ViewSet):
+	filter_backends = (FieldOrderBackend,)
 
-	pageinationLimitField = 'create_time'
-	pageinationLimitQueryParamName = 'time'
-	pageinationModel = Bulk
-	pageinationSerializerClass = BulkListSerializer
+	order_fields = ['-create_time']
 
-	#def list(self, request):
-	#	queryset = Bulk.objects.all()
-	#	serializer = BulkListSerializer(queryset, 
-	#		many=True, context={'request': request})
-	#	return Response(serializer.data)
+class ProductViewSet(ModelViewSet):
+	queryset = Product.objects.all()
+	serializer_class_retrieve = ProductSerializer
 
-	def retrieve(self, request, pk=None):
-		queryset = Bulk.objects.all()
-		try:
-			bulk = queryset.get(pk=pk)
-			serializer = BulkSerializer(bulk, 
-				context={'request': request, 'pk': pk})
-			return Response(serializer.data)
-		except queryset.model.DoesNotExist:
-			return Response(status=status.HTTP_204_NO_CONTENT)
-
-class ProductViewSet(viewsets.ViewSet):
-	
-	def retrieve(self, request, pk=None):
-		queryset = Product.objects.all()
-		try:
-			product = queryset.get(pk=pk)
-			serializer = ProductSerializer(product,
-				context={'request': request})
-			return Response(serializer.data)
-		except queryset.model.DoesNotExist:
-			return Response(status=status.HTTP_204_NO_CONTENT)
-
-class ShippingAddressViewSet(viewsets.ModelViewSet):
-
+class ShippingAddressViewSet(ModelViewSet):
 	queryset = ShippingAddress.objects.all()
 	serializer_class = ShippingAddressSerializer
 	permission_classes = [IsAuthenticated]
+	filter_backends = (IsOwnedByUserFilterBackend,)
 
-	def list(self, request):
-		mob_user = request.user
-		if mob_user is None:
-			raise BadRequestException('Mob user not found')
-		user = User.objects.filter(mob_user_id=mob_user.id).first()
-		if user is None:
-			raise BadRequestException('User not found')
-		queryset = ShippingAddress.objects.filter(user_id=user.id)
-		serializer = ShippingAddressSerializer(queryset,
-			many=True, context={'request': request})
-		return Response(serializer.data)
+class PurchasedProductHistoryViewSet(ReadOnlyModelViewSet):
+	queryset = PurchasedProductHistory.objects.all()
+	serializer_class = PurchasedProductHistorySerializer
+	filter_backends = (FieldFilterBackend,)
 
-	def retrieve(self, request, pk=None):
-		mob_user = request.user
-		if mob_user is None:
-			raise BadRequestException('Mob user not found')
-		user = User.objects.filter(mob_user_id=mob_user.id).first()
-		if user is None:
-			raise BadRequestException('User not found')
-		queryset = ShippingAddress.objects.filter(user_id=user.id)
-		try:
-			shippingAddress = queryset.get(pk=pk)
-			serializer = ShippingAddressSerializer(shippingAddress,
-				context={'request': request})
-			return Response(serializer.data)
-		except queryset.model.DoesNotExist:
-			return Response(status=status.HTTP_204_NO_CONTENT)
-		
-
-
-class PurchasedProductHistoryView(views.APIView):
+	filter_fields = ['product_id']
+	filter_field_raise_exception = True
 	
-	def get(self, request, format=None):
-		product_id = request.query_params.get('product_id', None)
-		if not product_id:
-			raise BadRequestException('Product id is required')
-		bulk_id = request.query_params.get('bulk_id', None)
-		if not bulk_id:
-			raise BadRequestException('Bulk id is required')
-		queryset = PurchasedProductHistory.objects.filter(
-			product_id=product_id, bulk_id=bulk_id)
-		serializer = PurchasedProductHistorySerializer(
-			queryset, many=True, context={'request': request})
-		return Response(serializer.data)
-		
 
 
 

@@ -232,14 +232,10 @@ class ProductListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedMo
 		request = self.context.get('request', None)
 		if not request:
 			return None
-		pk = self.context.get('pk', None)
-		if not pk:
-			return None
 		params = {
 			'product_id': obj.id,
-			'bulk_id': pk,
 		}
-		url = reverse('purchasedproducthistorys', request=request)
+		url = reverse('purchasedproducthistory-list', request=request)
 		return utils.addQueryParams(url, params)
 
 class ProductDetailsSerializer(serializers.ModelSerializer):
