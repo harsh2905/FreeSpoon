@@ -166,29 +166,30 @@ class BulkListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModel
 	#	view_name='bulk-detail',
 	#	lookup_field='id'
 	#)
-	reseller = serializers.SerializerMethodField(method_name='get_reseller_name')
+	reseller = ResellerSerializer()
 	covers = serializers.SerializerMethodField(method_name='get_product_covers')
 	create_time = TimestampField()
 	dead_time = TimestampField()
 	arrived_time = TimestampField()
+	participant_count = serializers.SerializerMethodField()
 
 	class Meta:
 		model = Bulk
 		fields = ('url', 'id', 'title', 'reseller', 'covers',
 			'dead_time', 'arrived_time', 'status',
-			'create_time')
+			'create_time', 'location', 'participant_count')
 		#extra_kwargs = {
 		#	'url': {'view_name': 'bulk', 'lookup_field': 'id'}
 		#}
 
-	def get_reseller_name(self, obj):
-		obj = obj.reseller
-		if not hasattr(obj, 'mob_user'):
-			return ''
-		obj = obj.mob_user
-		if not obj:
-			return ''
-		return obj.real_wx_nickname
+	#def get_reseller_name(self, obj):
+	#	obj = obj.reseller
+	#	if not hasattr(obj, 'mob_user'):
+	#		return ''
+	#	obj = obj.mob_user
+	#	if not obj:
+	#		return ''
+	#	return obj.real_wx_nickname
 
 	def get_product_covers(self, obj): # So ugly :(
 		request = self.context.get('request', None)
@@ -199,17 +200,27 @@ class BulkListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModel
 			if hasattr(p.cover, 'url') 
 			else '', obj.products.all()))
 
+	def get_participant_count(self, obj):
+		return Order.objects.filter(bulk_id=obj.pk).count()
+
+class ProductDetailsSerializer(serializers.ModelSerializer):
+	
+	class Meta:
+		model = ProductDetails
+		fields = ('image', 'plain', 'seq')
+
 class ProductListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	create_time = TimestampField()
 	participant_count = serializers.SerializerMethodField()
 	purchased_count = serializers.SerializerMethodField()
 	participant_avatars = serializers.SerializerMethodField()
 	history = serializers.SerializerMethodField()
+	details = ProductDetailsSerializer(source='productdetails_set', many=True)
 
 	class Meta:
 		model = Product
 		fields = ('url', 'id', 'title', 'desc', 'unit_price', 'market_price',
-			'spec', 'spec_desc', 'cover', 'create_time',
+			'spec', 'spec_desc', 'cover', 'create_time', 'details',
 			'participant_count', 'purchased_count',
 			'participant_avatars', 'history')
 
@@ -244,12 +255,6 @@ class ProductListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedMo
 		url = reverse('purchasedproducthistory-list', request=request)
 		return utils.addQueryParams(url, params)
 
-class ProductDetailsSerializer(serializers.ModelSerializer):
-	
-	class Meta:
-		model = ProductDetails
-		fields = ('image', 'plain', 'seq')
-
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
 	details = ProductDetailsSerializer(source='productdetails_set', many=True)
 
@@ -266,7 +271,7 @@ class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 	dead_time = TimestampField()
 	standard_time = StandardTimeField(source='*')
 	arrived_time = TimestampField()
-	products = ProductSerializer(many=True)
+	products = ProductListSerializer(many=True)
 	participant_count = serializers.SerializerMethodField()
 	recent_obtain_name = serializers.SerializerMethodField()
 	recent_obtain_mob = serializers.SerializerMethodField()
@@ -274,7 +279,7 @@ class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 	class Meta:
 		model = Bulk
 		fields = ('url', 'id', 'title', 'reseller', 'dispatchers', 
-			'products', 'standard_time', 'dead_time', 
+			'products', 'location', 'standard_time', 'dead_time', 
 			'arrived_time', 'status', 'card_title', 'card_desc',
 			'card_icon', 'create_time', 'participant_count',
 			'recent_obtain_name', 'recent_obtain_mob')
