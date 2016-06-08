@@ -175,7 +175,7 @@ class BulkListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModel
 
 	class Meta:
 		model = Bulk
-		fields = ('url', 'id', 'title', 'reseller', 'covers',
+		fields = ('url', 'id', 'title', 'category', 'reseller', 'covers',
 			'dead_time', 'arrived_time', 'status',
 			'create_time', 'location', 'participant_count')
 		#extra_kwargs = {
@@ -221,7 +221,7 @@ class ProductListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedMo
 		model = Product
 		fields = ('url', 'id', 'title', 'desc', 'unit_price', 'market_price',
 			'spec', 'spec_desc', 'cover', 'create_time', 'details',
-			'participant_count', 'purchased_count',
+			'participant_count', 'purchased_count', 'tag',
 			'participant_avatars', 'history')
 
 	def get_participant_count(self, obj):
@@ -278,7 +278,7 @@ class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 
 	class Meta:
 		model = Bulk
-		fields = ('url', 'id', 'title', 'reseller', 'dispatchers', 
+		fields = ('url', 'id', 'title', 'category', 'reseller', 'dispatchers', 
 			'products', 'location', 'standard_time', 'dead_time', 
 			'arrived_time', 'status', 'card_title', 'card_desc',
 			'card_icon', 'create_time', 'participant_count',

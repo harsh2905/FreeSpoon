@@ -71,6 +71,7 @@ class Product(models.Model):
 	desc = models.TextField()
 	unit_price = models.IntegerField(max_length=11)
 	market_price = models.IntegerField(max_length=11)
+	tag = models.CharField(max_length=20)
 	spec = models.CharField(max_length=100)
 	spec_desc = models.CharField(max_length=100)
 	cover = models.ImageField(upload_to='images/product/%Y/%m/%d')
@@ -96,6 +97,7 @@ class ProductDetails(models.Model):
 
 class Bulk(models.Model):
 	title = models.CharField(max_length=200)
+	category = models.CharField(max_length=100)
 	details = models.TextField()
 	reseller = models.ForeignKey('Reseller')
 	dispatchers = models.ManyToManyField('Dispatcher')
