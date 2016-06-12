@@ -150,10 +150,14 @@ class ShippingAddress(models.Model):
 # Views
 
 class PurchasedProductHistory(models.Model):
-	order = models.ForeignKey('Order', primary_key=True)
-	product = models.ForeignKey('Product')
-	bulk = models.ForeignKey('Bulk')
-	mob_user = models.ForeignKey(settings.AUTH_USER_MODEL)
+	order = models.ForeignKey('Order', primary_key=True,
+		on_delete=models.DO_NOTHING)
+	product = models.ForeignKey('Product',
+		on_delete=models.DO_NOTHING, null=True)
+	bulk = models.ForeignKey('Bulk',
+		on_delete=models.DO_NOTHING, null=True)
+	mob_user = models.ForeignKey(settings.AUTH_USER_MODEL, 
+		on_delete=models.DO_NOTHING, null=True)
 	name = models.CharField(max_length=100, null=True, blank=True)
 	quantity = models.IntegerField(max_length=11)
 	spec = models.CharField(max_length=100)

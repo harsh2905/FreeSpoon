@@ -181,8 +181,8 @@ REST_SESSION_LOGIN = False
 
 SOCIALACCOUNT_PROVIDERS = {
     'weixin': {
-	'AUTHORIZE_URL': 'https://open.weixin.qq.com/connect/oauth2/authorize',
-	'SCOPE': ('snsapi_userinfo',),
+        #'AUTHORIZE_URL': 'https://open.weixin.qq.com/connect/oauth2/authorize',
+        #'SCOPE': ('snsapi_userinfo',),
     }
 }
 
@@ -200,7 +200,8 @@ JWT_AUTH = {
     'authentication.utils.jwt_get_username_from_payload_handler',
 
     'JWT_ALLOW_REFRESH': True,
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=30),
+    #'JWT_EXPIRATION_DELTA': datetime.timedelta(days=30),
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=30),
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=999),
 }
 
@@ -209,5 +210,6 @@ AUTH_USER_MODEL = 'authentication.MobUser'
 ACCOUNT_USER_MODEL_USERNAME_FIELD = 'mob'
 ACCOUNT_EMAIL_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = 'none'
-
+ACCOUNT_ADAPTER = 'authentication.adapter.DefaultAccountAdapter'
+SOCIALACCOUNT_ADAPTER = 'authentication.adapter.DefaultSocialAccountAdapter'
 

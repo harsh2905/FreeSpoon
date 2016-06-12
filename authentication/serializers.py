@@ -5,14 +5,49 @@ from rest_framework import exceptions
 
 from rest_framework.fields import empty
 
+from collections import OrderedDict
+from rest_framework.relations import PKOnlyObject
+from rest_framework.fields import SkipField
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import authenticate
 from .models import *
 
-class MobUserSerializer(serializers.ModelSerializer):
+class RemoveNullSerializerMixIn(serializers.Serializer):
+	def to_representation(self, instance):
+		"""
+		Object instance -> Dict of primitive datatypes.
+		"""
+		ret = OrderedDict()
+		fields = self._readable_fields
+		
+		for field in fields:
+			try:
+				attribute = field.get_attribute(instance)
+			except SkipField:
+				continue
+			
+			# We skip `to_representation` for `None` values so that fields do
+			# not have to explicitly deal with that case.
+			#
+			# For related fields with `use_pk_only_optimization` we need to
+			# resolve the pk value.
+			check_for_none = attribute.pk if isinstance(attribute, PKOnlyObject) else attribute
+			if check_for_none is None:
+				#ret[field.field_name] = None
+				pass
+			else:
+				value = field.to_representation(attribute)
+				if value is not None:
+					ret[field.field_name] = value
+		
+		return ret
+
+class MobUserSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
+	wx_nickname = serializers.CharField(source='real_wx_nickname')
+	wx_headimgurl = serializers.CharField(source='real_wx_headimgurl')
 	class Meta:
 		model = MobUser
-		fields = ('id', 'mob')
+		fields = ('id', 'mob', 'wx_nickname', 'wx_headimgurl')
 
 	def __init__(self, instance=None, data=empty, **kwargs):
 		if instance and instance.parent:

@@ -56,54 +56,93 @@ def redirect(request, relativePath):
 
 class LoginViewMixIn(object):
 
-	jwtSerializerClass = None # Must implement it in sub class
-
 	def get_response(self):
-		user = self.serializer.validated_data['wrap_user']
+		mob_user = self.serializer.validated_data.get('user', None)
+		user = self.serializer.validated_data.get('wrap_user', None)
+		reseller = self.serializer.validated_data.get('wrap_reseller', None)
+		dispatcher = self.serializer.validated_data.get('wrap_dispatcher', None)
+
+		flag = 0
+		if user:
+			flag = flag | 1
+		if reseller:
+			flag = flag | (1 << 1)
+		if dispatcher:
+			flag = flag | (1 << 2)
 
         	data = {
-        	    'user': user,
-        	    'token': self.token
+        		'mob_user': mob_user,
+        		'user': user,
+        		'reseller': reseller,
+        		'dispatcher': dispatcher,
+        		'token': self.token,
+			'flag': flag
         	}
-        	serializer = self.jwtSerializerClass(instance=data, context={'request': self.request})
+        	serializer = JWTSerializer(instance=data, context={'request': self.request})
 
         	return Response(serializer.data, status=status.HTTP_200_OK)
 
 class UserLoginView(
 	LoginViewMixIn,
 	BaseLoginView):
-	serializer_class = UserLoginSerializer
-	jwtSerializerClass = UserJWTSerializer
+	serializer_class = LoginSerializer
 
-class WeixinLogin(
+class WeixinLoginView(
 	LoginViewMixIn,
 	BaseWeixinLogin):
-	serializer_class = UserSocialLoginSerializer
-	jwtSerializerClass = UserJWTSerializer
+	serializer_class = SocialLoginSerializer
 
-class ResellerLoginView(
-	LoginViewMixIn,
-	BaseLoginView):
-	serializer_class = ResellerLoginSerializer
-	jwtSerializerClass = ResellerJWTSerializer
 
-class ResellerWeixinLogin(
-	LoginViewMixIn,
-	BaseWeixinLogin):
-	serializer_class = ResellerSocialLoginSerializer
-	jwtSerializerClass = ResellerJWTSerializer
-
-class DispatcherLoginView(
-	LoginViewMixIn,
-	BaseLoginView):
-	serializer_class = DispatcherLoginSerializer
-	jwtSerializerClass = DispatcherJWTSerializer
-
-class DispatcherWeixinLogin(
-	LoginViewMixIn,
-	BaseWeixinLogin):
-	serializer_class = DispatcherSocialLoginSerializer
-	jwtSerializerClass = DispatcherJWTSerializer
+#class LoginViewMixIn(object):
+#
+#	jwtSerializerClass = None # Must implement it in sub class
+#
+#	def get_response(self):
+#		user = self.serializer.validated_data['wrap_user']
+#
+#        	data = {
+#        	    'user': user,
+#        	    'token': self.token
+#        	}
+#        	serializer = self.jwtSerializerClass(instance=data, context={'request': self.request})
+#
+#        	return Response(serializer.data, status=status.HTTP_200_OK)
+#
+#class UserLoginView(
+#	LoginViewMixIn,
+#	BaseLoginView):
+#	serializer_class = UserLoginSerializer
+#	jwtSerializerClass = UserJWTSerializer
+#
+#class WeixinLogin(
+#	LoginViewMixIn,
+#	BaseWeixinLogin):
+#	serializer_class = UserSocialLoginSerializer
+#	jwtSerializerClass = UserJWTSerializer
+#
+#class ResellerLoginView(
+#	LoginViewMixIn,
+#	BaseLoginView):
+#	serializer_class = ResellerLoginSerializer
+#	jwtSerializerClass = ResellerJWTSerializer
+#
+#class ResellerWeixinLogin(
+#	LoginViewMixIn,
+#	BaseWeixinLogin):
+#	serializer_class = ResellerSocialLoginSerializer
+#	jwtSerializerClass = ResellerJWTSerializer
+#
+#class DispatcherLoginView(
+#	LoginViewMixIn,
+#	BaseLoginView):
+#	serializer_class = DispatcherLoginSerializer
+#	jwtSerializerClass = DispatcherJWTSerializer
+#
+#class DispatcherWeixinLogin(
+#	LoginViewMixIn,
+#	BaseWeixinLogin):
+#	serializer_class = DispatcherSocialLoginSerializer
+#	jwtSerializerClass = DispatcherJWTSerializer
 
 # Web Only
 

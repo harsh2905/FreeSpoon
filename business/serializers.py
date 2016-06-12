@@ -16,6 +16,8 @@ from collections import OrderedDict
 from rest_framework.relations import PKOnlyObject
 from rest_framework.fields import SkipField
 
+from authentication.serializers import MobUserSerializer
+
 from wx import Auth as wxAuthClass
 wx = wxAuthClass()
 
@@ -62,9 +64,16 @@ class UserSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
 			'recent_obtain_name', 'recent_obtain_mob', 
 			'wx_nickname', 'wx_headimgurl')
 
-class UserJWTSerializer(serializers.Serializer):
-	token = serializers.CharField()
-	user = UserSerializer()
+class LoginUserSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
+	create_time = TimestampField()
+	class Meta:
+		model = User
+		fields = ('create_time',
+			'recent_obtain_name', 'recent_obtain_mob')
+
+#class UserJWTSerializer(serializers.Serializer):
+#	token = serializers.CharField()
+#	user = UserSerializer()
 
 class ResellerSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
 	mob = serializers.CharField(source='mob_user.real_mob')
@@ -74,9 +83,15 @@ class ResellerSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
 		fields = ('id', 'name', 'tail', 'create_time', 
 			'mob', 'wx_nickname', 'wx_headimgurl')
 
-class ResellerJWTSerializer(serializers.Serializer):
-	token = serializers.CharField()
-	user = ResellerSerializer()
+class LoginResellerSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
+	create_time = TimestampField()
+	class Meta:
+		model = Reseller
+		fields = ('tail', 'create_time')
+
+#class ResellerJWTSerializer(serializers.Serializer):
+#	token = serializers.CharField()
+#	user = ResellerSerializer()
 
 class DispatcherSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
 	mob = serializers.CharField(source='mob_user.real_mob')
@@ -87,77 +102,131 @@ class DispatcherSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
 			'create_time', 'mob', 'opening_time', 
 			'closing_time', 'wx_nickname', 'wx_headimgurl')
 
-class DispatcherJWTSerializer(serializers.Serializer):
+class LoginDispatcherSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
+	create_time = TimestampField()
+	class Meta:
+		model = Dispatcher
+		fields = ('tail', 'address', 
+			'create_time', 'opening_time', 
+			'closing_time')
+
+#class DispatcherJWTSerializer(serializers.Serializer):
+#	token = serializers.CharField()
+#	user = DispatcherSerializer()
+
+class JWTSerializer(serializers.Serializer):
+	flag = serializers.IntegerField()
 	token = serializers.CharField()
-	user = DispatcherSerializer()
+	mob_user = MobUserSerializer()
+	user = LoginUserSerializer()
+	reseller = LoginResellerSerializer()
+	dispatcher = LoginDispatcherSerializer()
 
 class LoginSerializerMixIn(serializers.Serializer):
 	name = serializers.CharField(required=False, allow_blank=True)
 
-	mainModel = None # Must implement it in sub class
-	parentClass = None # Must implement it in sub class
-	defaultFieldNames = [] # Must implement it in sub class
+	baseClass = None # Must implement it in sub class
 
 	def validate(self, attrs):
-		attrs = self.parentClass.validate(self, attrs)
+		attrs = self.baseClass.validate(self, attrs)
 		mob_user = attrs['user']
-		if mob_user:
-			defaults = {}
-			for fieldName in self.defaultFieldNames:
-				fieldValue = attrs.get(fieldName)
-				if fieldValue:
-					defaults[fieldName] = fieldValue
-			user, created = self.mainModel.objects.get_or_create(
-				mob_user=mob_user,
-				defaults=defaults
-			)
-			attrs['wrap_user'] = user
-		else:
+		if not mob_user:
 			msg = _('Unable to log in with provided credentials.')
 			raise exceptions.ValidationError(msg)
+		user, created = User.objects.get_or_create(
+			mob_user=mob_user,
+			defaults={}
+		)
+		attrs['wrap_user'] = user
+		try:
+			reseller = Reseller.objects.get(mob_user=mob_user)
+			attrs['wrap_reseller'] = reseller
+		except ObjectDoesNotExist:
+			pass
+		try:
+			dispatcher = Dispatcher.objects.get(mob_user=mob_user)
+			attrs['wrap_dispatcher'] = dispatcher
+		except ObjectDoesNotExist:
+			pass
 		return attrs
 
-class UserLoginSerializer(
+class LoginSerializer(
 	LoginSerializerMixIn, 
 	BaseLoginSerializer):
-	parentClass = BaseLoginSerializer
-	defaultFieldNames = ['name']
-	mainModel = User
+	baseClass = BaseLoginSerializer
 
-class UserSocialLoginSerializer(
+class SocialLoginSerializer(
 	LoginSerializerMixIn, 
 	BaseSocialLoginSerializer):
-	parentClass = BaseSocialLoginSerializer
-	defaultFieldNames = ['name']
-	mainModel = User
+	baseClass = BaseSocialLoginSerializer
 
-class ResellerLoginSerializer(
-	LoginSerializerMixIn, 
-	BaseLoginSerializer):
-	parentClass = BaseLoginSerializer
-	defaultFieldNames = ['name', 'tail']
-	mainModel = Reseller
-
-class ResellerSocialLoginSerializer(
-	LoginSerializerMixIn, 
-	BaseSocialLoginSerializer):
-	parentClass = BaseSocialLoginSerializer
-	defaultFieldNames = ['name', 'tail']
-	mainModel = Reseller
-
-class DispatcherLoginSerializer(
-	LoginSerializerMixIn, 
-	BaseLoginSerializer):
-	parentClass = BaseLoginSerializer
-	defaultFieldNames = ['name', 'tail', 'address']
-	mainModel = Dispatcher
-
-class DispatcherSocialLoginSerializer(
-	LoginSerializerMixIn, 
-	BaseSocialLoginSerializer):
-	parentClass = BaseSocialLoginSerializer
-	defaultFieldNames = ['name', 'tail', 'address']
-	mainModel = Dispatcher
+#class LoginSerializerMixIn(serializers.Serializer):
+#	name = serializers.CharField(required=False, allow_blank=True)
+#
+#	mainModel = None # Must implement it in sub class
+#	parentClass = None # Must implement it in sub class
+#	defaultFieldNames = [] # Must implement it in sub class
+#
+#	def validate(self, attrs):
+#		attrs = self.parentClass.validate(self, attrs)
+#		mob_user = attrs['user']
+#		if mob_user:
+#			defaults = {}
+#			for fieldName in self.defaultFieldNames:
+#				fieldValue = attrs.get(fieldName)
+#				if fieldValue:
+#					defaults[fieldName] = fieldValue
+#			user, created = self.mainModel.objects.get_or_create(
+#				mob_user=mob_user,
+#				defaults=defaults
+#			)
+#			attrs['wrap_user'] = user
+#		else:
+#			msg = _('Unable to log in with provided credentials.')
+#			raise exceptions.ValidationError(msg)
+#		return attrs
+#
+#class UserLoginSerializer(
+#	LoginSerializerMixIn, 
+#	BaseLoginSerializer):
+#	parentClass = BaseLoginSerializer
+#	defaultFieldNames = ['name']
+#	mainModel = User
+#
+#class UserSocialLoginSerializer(
+#	LoginSerializerMixIn, 
+#	BaseSocialLoginSerializer):
+#	parentClass = BaseSocialLoginSerializer
+#	defaultFieldNames = ['name']
+#	mainModel = User
+#
+#class ResellerLoginSerializer(
+#	LoginSerializerMixIn, 
+#	BaseLoginSerializer):
+#	parentClass = BaseLoginSerializer
+#	defaultFieldNames = ['name', 'tail']
+#	mainModel = Reseller
+#
+#class ResellerSocialLoginSerializer(
+#	LoginSerializerMixIn, 
+#	BaseSocialLoginSerializer):
+#	parentClass = BaseSocialLoginSerializer
+#	defaultFieldNames = ['name', 'tail']
+#	mainModel = Reseller
+#
+#class DispatcherLoginSerializer(
+#	LoginSerializerMixIn, 
+#	BaseLoginSerializer):
+#	parentClass = BaseLoginSerializer
+#	defaultFieldNames = ['name', 'tail', 'address']
+#	mainModel = Dispatcher
+#
+#class DispatcherSocialLoginSerializer(
+#	LoginSerializerMixIn, 
+#	BaseSocialLoginSerializer):
+#	parentClass = BaseSocialLoginSerializer
+#	defaultFieldNames = ['name', 'tail', 'address']
+#	mainModel = Dispatcher
 
 # Business Serializer model
 

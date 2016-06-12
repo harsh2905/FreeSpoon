@@ -27,7 +27,7 @@ class MobUserManager(BaseUserManager):
 		return user
 
 class MobUser(AbstractBaseUser):
-	mob = models.CharField(max_length=20, unique=True)
+	mob = models.CharField(max_length=20, unique=False, null=True, blank=True)
 	USERNAME_FIELD = 'mob'
 	parent = models.ForeignKey('MobUser', on_delete=models.CASCADE, null=True)
 	create_time = models.DateTimeField(auto_now=True)
@@ -37,7 +37,7 @@ class MobUser(AbstractBaseUser):
 	objects = MobUserManager()
 
 	def __unicode__(self):
-		return self.mob
+		return '%s(%s)' % (self.mob, self.id)
 
 	def get_full_name(self):
 		return self.mob
