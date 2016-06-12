@@ -228,6 +228,43 @@ class SocialLoginSerializer(
 #	defaultFieldNames = ['name', 'tail', 'address']
 #	mainModel = Dispatcher
 
+def jwt_response_payload_handler(token, user=None, request=None):
+	mob_user = user
+	user = None
+	reseller = None
+	dispatcher = None
+	try:
+		user = User.objects.get(mob_user=mob_user)
+	except ObjectDoesNotExist:
+		pass
+	try:
+		reseller = Reseller.objects.get(mob_user=mob_user)
+	except ObjectDoesNotExist:
+		pass
+	try:
+		dispatcher = Dispatcher.objects.get(mob_user=mob_user)
+	except ObjectDoesNotExist:
+		pass
+
+	flag = 0
+	if user:
+		flag = flag | 1
+	if reseller:
+		flag = flag | (1 << 1)
+	if dispatcher:
+		flag = flag | (1 << 2)
+
+        data = {
+        	'mob_user': mob_user,
+        	'user': user,
+        	'reseller': reseller,
+        	'dispatcher': dispatcher,
+        	'token': token,
+		'flag': flag
+        }
+        serializer = JWTSerializer(instance=data, context={'request': request})
+	return serializer.data
+
 # Business Serializer model
 
 class BulkListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
