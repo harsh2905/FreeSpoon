@@ -181,8 +181,8 @@ REST_SESSION_LOGIN = False
 
 SOCIALACCOUNT_PROVIDERS = {
     'weixin': {
-        #'AUTHORIZE_URL': 'https://open.weixin.qq.com/connect/oauth2/authorize',
-        #'SCOPE': ('snsapi_userinfo',),
+        'AUTHORIZE_URL': 'https://open.weixin.qq.com/connect/oauth2/authorize', # Not Used
+        'SCOPE': ('snsapi_userinfo',),
     }
 }
 
@@ -203,7 +203,7 @@ JWT_AUTH = {
 
     'JWT_ALLOW_REFRESH': True,
     #'JWT_EXPIRATION_DELTA': datetime.timedelta(days=30),
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=30),
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes=2),
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=999),
 }
 

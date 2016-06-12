@@ -9,6 +9,7 @@ urlpatterns = [
 	url(r'^wxConfig$', views.wxConfig, name='wxConfig2'),
 	url(r'^login$', views.UserLoginView.as_view(), name='userLogin'),
 	url(r'^weixin$', views.WeixinLoginView.as_view(), name='userWeixinLogin'),
+	url(r'^r(.*)$', views.redirect, name='redirect'),
 	#url(r'^login$', views.UserLoginView.as_view(), name='userLogin'),
 	#url(r'^weixin$', views.WeixinLogin.as_view(), name='userWeixinLogin'),
 	#url(r'^resellerLogin$', views.ResellerLoginView.as_view(), name='resellerLogin'),

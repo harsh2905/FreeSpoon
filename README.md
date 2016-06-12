@@ -38,3 +38,8 @@ Visiting https://pillow.readthedocs.org/en/3.0.0/installation.html#linux-install
 	python manage.py loaddata /your/path/auth.json  
 	python manage.py loaddata /your/path/basic.json  
 
+### Configuration Social App Key
+
+> Media Platform: Chrome  
+> App: iOS  
+

@@ -442,7 +442,7 @@ class GoodsCreateSerializer(serializers.Serializer):
 
 class OrderCreateSerializer(serializers.Serializer):
 	goods = GoodsCreateSerializer(many=True)
-	ipaddress = serializers.CharField()
+	ip_address = serializers.CharField()
 	obtain_name = serializers.CharField()
 	obtain_mob = serializers.CharField()
 	bulk_id = serializers.IntegerField()
@@ -479,7 +479,7 @@ class OrderCreateSerializer(serializers.Serializer):
 			raise BadRequestException('Dispatcher not found')
 		obtain_name = validated_data.get('obtain_name')
 		obtain_mob = validated_data.get('obtain_mob')
-		ipaddress = validated_data.get('ipaddress')
+		ip_address = validated_data.get('ip_address')
 		goods = validated_data.get('goods')
 		total_fee = 0
 		for _ in goods:
@@ -493,10 +493,10 @@ class OrderCreateSerializer(serializers.Serializer):
 		time_start = datetime.datetime.now()
 		time_expire = time_start + datetime.timedelta(minutes=30)
 		order_id = utils.createOrderId()
-		prepay_id = wx.createPrepayId(
-			orderId=order_id,
+		prepay_id = WxApp.get_current(request).createPrepayId(
+			order_id=order_id,
 			total_fee=total_fee,
-			ipaddress=ipaddress,
+			ip_address=ip_address,
 			time_start=time_start,
 			time_expire=time_expire,
 			openid=openid,

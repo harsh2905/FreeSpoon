@@ -9,6 +9,8 @@ import hashlib
 import json
 import logging
 
+from allauth.socialaccount.models import SocialApp
+
 from requests.exceptions import RequestException
 
 from . import utils
@@ -16,18 +18,35 @@ from . import config
 
 logger = logging.getLogger('django')
 
+__all__ = ['WxApp']
 
-class Application(object):
+class WxApp(object):
 	appid = None
 	appsecret = None
 	access_token = None
 	access_token_expires_time = datetime.min
 	jsapi_ticket = None
 	jsapi_ticket_expires_time = datetime.min
+	trade_type = None # JSAPI or APP
 
-	def __init(self, appid, appsecret):
+	_cache_ = {}
+
+	@classmethod	
+	def get_current(cls, request):
+		social_app = SocialApp.objects.get_current('weixin', request)
+		social_app_id = social_app.id
+		app = cls._cache_.get(social_app_id, None)
+		if app:
+			return app
+		app = cls(social_app.client_id, social_app.secret, social_app.trade_type)
+		cls._cache_[social_app_id] = app
+		return app
+		
+
+	def __init__(self, appid, appsecret, trade_type):
 		self.appid = appid
 		self.appsecret = appsecret
+		self.trade_type = trade_type
 
 	def createAuthorizeRedirectUrl(self, redirectUrl, state):
 		return config.AUTHORIZE_REDIRECT_URL % (self.appid, redirectUrl, state)
@@ -120,29 +139,30 @@ class Application(object):
 		title,
 		detail,
 		notify_url,
+		device_info='WEB',
 		attach=None):
 		d = {
 			'appid': self.appid,
-			'mch_id': MCHID,
-			'device_info': 'WEB',
+			'mch_id': config.MCHID,
+			'device_info': device_info,
 			'nonce_str': utils.nonceStr(),
 			'body': title,
 			'detail': detail,
 			'attach': attach,
-			'out_trade_no': orderId,
+			'out_trade_no': order_id,
 			'fee_type': 'CNY',
 			'total_fee': str(total_fee),
-			'spbill_create_ip': ipaddress,
+			'spbill_create_ip': ip_address,
 			'time_start': time_start.strftime('%Y%m%d%H%M%S'),
 			'time_expire': time_expire.strftime('%Y%m%d%H%M%S'),
 			'notify_url': notify_url,
-			'trade_type': 'JSAPI',
+			'trade_type': self.trade_type,
 			'openid': openid
 		}
-		d['sign'] = utils.generateSign(d, APPKEY)
+		d['sign'] = utils.generateSign(d, config.APPKEY)
 		xml = utils.mapToXml(d)
 		try:
-			r = requests.post(UNIFIEDORDER_URL, xml)
+			r = requests.post(config.UNIFIEDORDER_URL, xml)
 			responseXml = r.text
 		except RequestException, e:
 			logger.error('RequestException: %s' % e)
@@ -158,7 +178,8 @@ class Application(object):
 			err_code_des = result.get('err_code_des', None)
 			logger.error('Fetch Prepay Id Error: %s(%s)' % (err_code_des, err_code))
 			return None
-		prepayId = result.get('prepay_id', None)
+		prepay_id = result.get('prepay_id', None)
+		return prepay_id
 
 	def payNotify(self, xmlData):
 		requestData = utils.xmlToMap(xmlData)
@@ -169,7 +190,7 @@ class Application(object):
 				rawData[name] = value
 			else:
 				rawSign = value
-		sign = utils.generateSign(rawData, APPKEY)
+		sign = utils.generateSign(rawData, config.APPKEY)
 		if rawSign is None or rawSign <> sign:
 			return None
 		return_code = requestData.get('return_code', None)
@@ -179,15 +200,15 @@ class Application(object):
 			return None
 		return requestData.get('out_trade_no', None)
 	
-	def createPayRequestJson(self, prepayId):
+	def createPayRequestJson(self, prepay_id):
 		d = {
-			'appId': APPID,
+			'appId': self.appid,
 			'timeStamp': str(utils.now()),
 			'nonceStr': utils.nonceStr(),
-			'package': 'prepay_id=%s' % prepayId,
+			'package': 'prepay_id=%s' % prepay_id,
 			'signType': 'MD5'
 		}
-		d['paySign'] = utils.generateSign(d, APPKEY)
+		d['paySign'] = utils.generateSign(d, config.APPKEY)
 		return d
 
 

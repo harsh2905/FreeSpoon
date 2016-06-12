@@ -1,6 +1,6 @@
 import datetime
 
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_GET
 from django.shortcuts import get_object_or_404
 
@@ -30,8 +30,7 @@ from .paginations import *
 from .viewsets import *
 from .filters import *
 
-from wx import Auth as wxAuthClass
-wx = wxAuthClass()
+from .wx2 import *
 
 # Create your views here.
 
@@ -47,7 +46,7 @@ def redirect(request, relativePath):
 	if state is None:
 		return error()
 	targetUrl = '%s%s' % (config.DOMAIN_URL, relativePath)
-	redirectUrl = wx.createAuthorizeBaseRedirectUrl(targetUrl, state)
+	redirectUrl = WxApp.get_current(request).createAuthorizeBaseRedirectUrl(targetUrl, state)
 	return HttpResponseRedirect(redirectUrl)
 
 # REST API
@@ -78,6 +77,8 @@ class LoginViewMixIn(object):
         		'token': self.token,
 			'flag': flag
         	}
+		import pdb
+		pdb.set_trace()
         	serializer = JWTSerializer(instance=data, context={'request': self.request})
 
         	return Response(serializer.data, status=status.HTTP_200_OK)
@@ -158,7 +159,7 @@ def wxConfig(request):
 	url = request.data.get('url', None)
 	if url is None:
 		raise BadRequestException('url is required')
-	wxConfig = wx.createWXConfig(url, jsApiList)
+	wxConfig = WxApp.get_current(request).createWXConfig(url, jsApiList)
 	return Response(wxConfig)
 
 # General API
