@@ -201,15 +201,27 @@ class WxApp(object):
 		return requestData.get('out_trade_no', None)
 	
 	def createPayRequestJson(self, prepay_id):
-		d = {
-			'appId': self.appid,
-			'timeStamp': str(utils.now()),
-			'nonceStr': utils.nonceStr(),
-			'package': 'prepay_id=%s' % prepay_id,
-			'signType': 'MD5'
-		}
-		d['paySign'] = utils.generateSign(d, config.APPKEY)
-		return d
+		if self.trade_type == 'JSAPI':
+			d = {
+				'appId': self.appid,
+				'timeStamp': str(utils.now()),
+				'nonceStr': utils.nonceStr(),
+				'package': 'prepay_id=%s' % prepay_id,
+				'signType': 'MD5'
+			}
+			d['paySign'] = utils.generateSign(d, config.APPKEY)
+			return d
+		else:
+			d = {
+				'appid': self.appid,
+				'partnerid': config.MCHID,
+				'prepayid': prepay_id,
+				'package': 'Sign=WXPay',
+				'noncestr': utils.nonceStr(),
+				'timestamp': str(utils.now())
+			}
+			d['sign'] = utils.generateSign(d, config.APPKEY)
+			return d
 
 
 
