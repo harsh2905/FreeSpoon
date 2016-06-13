@@ -77,8 +77,6 @@ class LoginViewMixIn(object):
         		'token': self.token,
 			'flag': flag
         	}
-		import pdb
-		pdb.set_trace()
         	serializer = JWTSerializer(instance=data, context={'request': self.request})
 
         	return Response(serializer.data, status=status.HTTP_200_OK)
@@ -164,6 +162,42 @@ def wxConfig(request):
 
 # General API
 
+@api_view(['POST'])
+def payNotify(request):
+	error = {
+		"return_code": "FAIL"
+	}
+	order_id = WxApp.get_current(request).payNotify(request.body)
+	if order_id is None:
+		error['return_msg'] = 'Error'
+    		xml = utils.mapToXml(error)
+		return HttpResponse(xml,
+			content_type='text/xml')
+	order_id = int(order_id)
+	order = None
+	try:
+		order = Order.objects.get(pk=order_id)
+	except ObjectDoesNotExist:
+		raise BadRequestException('Order not found')
+	if order is None:
+		error['return_msg'] = 'Error'
+    		xml = utils.mapToXml(error)
+		return HttpResponse(xml,
+			content_type='text/xml')
+	if order.status > 1:
+		error['return_msg'] = 'Error'
+    		xml = utils.mapToXml(error)
+		return HttpResponse(xml,
+			content_type='text/xml')
+	data.setOrderStatus(order, 1)
+	success = {
+		"return_code": "SUCCESS",
+		"return_msg": ""
+	}
+	xml = utils.mapToXml(success)
+	return HttpResponse(xml,
+		content_type='text/xml')
+
 class BulkViewSet(ModelViewSet):
 	queryset = Bulk.objects.all()
 	serializer_class_list = BulkListSerializer
@@ -200,7 +234,11 @@ class PurchasedProductHistoryViewSet(ReadOnlyModelViewSet):
 class OrderViewSet(ModelViewSet):
 	queryset = Order.objects.all()
 	serializer_class = OrderSerializer
+	serializer_class_list = OrderListSerializer
 	serializer_class_create = OrderCreateSerializer
+	serializer_class_update = OrderUpdateSerializer
+	permission_classes = [IsAuthenticated]
+	filter_backends = (IsOwnedByUserFilterBackend,)
 
 
 

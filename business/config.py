@@ -21,3 +21,5 @@ FETCH_JSAPI_TICKET_URL = \
         'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi'
 UNIFIEDORDER_URL = \
 	'https://api.mch.weixin.qq.com/pay/unifiedorder'
+
+CARD_URL = '%s/api/business/r?state=%s' % (DOMAIN_URL, '%s')

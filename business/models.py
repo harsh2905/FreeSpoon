@@ -39,7 +39,7 @@ class User(AssociatedMixIn, models.Model):
 	recent_obtain_mob = models.CharField(max_length=20, null=True, blank=True)
 	create_time = models.DateTimeField(auto_now=True)
 	def __unicode__(self):
-		return self.name
+		return '%s(%s)' % (self.name, self.id)
 
 class Reseller(AssociatedMixIn, models.Model):
 	related_field_name = 'reseller'
@@ -123,8 +123,8 @@ class Order(models.Model):
 	freight = models.IntegerField(max_length=11)
 	total_fee = models.IntegerField(max_length=11)
 	create_time = models.DateTimeField(auto_now=True)
-	obtain_name = models.CharField(max_length=100)
-	obtain_mob = models.CharField(max_length=20)
+	obtain_name = models.CharField(max_length=100, null=True, blank=True)
+	obtain_mob = models.CharField(max_length=20, null=True, blank=True)
 	def __unicode__(self):
 		return '%s(User: %s, Date: %s)' % (
 			self.bulk.title, self.user.name, self.create_time)

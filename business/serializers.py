@@ -7,6 +7,7 @@ from rest_framework.reverse import reverse
 from authentication.serializers import LoginSerializer as BaseLoginSerializer
 from rest_auth.registration.serializers import SocialLoginSerializer as BaseSocialLoginSerializer
 
+from . import config
 from .models import *
 from .fields import *
 from .exceptions import *
@@ -381,13 +382,14 @@ class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 	participant_count = serializers.SerializerMethodField()
 	recent_obtain_name = serializers.SerializerMethodField()
 	recent_obtain_mob = serializers.SerializerMethodField()
+	card_url = serializers.SerializerMethodField()
 
 	class Meta:
 		model = Bulk
 		fields = ('url', 'id', 'title', 'category', 'reseller', 'dispatchers', 
 			'products', 'location', 'standard_time', 'dead_time', 
 			'arrived_time', 'status', 'card_title', 'card_desc',
-			'card_icon', 'create_time', 'participant_count',
+			'card_icon', 'card_url', 'create_time', 'participant_count',
 			'recent_obtain_name', 'recent_obtain_mob')
 
 	def get_participant_count(self, obj):
@@ -415,6 +417,9 @@ class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 				return user.recent_obtain_mob
 		return None
 
+	def get_card_url(self, obj):
+		return config.CARD_URL % obj.id
+
 
 class ShippingAddressSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
@@ -439,6 +444,22 @@ class PurchasedProductHistorySerializer(WeixinSerializerMixIn, serializers.Model
 class GoodsCreateSerializer(serializers.Serializer):
 	product_id = serializers.IntegerField()
 	quantity = serializers.IntegerField()
+
+class GoodsSerializer(serializers.ModelSerializer):
+	title = serializers.CharField(source='product.title')
+	unit_price = serializers.IntegerField(source='product.unit_price')
+	class Meta:
+		model = Goods
+		fields = ('title', 'quantity', 'unit_price')
+
+class OrderUpdateSerializer(serializers.Serializer):
+	status = serializers.IntegerField()
+
+	def update(self, instance, validated_data):
+		status = validated_data.get('status')
+		instance.status = status
+		instance.save()
+		return instance
 
 class OrderCreateSerializer(serializers.Serializer):
 	goods = GoodsCreateSerializer(many=True)
@@ -526,15 +547,37 @@ class OrderCreateSerializer(serializers.Serializer):
 			)
 		return order
 			
-	
-class OrderSerializer(serializers.ModelSerializer):
+class OrderListSerializer(serializers.HyperlinkedModelSerializer):
+	reseller = ResellerSerializer(source='bulk.reseller')
+	create_time = TimestampField()
+	covers = serializers.SerializerMethodField(method_name='get_goods_covers')
+	count = serializers.SerializerMethodField(method_name='get_goods_count')
 	class Meta:
 		model = Order
-		fields = ('id', 'user', 'bulk', 'dispatcher', 
+		fields = ('url', 'id', 'create_time', 'reseller', 
+			'status', 'total_fee', 'covers', 'count',)
+
+	def get_goods_count(self, obj):
+		result = Goods.objects.filter(order_id=obj.pk).aggregate(Sum('quantity'))
+		return result.get('quantity__sum', 0)
+
+	def get_goods_covers(self, obj): # So ugly :(
+		request = self.context.get('request', None)
+		return map(lambda url: 
+			url if not request else
+			request.build_absolute_uri(url),
+			map(lambda g: g.product.cover.url 
+			if hasattr(g.product.cover, 'url') 
+			else '', obj.goods_set.all()))
+
+class OrderSerializer(serializers.HyperlinkedModelSerializer):
+	dispatcher = DispatcherSerializer()
+	create_time = TimestampField()
+	goods = GoodsSerializer(source='goods_set', many=True)
+	class Meta:
+		model = Order
+		fields = ('url', 'id', 'create_time', 'dispatcher', 
 			'status', 'prepay_id', 'freight', 'total_fee',
-			'obtain_name', 'obtain_mob',)
-
-
-
+			'obtain_name', 'obtain_mob', 'goods',)
 
 
