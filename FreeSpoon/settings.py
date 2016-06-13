@@ -202,8 +202,8 @@ JWT_AUTH = {
     'business.serializers.jwt_response_payload_handler',
 
     'JWT_ALLOW_REFRESH': True,
-    #'JWT_EXPIRATION_DELTA': datetime.timedelta(days=30),
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes=2),
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=30),
+    #'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes=2),
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=999),
 }
 

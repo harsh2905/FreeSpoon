@@ -19,6 +19,7 @@ from rest_framework.fields import SkipField
 
 from authentication.serializers import MobUserSerializer
 
+from .wx2 import *
 from wx import Auth as wxAuthClass
 wx = wxAuthClass()
 
@@ -521,8 +522,10 @@ class OrderCreateSerializer(serializers.Serializer):
 			openid=openid,
 			title=bulk.title,
 			detail=bulk.details,
-			notify_url='http://yijiayinong.com/api/payNotify'
+			notify_url=reverse('payNotify', request=request)
 		)
+		if prepay_id is None:
+			raise BadRequestException('Failed to create pre pay order')
 		order = Order.objects.create(
 			id=order_id,
 			status=0,
@@ -575,10 +578,17 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
 	dispatcher = DispatcherSerializer()
 	create_time = TimestampField()
 	goods = GoodsSerializer(source='goods_set', many=True)
+	pay_request_json = serializers.SerializerMethodField()
 	class Meta:
 		model = Order
 		fields = ('url', 'id', 'create_time', 'dispatcher', 
 			'status', 'prepay_id', 'freight', 'total_fee',
-			'obtain_name', 'obtain_mob', 'goods',)
+			'obtain_name', 'obtain_mob', 'goods',
+			'pay_request_json',)
+
+	def get_pay_request_json(self, obj):
+		request = self.context.get('request', None)
+		return WxApp.get_current(request).createPayRequestJson(obj.prepay_id)
+
 
 
