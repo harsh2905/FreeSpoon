@@ -473,12 +473,10 @@ class OrderCreateSerializer(serializers.Serializer):
 		openid = None
 		request = self.context.get('request', None)
 		if request is None:
-			raise BadRequestException('User not found')
+			raise BadRequestException('Bad Request')
 		mob_user = request.user
 		if mob_user:
 			openid = mob_user.real_wx_openid
-		if openid is None:
-			raise BadRequestException('User not found')
 		user = User.first(mob_user)
 		if user is None:
 			raise BadRequestException('User not found')
@@ -545,6 +543,9 @@ class OrderCreateSerializer(serializers.Serializer):
 				order_id=order.id,
 				product_id=product_id
 			)
+		user.recent_obtain_name = obtain_name
+		user.recent_obtain_mob = obtain_mob
+		user.save()
 		return order
 			
 class OrderListSerializer(serializers.HyperlinkedModelSerializer):

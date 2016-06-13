@@ -157,7 +157,7 @@ class WxApp(object):
 			'time_expire': time_expire.strftime('%Y%m%d%H%M%S'),
 			'notify_url': notify_url,
 			'trade_type': self.trade_type,
-			'openid': openid
+			'openid': openid if self.trade_type == 'JSAPI' else None
 		}
 		d['sign'] = utils.generateSign(d, config.APPKEY)
 		xml = utils.mapToXml(d)
