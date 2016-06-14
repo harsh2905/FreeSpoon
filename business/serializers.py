@@ -427,6 +427,28 @@ class ShippingAddressSerializer(serializers.HyperlinkedModelSerializer):
 		model = ShippingAddress
 		fields = ('url', 'id', 'name', 'mob', 'address')
 
+	def create(self, validated_data):
+		request = self.context.get('request', None)
+		if request is None:
+			raise BadRequestException('Bad Request')
+		mob_user = request.user
+		if mob_user:
+			openid = mob_user.real_wx_openid
+		user = User.first(mob_user)
+		if user is None:
+			raise BadRequestException('User not found')
+
+		name = validated_data.get('name')
+		mob = validated_data.get('mob')
+		address = validated_data.get('address')
+
+		shippingaddress = ShippingAddress.objects.create(
+			name=name,
+			mob=mob,
+			address=address,
+			user=user)
+		return shippingaddress
+
 class PurchasedProductHistorySerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
 	order_id = serializers.ReadOnlyField()
 	bulk_id = serializers.ReadOnlyField()
