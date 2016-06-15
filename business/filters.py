@@ -8,8 +8,7 @@ class IsOwnedByUserFilterBackend(filters.BaseFilterBackend):
 		mob_user = request.user
 		if mob_user is None:
 			raise BadRequestException('Mob user not found')
-		owners = User.objects.filter(mob_user__in=mob_user.associated)
-		return queryset.filter(user__in=owners)
+		return queryset.filter(user=mob_user.user)
 
 class FieldFilterBackend(filters.BaseFilterBackend):
 

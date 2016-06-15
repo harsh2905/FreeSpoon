@@ -22,8 +22,6 @@ from rest_framework.fields import SkipField
 from authentication.serializers import MobUserSerializer
 
 from .wx2 import *
-from wx import Auth as wxAuthClass
-wx = wxAuthClass()
 
 class RemoveNullSerializerMixIn(serializers.Serializer):
 	def to_representation(self, instance):
@@ -60,7 +58,7 @@ class WeixinSerializerMixIn(RemoveNullSerializerMixIn, serializers.Serializer):
 	wx_headimgurl = serializers.CharField(source='mob_user.real_wx_headimgurl', read_only=True)
 
 class UserSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
-	mob = serializers.CharField(source='mob_user.real_mob')
+	mob = serializers.CharField(source='mob_user.mob')
 	create_time = TimestampField()
 	class Meta:
 		model = User
@@ -80,7 +78,7 @@ class LoginUserSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
 #	user = UserSerializer()
 
 class ResellerSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
-	mob = serializers.CharField(source='mob_user.real_mob')
+	mob = serializers.CharField(source='mob_user.mob')
 	create_time = TimestampField()
 	class Meta:
 		model = Reseller
@@ -98,7 +96,7 @@ class LoginResellerSerializer(WeixinSerializerMixIn, serializers.ModelSerializer
 #	user = ResellerSerializer()
 
 class DispatcherSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
-	mob = serializers.CharField(source='mob_user.real_mob')
+	mob = serializers.CharField(source='mob_user.mob')
 	create_time = TimestampField()
 	class Meta:
 		model = Dispatcher
@@ -118,7 +116,7 @@ class LoginDispatcherSerializer(WeixinSerializerMixIn, serializers.ModelSerializ
 #	token = serializers.CharField()
 #	user = DispatcherSerializer()
 
-class JWTSerializer(serializers.Serializer):
+class JWTSerializer(RemoveNullSerializerMixIn, serializers.Serializer):
 	flag = serializers.IntegerField()
 	token = serializers.CharField()
 	mob_user = MobUserSerializer()
@@ -126,13 +124,10 @@ class JWTSerializer(serializers.Serializer):
 	reseller = LoginResellerSerializer()
 	dispatcher = LoginDispatcherSerializer()
 
-class LoginSerializerMixIn(serializers.Serializer):
-	name = serializers.CharField(required=False, allow_blank=True)
-
-	baseClass = None # Must implement it in sub class
+class LoginSerializer(BaseLoginSerializer):
 
 	def validate(self, attrs):
-		attrs = self.baseClass.validate(self, attrs)
+		attrs = super(LoginSerializer, self).validate(attrs)
 		mob_user = attrs['user']
 		if not mob_user:
 			msg = _('Unable to log in with provided credentials.')
@@ -154,15 +149,30 @@ class LoginSerializerMixIn(serializers.Serializer):
 			pass
 		return attrs
 
-class LoginSerializer(
-	LoginSerializerMixIn, 
-	BaseLoginSerializer):
-	baseClass = BaseLoginSerializer
+class SocialLoginSerializer(BaseSocialLoginSerializer):
 
-class SocialLoginSerializer(
-	LoginSerializerMixIn, 
-	BaseSocialLoginSerializer):
-	baseClass = BaseSocialLoginSerializer
+	def validate(self, attrs):
+		attrs = super(SocialLoginSerializer, self).validate(attrs)
+		mob_user = attrs['user']
+		if not mob_user:
+			msg = _('Unable to log in with provided credentials.')
+			raise exceptions.ValidationError(msg)
+		try:
+			user = User.objects.get(mob_user=mob_user)
+			attrs['wrap_user'] = user
+		except ObjectDoesNotExist:
+			pass
+		try:
+			reseller = Reseller.objects.get(mob_user=mob_user)
+			attrs['wrap_reseller'] = reseller
+		except ObjectDoesNotExist:
+			pass
+		try:
+			dispatcher = Dispatcher.objects.get(mob_user=mob_user)
+			attrs['wrap_dispatcher'] = dispatcher
+		except ObjectDoesNotExist:
+			pass
+		return attrs
 
 #class LoginSerializerMixIn(serializers.Serializer):
 #	name = serializers.CharField(required=False, allow_blank=True)
@@ -403,10 +413,9 @@ class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 		if request is None:
 			return None
 		mob_user = request.user
-		if mob_user:
-			user = User.first(mob_user)
-			if user:
-				return user.recent_obtain_name
+		user = mob_user.user
+		if user:
+			return user.recent_obtain_name
 		return None
 
 	def get_recent_obtain_mob(self, obj):
@@ -414,10 +423,9 @@ class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 		if request is None:
 			return None
 		mob_user = request.user
-		if mob_user:
-			user = User.first(mob_user)
-			if user:
-				return user.recent_obtain_mob
+		user = mob_user.user
+		if user:
+			return user.recent_obtain_mob
 		return None
 
 	def get_card_url(self, obj):
@@ -436,7 +444,7 @@ class ShippingAddressSerializer(serializers.HyperlinkedModelSerializer):
 		mob_user = request.user
 		if mob_user:
 			openid = mob_user.real_wx_openid
-		user = User.first(mob_user)
+		user = mob_user.user
 		if user is None:
 			raise BadRequestException('User not found')
 
@@ -499,7 +507,7 @@ class OrderCreateSerializer(serializers.Serializer):
 		if request is None:
 			raise BadRequestException('Bad Request')
 		mob_user = request.user
-		user = User.first(mob_user)
+		user = mob_user.user
 		if user is None:
 			raise BadRequestException('User not found')
 		bulk_id = validated_data.get('bulk_id')

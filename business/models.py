@@ -8,28 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 # Create your models here.
 
-class AssociatedMixIn(object):
-	related_field_name = None
-
-	@property
-	def associated(self):
-		if not self.mob_user:
-			return self
-		return self.objects.filter(mob_user__in=self.mob_user.associated)
-
-	@classmethod
-	def first(cls, mob_user):
-		if not isinstance(mob_user, MobUser):
-			return None
-		if mob_user.parent:
-			parent = mob_user.parent
-			try:
-				return cls.objects.get(mob_user=parent)
-			except ObjectDoesNotExist:
-				pass
-		return cls.objects.filter(mob_user__in=mob_user.associated).first()
-
-class User(AssociatedMixIn, models.Model):
+class User(models.Model):
 	related_field_name = 'user'
 	mob_user = models.OneToOneField(
 		settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
@@ -41,7 +20,7 @@ class User(AssociatedMixIn, models.Model):
 	def __unicode__(self):
 		return '%s(%s)' % (self.name, self.id)
 
-class Reseller(AssociatedMixIn, models.Model):
+class Reseller(models.Model):
 	related_field_name = 'reseller'
 	mob_user = models.OneToOneField(
 		settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
@@ -52,7 +31,7 @@ class Reseller(AssociatedMixIn, models.Model):
 	def __unicode__(self):
 		return self.name
 	
-class Dispatcher(AssociatedMixIn, models.Model):
+class Dispatcher(models.Model):
 	related_field_name = 'dispatcher'
 	mob_user = models.OneToOneField(
 		settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)

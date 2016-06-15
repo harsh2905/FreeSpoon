@@ -7,8 +7,9 @@ from . import views
 
 urlpatterns = [
 	url(r'^wxConfig$', views.wxConfig, name='wxConfig2'),
-	url(r'^login$', views.UserLoginView.as_view(), name='userLogin'),
-	url(r'^weixin$', views.WeixinLoginView.as_view(), name='userWeixinLogin'),
+	url(r'^login$', views.UserLoginView.as_view(), name='login'),
+	url(r'^weixin$', views.WeixinLoginView.as_view(), name='weixin'),
+	url(r'^bind$', views.BindView.as_view(), name='bind'),
 	url(r'^r(.*)$', views.redirect, name='redirect'),
 	url(r'^paynotify$', views.payNotify, name='payNofity2'),
 	url(r'^payrequest/(?P<pk>[0-9]+)/$', views.payRequest.as_view(), name='payRequest'),

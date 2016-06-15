@@ -56,27 +56,13 @@ class MobUser(AbstractBaseUser):
 		return self.is_admin
 
 	@property
-	def associated(self):
-		mob_users = None
-		if self.parent is None:
-			mob_users = MobUser.objects.filter(Q(id=self.id) 
-				| Q(parent=self)) 
-		else:
-			mob_users = MobUser.objects.filter(Q(id=self.id) 
-				| Q(parent=self) 
-				| Q(parent=self.parent))
-		return mob_users
-
-	@property
-	def real_mob(self):
-		if self.parent:
-			return self.parent.mob
-		return self.mob
+	def wx_socialaccount(self):
+		return self.socialaccount_set.filter(provider='weixin').first()
 
 	@property
         def real_wx_extra_data(self):
-		social_account = SocialAccount.objects.filter(user__in=self.associated).first()
-		if hasattr(social_account, 'extra_data'):
+		social_account = self.wx_socialaccount
+		if social_account and hasattr(social_account, 'extra_data'):
 			return social_account.extra_data
 		return None
 

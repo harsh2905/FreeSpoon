@@ -19,6 +19,7 @@ from rest_framework.decorators import (
 
 from rest_auth.views import LoginView as BaseLoginView
 from authentication.views import WeixinLogin as BaseWeixinLogin
+from authentication.views import BindView as BaseBindView
 
 from django.shortcuts import render
 
@@ -70,17 +71,17 @@ class LoginViewMixIn(object):
 		if dispatcher:
 			flag = flag | (1 << 2)
 
-        	data = {
-        		'mob_user': mob_user,
-        		'user': user,
-        		'reseller': reseller,
-        		'dispatcher': dispatcher,
-        		'token': self.token,
+		data = {
+			'mob_user': mob_user,
+			'user': user,
+			'reseller': reseller,
+			'dispatcher': dispatcher,
+			'token': self.token,
 			'flag': flag
-        	}
-        	serializer = JWTSerializer(instance=data, context={'request': self.request})
+		}
+		serializer = JWTSerializer(instance=data, context={'request': self.request})
 
-        	return Response(serializer.data, status=status.HTTP_200_OK)
+		return Response(serializer.data, status=status.HTTP_200_OK)
 
 class UserLoginView(
 	LoginViewMixIn,
@@ -92,6 +93,45 @@ class WeixinLoginView(
 	BaseWeixinLogin):
 	serializer_class = SocialLoginSerializer
 
+class BindView(
+	BaseBindView):
+
+	def get_response(self):
+		user = None
+		reseller = None
+		dispatcher = None
+		try:
+			user = User.objects.get(mob_user=self.mob_user)
+		except ObjectDoesNotExist:
+			pass
+		try:
+			reseller = Reseller.objects.get(mob_user=self.mob_user)
+		except ObjectDoesNotExist:
+			pass
+		try:
+			dispatcher = Dispatcher.objects.get(mob_user=self.mob_user)
+		except ObjectDoesNotExist:
+			pass
+
+		flag = 0
+		if user:
+			flag = flag | 1
+		if reseller:
+			flag = flag | (1 << 1)
+		if dispatcher:
+			flag = flag | (1 << 2)
+
+		data = {
+			'mob_user': self.mob_user,
+			'user': user,
+			'reseller': reseller,
+			'dispatcher': dispatcher,
+			'token': self.token,
+			'flag': flag
+		}
+		serializer = JWTSerializer(instance=data, context={'request': self.request})
+
+		return Response(serializer.data, status=status.HTTP_200_OK)
 
 #class LoginViewMixIn(object):
 #
@@ -216,7 +256,7 @@ class payRequest(views.APIView):
 		mob_user = request.user
 		if mob_user:
 			openid = mob_user.real_wx_openid
-		user = User.first(mob_user)
+		user = mob_user.user
 		if user is None:
 			raise BadRequestException('User not found')
 		order = None
