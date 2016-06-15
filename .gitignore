@@ -66,3 +66,5 @@ media/
 data/
 docker-compose.yml
 sshkeys
+smbkeys
+smbusers

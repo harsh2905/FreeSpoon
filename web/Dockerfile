@@ -36,15 +36,16 @@ RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
 
 EXPOSE 22
 
-# Samba
-
-RUN apt-get install samba -y
-COPY smbusers /etc/samba/
-COPY smbkeys /
-COPY samba.sh /
-RUN /bin/bash /samba.sh
+## Samba
+#
+#RUN apt-get install samba -y
+#COPY smbusers /etc/samba/
+#COPY smbkeys /
+#COPY samba.sh /
+#RUN /bin/bash /samba.sh
 
 EXPOSE 35729
 
-ENTRYPOINT smbd && \
-	/usr/sbin/sshd -D
+#ENTRYPOINT smbd && \
+#	/usr/sbin/sshd -D
+CMD ["/usr/sbin/sshd", "-D"]

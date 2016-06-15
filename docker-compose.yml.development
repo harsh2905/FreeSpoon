@@ -6,10 +6,6 @@ web:
     - "35729:35729"
     - "24:22"
     #- "80:80"
-    - "139:139"
-    - "455:455"
-    - "137/udp:137/udp"
-    - "138/udp:138/udp"
 nginx:
   build: nginx
   links:
@@ -43,6 +39,10 @@ freespoon:
   ports:
     #- "80:80"
     - "23:22"
+    - "139:139"
+    - "455:455"
+    - "137/udp:137/udp"
+    - "138/udp:138/udp"
 cookbook:
   build: cookbook
   volumes:
