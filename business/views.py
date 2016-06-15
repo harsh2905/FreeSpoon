@@ -29,6 +29,7 @@ from .serializers import *
 from .paginations import *
 from .viewsets import *
 from .filters import *
+from .generics import *
 
 from .wx2 import *
 
@@ -197,6 +198,67 @@ def payNotify(request):
 	xml = utils.mapToXml(success)
 	return HttpResponse(xml,
 		content_type='text/xml')
+
+class payRequest(views.APIView):
+	permission_classes = [IsAuthenticated]
+
+	lookup_field = 'pk'
+	lookup_url_kwarg = None
+
+	def get_pay_request(self, order_id, request):
+		ip_address = '127.0.0.1'
+		if 'HTTP_X_FORWARDED_FOR' in request.META:
+			ip_address = request.META.get('HTTP_X_FORWARDED_FOR', '127.0.0.1')
+		if 'REMOTE_ADDR' in request.META:
+			ip_address = request.META.get('REMOTE_ADDR', '127.0.0.1')
+
+		openid = None
+		mob_user = request.user
+		if mob_user:
+			openid = mob_user.real_wx_openid
+		user = User.first(mob_user)
+		if user is None:
+			raise BadRequestException('User not found')
+		order = None
+		try:
+			order = Order.objects.get(pk=order_id)
+		except ObjectDoesNotExist:
+			raise BadRequestException('Order not found')
+		if order is None:
+			raise BadRequestException('Order not found')
+
+		time_start = datetime.datetime.now()
+		time_expire = time_start + datetime.timedelta(minutes=30)
+
+		prepay_id = WxApp.get_current(request).createPrepayId(
+			order_id=order_id,
+			total_fee=order.total_fee,
+			ip_address=ip_address,
+			time_start=time_start,
+			time_expire=time_expire,
+			openid=openid,
+			title=order.bulk.title,
+			detail=order.bulk.details,
+			notify_url=reverse('payNotify', request=request)
+		)
+		if prepay_id is None:
+			raise BadRequestException('Failed to create pre pay order')
+		return WxApp.get_current(request).createPayRequestJson(prepay_id)
+
+	def get(self, request, *args, **kwargs):
+                lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+
+                assert lookup_url_kwarg in self.kwargs, (
+                        'Expected view %s to be called with a URL keyword argument '
+                        'named "%s". Fix your URL conf, or set the `.lookup_field` '
+                        'attribute on the view correctly.' %
+                        (self.__class__.__name__, lookup_url_kwarg)
+                )
+
+                pk = self.kwargs[lookup_url_kwarg]
+
+		result = self.get_pay_request(pk, request)
+		return Response(result, status=status.HTTP_200_OK)
 
 class BulkViewSet(ModelViewSet):
 	queryset = Bulk.objects.all()

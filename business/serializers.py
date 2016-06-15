@@ -1,3 +1,5 @@
+import urlparse
+
 from django.db.models import Sum
 from rest_framework import exceptions
 
@@ -493,13 +495,10 @@ class OrderCreateSerializer(serializers.Serializer):
 	dispatcher_id = serializers.IntegerField()
 
 	def create(self, validated_data):
-		openid = None
 		request = self.context.get('request', None)
 		if request is None:
 			raise BadRequestException('Bad Request')
 		mob_user = request.user
-		if mob_user:
-			openid = mob_user.real_wx_openid
 		user = User.first(mob_user)
 		if user is None:
 			raise BadRequestException('User not found')
@@ -532,26 +531,10 @@ class OrderCreateSerializer(serializers.Serializer):
 				total_fee = product.unit_price * quantity
 			except ObjectDoesNotExist:
 				raise BadRequestException('Product not found')
-		time_start = datetime.datetime.now()
-		time_expire = time_start + datetime.timedelta(minutes=30)
 		order_id = utils.createOrderId()
-		prepay_id = WxApp.get_current(request).createPrepayId(
-			order_id=order_id,
-			total_fee=total_fee,
-			ip_address=ip_address,
-			time_start=time_start,
-			time_expire=time_expire,
-			openid=openid,
-			title=bulk.title,
-			detail=bulk.details,
-			notify_url=reverse('payNotify', request=request)
-		)
-		if prepay_id is None:
-			raise BadRequestException('Failed to create pre pay order')
 		order = Order.objects.create(
 			id=order_id,
 			status=0,
-			prepay_id=prepay_id,
 			freight=0,
 			total_fee=total_fee,
 			bulk_id=bulk_id,
@@ -572,7 +555,7 @@ class OrderCreateSerializer(serializers.Serializer):
 		user.recent_obtain_mob = obtain_mob
 		user.save()
 		return order
-			
+		
 class OrderListSerializer(serializers.HyperlinkedModelSerializer):
 	reseller = ResellerSerializer(source='bulk.reseller')
 	create_time = TimestampField()
@@ -600,17 +583,19 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
 	dispatcher = DispatcherSerializer()
 	create_time = TimestampField()
 	goods = GoodsSerializer(source='goods_set', many=True)
-	pay_request_json = serializers.SerializerMethodField()
+	wx_pay_request = serializers.SerializerMethodField()
+	
 	class Meta:
 		model = Order
 		fields = ('url', 'id', 'create_time', 'dispatcher', 
-			'status', 'prepay_id', 'freight', 'total_fee',
+			'status', 'freight', 'total_fee',
 			'obtain_name', 'obtain_mob', 'goods',
-			'pay_request_json',)
+			'wx_pay_request',)
 
-	def get_pay_request_json(self, obj):
+	def get_wx_pay_request(self, obj):
 		request = self.context.get('request', None)
-		return WxApp.get_current(request).createPayRequestJson(obj.prepay_id)
-
+		if not request:
+			return None
+		return reverse('payRequest', request=request, kwargs={'pk':obj.pk})
 
 

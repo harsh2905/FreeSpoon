@@ -119,7 +119,6 @@ class Order(models.Model):
 	bulk = models.ForeignKey('Bulk')
 	dispatcher = models.ForeignKey('Dispatcher')
 	status = models.IntegerField(max_length=10)
-	prepay_id = models.CharField(max_length=200)
 	freight = models.IntegerField(max_length=11)
 	total_fee = models.IntegerField(max_length=11)
 	create_time = models.DateTimeField(auto_now=True)
