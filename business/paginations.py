@@ -1,5 +1,6 @@
 from rest_framework.pagination import BasePagination
 from rest_framework.response import Response
+from django.utils.timezone import UTC
 
 import datetime
 
@@ -8,13 +9,13 @@ from .utils import total_microseconds
 class TimestampPagination(BasePagination):
 
 	def paginate_queryset(self, queryset, request, view=None):
-		max_value = datetime.datetime(2050, 1, 1)
-		epoch = datetime.datetime(1970, 1, 1)
+		max_value = datetime.date(2050, 1, 1)
+		epoch = datetime.date(1970, 1, 1)
 		defaultLimit = int(total_microseconds(max_value - epoch))
                 limit = request.query_params.get('time', defaultLimit)
                 limit = int(limit)
                 limit = limit / 10**6
-                limit = datetime.datetime.fromtimestamp(limit)
+                limit = datetime.datetime.fromtimestamp(limit, tz=UTC())
                 size = request.query_params.get('page_size', 10)
                 size = int(size)
 		field_name = view.pagination_field_name

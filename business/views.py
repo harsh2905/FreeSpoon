@@ -309,7 +309,7 @@ class BulkViewSet(ModelViewSet):
 
 	search_fields = ('$products__title',)
 
-	order_fields = ['-create_time']
+	order_fields = ['-dead_time']
 
 class ProductViewSet(ModelViewSet):
 	queryset = Product.objects.all()
@@ -336,7 +336,9 @@ class OrderViewSet(ModelViewSet):
 	serializer_class_create = OrderCreateSerializer
 	serializer_class_update = OrderUpdateSerializer
 	permission_classes = [IsAuthenticated]
-	filter_backends = (IsOwnedByUserFilterBackend,)
+	filter_backends = (IsOwnedByUserFilterBackend, FieldOrderBackend,)
+
+	order_fields = ['-create_time']
 
 	def perform_destroy(self, instance):
 		if instance.status > 1:

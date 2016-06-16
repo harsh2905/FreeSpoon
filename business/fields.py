@@ -18,7 +18,7 @@ class TimestampField(serializers.Field):
 
 class StandardTimeField(serializers.Field):
 	def to_representation(self, value):
-		epoch = datetime.datetime(1970, 1, 1)
-		now = datetime.datetime.utcnow() # local time zone
+		epoch = datetime.datetime(1970, 1, 1, tzinfo=UTC())
+		now = datetime.datetime.now(tz=UTC()) # local time zone
 		#return int((now - epoch).total_seconds())
 		return int(total_microseconds(now - epoch))
