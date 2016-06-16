@@ -11,7 +11,10 @@ from rest_framework import filters
 #from rest_framework import viewsets
 from rest_framework import generics
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import (
+	AllowAny,
+	IsAuthenticated
+)
 from rest_framework.decorators import (
 	api_view,
 	permission_classes,
@@ -195,6 +198,7 @@ def wxConfig(request):
 # General API
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def payNotify(request):
 	error = {
 		"return_code": "FAIL"
@@ -216,12 +220,13 @@ def payNotify(request):
     		xml = utils.mapToXml(error)
 		return HttpResponse(xml,
 			content_type='text/xml')
-	if order.status > 1:
+	if order.status > 0:
 		error['return_msg'] = 'Error'
     		xml = utils.mapToXml(error)
 		return HttpResponse(xml,
 			content_type='text/xml')
-	data.setOrderStatus(order, 1)
+	order.status = 1
+	order.save()
 	success = {
 		"return_code": "SUCCESS",
 		"return_msg": ""

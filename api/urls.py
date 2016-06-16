@@ -17,5 +17,5 @@ urlpatterns = [
 	url(r'^orderAmount$', views.orderAmount, name='orderAmount'),
 	url(r'^shareInfo$', views.shareInfo, name='shareInfo'),
 	url(r'^undo$', views.undo, name='undo'),
-	url(r'^payNotify$', views.payNotify, name='payNotify'),
+	url(r'^payNotify$', views.payNotify, name='payNotify2'),
 ]
