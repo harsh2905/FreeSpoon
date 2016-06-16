@@ -29,7 +29,7 @@ class MobUserManager(BaseUserManager):
 class MobUser(AbstractBaseUser):
 	mob = models.CharField(max_length=20, unique=False, null=True, blank=True)
 	USERNAME_FIELD = 'mob'
-	parent = models.ForeignKey('MobUser', on_delete=models.CASCADE, null=True, blank=True)
+	#parent = models.ForeignKey('MobUser', on_delete=models.CASCADE, null=True, blank=True)
 	create_time = models.DateTimeField(auto_now=True)
 
 	is_active = models.BooleanField(default=True)

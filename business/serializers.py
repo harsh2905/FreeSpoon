@@ -413,9 +413,10 @@ class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 		if request is None:
 			return None
 		mob_user = request.user
-		user = mob_user.user
-		if user:
-			return user.recent_obtain_name
+		if isinstance(mob_user, MobUser):
+			user = mob_user.user
+			if user:
+				return user.recent_obtain_name
 		return None
 
 	def get_recent_obtain_mob(self, obj):
@@ -423,9 +424,10 @@ class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 		if request is None:
 			return None
 		mob_user = request.user
-		user = mob_user.user
-		if user:
-			return user.recent_obtain_mob
+		if isinstance(mob_user, MobUser):
+			user = mob_user.user
+			if user:
+				return user.recent_obtain_mob
 		return None
 
 	def get_card_url(self, obj):
@@ -496,7 +498,6 @@ class OrderUpdateSerializer(serializers.Serializer):
 
 class OrderCreateSerializer(serializers.Serializer):
 	goods = GoodsCreateSerializer(many=True)
-	ip_address = serializers.CharField()
 	obtain_name = serializers.CharField()
 	obtain_mob = serializers.CharField()
 	bulk_id = serializers.IntegerField()
@@ -528,7 +529,6 @@ class OrderCreateSerializer(serializers.Serializer):
 			raise BadRequestException('Dispatcher not found')
 		obtain_name = validated_data.get('obtain_name')
 		obtain_mob = validated_data.get('obtain_mob')
-		ip_address = validated_data.get('ip_address')
 		goods = validated_data.get('goods')
 		total_fee = 0
 		for _ in goods:
