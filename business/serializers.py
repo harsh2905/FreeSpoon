@@ -65,13 +65,13 @@ class UserSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
 		model = User
 		fields = ('id', 'name', 'create_time', 'mob', 
 			'recent_obtain_name', 'recent_obtain_mob', 
-			'wx_nickname', 'wx_headimgurl')
+			'wx_nickname', 'wx_headimgurl', 'balance')
 
 class LoginUserSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
 	create_time = TimestampField()
 	class Meta:
 		model = User
-		fields = ('create_time',
+		fields = ('create_time', 'balance',
 			'recent_obtain_name', 'recent_obtain_mob')
 
 #class UserJWTSerializer(serializers.Serializer):
