@@ -4,7 +4,7 @@ from .utils import total_microseconds
 
 class TimestampField(serializers.Field):
 	def to_representation(self, value):
-		# value is local time zone
+		# value is utc time zone
 		epoch = datetime.datetime(1970, 1, 1)
 		#return int((value - epoch).total_seconds())
 		return int(total_microseconds(value - epoch))
@@ -16,6 +16,6 @@ class TimestampField(serializers.Field):
 class StandardTimeField(serializers.Field):
 	def to_representation(self, value):
 		epoch = datetime.datetime(1970, 1, 1)
-		now = datetime.datetime.now() # local time zone
+		now = datetime.datetime.utcnow() # local time zone
 		#return int((now - epoch).total_seconds())
 		return int(total_microseconds(now - epoch))
