@@ -14,6 +14,7 @@ class User(models.Model):
 		settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 	name = models.CharField(max_length=100, null=True, blank=True)
 	avatar = models.ImageField(upload_to='avatars', null=True, blank=True)
+	balance = models.IntegerField(max_length=11, default=0)
 	recent_obtain_name = models.CharField(max_length=100, null=True, blank=True)
 	recent_obtain_mob = models.CharField(max_length=20, null=True, blank=True)
 	create_time = models.DateTimeField(auto_now=True)
@@ -103,6 +104,7 @@ class Order(models.Model):
 	create_time = models.DateTimeField(auto_now=True)
 	obtain_name = models.CharField(max_length=100, null=True, blank=True)
 	obtain_mob = models.CharField(max_length=20, null=True, blank=True)
+	is_delete = models.BooleanField(default=False)
 	def __unicode__(self):
 		return '%s(User: %s, Date: %s)' % (
 			self.bulk.title, self.user.name, self.create_time)

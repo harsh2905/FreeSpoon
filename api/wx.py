@@ -15,7 +15,6 @@ from requests.exceptions import RequestException
 
 from . import utils
 
-import pdb
 
 APPID = os.getenv('APPID')
 APPSECRET = os.getenv('APPSECRET')

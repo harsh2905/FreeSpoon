@@ -7,6 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 from authentication.serializers import LoginSerializer as BaseLoginSerializer
+from authentication.serializers import BindSerializer as BaseBindSerializer
 from rest_auth.registration.serializers import SocialLoginSerializer as BaseSocialLoginSerializer
 
 from . import config
@@ -128,6 +129,31 @@ class LoginSerializer(BaseLoginSerializer):
 
 	def validate(self, attrs):
 		attrs = super(LoginSerializer, self).validate(attrs)
+		mob_user = attrs['user']
+		if not mob_user:
+			msg = _('Unable to log in with provided credentials.')
+			raise exceptions.ValidationError(msg)
+		user, created = User.objects.get_or_create(
+			mob_user=mob_user,
+			defaults={}
+		)
+		attrs['wrap_user'] = user
+		try:
+			reseller = Reseller.objects.get(mob_user=mob_user)
+			attrs['wrap_reseller'] = reseller
+		except ObjectDoesNotExist:
+			pass
+		try:
+			dispatcher = Dispatcher.objects.get(mob_user=mob_user)
+			attrs['wrap_dispatcher'] = dispatcher
+		except ObjectDoesNotExist:
+			pass
+		return attrs
+
+class BindSerializer(BaseBindSerializer):
+	
+	def validate(self, attrs):
+		attrs = super(BindSerializer, self).validate(attrs)
 		mob_user = attrs['user']
 		if not mob_user:
 			msg = _('Unable to log in with provided credentials.')

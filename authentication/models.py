@@ -8,7 +8,6 @@ from django.contrib.auth.models import (
 )
 from allauth.socialaccount.models import SocialAccount
 
-import pdb
 
 # Create your models here.
 

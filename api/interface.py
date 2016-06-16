@@ -6,7 +6,6 @@ import json
 import logging
 from . import utils
 
-import pdb
 
 logger = logging.getLogger('django')
 

@@ -63,6 +63,7 @@ class LoginViewMixIn(object):
 		reseller = self.serializer.validated_data.get('wrap_reseller', None)
 		dispatcher = self.serializer.validated_data.get('wrap_dispatcher', None)
 
+
 		flag = 0
 		if user:
 			flag = flag | 1
@@ -95,23 +96,13 @@ class WeixinLoginView(
 
 class BindView(
 	BaseBindView):
+	serializer_class = BindSerializer
 
 	def get_response(self):
-		user = None
-		reseller = None
-		dispatcher = None
-		try:
-			user = User.objects.get(mob_user=self.mob_user)
-		except ObjectDoesNotExist:
-			pass
-		try:
-			reseller = Reseller.objects.get(mob_user=self.mob_user)
-		except ObjectDoesNotExist:
-			pass
-		try:
-			dispatcher = Dispatcher.objects.get(mob_user=self.mob_user)
-		except ObjectDoesNotExist:
-			pass
+		mob_user = self.serializer.validated_data.get('user', None)
+		user = self.serializer.validated_data.get('wrap_user', None)
+		reseller = self.serializer.validated_data.get('wrap_reseller', None)
+		dispatcher = self.serializer.validated_data.get('wrap_dispatcher', None)
 
 		flag = 0
 		if user:
@@ -334,13 +325,22 @@ class PurchasedProductHistoryViewSet(ReadOnlyModelViewSet):
 	filter_field_raise_exception = True
 	
 class OrderViewSet(ModelViewSet):
-	queryset = Order.objects.all()
+	queryset = Order.objects.filter(is_delete=False)
 	serializer_class = OrderSerializer
 	serializer_class_list = OrderListSerializer
 	serializer_class_create = OrderCreateSerializer
 	serializer_class_update = OrderUpdateSerializer
 	permission_classes = [IsAuthenticated]
 	filter_backends = (IsOwnedByUserFilterBackend,)
+
+	def perform_destroy(self, instance):
+		if instance.status > 1:
+			raise BadRequestException('Refused to destroy order')
+		if instance.status > 0:
+			instance.user.balance += instance.total_fee
+			instance.user.save()
+		instance.is_delete = True
+		instance.save()
 
 
 

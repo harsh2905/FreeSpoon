@@ -11,7 +11,6 @@ from .interface import *
 
 wxAuth = wx.Auth()
 
-import pdb
 
 # Create your views here.
 

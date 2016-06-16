@@ -10,7 +10,6 @@ from django.db import IntegrityError
 from basic.models import *
 from . import utils, config
 
-import pdb
 
 logger = logging.getLogger('django')
 
