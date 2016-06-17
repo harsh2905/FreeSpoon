@@ -22,7 +22,7 @@ from rest_framework.fields import SkipField
 
 from authentication.serializers import MobUserSerializer
 
-from .wx2 import *
+from .wx import *
 
 class RemoveNullSerializerMixIn(serializers.Serializer):
 	def to_representation(self, instance):

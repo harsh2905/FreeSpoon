@@ -35,7 +35,7 @@ from .viewsets import *
 from .filters import *
 from .generics import *
 
-from .wx2 import *
+from .wx import *
 
 # Create your views here.
 
@@ -282,16 +282,16 @@ class payRequest(views.APIView):
 		return WxApp.get_current(request).createPayRequestJson(prepay_id)
 
 	def get(self, request, *args, **kwargs):
-                lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+		lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
 
-                assert lookup_url_kwarg in self.kwargs, (
-                        'Expected view %s to be called with a URL keyword argument '
-                        'named "%s". Fix your URL conf, or set the `.lookup_field` '
-                        'attribute on the view correctly.' %
-                        (self.__class__.__name__, lookup_url_kwarg)
-                )
+		assert lookup_url_kwarg in self.kwargs, (
+				'Expected view %s to be called with a URL keyword argument '
+				'named "%s". Fix your URL conf, or set the `.lookup_field` '
+				'attribute on the view correctly.' %
+				(self.__class__.__name__, lookup_url_kwarg)
+		)
 
-                pk = self.kwargs[lookup_url_kwarg]
+		pk = self.kwargs[lookup_url_kwarg]
 
 		result = self.get_pay_request(pk, request)
 		return Response(result, status=status.HTTP_200_OK)
