@@ -101,6 +101,25 @@ class BindView(
 	BaseBindView):
 	serializer_class = BindSerializer
 
+	def bind(self):
+		super(BindView, self).bind()
+		mob_user = self.serializer.validated_data.get('user', None)
+		user = self.serializer.validated_data.get('wrap_user', None)
+		reseller = self.serializer.validated_data.get('wrap_reseller', None)
+		dispatcher = self.serializer.validated_data.get('wrap_dispatcher', None)
+		if not mob_user:
+			return
+		if user:
+			user.name = mob_user.real_wx_nickname
+			user.save()
+		if reseller:
+			reseller.name = mob_user.real_wx_nickname
+			reseller.save()
+		if dispatcher:
+			dispatcher.name = mob_user.real_wx_nickname
+			dispatcher.save()
+
+
 	def get_response(self):
 		mob_user = self.serializer.validated_data.get('user', None)
 		user = self.serializer.validated_data.get('wrap_user', None)
@@ -307,7 +326,8 @@ class BulkViewSet(ModelViewSet):
 
 	filter_backends = (filters.SearchFilter, FieldOrderBackend,)
 
-	search_fields = ('$products__title',)
+	#search_fields = ('$products__title',)
+	search_fields = ('$products__title', '$reseller__name')
 
 	order_fields = ['-dead_time']
 

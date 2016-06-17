@@ -135,7 +135,9 @@ class LoginSerializer(BaseLoginSerializer):
 			raise exceptions.ValidationError(msg)
 		user, created = User.objects.get_or_create(
 			mob_user=mob_user,
-			defaults={}
+			defaults={
+				'name': mob_user.mob,
+			}
 		)
 		attrs['wrap_user'] = user
 		try:
@@ -160,7 +162,9 @@ class BindSerializer(BaseBindSerializer):
 			raise exceptions.ValidationError(msg)
 		user, created = User.objects.get_or_create(
 			mob_user=mob_user,
-			defaults={}
+			defaults={
+				'name': mob_user.mob,
+			}
 		)
 		attrs['wrap_user'] = user
 		try:

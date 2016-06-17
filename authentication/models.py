@@ -65,25 +65,25 @@ class MobUser(AbstractBaseUser):
 		return None
 
 	@property
-        def real_wx_nickname(self):
-                extra_data = self.real_wx_extra_data
-                if extra_data:
-                        return extra_data.get('nickname', None)
-                return None
+	def real_wx_nickname(self):
+		extra_data = self.real_wx_extra_data
+		if extra_data:
+			return extra_data.get('nickname', None)
+		return None
 
 	@property
-        def real_wx_headimgurl(self):
-                extra_data = self.real_wx_extra_data
-                if extra_data:
-                        return extra_data.get('headimgurl', None)
-                return None
+	def real_wx_headimgurl(self):
+		extra_data = self.real_wx_extra_data
+		if extra_data:
+			return extra_data.get('headimgurl', None)
+		return None
 
 	@property
-        def real_wx_openid(self):
-                extra_data = self.real_wx_extra_data
-                if extra_data:
-                        return extra_data.get('openid', None)
-                return None
+	def real_wx_openid(self):
+		extra_data = self.real_wx_extra_data
+		if extra_data:
+			return extra_data.get('openid', None)
+		return None
 
 
 
