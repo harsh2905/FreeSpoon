@@ -562,7 +562,7 @@ class OrderCreateSerializer(serializers.Serializer):
 			quantity = _.get('quantity')
 			try:
 				product = Product.objects.get(pk=product_id)
-				total_fee = product.unit_price * quantity
+				total_fee += product.unit_price * quantity
 			except ObjectDoesNotExist:
 				raise BadRequestException('Product not found')
 		order_id = utils.createOrderId()
