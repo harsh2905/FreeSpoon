@@ -5,6 +5,15 @@ from django.contrib import admin
 from django import forms
 from .models import *
 
+class ProductInline(admin.TabularInline):
+	model = Product
+	extra = 1
+
+class BulkAdmin(admin.ModelAdmin):
+	inlines = [
+		ProductInline,
+	]
+
 class ProductDetailsInline(admin.TabularInline):
 	model = ProductDetails
 	extra = 1
@@ -37,7 +46,7 @@ admin.site.register(Dispatcher)
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductDetails)
-admin.site.register(Bulk)
+admin.site.register(Bulk, BulkAdmin)
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Goods)
 admin.site.register(ShippingAddress)

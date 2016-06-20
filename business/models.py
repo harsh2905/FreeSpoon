@@ -52,7 +52,7 @@ class Product(models.Model):
 	bulk = models.ForeignKey('Bulk')
 	unit_price = models.IntegerField(max_length=11)
 	market_price = models.IntegerField(max_length=11)
-	tag = models.CharField(max_length=20)
+	tag = models.CharField(max_length=20, null=True, blank=True)
 	spec = models.CharField(max_length=100)
 	spec_desc = models.CharField(max_length=100)
 	cover = models.ImageField(upload_to='images/product/%Y/%m/%d')
