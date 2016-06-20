@@ -636,4 +636,6 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
 			return None
 		return reverse('payRequest', request=request, kwargs={'pk':obj.pk})
 
-
+class PayRequestSerializer(RemoveNullSerializerMixIn, serializers.Serializer):
+	require_third_party_payment = serializers.BooleanField()
+	pay_request_json = serializers.JSONField()

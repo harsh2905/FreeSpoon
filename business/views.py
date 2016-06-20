@@ -297,8 +297,10 @@ class payRequest(views.APIView):
 		total_fee = order.total_fee
 		balance_fee = 0
 		third_party_fee = 0
+		require_third_party_payment = True
 		if balance:
 			if user.balance >= total_fee:
+				require_third_party_payment = False
 				balance_fee = total_fee
 				third_party_fee = 0
 			else:
@@ -316,6 +318,14 @@ class payRequest(views.APIView):
 		)
 		payrequest.save()
 
+		if not require_third_party_payment:
+			data = {
+				'require_third_party_payment': require_third_party_payment
+				#'pay_request_json' = None
+			}
+			serializer = PayRequestSerializer(instance=data, context={'request': self.request})
+			return serializer.data
+
 		time_start = datetime.datetime.now()
 		time_expire = time_start + datetime.timedelta(minutes=30)
 
@@ -332,7 +342,12 @@ class payRequest(views.APIView):
 		)
 		if prepay_id is None:
 			raise BadRequestException('Failed to create pre pay order')
-		return WxApp.get_current(request).createPayRequestJson(prepay_id)
+		data = {
+			'require_third_party_payment': require_third_party_payment,
+			'pay_request_json': WxApp.get_current(request).createPayRequestJson(prepay_id)
+		}
+		serializer = PayRequestSerializer(instance=data, context={'request': self.request})
+		return serializer.data
 
 	def get(self, request, *args, **kwargs):
 		lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
