@@ -147,5 +147,12 @@ class PurchasedProductHistory(models.Model):
 		managed = False
 		db_table = 'view_history_purchased_products'
 
+class PayRequest(models.Model):
+	order = models.OneToOneField('Order', on_delete=models.CASCADE)
+	third_party_order_id = models.CharField(max_length=200)
+	third_party_fee = models.IntegerField(default=0)
+	balance_fee = models.IntegerField(default=0)
+	use_balance = models.IntegerField(default=0)
+	status = models.IntegerField(default=0)
 
 

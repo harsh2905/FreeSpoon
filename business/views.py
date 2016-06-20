@@ -225,27 +225,38 @@ def payNotify(request):
 	order_id = WxApp.get_current(request).payNotify(request.body)
 	if order_id is None:
 		error['return_msg'] = 'Error'
-    		xml = utils.mapToXml(error)
+		xml = utils.mapToXml(error)
 		return HttpResponse(xml,
 			content_type='text/xml')
 	order_id = int(order_id)
-	order = None
+	payrequest = None
 	try:
-		order = Order.objects.get(pk=order_id)
+		payrequest = PayRequest.objects.get(third_party_order_id=order_id)
 	except ObjectDoesNotExist:
 		raise BadRequestException('Order not found')
-	if order is None:
+	if payrequest is None:
 		error['return_msg'] = 'Error'
-    		xml = utils.mapToXml(error)
+		xml = utils.mapToXml(error)
+		return HttpResponse(xml,
+			content_type='text/xml')
+	order = payrequest.order
+	user = order.user
+	if payrequest.status > 0:
+		error['return_msg'] = 'Error'
+		xml = utils.mapToXml(error)
 		return HttpResponse(xml,
 			content_type='text/xml')
 	if order.status > 0:
 		error['return_msg'] = 'Error'
-    		xml = utils.mapToXml(error)
+		xml = utils.mapToXml(error)
 		return HttpResponse(xml,
 			content_type='text/xml')
+	payrequest.status = 1
+	payrequest.save()
 	order.status = 1
 	order.save()
+	user.balance -= payrequest.balance_fee
+	user.save()
 	success = {
 		"return_code": "SUCCESS",
 		"return_msg": ""
@@ -260,7 +271,7 @@ class payRequest(views.APIView):
 	lookup_field = 'pk'
 	lookup_url_kwarg = None
 
-	def get_pay_request(self, order_id, request):
+	def get_pay_request(self, order_id, balance, request):
 		ip_address = '127.0.0.1'
 		if 'HTTP_X_FORWARDED_FOR' in request.META:
 			ip_address = request.META.get('HTTP_X_FORWARDED_FOR', '127.0.0.1')
@@ -281,12 +292,35 @@ class payRequest(views.APIView):
 			raise BadRequestException('Order not found')
 		if order is None:
 			raise BadRequestException('Order not found')
+		if order.payrequest:
+			order.payrequest.delete()
+		total_fee = order.total_fee
+		balance_fee = 0
+		third_party_fee = 0
+		if balance:
+			if user.balance >= total_fee:
+				balance_fee = total_fee
+				third_party_fee = 0
+			else:
+				balance_fee = user.balance
+				third_party_fee = total_fee - user.balance
+		else:
+			third_party_fee = total_fee
+		payrequest = PayRequest(
+			order=order,
+			third_party_order_id=utils.createOrderId(),
+			third_party_fee=third_party_fee,
+			balance_fee=balance_fee,
+			use_balance=balance,
+			status=0
+		)
+		payrequest.save()
 
 		time_start = datetime.datetime.now()
 		time_expire = time_start + datetime.timedelta(minutes=30)
 
 		prepay_id = WxApp.get_current(request).createPrepayId(
-			order_id=order_id,
+			order_id=order.payrequest.third_party_order_id,
 			total_fee=order.total_fee,
 			ip_address=ip_address,
 			time_start=time_start,
@@ -311,8 +345,14 @@ class payRequest(views.APIView):
 		)
 
 		pk = self.kwargs[lookup_url_kwarg]
+		balance = kwargs.get('balance', True)
+		try:
+			balance = int(balance)
+			balance = bool(balance)
+		except ValueError:
+			balance = True
 
-		result = self.get_pay_request(pk, request)
+		result = self.get_pay_request(pk, balance, request)
 		return Response(result, status=status.HTTP_200_OK)
 
 class BulkViewSet(ModelViewSet):
