@@ -348,7 +348,7 @@ class BulkListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModel
 			request.build_absolute_uri(url),
 			map(lambda p: p.cover.url 
 			if hasattr(p.cover, 'url') 
-			else '', obj.products.all()))
+			else '', obj.product_set.all()))
 
 	def get_participant_count(self, obj):
 		return Order.objects.filter(bulk_id=obj.pk).count()
@@ -407,12 +407,13 @@ class ProductListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedMo
 
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
 	details = ProductDetailsSerializer(source='productdetails_set', many=True)
+	bulk_url = serializers.HyperlinkedRelatedField(
+		source='bulk', read_only=True, view_name='bulk-detail')
 
 	class Meta:
 		model = Product
 		fields = ('url', 'id', 'title', 'desc', 'unit_price', 'market_price',
-			'spec', 'spec_desc', 'cover', 'create_time',
-			'details')
+			'spec', 'spec_desc', 'cover', 'create_time', 'details', 'bulk_url')
 
 class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	reseller = ResellerSerializer()
@@ -421,7 +422,7 @@ class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 	dead_time = TimestampField()
 	standard_time = StandardTimeField(source='*')
 	arrived_time = TimestampField()
-	products = ProductListSerializer(many=True)
+	products = ProductListSerializer(source='product_set', many=True)
 	participant_count = serializers.SerializerMethodField()
 	recent_obtain_name = serializers.SerializerMethodField()
 	recent_obtain_mob = serializers.SerializerMethodField()
@@ -639,3 +640,64 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
 class PayRequestSerializer(RemoveNullSerializerMixIn, serializers.Serializer):
 	require_third_party_payment = serializers.BooleanField()
 	pay_request_json = serializers.JSONField()
+
+class SlideSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
+	create_time = TimestampField()
+
+	class Meta:
+		model = Slide
+		fields = ('link', 'image', 'category', 'seq', 'create_time')
+
+class BulkExhibitSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
+	covers = serializers.SerializerMethodField(method_name='get_product_covers')
+
+	class Meta:
+		model = Bulk
+		fields = ('url', 'id', 'title', 'category', 'covers',)
+
+	def get_product_covers(self, obj): # So ugly :(
+		request = self.context.get('request', None)
+		return map(lambda url: 
+			url if not request else
+			request.build_absolute_uri(url),
+			map(lambda p: p.cover.url 
+			if hasattr(p.cover, 'url') 
+			else '', obj.product_set.all()))
+
+class ProductExhibitSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
+	create_time = TimestampField()
+	participant_count = serializers.SerializerMethodField()
+	purchased_count = serializers.SerializerMethodField()
+	details = ProductDetailsSerializer(source='productdetails_set', many=True)
+
+	class Meta:
+		model = Product
+		fields = ('url', 'id', 'title', 'desc', 'unit_price', 'market_price',
+			'spec', 'spec_desc', 'cover', 'create_time', 'details',
+			'participant_count', 'purchased_count', 'tag',)
+
+	def get_participant_count(self, obj):
+		return Goods.objects.filter(product_id=obj.pk).count()
+
+	def get_purchased_count(self, obj):
+		result = Goods.objects.filter(product_id=obj.pk).aggregate(Sum('quantity'))
+		return result.get('quantity__sum', 0)
+
+class ExhibitedProductSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
+	product = ProductExhibitSerializer()
+
+	class Meta:
+		model = ExhibitedProduct
+		fields = ('title', 'subtitle', 'stick', 'seq', 'product')
+
+class ExhibitSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
+	create_time = TimestampField()
+	publish_time = TimestampField()
+	slides = SlideSerializer(many=True)
+	hot_bulks = BulkExhibitSerializer(many=True)
+	hot_products = ExhibitedProductSerializer(source='exhibitedproduct_set', many=True)
+
+	class Meta:
+		model = Exhibit
+		fields = ('slides', 'hot_bulks', 'hot_products', 'create_time', 'publish_time')
+

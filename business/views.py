@@ -1,5 +1,6 @@
 import datetime
 
+from django.utils.timezone import UTC
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_GET
 from django.shortcuts import get_object_or_404
@@ -424,7 +425,13 @@ class OrderViewSet(ModelViewSet):
 		instance.is_delete = True
 		instance.save()
 
-
-
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def index(request):
+	now = datetime.datetime.now(tz=UTC()) 
+	data = Exhibit.objects.filter(
+		publish_time__lt=now).order_by('-publish_time').first()
+	serializer = ExhibitSerializer(instance=data, context={'request': request})
+	return Response(serializer.data, status=status.HTTP_200_OK)
 
 

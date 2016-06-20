@@ -49,6 +49,7 @@ class Dispatcher(models.Model):
 class Product(models.Model):
 	title = models.CharField(max_length=200)
 	desc = models.TextField()
+	bulk = models.ForeignKey('Bulk')
 	unit_price = models.IntegerField(max_length=11)
 	market_price = models.IntegerField(max_length=11)
 	tag = models.CharField(max_length=20)
@@ -81,7 +82,6 @@ class Bulk(models.Model):
 	details = models.TextField()
 	reseller = models.ForeignKey('Reseller')
 	dispatchers = models.ManyToManyField('Dispatcher')
-	products = models.ManyToManyField('Product')
 	dead_time = models.DateTimeField()
 	arrived_time = models.DateTimeField()
 	status = models.IntegerField(max_length=11)
@@ -155,4 +155,31 @@ class PayRequest(models.Model):
 	use_balance = models.IntegerField(default=0)
 	status = models.IntegerField(default=0)
 
+class Slide(models.Model):
+	link = models.CharField(max_length=200)
+	image = models.ImageField(upload_to='images/card_icon/%Y/%m/%d')
+	category = models.CharField(max_length=100, null=True, blank=True)
+	seq = models.IntegerField(max_length=11)
+	create_time = models.DateTimeField(auto_now=True)
+	def __unicode__(self):
+		return self.link
+
+class ExhibitedProduct(models.Model):
+	exhibit = models.ForeignKey('Exhibit')
+	product = models.ForeignKey('Product')
+	title = models.CharField(max_length=100, null=True, blank=True)
+	subtitle = models.CharField(max_length=100, null=True, blank=True)
+	seq = models.IntegerField(max_length=11)
+	stick = models.BooleanField(default=False)
+	def __unicode__(self):
+		return self.product.title
+
+class Exhibit(models.Model):
+	slides = models.ManyToManyField('Slide')
+	hot_bulks = models.ManyToManyField('Bulk')
+	hot_products = models.ManyToManyField('Product', through='ExhibitedProduct')
+	publish_time = models.DateTimeField()
+	create_time = models.DateTimeField(auto_now=True)
+	def __unicode__(self):
+		return str(self.publish_time)
 
