@@ -201,6 +201,7 @@ class BindView(
 # Web Only
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def wxConfig(request):
 
 	"""
