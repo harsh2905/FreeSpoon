@@ -320,6 +320,12 @@ class payRequest(views.APIView):
 		payrequest.save()
 
 		if not require_third_party_payment:
+			payrequest.status = 1
+			payrequest.save()
+			order.status = 1
+			order.save()
+			user.balance -= payrequest.balance_fee
+			user.save()			
 			data = {
 				'require_third_party_payment': require_third_party_payment,
 				'pay_request_json': None,
