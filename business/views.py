@@ -1,9 +1,12 @@
 import datetime
+import hashlib
 
 from django.utils.timezone import UTC
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_GET
 from django.shortcuts import get_object_or_404
+from django.db import IntegrityError
+from django.core.files.base import ContentFile
 
 from rest_framework import status
 from rest_framework import mixins
@@ -19,6 +22,7 @@ from rest_framework.permissions import (
 from rest_framework.decorators import (
 	api_view,
 	permission_classes,
+	parser_classes,
 )
 
 from rest_auth.views import LoginView as BaseLoginView
@@ -434,6 +438,36 @@ class OrderViewSet(ModelViewSet):
 		instance.is_delete = True
 		instance.save()
 
+class RecipeViewSet(ModelViewSet):
+	queryset = Recipe.objects.all()
+	serializer_class = RecipeSerializer
+	permission_classes = [AllowAny]
+	pagination_class = TimestampPagination
+
+	pagination_field_name = 'create_time'
+	pagination_lookup_type = 'lt'
+
+	filter_backends = (filters.SearchFilter, FieldOrderBackend,)
+
+	search_fields = ('$name', '$user__name')
+
+	order_fields = ['-create_time']
+
+class DishViewSet(ModelViewSet):
+	queryset = Dish.objects.all()
+	serializer_class = DishSerializer
+	permission_classes = [AllowAny]
+	pagination_class = TimestampPagination
+
+	pagination_field_name = 'create_time'
+	pagination_lookup_type = 'lt'
+
+	filter_backends = (filters.SearchFilter, FieldOrderBackend,)
+
+	search_fields = ('$name', '$user__name')
+
+	order_fields = ['-create_time']
+
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def index(request):
@@ -443,4 +477,35 @@ def index(request):
 	serializer = ExhibitSerializer(instance=data, context={'request': request})
 	return Response(serializer.data, status=status.HTTP_200_OK)
 
+@api_view(['POST'])
+@permission_classes([AllowAny])
+@parser_classes([StreamParser])
+def image_create(request):
+	data = request.data
+	if data:
+		try:
+			md5 = hashlib.md5(data).hexdigest()
+			content_file = ContentFile(data, md5)
+			image, created = Image.objects.get_or_create(
+				pk=md5,
+				defaults={
+					'image': content_file
+				}
+			)
+			serializer = ImageSerializer(instance=image, context={'request': request})
+			return Response(serializer.data, status=status.HTTP_201_CREATED)
+		except IntegrityError:
+			pass
+	return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def image_retrieve(request, pk):
+	if pk:
+		try:
+			image = Image.objects.get(pk=pk)
+			serializer = ImageSerializer(instance=image, context={'request': request})
+			return Response(serializer.data, status=status.HTTP_200_OK)
+		except ObjectDoesNotExist:
+			pass
+	return Response(status=status.HTTP_404_NOT_FOUND)

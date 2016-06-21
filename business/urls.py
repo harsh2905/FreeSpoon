@@ -10,8 +10,10 @@ urlpatterns = [
 	url(r'^login$', views.UserLoginView.as_view(), name='login'),
 	url(r'^weixin$', views.WeixinLoginView.as_view(), name='weixin'),
 	url(r'^bind$', views.BindView.as_view(), name='bind'),
-	url(r'^r(.*)$', views.redirect, name='redirect'),
+	url(r'^redirect(.*)$', views.redirect, name='redirect'),
 	url(r'^index$', views.index, name='index'),	
+	url(r'^images$', views.image_create, name='imageCreate'),	
+	url(r'^images/(?P<pk>[^/.]+)/$', views.image_retrieve, name='imageRetrieve'),	
 	url(r'^paynotify$', views.payNotify, name='payNotify'),
 	url(r'^payrequest/(?P<pk>[0-9]+)/$', views.payRequest.as_view(), name='payRequest'),
 	#url(r'^login$', views.UserLoginView.as_view(), name='userLogin'),
@@ -29,4 +31,6 @@ router.register(r'shippingaddresses', views.ShippingAddressViewSet, base_name='s
 router.register(r'purchasedproducthistorys', views.PurchasedProductHistoryViewSet, 
 		base_name='purchasedproducthistory')
 router.register(r'orders', views.OrderViewSet, base_name='order')
+router.register(r'recipes', views.RecipeViewSet, base_name='recipe')
+router.register(r'dishs', views.DishViewSet, base_name='dish')
 urlpatterns.extend(router.urls)

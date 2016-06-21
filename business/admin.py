@@ -40,6 +40,29 @@ class ExhibitAdmin(admin.ModelAdmin):
 	filter_horizontal = ('slides', 'hot_bulks',)
 	inlines = [ExhibitedProductInline]
 
+class StepInline(admin.TabularInline):
+	model = Step
+	extra = 1
+
+class IngredientInline(admin.TabularInline):
+	model = Ingredient
+	extra = 1
+
+class RecipeAdmin(admin.ModelAdmin):
+	inlines = [
+		StepInline,
+		IngredientInline,
+	]
+
+class DishDetailsInline(admin.TabularInline):
+	model = DishDetails
+	extra = 1
+
+class DishAdmin(admin.ModelAdmin):
+	inlines = [
+		DishDetailsInline,
+	]
+
 admin.site.register(User)
 admin.site.register(Reseller)
 admin.site.register(Dispatcher)
@@ -53,3 +76,11 @@ admin.site.register(ShippingAddress)
 
 admin.site.register(Slide)
 admin.site.register(Exhibit, ExhibitAdmin)
+
+admin.site.register(Recipe, RecipeAdmin)
+admin.site.register(Step)
+admin.site.register(Ingredient)
+admin.site.register(Dish, DishAdmin)
+admin.site.register(DishDetails)
+admin.site.register(Tip)
+admin.site.register(Image)

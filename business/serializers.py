@@ -15,10 +15,12 @@ from .models import *
 from .fields import *
 from .exceptions import *
 from . import utils
+from .parsers import *
 
 from collections import OrderedDict
 from rest_framework.relations import PKOnlyObject
 from rest_framework.fields import SkipField
+from rest_framework.parsers import JSONParser
 
 from authentication.serializers import MobUserSerializer
 
@@ -704,3 +706,105 @@ class ExhibitSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
 		model = Exhibit
 		fields = ('slides', 'hot_bulks', 'hot_products', 'create_time', 'publish_time')
 
+class UserGuestSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
+	create_time = TimestampField()
+	class Meta:
+		model = User
+		fields = ('id', 'name', 'create_time', 
+			'wx_nickname', 'wx_headimgurl')
+
+class StepSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
+	create_time = TimestampField()
+	width = serializers.SerializerMethodField()
+	height = serializers.SerializerMethodField()
+
+	class Meta:
+		model = Step
+		fields = ('image', 'plain', 'seq', 'create_time', 'width', 'height')
+
+	def get_width(self, obj):
+		if hasattr(obj, 'image'):
+			return obj.image.width
+		return 0
+
+	def get_height(self, obj):
+		if hasattr(obj, 'image'):
+			return obj.image.height
+		return 0
+
+class IngredientSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
+	class Meta:
+		model = Ingredient
+		fields = ('name', 'seq', 'quantity')
+
+class RecipeSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
+	create_time = TimestampField()	
+	user = UserGuestSerializer()
+	tips = serializers.SlugRelatedField(
+		many=True,
+		read_only=True,
+		slug_field='plain'
+	)
+	steps = StepSerializer(source='step_set', many=True)
+	dish_num = serializers.SerializerMethodField()
+	ingredients = IngredientSerializer(source='ingredient_set', many=True)
+	step_num = serializers.SerializerMethodField()
+
+	class Meta:
+		model = Recipe
+		fields = ('url', 'id', 'name', 'user', 'desc', 'cover', 
+			'status', 'tag', 'tips', 'time', 'steps',
+			'dish_num', 'ingredients', 'step_num',
+			'create_time')
+
+	def get_dish_num(self, obj):
+		return Dish.objects.filter(recipe=obj).count()
+
+	def get_step_num(self, obj):
+		return obj.step_set.count()
+
+class DishDetailsSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
+	create_time = TimestampField()
+	width = serializers.SerializerMethodField()
+	height = serializers.SerializerMethodField()
+
+	class Meta:
+		model = Step
+		fields = ('image', 'plain', 'seq', 'create_time', 'width', 'height')
+
+	def get_width(self, obj):
+		if hasattr(obj, 'image'):
+			return obj.image.width
+		return 0
+
+	def get_height(self, obj):
+		if hasattr(obj, 'image'):
+			return obj.image.height
+		return 0
+
+class DishSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
+	create_time = TimestampField()
+	user = UserGuestSerializer()
+	tips = serializers.SlugRelatedField(
+		many=True,
+		read_only=True,
+		slug_field='plain'
+	)
+	recipe = serializers.HyperlinkedRelatedField(read_only=True, view_name='recipe-detail')
+	steps = DishDetailsSerializer(source='dishdetails_set', many=True)
+	step_num = serializers.SerializerMethodField()
+
+	class Meta:
+		model = Dish
+		fields = ('url', 'id', 'name', 'user', 'desc', 'cover',
+			'status', 'tag', 'tips', 'create_time', 'recipe',
+			'steps', 'step_num')
+
+	def get_step_num(self, obj):
+		return obj.dishdetails_set.count()
+
+class ImageSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
+
+	class Meta:
+		model = Image
+		fields = ('image', 'md5')

@@ -98,7 +98,7 @@ class Order(models.Model):
 	user = models.ForeignKey('User')
 	bulk = models.ForeignKey('Bulk')
 	dispatcher = models.ForeignKey('Dispatcher')
-	status = models.IntegerField(max_length=10)
+	status = models.IntegerField(max_length=11)
 	freight = models.IntegerField(max_length=11)
 	total_fee = models.IntegerField(max_length=11)
 	create_time = models.DateTimeField(auto_now=True)
@@ -157,7 +157,7 @@ class PayRequest(models.Model):
 
 class Slide(models.Model):
 	link = models.CharField(max_length=200)
-	image = models.ImageField(upload_to='images/card_icon/%Y/%m/%d')
+	image = models.ImageField(upload_to='images/slide/%Y/%m/%d')
 	category = models.CharField(max_length=100, null=True, blank=True)
 	seq = models.IntegerField(max_length=11)
 	create_time = models.DateTimeField(auto_now=True)
@@ -167,7 +167,7 @@ class Slide(models.Model):
 class ExhibitedProduct(models.Model):
 	exhibit = models.ForeignKey('Exhibit')
 	product = models.ForeignKey('Product')
-	cover = models.ImageField(upload_to='images/card_icon/%Y/%m/%d', null=True, blank=True)
+	cover = models.ImageField(upload_to='images/exhibited_product/%Y/%m/%d', null=True, blank=True)
 	seq = models.IntegerField(max_length=11)
 	stick = models.BooleanField(default=False)
 	def __unicode__(self):
@@ -182,3 +182,72 @@ class Exhibit(models.Model):
 	def __unicode__(self):
 		return str(self.publish_time)
 
+class Step(models.Model):
+	recipe = models.ForeignKey('Recipe')
+	image = models.OneToOneField('Image', on_delete=models.SET_NULL, null=True, blank=True)
+	plain = models.TextField()
+	seq = models.IntegerField(max_length=11)
+	create_time = models.DateTimeField(auto_now=True)
+	def __unicode__(self):
+		return '%s[%s]' % (self.recipe.name, self.seq)
+	class Meta:
+		verbose_name = 'Step details'
+		verbose_name_plural = 'Step details'
+
+class Ingredient(models.Model):
+	recipe = models.ForeignKey('Recipe')
+	name = models.CharField(max_length=200)
+	seq = models.IntegerField(max_length=11)
+	quantity = models.CharField(max_length=200)
+	def __unicode__(self):
+		return self.name
+
+class Recipe(models.Model):
+	create_time = models.DateTimeField(auto_now=True)
+	name = models.CharField(max_length=200)
+	user = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True)
+	desc = models.TextField()
+	cover = models.OneToOneField('Image', on_delete=models.SET_NULL, null=True, blank=True)
+	status = models.IntegerField(max_length=11)
+	tag = models.CharField(max_length=200)
+	tips = models.ManyToManyField('Tip')
+	time = models.CharField(max_length=200)
+	def __unicode__(self):
+		return self.name
+
+class DishDetails(models.Model):
+	dish = models.ForeignKey('Dish')
+	image = models.OneToOneField('Image', on_delete=models.SET_NULL, null=True, blank=True)
+	plain = models.TextField()
+	seq = models.IntegerField(max_length=11)
+	create_time = models.DateTimeField(auto_now=True)
+	def __unicode__(self):
+		return '%s[%s]' % (self.dish.name, self.seq)
+	class Meta:
+		verbose_name = 'Dish details'
+		verbose_name_plural = 'Dish details'
+
+class Tip(models.Model):
+	plain = models.TextField()
+	def __unicode__(self):
+		return self.plain
+
+class Dish(models.Model):
+	create_time = models.DateTimeField(auto_now=True)
+	name = models.CharField(max_length=200)
+	desc = models.TextField()
+	recipe = models.ForeignKey('Recipe', on_delete=models.SET_NULL, null=True, blank=True)
+	cover = models.OneToOneField('Image', on_delete=models.SET_NULL, null=True, blank=True)
+	user = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True)
+	status = models.IntegerField(max_length=11)
+	tag = models.CharField(max_length=200)
+	tips = models.ManyToManyField('Tip')
+	def __unicode__(self):
+		return self.name
+
+class Image(models.Model):
+	md5 = models.CharField(max_length=200, primary_key=True)
+	create_time = models.DateTimeField(auto_now=True)
+	image = models.ImageField(upload_to='images/upload/%Y/%m/%d')
+	def __unicode__(self):
+		return self.md5
