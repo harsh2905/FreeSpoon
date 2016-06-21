@@ -293,7 +293,7 @@ class payRequest(views.APIView):
 			raise BadRequestException('Order not found')
 		if order is None:
 			raise BadRequestException('Order not found')
-		if order.payrequest:
+		if hasattr(order, 'payrequest'):
 			order.payrequest.delete()
 		total_fee = order.total_fee
 		balance_fee = 0
@@ -321,8 +321,9 @@ class payRequest(views.APIView):
 
 		if not require_third_party_payment:
 			data = {
-				'require_third_party_payment': require_third_party_payment
-				#'pay_request_json' = None
+				'require_third_party_payment': require_third_party_payment,
+				'pay_request_json': None,
+				'order': order
 			}
 			serializer = PayRequestSerializer(instance=data, context={'request': self.request})
 			return serializer.data
@@ -345,7 +346,8 @@ class payRequest(views.APIView):
 			raise BadRequestException('Failed to create pre pay order')
 		data = {
 			'require_third_party_payment': require_third_party_payment,
-			'pay_request_json': WxApp.get_current(request).createPayRequestJson(prepay_id)
+			'pay_request_json': WxApp.get_current(request).createPayRequestJson(prepay_id),
+			'order': None
 		}
 		serializer = PayRequestSerializer(instance=data, context={'request': self.request})
 		return serializer.data

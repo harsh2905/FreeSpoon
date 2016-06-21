@@ -640,6 +640,7 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
 class PayRequestSerializer(RemoveNullSerializerMixIn, serializers.Serializer):
 	require_third_party_payment = serializers.BooleanField()
 	pay_request_json = serializers.JSONField()
+	order = OrderSerializer()
 
 class SlideSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
 	create_time = TimestampField()
