@@ -49,7 +49,7 @@ class Dispatcher(models.Model):
 class Product(models.Model):
 	title = models.CharField(max_length=200)
 	desc = models.TextField()
-	bulk = models.ForeignKey('Bulk')
+	bulk = models.ForeignKey('Bulk', null=True, blank=True)
 	unit_price = models.IntegerField(max_length=11)
 	market_price = models.IntegerField(max_length=11)
 	tag = models.CharField(max_length=20, null=True, blank=True)
@@ -167,8 +167,7 @@ class Slide(models.Model):
 class ExhibitedProduct(models.Model):
 	exhibit = models.ForeignKey('Exhibit')
 	product = models.ForeignKey('Product')
-	title = models.CharField(max_length=100, null=True, blank=True)
-	subtitle = models.CharField(max_length=100, null=True, blank=True)
+	cover = models.ImageField(upload_to='images/card_icon/%Y/%m/%d', null=True, blank=True)
 	seq = models.IntegerField(max_length=11)
 	stick = models.BooleanField(default=False)
 	def __unicode__(self):

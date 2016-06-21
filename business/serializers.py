@@ -690,7 +690,7 @@ class ExhibitedProductSerializer(RemoveNullSerializerMixIn, serializers.Hyperlin
 
 	class Meta:
 		model = ExhibitedProduct
-		fields = ('title', 'subtitle', 'stick', 'seq', 'product')
+		fields = ('cover', 'stick', 'seq', 'product')
 
 class ExhibitSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
 	create_time = TimestampField()
