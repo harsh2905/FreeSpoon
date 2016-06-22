@@ -184,7 +184,7 @@ class Exhibit(models.Model):
 
 class Step(models.Model):
 	recipe = models.ForeignKey('Recipe')
-	image = models.OneToOneField('Image', on_delete=models.SET_NULL, null=True, blank=True)
+	image = models.ForeignKey('Image', on_delete=models.SET_NULL, null=True, blank=True)
 	plain = models.TextField()
 	seq = models.IntegerField(max_length=11)
 	create_time = models.DateTimeField(auto_now=True)
@@ -207,7 +207,7 @@ class Recipe(models.Model):
 	name = models.CharField(max_length=200)
 	user = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True)
 	desc = models.TextField()
-	cover = models.OneToOneField('Image', on_delete=models.SET_NULL, null=True, blank=True)
+	cover = models.ForeignKey('Image', on_delete=models.SET_NULL, null=True, blank=True)
 	status = models.IntegerField(max_length=11)
 	tag = models.CharField(max_length=200)
 	tips = models.ManyToManyField('Tip')
@@ -217,7 +217,7 @@ class Recipe(models.Model):
 
 class DishDetails(models.Model):
 	dish = models.ForeignKey('Dish')
-	image = models.OneToOneField('Image', on_delete=models.SET_NULL, null=True, blank=True)
+	image = models.ForeignKey('Image', on_delete=models.SET_NULL, null=True, blank=True)
 	plain = models.TextField()
 	seq = models.IntegerField(max_length=11)
 	create_time = models.DateTimeField(auto_now=True)
@@ -237,10 +237,10 @@ class Dish(models.Model):
 	name = models.CharField(max_length=200)
 	desc = models.TextField()
 	recipe = models.ForeignKey('Recipe', on_delete=models.SET_NULL, null=True, blank=True)
-	cover = models.OneToOneField('Image', on_delete=models.SET_NULL, null=True, blank=True)
+	cover = models.ForeignKey('Image', on_delete=models.SET_NULL, null=True, blank=True)
 	user = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True)
 	status = models.IntegerField(max_length=11)
-	tag = models.CharField(max_length=200)
+	tag = models.CharField(max_length=200, null=True, blank=True)
 	tips = models.ManyToManyField('Tip')
 	def __unicode__(self):
 		return self.name

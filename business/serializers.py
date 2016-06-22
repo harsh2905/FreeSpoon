@@ -4,6 +4,7 @@ from django.db.models import Sum
 from rest_framework import exceptions
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 from authentication.serializers import LoginSerializer as BaseLoginSerializer
@@ -715,27 +716,150 @@ class UserGuestSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
 
 class StepSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
 	create_time = TimestampField()
-	width = serializers.SerializerMethodField()
-	height = serializers.SerializerMethodField()
+	width = serializers.SerializerMethodField(read_only=True)
+	height = serializers.SerializerMethodField(read_only=True)
+	image = serializers.ImageField(source='image.image')
 
 	class Meta:
 		model = Step
 		fields = ('image', 'plain', 'seq', 'create_time', 'width', 'height')
 
 	def get_width(self, obj):
-		if hasattr(obj, 'image'):
-			return obj.image.width
+		if hasattr(obj, 'image') and hasattr(obj.image, 'image'):
+			return obj.image.image.width
 		return 0
 
 	def get_height(self, obj):
-		if hasattr(obj, 'image'):
-			return obj.image.height
+		if hasattr(obj, 'image') and hasattr(obj.image, 'image'):
+			return obj.image.image.height
 		return 0
 
 class IngredientSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
 	class Meta:
 		model = Ingredient
 		fields = ('name', 'seq', 'quantity')
+
+#class TipSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
+#
+#	class Meta:
+#		model = Tip
+#		fields = ('plain',)
+
+class StepCreateSerializer(serializers.Serializer):
+	image = serializers.CharField()
+	plain = serializers.CharField()
+	seq = serializers.IntegerField()
+
+class RecipeUpdateSerializer(serializers.Serializer):
+	name = serializers.CharField()
+	desc = serializers.CharField()
+	cover = serializers.CharField()
+	tag = serializers.CharField()
+	tips = serializers.ListField(
+		child=serializers.CharField()
+		)
+	steps = StepCreateSerializer(many=True)
+	time = serializers.CharField()
+
+	def update(self, instance, validated_data):
+		request = self.context.get('request', None)
+		if request is None:
+			raise BadRequestException('Bad Request')
+		instance.name = validated_data.get('name', instance.name)
+		instance.desc = validated_data.get('desc', instance.desc)
+		cover_md5 = validated_data.get('cover', None)
+		if cover_md5:
+			cover = Image.objects.get(pk=cover_md5)
+			if cover:
+				instance.cover = cover
+		instance.tag = validated_data.get('tag', instance.tag)
+		instance.time = validated_data.get('time', instance.time)
+		steps = validated_data.get('steps', None)
+		try:
+			if request.method == 'PUT':
+				instance.step_set.all().delete()
+				if steps:
+					for step in steps:
+						image_md5 = step.get('image')
+						plain = step.get('plain')
+						seq = step.get('seq')
+						image = Image.objects.get(pk=image_md5)
+						instance.step_set.create(
+							recipe=instance,
+							image=image,
+							plain=plain,
+							seq=seq
+							)
+			tips = validated_data.get('tips', None)
+			if request.method == 'PUT':
+				instance.tips.all().delete()
+				if tips:
+					for tip in tips:
+						instance.tips.create(plain=tip)
+			elif request.method == 'PATCH':
+				if tips:
+					instance.tips.all().delete()
+					for tip in tips:
+						instance.tips.create(plain=tip)
+		except IntegrityError:
+			raise BadRequestException('Update failed')
+		return instance
+
+class RecipeCreateSerializer(serializers.Serializer):
+	name = serializers.CharField()
+	desc = serializers.CharField()
+	cover = serializers.CharField()
+	tag = serializers.CharField(required=False)
+	tips = serializers.ListField(
+		child=serializers.CharField()
+		)
+	steps = StepCreateSerializer(many=True)
+	time = serializers.CharField()
+
+	def create(self, validated_data):
+		request = self.context.get('request', None)
+		if request is None:
+			raise BadRequestException('Bad Request')
+		mob_user = request.user
+		user = mob_user.user
+		if user is None:
+			raise BadRequestException('User not found')
+		name = validated_data.get('name')
+		desc = validated_data.get('desc')
+		cover_md5 = validated_data.get('cover')
+		tag = validated_data.get('tag', None)
+		time = validated_data.get('time')
+		tips = validated_data.get('tips')
+		steps = validated_data.get('steps')
+		try:
+			cover = Image.objects.get(pk=cover_md5)
+			recipe = Recipe.objects.create(
+				name=name,
+				desc=desc,
+				user=user,
+				status=0,
+				tag=tag,
+				time=time,
+				cover=cover
+				)
+			for step in steps:
+				image_md5 = step.get('image')
+				plain = step.get('plain')
+				seq = step.get('seq')
+				image = Image.objects.get(pk=image_md5)
+				Step.objects.create(
+					recipe=recipe,
+					image=image,
+					plain=plain,
+					seq=seq
+					)
+			for tip in tips:
+				recipe.tips.create(plain=tip)
+			return recipe
+		except Image.DoesNotExist:
+			raise BadRequestException('Image does not exist')
+		except IntegrityError:
+			raise BadRequestException('Create failed')
 
 class RecipeSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	create_time = TimestampField()	
@@ -749,6 +873,7 @@ class RecipeSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSe
 	dish_num = serializers.SerializerMethodField()
 	ingredients = IngredientSerializer(source='ingredient_set', many=True)
 	step_num = serializers.SerializerMethodField()
+	cover = serializers.ImageField(source='cover.image')
 
 	class Meta:
 		model = Recipe
@@ -767,24 +892,142 @@ class DishDetailsSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializ
 	create_time = TimestampField()
 	width = serializers.SerializerMethodField()
 	height = serializers.SerializerMethodField()
+	image = serializers.ImageField(source='image.image')
 
 	class Meta:
 		model = Step
 		fields = ('image', 'plain', 'seq', 'create_time', 'width', 'height')
 
 	def get_width(self, obj):
-		if hasattr(obj, 'image'):
-			return obj.image.width
+		if hasattr(obj, 'image') and hasattr(obj.image, 'image'):
+			return obj.image.image.width
 		return 0
 
 	def get_height(self, obj):
-		if hasattr(obj, 'image'):
-			return obj.image.height
+		if hasattr(obj, 'image') and hasattr(obj.image, 'image'):
+			return obj.image.image.height
 		return 0
+
+class DishDetailsCreateSerializer(serializers.Serializer):
+	image = serializers.CharField()
+	plain = serializers.CharField()
+	seq = serializers.IntegerField()
+
+class DishUpdateSerializer(serializers.Serializer):
+	name = serializers.CharField()
+	desc = serializers.CharField()
+	cover = serializers.CharField()
+	tag = serializers.CharField()
+	tips = serializers.ListField(
+		child=serializers.CharField()
+		)
+	steps = StepCreateSerializer(many=True)
+
+	def update(self, instance, validated_data):
+		request = self.context.get('request', None)
+		if request is None:
+			raise BadRequestException('Bad Request')
+		instance.name = validated_data.get('name', instance.name)
+		instance.desc = validated_data.get('desc', instance.desc)
+		cover_md5 = validated_data.get('cover', None)
+		if cover_md5:
+			cover = Image.objects.get(pk=cover_md5)
+			if cover:
+				instance.cover = cover
+		instance.tag = validated_data.get('tag', instance.tag)
+		steps = validated_data.get('steps', None)
+		try:
+			if request.method == 'PUT':
+				instance.dishdetails_set.all().delete()
+				if steps:
+					for step in steps:
+						image_md5 = step.get('image')
+						plain = step.get('plain')
+						seq = step.get('seq')
+						image = Image.objects.get(pk=image_md5)
+						instance.dishdetails_set.create(
+							dish=instance,
+							image=image,
+							plain=plain,
+							seq=seq
+							)
+			tips = validated_data.get('tips', None)
+			if request.method == 'PUT':
+				instance.tips.all().delete()
+				if tips:
+					for tip in tips:
+						instance.tips.create(plain=tip)
+			elif request.method == 'PATCH':
+				if tips:
+					instance.tips.all().delete()
+					for tip in tips:
+						instance.tips.create(plain=tip)
+		except IntegrityError:
+			raise BadRequestException('Update failed')
+		return instance
+
+class DishCreateSerializer(serializers.Serializer):
+	name = serializers.CharField()
+	desc = serializers.CharField()
+	cover = serializers.CharField()
+	tag = serializers.CharField(required=False)
+	tips = serializers.ListField(
+		child=serializers.CharField()
+		)
+	recipe = serializers.IntegerField()
+	steps = DishDetailsCreateSerializer(many=True)
+
+	def create(self, validated_data):
+		request = self.context.get('request', None)
+		if request is None:
+			raise BadRequestException('Bad Request')
+		mob_user = request.user
+		user = mob_user.user
+		if user is None:
+			raise BadRequestException('User not found')
+		recipe_id = validated_data.get('recipe')
+		name = validated_data.get('name')
+		desc = validated_data.get('desc')
+		cover_md5 = validated_data.get('cover')
+		tag = validated_data.get('tag', None)
+		tips = validated_data.get('tips')
+		steps = validated_data.get('steps')
+		try:
+			recipe = Recipe.objects.get(pk=recipe_id)
+			cover = Image.objects.get(pk=cover_md5)
+			dish = Dish.objects.create(
+				name=name,
+				desc=desc,
+				recipe=recipe,
+				user=user,
+				status=0,
+				tag=tag,
+				cover=cover
+				)
+			for step in steps:
+				image_md5 = step.get('image')
+				plain = step.get('plain')
+				seq = step.get('seq')
+				image = Image.objects.get(pk=image_md5)
+				DishDetails.objects.create(
+					dish=dish,
+					image=image,
+					plain=plain,
+					seq=seq
+					)
+			for tip in tips:
+				dish.tips.create(plain=tip)
+			return dish
+		except Recipe.DoesNotExist:
+			raise BadRequestException('Recipe does not exist')
+		except Image.DoesNotExist:
+			raise BadRequestException('Image does not exist')
+		except IntegrityError:
+			raise BadRequestException('Create failed')
 
 class DishSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	create_time = TimestampField()
-	user = UserGuestSerializer()
+	user = UserGuestSerializer(read_only=True)
 	tips = serializers.SlugRelatedField(
 		many=True,
 		read_only=True,
@@ -793,6 +1036,7 @@ class DishSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 	recipe = serializers.HyperlinkedRelatedField(read_only=True, view_name='recipe-detail')
 	steps = DishDetailsSerializer(source='dishdetails_set', many=True)
 	step_num = serializers.SerializerMethodField()
+	cover = serializers.ImageField(source='cover.image')
 
 	class Meta:
 		model = Dish

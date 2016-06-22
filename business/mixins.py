@@ -67,11 +67,12 @@ class UpdateModelMixin(object):
         instance = self.get_object('update')
         serializer = self.get_serializer(instance, data=request.data, partial=partial, suffix='update')
         serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response(serializer.data)
+        instance = self.perform_update(serializer)
+        response_serializer = self.get_serializer(instance, suffix='retrieve')
+        return Response(response_serializer.data, status=status.HTTP_200_OK)
 
     def perform_update(self, serializer):
-        serializer.save()
+        return serializer.save()
 
     def partial_update(self, request, *args, **kwargs):
         kwargs['partial'] = True

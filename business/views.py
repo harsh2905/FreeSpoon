@@ -24,6 +24,10 @@ from rest_framework.decorators import (
 	permission_classes,
 	parser_classes,
 )
+from rest_framework.parsers import (
+	MultiPartParser,
+	FileUploadParser
+)
 
 from rest_auth.views import LoginView as BaseLoginView
 from authentication.views import WeixinLogin as BaseWeixinLogin
@@ -440,8 +444,10 @@ class OrderViewSet(ModelViewSet):
 
 class RecipeViewSet(ModelViewSet):
 	queryset = Recipe.objects.all()
+	serializer_class_update = RecipeUpdateSerializer
+	serializer_class_create = RecipeCreateSerializer
 	serializer_class = RecipeSerializer
-	permission_classes = [AllowAny]
+	#permission_classes = [AllowAny]
 	pagination_class = TimestampPagination
 
 	pagination_field_name = 'create_time'
@@ -455,8 +461,10 @@ class RecipeViewSet(ModelViewSet):
 
 class DishViewSet(ModelViewSet):
 	queryset = Dish.objects.all()
+	serializer_class_update = DishUpdateSerializer
+	serializer_class_create = DishCreateSerializer
 	serializer_class = DishSerializer
-	permission_classes = [AllowAny]
+	#permission_classes = [AllowAny]
 	pagination_class = TimestampPagination
 
 	pagination_field_name = 'create_time'
@@ -479,17 +487,19 @@ def index(request):
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
-@parser_classes([StreamParser])
+@parser_classes([MultiPartParser])
 def image_create(request):
-	data = request.data
-	if data:
+	f = request.data.get('file', None)
+	if f:
 		try:
-			md5 = hashlib.md5(data).hexdigest()
-			content_file = ContentFile(data, md5)
+			md5 = hashlib.md5()
+			for chunk in f.chunks():
+				md5.update(chunk)
+			md5 = md5.hexdigest()
 			image, created = Image.objects.get_or_create(
 				pk=md5,
 				defaults={
-					'image': content_file
+					'image': f
 				}
 			)
 			serializer = ImageSerializer(instance=image, context={'request': request})
