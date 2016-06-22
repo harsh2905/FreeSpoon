@@ -750,6 +750,11 @@ class StepCreateSerializer(serializers.Serializer):
 	plain = serializers.CharField()
 	seq = serializers.IntegerField()
 
+class IngredientCreateSerializer(serializers.Serializer):
+	name = serializers.CharField()
+	seq = serializers.IntegerField()
+	quantity = serializers.CharField()
+
 class RecipeUpdateSerializer(serializers.Serializer):
 	name = serializers.CharField()
 	desc = serializers.CharField()
@@ -759,6 +764,7 @@ class RecipeUpdateSerializer(serializers.Serializer):
 		child=serializers.CharField()
 		)
 	steps = StepCreateSerializer(many=True)
+	ingredients = IngredientCreateSerializer(many=True)
 	time = serializers.CharField()
 
 	def update(self, instance, validated_data):
@@ -774,8 +780,8 @@ class RecipeUpdateSerializer(serializers.Serializer):
 				instance.cover = cover
 		instance.tag = validated_data.get('tag', instance.tag)
 		instance.time = validated_data.get('time', instance.time)
-		steps = validated_data.get('steps', None)
 		try:
+			steps = validated_data.get('steps', None)
 			if request.method == 'PUT':
 				instance.step_set.all().delete()
 				if steps:
@@ -789,6 +795,47 @@ class RecipeUpdateSerializer(serializers.Serializer):
 							image=image,
 							plain=plain,
 							seq=seq
+							)
+			elif request.method == 'PATCH':
+				if steps:
+					instance.step_set.all().delete()
+					for step in steps:
+						image_md5 = step.get('image')
+						plain = step.get('plain')
+						seq = step.get('seq')
+						image = Image.objects.get(pk=image_md5)
+						instance.step_set.create(
+							recipe=instance,
+							image=image,
+							plain=plain,
+							seq=seq
+							)
+			ingredients = validated_data.get('ingredients', None)
+			if request.method == 'PUT':
+				instance.ingredient_set.all().delete()
+				if ingredients:
+					for ingredient in ingredients:
+						name = ingredient.get('name')
+						seq = ingredient.get('seq')
+						quantity = ingredient.get('quantity')
+						Ingredient.objects.create(
+							recipe=recipe,
+							name=name,
+							seq=seq,
+							quantity=quantity
+							)
+			elif request.method == 'PATCH':
+				if ingredients:
+					instance.ingredient_set.all().delete()
+					for ingredient in ingredients:
+						name = ingredient.get('name')
+						seq = ingredient.get('seq')
+						quantity = ingredient.get('quantity')
+						Ingredient.objects.create(
+							recipe=recipe,
+							name=name,
+							seq=seq,
+							quantity=quantity
 							)
 			tips = validated_data.get('tips', None)
 			if request.method == 'PUT':
@@ -814,6 +861,7 @@ class RecipeCreateSerializer(serializers.Serializer):
 		child=serializers.CharField()
 		)
 	steps = StepCreateSerializer(many=True)
+	ingredients = IngredientCreateSerializer(many=True)
 	time = serializers.CharField()
 
 	def create(self, validated_data):
@@ -831,6 +879,7 @@ class RecipeCreateSerializer(serializers.Serializer):
 		time = validated_data.get('time')
 		tips = validated_data.get('tips')
 		steps = validated_data.get('steps')
+		ingredients = validated_data.get('ingredients')
 		try:
 			cover = Image.objects.get(pk=cover_md5)
 			recipe = Recipe.objects.create(
@@ -852,6 +901,16 @@ class RecipeCreateSerializer(serializers.Serializer):
 					image=image,
 					plain=plain,
 					seq=seq
+					)
+			for ingredient in ingredients:
+				name = ingredient.get('name')
+				seq = ingredient.get('seq')
+				quantity = ingredient.get('quantity')
+				Ingredient.objects.create(
+					recipe=recipe,
+					name=name,
+					seq=seq,
+					quantity=quantity
 					)
 			for tip in tips:
 				recipe.tips.create(plain=tip)
@@ -935,11 +994,25 @@ class DishUpdateSerializer(serializers.Serializer):
 			if cover:
 				instance.cover = cover
 		instance.tag = validated_data.get('tag', instance.tag)
-		steps = validated_data.get('steps', None)
 		try:
+			steps = validated_data.get('steps', None)
 			if request.method == 'PUT':
 				instance.dishdetails_set.all().delete()
 				if steps:
+					for step in steps:
+						image_md5 = step.get('image')
+						plain = step.get('plain')
+						seq = step.get('seq')
+						image = Image.objects.get(pk=image_md5)
+						instance.dishdetails_set.create(
+							dish=instance,
+							image=image,
+							plain=plain,
+							seq=seq
+							)
+			elif request.method == 'PATCH':
+				if steps:
+					instance.dishdetails_set.all().delete()
 					for step in steps:
 						image_md5 = step.get('image')
 						plain = step.get('plain')
