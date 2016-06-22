@@ -36,6 +36,7 @@ from authentication.views import BindView as BaseBindView
 from django.shortcuts import render
 
 from . import config
+from . import utils
 from .exceptions import *
 from .models import *
 from .serializers import *
@@ -492,6 +493,7 @@ def image_create(request):
 	f = request.data.get('file', None)
 	if f:
 		try:
+			f.name = utils.nonceStr()
 			md5 = hashlib.md5()
 			for chunk in f.chunks():
 				md5.update(chunk)
