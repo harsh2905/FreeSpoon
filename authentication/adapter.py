@@ -10,6 +10,10 @@ from django.contrib.auth import get_backends
 from django.middleware.csrf import rotate_token
 from django.contrib.auth.signals import user_logged_in
 
+from django.conf import settings
+from django.template.loader import render_to_string
+from django.template import TemplateDoesNotExist
+
 class DefaultSocialAccountAdapter(BaseDefaultSocialAccountAdapter):
 	def populate_user(self,
 			request,
@@ -45,3 +49,22 @@ class DefaultAccountAdapter(BaseDefaultAccountAdapter):
 			request.user = user
 		rotate_token(request)
 		user_logged_in.send(sender=user.__class__, request=request, user=user)
+
+	def add_message(self, request, level, message_template,
+					message_context=None, extra_tags=''):
+		"""
+		Wrapper of `django.contrib.messages.add_message`, that reads
+		the message text from a template.
+		"""
+		if 'django.contrib.messages' in settings.INSTALLED_APPS and \
+			not request.path.startswith('/api/'):
+			try:
+				if message_context is None:
+					message_context = {}
+				message = render_to_string(message_template,
+										message_context).strip()
+				if message:
+					messages.add_message(request, level, message,
+										extra_tags=extra_tags)
+			except TemplateDoesNotExist:
+				pass

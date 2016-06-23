@@ -47,7 +47,7 @@ class MobUserSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
 	wx_headimgurl = serializers.CharField(source='real_wx_headimgurl')
 	class Meta:
 		model = MobUser
-		fields = ('id', 'mob', 'wx_nickname', 'wx_headimgurl')
+		fields = ('mob', 'wx_nickname', 'wx_headimgurl')
 
 	def __init__(self, instance=None, data=empty, **kwargs):
 		if instance and instance.parent:
