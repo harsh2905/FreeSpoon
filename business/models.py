@@ -185,7 +185,7 @@ class Exhibit(models.Model):
 class Step(models.Model):
 	recipe = models.ForeignKey('Recipe')
 	image = models.ForeignKey('Image', on_delete=models.SET_NULL, null=True, blank=True)
-	plain = models.TextField()
+	plain = models.TextField(blank=True)
 	seq = models.IntegerField(max_length=11)
 	create_time = models.DateTimeField(auto_now=True)
 	def __unicode__(self):
@@ -196,20 +196,20 @@ class Step(models.Model):
 
 class Ingredient(models.Model):
 	recipe = models.ForeignKey('Recipe')
-	name = models.CharField(max_length=200)
+	name = models.CharField(max_length=200, blank=True)
 	seq = models.IntegerField(max_length=11)
-	quantity = models.CharField(max_length=200)
+	quantity = models.CharField(max_length=200, blank=True)
 	def __unicode__(self):
 		return self.name
 
 class Recipe(models.Model):
 	create_time = models.DateTimeField(auto_now=True)
-	name = models.CharField(max_length=200)
+	name = models.CharField(max_length=200, blank=True)
 	user = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True)
-	desc = models.TextField()
+	desc = models.TextField(blank=True)
 	cover = models.ForeignKey('Image', on_delete=models.SET_NULL, null=True, blank=True)
 	status = models.IntegerField(max_length=11)
-	tag = models.CharField(max_length=200)
+	tag = models.CharField(max_length=200, null=True, blank=True)
 	tips = models.ManyToManyField('Tip')
 	time = models.CharField(max_length=200, null=True, blank=True)
 	def __unicode__(self):
@@ -218,7 +218,7 @@ class Recipe(models.Model):
 class DishDetails(models.Model):
 	dish = models.ForeignKey('Dish')
 	image = models.ForeignKey('Image', on_delete=models.SET_NULL, null=True, blank=True)
-	plain = models.TextField()
+	plain = models.TextField(blank=True)
 	seq = models.IntegerField(max_length=11)
 	create_time = models.DateTimeField(auto_now=True)
 	def __unicode__(self):
@@ -228,14 +228,14 @@ class DishDetails(models.Model):
 		verbose_name_plural = 'Dish details'
 
 class Tip(models.Model):
-	plain = models.TextField()
+	plain = models.TextField(blank=True)
 	def __unicode__(self):
 		return self.plain
 
 class Dish(models.Model):
 	create_time = models.DateTimeField(auto_now=True)
-	name = models.CharField(max_length=200)
-	desc = models.TextField()
+	name = models.CharField(max_length=200, blank=True)
+	desc = models.TextField(blank=True)
 	recipe = models.ForeignKey('Recipe', on_delete=models.SET_NULL, null=True, blank=True)
 	cover = models.ForeignKey('Image', on_delete=models.SET_NULL, null=True, blank=True)
 	user = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True)

@@ -731,6 +731,7 @@ class StepSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
 	width = serializers.SerializerMethodField(read_only=True)
 	height = serializers.SerializerMethodField(read_only=True)
 	image = serializers.ImageField(source='image.image')
+	plain = serializers.CharField(allow_blank=True)
 
 	class Meta:
 		model = Step
@@ -759,25 +760,25 @@ class IngredientSerializer(RemoveNullSerializerMixIn, serializers.ModelSerialize
 
 class StepCreateSerializer(serializers.Serializer):
 	image = serializers.CharField()
-	plain = serializers.CharField()
+	plain = serializers.CharField(allow_blank=True)
 	seq = serializers.IntegerField()
 
 class IngredientCreateSerializer(serializers.Serializer):
-	name = serializers.CharField()
+	name = serializers.CharField(allow_blank=True)
 	seq = serializers.IntegerField()
-	quantity = serializers.CharField()
+	quantity = serializers.CharField(allow_blank=True)
 
 class RecipeUpdateSerializer(serializers.Serializer):
-	name = serializers.CharField()
-	desc = serializers.CharField()
+	name = serializers.CharField(allow_blank=True)
+	desc = serializers.CharField(allow_blank=True)
 	cover = serializers.CharField()
-	tag = serializers.CharField()
+	tag = serializers.CharField(allow_blank=True)
 	tips = serializers.ListField(
-		child=serializers.CharField()
+		child=serializers.CharField(allow_blank=True)
 		)
 	steps = StepCreateSerializer(many=True)
 	ingredients = IngredientCreateSerializer(many=True)
-	time = serializers.CharField(required=False)
+	time = serializers.CharField(required=False, allow_blank=True)
 
 	def update(self, instance, validated_data):
 		request = self.context.get('request', None)
@@ -865,16 +866,16 @@ class RecipeUpdateSerializer(serializers.Serializer):
 		return instance
 
 class RecipeCreateSerializer(serializers.Serializer):
-	name = serializers.CharField()
-	desc = serializers.CharField()
+	name = serializers.CharField(allow_blank=True)
+	desc = serializers.CharField(allow_blank=True)
 	cover = serializers.CharField()
-	tag = serializers.CharField(required=False)
+	tag = serializers.CharField(required=False, allow_blank=True)
 	tips = serializers.ListField(
-		child=serializers.CharField()
+		child=serializers.CharField(allow_blank=True)
 		)
 	steps = StepCreateSerializer(many=True)
 	ingredients = IngredientCreateSerializer(many=True)
-	time = serializers.CharField(required=False)
+	time = serializers.CharField(required=False, allow_blank=True)
 
 	def create(self, validated_data):
 		request = self.context.get('request', None)
@@ -981,16 +982,16 @@ class DishDetailsSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializ
 
 class DishDetailsCreateSerializer(serializers.Serializer):
 	image = serializers.CharField()
-	plain = serializers.CharField()
+	plain = serializers.CharField(allow_blank=True)
 	seq = serializers.IntegerField()
 
 class DishUpdateSerializer(serializers.Serializer):
-	name = serializers.CharField()
-	desc = serializers.CharField()
+	name = serializers.CharField(allow_blank=True)
+	desc = serializers.CharField(allow_blank=True)
 	cover = serializers.CharField()
-	tag = serializers.CharField()
+	tag = serializers.CharField(required=False, allow_blank=True)
 	tips = serializers.ListField(
-		child=serializers.CharField()
+		child=serializers.CharField(allow_blank=True)
 		)
 	steps = StepCreateSerializer(many=True)
 
@@ -1052,14 +1053,14 @@ class DishUpdateSerializer(serializers.Serializer):
 		return instance
 
 class DishCreateSerializer(serializers.Serializer):
-	name = serializers.CharField()
-	desc = serializers.CharField()
+	name = serializers.CharField(allow_blank=True)
+	desc = serializers.CharField(allow_blank=True)
 	cover = serializers.CharField()
-	tag = serializers.CharField(required=False)
+	tag = serializers.CharField(required=False, allow_blank=True)
 	tips = serializers.ListField(
-		child=serializers.CharField()
+		child=serializers.CharField(allow_blank=True)
 		)
-	recipe = serializers.IntegerField()
+	recipe = serializers.IntegerField(required=False)
 	steps = DishDetailsCreateSerializer(many=True)
 
 	def create(self, validated_data):
@@ -1078,7 +1079,9 @@ class DishCreateSerializer(serializers.Serializer):
 		tips = validated_data.get('tips')
 		steps = validated_data.get('steps')
 		try:
-			recipe = Recipe.objects.get(pk=recipe_id)
+			recipe = None
+			if Recipe.objects.filter(pk=recipe_id).exists():
+				recipe = Recipe.objects.get(pk=recipe_id)
 			cover = Image.objects.get(pk=cover_md5)
 			dish = Dish.objects.create(
 				name=name,
