@@ -777,7 +777,7 @@ class RecipeUpdateSerializer(serializers.Serializer):
 		)
 	steps = StepCreateSerializer(many=True)
 	ingredients = IngredientCreateSerializer(many=True)
-	time = serializers.CharField()
+	time = serializers.CharField(required=False)
 
 	def update(self, instance, validated_data):
 		request = self.context.get('request', None)
@@ -874,7 +874,7 @@ class RecipeCreateSerializer(serializers.Serializer):
 		)
 	steps = StepCreateSerializer(many=True)
 	ingredients = IngredientCreateSerializer(many=True)
-	time = serializers.CharField()
+	time = serializers.CharField(required=False)
 
 	def create(self, validated_data):
 		request = self.context.get('request', None)
@@ -888,7 +888,7 @@ class RecipeCreateSerializer(serializers.Serializer):
 		desc = validated_data.get('desc')
 		cover_md5 = validated_data.get('cover')
 		tag = validated_data.get('tag', None)
-		time = validated_data.get('time')
+		time = validated_data.get('time', None)
 		tips = validated_data.get('tips')
 		steps = validated_data.get('steps')
 		ingredients = validated_data.get('ingredients')

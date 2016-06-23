@@ -211,7 +211,7 @@ class Recipe(models.Model):
 	status = models.IntegerField(max_length=11)
 	tag = models.CharField(max_length=200)
 	tips = models.ManyToManyField('Tip')
-	time = models.CharField(max_length=200)
+	time = models.CharField(max_length=200, null=True, blank=True)
 	def __unicode__(self):
 		return self.name
 
