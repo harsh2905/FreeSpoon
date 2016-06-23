@@ -6,6 +6,7 @@ from django.utils.cache import patch_vary_headers
 from django.utils.http import cookie_date
 
 from django.utils.functional import SimpleLazyObject
+from django.contrib import auth
 
 
 class SessionMiddleware(object):
@@ -61,6 +62,11 @@ class SessionMiddleware(object):
                                 secure=settings.SESSION_COOKIE_SECURE or None,
                                 httponly=settings.SESSION_COOKIE_HTTPONLY or None)
         return response
+
+def get_user(request):
+    if not hasattr(request, '_cached_user'):
+        request._cached_user = auth.get_user(request)
+    return request._cached_user
 
 class AuthenticationMiddleware(object):
     def process_request(self, request):
