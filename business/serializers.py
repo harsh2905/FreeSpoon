@@ -421,6 +421,7 @@ class ProductListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedMo
 		return utils.addQueryParams(url, params)
 
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
+	create_time = TimestampField()
 	details = ProductDetailsSerializer(source='productdetails_set', many=True)
 	bulk_url = serializers.HyperlinkedRelatedField(
 		source='bulk', read_only=True, view_name='bulk-detail')
@@ -460,9 +461,8 @@ class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 			return None
 		mob_user = request.user
 		if isinstance(mob_user, MobUser):
-			user = mob_user.user
-			if user:
-				return user.recent_obtain_name
+			if hasattr(mob_user, 'user'):
+				return mob_user.user.recent_obtain_name
 		return None
 
 	def get_recent_obtain_mob(self, obj):
@@ -471,9 +471,8 @@ class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 			return None
 		mob_user = request.user
 		if isinstance(mob_user, MobUser):
-			user = mob_user.user
-			if user:
-				return user.recent_obtain_mob
+			if hasattr(mob_user, 'user'):
+				return mob_user.user.recent_obtain_mob
 		return None
 
 	def get_card_url(self, obj):

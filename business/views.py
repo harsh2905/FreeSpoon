@@ -401,7 +401,7 @@ class BulkViewSet(ModelViewSet):
 	filter_backends = (filters.SearchFilter, FieldOrderBackend,)
 
 	#search_fields = ('$products__title',)
-	search_fields = ('$products__title', '$reseller__name')
+	search_fields = ('$product__title', '$reseller__name')
 
 	order_fields = ['-dead_time']
 
