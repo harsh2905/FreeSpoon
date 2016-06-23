@@ -357,10 +357,22 @@ class BulkListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModel
 		return Order.objects.filter(bulk_id=obj.pk).count()
 
 class ProductDetailsSerializer(serializers.ModelSerializer):
-	
+	width = serializers.SerializerMethodField(read_only=True)
+	height = serializers.SerializerMethodField(read_only=True)
+
 	class Meta:
 		model = ProductDetails
-		fields = ('image', 'plain', 'seq')
+		fields = ('image', 'plain', 'seq', 'width', 'height')
+
+	def get_width(self, obj):
+		if hasattr(obj, 'image'):
+			return obj.image.width
+		return 0
+
+	def get_height(self, obj):
+		if hasattr(obj, 'image'):
+			return obj.image.height
+		return 0
 
 class ProductListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	create_time = TimestampField()
