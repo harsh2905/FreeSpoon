@@ -454,7 +454,11 @@ class RecipeViewSet(ModelViewSet):
 	pagination_field_name = 'create_time'
 	pagination_lookup_type = 'lt'
 
-	filter_backends = (filters.SearchFilter, FieldOrderBackend,)
+	filter_backends = (filters.SearchFilter, FieldOrderBackend, FieldFilterBackend)
+
+	filter_fields = ['user_id']
+	filter_field_raise_exception = False
+
 
 	search_fields = ('$name', '$user__name')
 
@@ -471,7 +475,10 @@ class DishViewSet(ModelViewSet):
 	pagination_field_name = 'create_time'
 	pagination_lookup_type = 'lt'
 
-	filter_backends = (filters.SearchFilter, FieldOrderBackend,)
+	filter_backends = (filters.SearchFilter, FieldOrderBackend, FieldFilterBackend)
+
+	filter_fields = ['user_id']
+	filter_field_raise_exception = False
 
 	search_fields = ('$name', '$user__name')
 
