@@ -40,6 +40,9 @@ class ExhibitAdmin(admin.ModelAdmin):
 	filter_horizontal = ('slides', 'hot_bulks',)
 	inlines = [ExhibitedProductInline]
 
+class RecipeExhibitAdmin(admin.ModelAdmin):
+	filter_horizontal = ('slides',)
+
 class StepInline(admin.TabularInline):
 	model = Step
 	extra = 1
@@ -76,6 +79,7 @@ admin.site.register(ShippingAddress)
 
 admin.site.register(Slide)
 admin.site.register(Exhibit, ExhibitAdmin)
+admin.site.register(RecipeExhibit, RecipeExhibitAdmin)
 
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Step)

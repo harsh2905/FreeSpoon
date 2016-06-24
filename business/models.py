@@ -182,6 +182,13 @@ class Exhibit(models.Model):
 	def __unicode__(self):
 		return str(self.publish_time)
 
+class RecipeExhibit(models.Model):
+	slides = models.ManyToManyField('Slide')
+	publish_time = models.DateTimeField()
+	create_time = models.DateTimeField(auto_now=True)
+	def __unicode__(self):
+		return str(self.publish_time)
+
 class Step(models.Model):
 	recipe = models.ForeignKey('Recipe')
 	image = models.ForeignKey('Image', on_delete=models.SET_NULL, null=True, blank=True)

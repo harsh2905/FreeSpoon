@@ -12,6 +12,7 @@ urlpatterns = [
 	url(r'^bind$', views.BindView.as_view(), name='bind'),
 	url(r'^redirect(.*)$', views.redirect, name='redirect'),
 	url(r'^index$', views.index, name='index'),	
+	url(r'^recipeindex$', views.recipe_index, name='recipeIndex'),	
 	url(r'^images$', views.image_create, name='imageCreate'),	
 	url(r'^images/(?P<pk>[^/.]+)/$', views.image_retrieve, name='imageRetrieve'),	
 	url(r'^paynotify$', views.payNotify, name='payNotify'),

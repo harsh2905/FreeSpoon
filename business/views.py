@@ -454,11 +454,10 @@ class RecipeViewSet(ModelViewSet):
 	pagination_field_name = 'create_time'
 	pagination_lookup_type = 'lt'
 
-	filter_backends = (filters.SearchFilter, FieldOrderBackend, FieldFilterBackend)
+	filter_backends = (filters.SearchFilter, FieldOrderBackend, FieldFilterBackend, MoreFilterBackend)
 
 	filter_fields = ['user_id']
 	filter_field_raise_exception = False
-
 
 	search_fields = ('$name', '$user__name')
 
@@ -475,7 +474,7 @@ class DishViewSet(ModelViewSet):
 	pagination_field_name = 'create_time'
 	pagination_lookup_type = 'lt'
 
-	filter_backends = (filters.SearchFilter, FieldOrderBackend, FieldFilterBackend)
+	filter_backends = (filters.SearchFilter, FieldOrderBackend, FieldFilterBackend, MoreFilterBackend)
 
 	filter_fields = ['user_id']
 	filter_field_raise_exception = False
@@ -491,6 +490,15 @@ def index(request):
 	data = Exhibit.objects.filter(
 		publish_time__lt=now).order_by('-publish_time').first()
 	serializer = ExhibitSerializer(instance=data, context={'request': request})
+	return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def recipe_index(request):
+	now = datetime.datetime.now(tz=UTC()) 
+	data = RecipeExhibit.objects.filter(
+		publish_time__lt=now).order_by('-publish_time').first()
+	serializer = RecipeExhibitSerializer(instance=data, context={'request': request})
 	return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['POST'])

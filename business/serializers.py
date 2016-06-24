@@ -22,6 +22,8 @@ from collections import OrderedDict
 from rest_framework.relations import PKOnlyObject
 from rest_framework.fields import SkipField
 from rest_framework.parsers import JSONParser
+from rest_framework.response import Response
+from rest_framework import status
 
 from authentication.serializers import MobUserSerializer
 
@@ -718,6 +720,15 @@ class ExhibitSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
 		model = Exhibit
 		fields = ('slides', 'hot_bulks', 'hot_products', 'create_time', 'publish_time')
 
+class RecipeExhibitSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
+	create_time = TimestampField()
+	publish_time = TimestampField()
+	slides = SlideSerializer(many=True)
+
+	class Meta:
+		model = RecipeExhibit
+		fields = ('slides', 'create_time', 'publish_time')
+
 class UserGuestSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
 	create_time = TimestampField()
 	class Meta:
@@ -862,6 +873,7 @@ class RecipeUpdateSerializer(serializers.Serializer):
 						instance.tips.create(plain=tip)
 		except IntegrityError:
 			raise BadRequestException('Update failed')
+		instance.save()
 		return instance
 
 class RecipeCreateSerializer(serializers.Serializer):
@@ -932,6 +944,14 @@ class RecipeCreateSerializer(serializers.Serializer):
 		except IntegrityError:
 			raise BadRequestException('Create failed')
 
+class RecipeSimpleSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
+	create_time = TimestampField()
+	cover = serializers.ImageField(source='cover.image')
+
+	class Meta:
+		model = Recipe
+		fields = ('url', 'id', 'name', 'cover', 'create_time')
+
 class RecipeSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	create_time = TimestampField()	
 	user = UserGuestSerializer()
@@ -945,19 +965,31 @@ class RecipeSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSe
 	ingredients = IngredientSerializer(source='ingredient_set', many=True)
 	step_num = serializers.SerializerMethodField()
 	cover = serializers.ImageField(source='cover.image')
+	more = serializers.SerializerMethodField()
 
 	class Meta:
 		model = Recipe
 		fields = ('url', 'id', 'name', 'user', 'desc', 'cover', 
 			'status', 'tag', 'tips', 'time', 'steps',
 			'dish_num', 'ingredients', 'step_num',
-			'create_time')
+			'create_time', 'more')
 
 	def get_dish_num(self, obj):
 		return Dish.objects.filter(recipe=obj).count()
 
 	def get_step_num(self, obj):
 		return obj.step_set.count()
+
+	def get_more(self, obj):
+		request = self.context.get('request', None)
+		recipes = obj.user.recipe_set.exclude(id=obj.id)[:3]
+		if recipes.count() == 0:
+			recipes = Recipe.objects.order_by('-create_time').exclude(id=obj.id)[:3]
+		serializer = RecipeSimpleSerializer(data=recipes, many=True, context={'request': request})
+		serializer.is_valid()
+		return serializer.data
+
+
 
 class DishDetailsSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
 	create_time = TimestampField()
@@ -1112,6 +1144,14 @@ class DishCreateSerializer(serializers.Serializer):
 		except IntegrityError:
 			raise BadRequestException('Create failed')
 
+class DishSimpleSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
+	create_time = TimestampField()
+	cover = serializers.ImageField(source='cover.image')
+
+	class Meta:
+		model = Dish
+		fields = ('url', 'id', 'name', 'cover', 'create_time')
+
 class DishSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	create_time = TimestampField()
 	user = UserGuestSerializer(read_only=True)
@@ -1124,15 +1164,26 @@ class DishSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 	steps = DishDetailsSerializer(source='dishdetails_set', many=True)
 	step_num = serializers.SerializerMethodField()
 	cover = serializers.ImageField(source='cover.image')
+	more = serializers.SerializerMethodField()
 
 	class Meta:
 		model = Dish
 		fields = ('url', 'id', 'name', 'user', 'desc', 'cover',
 			'status', 'tag', 'tips', 'create_time', 'recipe',
-			'steps', 'step_num')
+			'steps', 'step_num', 'more')
 
 	def get_step_num(self, obj):
 		return obj.dishdetails_set.count()
+
+	def get_more(self, obj):
+		request = self.context.get('request', None)
+		dishs = obj.user.dish_set.exclude(id=obj.id)[:3]
+		if dishs.count() == 0:
+			dishs = Dish.objects.order_by('-create_time').exclude(id=obj.id)[:3]
+		serializer = DishSimpleSerializer(data=dishs, many=True, context={'request': request})
+		serializer.is_valid()
+		return serializer.data
+
 
 class ImageSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
 
