@@ -675,14 +675,14 @@ class SlideDetailsSerializer(RemoveNullSerializerMixIn, serializers.ModelSeriali
 
 	def get_source(self, obj):
 		request = self.context.get('request', None)
-		if obj.category == 'bulk':
-			try:
-				instance = Bulk.objects.get(pk=obj.key)
-				serializer = BulkSerializer(instance=instance, context={'request': request})
-				return serializer.data
-			except Bulk.DoesNotExist:
-				pass
-		elif obj.category == 'recipe':
+		#if obj.category == 'bulk':
+		#	try:
+		#		instance = Bulk.objects.get(pk=obj.key)
+		#		serializer = BulkSerializer(instance=instance, context={'request': request})
+		#		return serializer.data
+		#	except Bulk.DoesNotExist:
+		#		pass
+		if obj.category == 'recipe':
 			try:
 				instance = Recipe.objects.get(pk=obj.key)
 				serializer = RecipeSerializer(instance=instance, context={'request': request})
@@ -745,7 +745,7 @@ class ExhibitedProductSerializer(RemoveNullSerializerMixIn, serializers.Hyperlin
 class ExhibitSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
 	create_time = TimestampField()
 	publish_time = TimestampField()
-	slides = SlideSerializer(many=True)
+	slides = SlideDetailsSerializer(many=True)
 	hot_bulks = BulkExhibitSerializer(many=True)
 	hot_products = ExhibitedProductSerializer(source='exhibitedproduct_set', many=True)
 

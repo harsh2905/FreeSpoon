@@ -229,11 +229,17 @@ def wxConfig(request):
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
-def payNotify(request):
+def payNotify(request, appid):
 	error = {
 		"return_code": "FAIL"
 	}
-	order_id = WxApp.get_current(request).payNotify(request.body)
+	wxapp = WxApp.get(appid)
+	if wxapp is None:
+		error['return_msg'] = 'Error'
+		xml = utils.mapToXml(error)
+		return HttpResponse(xml,
+			content_type='text/xml')
+	order_id = wxapp.payNotify(request.body)
 	if order_id is None:
 		error['return_msg'] = 'Error'
 		xml = utils.mapToXml(error)
@@ -347,8 +353,6 @@ class payRequest(views.APIView):
 		time_start = datetime.datetime.now()
 		time_expire = time_start + datetime.timedelta(minutes=30)
 
-		import pdb
-		pdb.set_trace()
 		prepay_id = WxApp.get_current(request).createPrepayId(
 			order_id=order.payrequest.third_party_order_id,
 			total_fee=order.total_fee,
@@ -358,7 +362,7 @@ class payRequest(views.APIView):
 			openid=openid,
 			title=order.bulk.title,
 			detail=order.bulk.details,
-			notify_url=reverse('payNotify', request=request)
+			notify_url=reverse('payNotify', request=request, kwargs={'appid': WxApp.get_current(request).appid})
 		)
 		if prepay_id is None:
 			raise BadRequestException('Failed to create pre pay order')
@@ -381,7 +385,7 @@ class payRequest(views.APIView):
 		)
 
 		pk = self.kwargs[lookup_url_kwarg]
-		balance = kwargs.get('balance', True)
+		balance = request.query_params.get('balance', True)
 		try:
 			balance = int(balance)
 			balance = bool(balance)

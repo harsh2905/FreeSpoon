@@ -43,6 +43,20 @@ class WxApp(object):
 		cls._cache_[social_app_id] = app
 		return app
 		
+	@classmethod
+	def get(cls, appid):
+		try:
+			social_app = SocialApp.objects.get(client_id=appid)
+			social_app_id = social_app.id
+			app = cls._cache_.get(social_app_id, None)
+			if app:
+				return app
+			app = cls(social_app.client_id, social_app.secret, 
+				social_app.mch_id, social_app.mch_appkey, social_app.trade_type)
+			cls._cache_[social_app_id] = app
+			return app
+		except SocialApp.DoesNotExist:
+			return None
 
 	def __init__(self, appid, appsecret, mch_id, mch_appkey, trade_type):
 		self.appid = appid
