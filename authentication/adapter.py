@@ -13,6 +13,7 @@ from django.contrib.auth.signals import user_logged_in
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.template import TemplateDoesNotExist
+from rest_framework.exceptions import AuthenticationFailed
 
 class DefaultSocialAccountAdapter(BaseDefaultSocialAccountAdapter):
 	def populate_user(self,
@@ -68,3 +69,9 @@ class DefaultAccountAdapter(BaseDefaultAccountAdapter):
 										extra_tags=extra_tags)
 			except TemplateDoesNotExist:
 				pass
+
+	def respond_user_inactive(self, request, user):
+		raise AuthenticationFailed(detail='Account inactive')
+
+	def unstash_verified_email(self, request):
+		return None

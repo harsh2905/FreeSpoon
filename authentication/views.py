@@ -10,6 +10,7 @@ from rest_auth.app_settings import create_token
 from rest_auth.utils import jwt_encode
 from rest_auth.models import TokenModel
 
+from rest_framework.exceptions import AuthenticationFailed
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -76,6 +77,10 @@ class BindView(GenericAPIView):
 	def bind(self):
 		mob_user = self.mob_user = self.serializer.validated_data['user']
 		temp_mob_user = self.request.user
+		if hasattr(temp_mob_user, 'mob') \
+			and temp_mob_user.mob \
+			and len(temp_mob_user.mob) > 0:
+			raise AuthenticationFailed(detail='Duplicate bind')
 		social_account = temp_mob_user.wx_socialaccount
 		if mob_user and temp_mob_user and social_account:
 			social_account.user = mob_user
