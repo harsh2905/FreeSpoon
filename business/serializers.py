@@ -831,7 +831,7 @@ class RecipeUpdateSerializer(serializers.Serializer):
 						seq = ingredient.get('seq')
 						quantity = ingredient.get('quantity')
 						Ingredient.objects.create(
-							recipe=recipe,
+							recipe=instance,
 							name=name,
 							seq=seq,
 							quantity=quantity
@@ -844,7 +844,7 @@ class RecipeUpdateSerializer(serializers.Serializer):
 						seq = ingredient.get('seq')
 						quantity = ingredient.get('quantity')
 						Ingredient.objects.create(
-							recipe=recipe,
+							recipe=instance,
 							name=name,
 							seq=seq,
 							quantity=quantity
