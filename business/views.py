@@ -347,6 +347,8 @@ class payRequest(views.APIView):
 		time_start = datetime.datetime.now()
 		time_expire = time_start + datetime.timedelta(minutes=30)
 
+		import pdb
+		pdb.set_trace()
 		prepay_id = WxApp.get_current(request).createPrepayId(
 			order_id=order.payrequest.third_party_order_id,
 			total_fee=order.total_fee,

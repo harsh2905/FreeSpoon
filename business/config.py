@@ -5,9 +5,6 @@ import os
 DOMAIN_NAME = os.getenv('DOMAINNAME')
 DOMAIN_URL = 'http://%s' % DOMAIN_NAME
 
-MCHID = os.getenv('MCHID')
-APPKEY = os.getenv('APPKEY')
-
 AUTHORIZE_BASE_REDIRECT_URL = \
         ('https://open.weixin.qq.com/connect/oauth2/authorize'
         '?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_base&state=%s#wechat_redirect')

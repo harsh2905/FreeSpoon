@@ -38,14 +38,17 @@ class WxApp(object):
 		app = cls._cache_.get(social_app_id, None)
 		if app:
 			return app
-		app = cls(social_app.client_id, social_app.secret, social_app.trade_type)
+		app = cls(social_app.client_id, social_app.secret, 
+			social_app.mch_id, social_app.mch_appkey, social_app.trade_type)
 		cls._cache_[social_app_id] = app
 		return app
 		
 
-	def __init__(self, appid, appsecret, trade_type):
+	def __init__(self, appid, appsecret, mch_id, mch_appkey, trade_type):
 		self.appid = appid
 		self.appsecret = appsecret
+		self.mch_id = mch_id
+		self.mch_appkey = mch_appkey
 		self.trade_type = trade_type
 
 	def createAuthorizeRedirectUrl(self, redirectUrl, state):
@@ -143,7 +146,7 @@ class WxApp(object):
 		attach=None):
 		d = {
 			'appid': self.appid,
-			'mch_id': config.MCHID,
+			'mch_id': self.mch_id,
 			'device_info': device_info,
 			'nonce_str': utils.nonceStr(),
 			'body': title,
@@ -159,7 +162,7 @@ class WxApp(object):
 			'trade_type': self.trade_type,
 			'openid': openid if self.trade_type == 'JSAPI' else None
 		}
-		d['sign'] = utils.generateSign(d, config.APPKEY)
+		d['sign'] = utils.generateSign(d, self.mch_appkey)
 		xml = utils.mapToXml(d)
 		try:
 			r = requests.post(config.UNIFIEDORDER_URL, xml)
@@ -190,7 +193,7 @@ class WxApp(object):
 				rawData[name] = value
 			else:
 				rawSign = value
-		sign = utils.generateSign(rawData, config.APPKEY)
+		sign = utils.generateSign(rawData, self.mch_appkey)
 		if rawSign is None or rawSign <> sign:
 			return None
 		return_code = requestData.get('return_code', None)
@@ -209,18 +212,18 @@ class WxApp(object):
 				'package': 'prepay_id=%s' % prepay_id,
 				'signType': 'MD5'
 			}
-			d['paySign'] = utils.generateSign(d, config.APPKEY)
+			d['paySign'] = utils.generateSign(d, self.mch_appkey)
 			return d
 		else:
 			d = {
 				'appid': self.appid,
-				'partnerid': config.MCHID,
+				'partnerid': self.mch_id,
 				'prepayid': prepay_id,
 				'package': 'Sign=WXPay',
 				'noncestr': utils.nonceStr(),
 				'timestamp': str(utils.now())
 			}
-			d['sign'] = utils.generateSign(d, config.APPKEY)
+			d['sign'] = utils.generateSign(d, self.mch_appkey)
 			return d
 
 

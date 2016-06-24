@@ -18,7 +18,6 @@ from . import utils
 
 APPID = os.getenv('APPID')
 APPSECRET = os.getenv('APPSECRET')
-MCHID = os.getenv('MCHID')
 APPKEY = os.getenv('APPKEY')
 
 AUTHORIZE_BASE_REDIRECT_URL = \
