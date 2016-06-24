@@ -663,7 +663,40 @@ class SlideSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
 
 	class Meta:
 		model = Slide
-		fields = ('link', 'image', 'category', 'seq', 'create_time')
+		fields = ('source', 'key', 'image', 'category', 'seq', 'create_time')
+
+class SlideDetailsSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
+	create_time = TimestampField()
+	source = serializers.SerializerMethodField()
+
+	class Meta:
+		model = Slide
+		fields = ('source', 'key', 'image', 'category', 'seq', 'create_time')
+
+	def get_source(self, obj):
+		request = self.context.get('request', None)
+		if obj.category == 'bulk':
+			try:
+				instance = Bulk.objects.get(pk=obj.key)
+				serializer = BulkSerializer(instance=instance, context={'request': request})
+				return serializer.data
+			except Bulk.DoesNotExist:
+				pass
+		elif obj.category == 'recipe':
+			try:
+				instance = Recipe.objects.get(pk=obj.key)
+				serializer = RecipeSerializer(instance=instance, context={'request': request})
+				return serializer.data
+			except Recipe.DoesNotExist:
+				pass
+		elif obj.category == 'dish':
+			try:
+				instance = Dish.objects.get(pk=obj.key)
+				serializer = DishSerializer(instance=instance, context={'request': request})
+				return serializer.data
+			except Dish.DoesNotExist:
+				pass
+		return obj.source
 
 class BulkExhibitSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	covers = serializers.SerializerMethodField(method_name='get_product_covers')
@@ -723,7 +756,7 @@ class ExhibitSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
 class RecipeExhibitSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
 	create_time = TimestampField()
 	publish_time = TimestampField()
-	slides = SlideSerializer(many=True)
+	slides = SlideDetailsSerializer(many=True)
 
 	class Meta:
 		model = RecipeExhibit

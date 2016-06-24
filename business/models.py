@@ -156,13 +156,14 @@ class PayRequest(models.Model):
 	status = models.IntegerField(default=0)
 
 class Slide(models.Model):
-	link = models.CharField(max_length=200)
+	source = models.CharField(max_length=200)
+	key = models.IntegerField(max_length=11, null=True, blank=True)
 	image = models.ImageField(upload_to='images/slide/%Y/%m/%d')
 	category = models.CharField(max_length=100, null=True, blank=True)
 	seq = models.IntegerField(max_length=11)
 	create_time = models.DateTimeField(auto_now=True)
 	def __unicode__(self):
-		return self.link
+		return self.source
 
 class ExhibitedProduct(models.Model):
 	exhibit = models.ForeignKey('Exhibit')
