@@ -43,19 +43,6 @@ freespoon:
     - "455:455"
     - "137/udp:137/udp"
     - "138/udp:138/udp"
-cookbook:
-  build: cookbook
-  volumes:
-    - /etc/localtime:/etc/localtime:ro
-    - /your/path:/CuisineBook
-  links:
-    - db:db
-  environment:
-    - DBHOST=db
-    - DBPASSWD=123456
-  ports:
-    - "26:22"
-    #- "8082:80"
 wx:
   build: wx
   volumes:
