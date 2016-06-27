@@ -44,6 +44,7 @@ from .paginations import *
 from .viewsets import *
 from .filters import *
 from .generics import *
+from .sms import *
 
 from .wx import *
 
@@ -542,3 +543,12 @@ def image_retrieve(request, pk):
 		except ObjectDoesNotExist:
 			pass
 	return Response(status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def sms(request, mob):
+	if mob and SmsApp.send(mob):
+		return Response(status=status.HTTP_204_NO_CONTENT)
+	raise BadRequestException('SMS sending failure')
+
+	

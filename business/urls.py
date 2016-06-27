@@ -17,6 +17,7 @@ urlpatterns = [
 	url(r'^images/(?P<pk>[^/.]+)/$', views.image_retrieve, name='imageRetrieve'),	
 	url(r'^paynotify/(?P<appid>[^/.]+)/$', views.payNotify, name='payNotify'),
 	url(r'^payrequest/(?P<pk>[0-9]+)/$', views.payRequest.as_view(), name='payRequest'),
+	url(r'^sms/(?P<mob>[0-9]+)/$', views.sms, name='sms'),	
 	#url(r'^login$', views.UserLoginView.as_view(), name='userLogin'),
 	#url(r'^weixin$', views.WeixinLogin.as_view(), name='userWeixinLogin'),
 	#url(r'^resellerLogin$', views.ResellerLoginView.as_view(), name='resellerLogin'),

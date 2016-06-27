@@ -20,3 +20,12 @@ UNIFIEDORDER_URL = \
 	'https://api.mch.weixin.qq.com/pay/unifiedorder'
 
 CARD_URL = '%s/api/business/r?state=%s' % (DOMAIN_URL, '%s')
+
+# Sms
+
+SMS_ACCOUNT_SID = os.getenv('SMSACCOUNTSID')
+SMS_AUTH_TOKEN = os.getenv('SMSAUTHTOKEN')
+SMS_TEMPLATE_ID = os.getenv('SMSTEMPLATEID')
+SMS_APP_ID = os.getenv('SMSAPPID')
+SMS_REST_HOST = os.getenv('SMSRESTHOST')
+SMS_REST_URL = '%s/2013-12-26/Accounts/%s/SMS/TemplateSMS?sig=%s' % (SMS_REST_HOST, SMS_ACCOUNT_SID, '%s')

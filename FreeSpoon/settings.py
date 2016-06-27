@@ -167,7 +167,7 @@ LOGGING = {
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'authentication.authentication.SmsBackend',
+    'business.auth.SmsBackend',
 )
 
 REST_USE_JWT = True
