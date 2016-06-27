@@ -356,7 +356,7 @@ class payRequest(views.APIView):
 
 		prepay_id = WxApp.get_current(request).createPrepayId(
 			order_id=order.payrequest.third_party_order_id,
-			total_fee=order.total_fee,
+			total_fee=third_party_fee,
 			ip_address=ip_address,
 			time_start=time_start,
 			time_expire=time_expire,

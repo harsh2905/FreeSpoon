@@ -17,6 +17,7 @@ class User(models.Model):
 	balance = models.IntegerField(max_length=11, default=0)
 	recent_obtain_name = models.CharField(max_length=100, null=True, blank=True)
 	recent_obtain_mob = models.CharField(max_length=20, null=True, blank=True)
+	recent_dispatcher = models.ForeignKey('Dispatcher', on_delete=models.SET_NULL, null=True)
 	create_time = models.DateTimeField(auto_now=True)
 	def __unicode__(self):
 		return '%s(%s)' % (self.name, self.id)

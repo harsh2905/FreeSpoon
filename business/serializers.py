@@ -65,19 +65,21 @@ class WeixinSerializerMixIn(RemoveNullSerializerMixIn, serializers.Serializer):
 
 class UserSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
 	mob = serializers.CharField(source='mob_user.mob')
+	recent_dispatcher = serializers.IntegerField(source='recent_dispatcher.id')
 	create_time = TimestampField()
 	class Meta:
 		model = User
 		fields = ('id', 'name', 'create_time', 'mob', 
 			'recent_obtain_name', 'recent_obtain_mob', 
-			'wx_nickname', 'wx_headimgurl', 'balance')
+			'recent_dispatcher', 'wx_nickname', 'wx_headimgurl', 'balance')
 
 class LoginUserSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
 	create_time = TimestampField()
+	recent_dispatcher = serializers.IntegerField(source='recent_dispatcher.id')
 	class Meta:
 		model = User
 		fields = ('id', 'create_time', 'balance', 'name',
-			'recent_obtain_name', 'recent_obtain_mob')
+			'recent_dispatcher', 'recent_obtain_name', 'recent_obtain_mob')
 
 #class UserJWTSerializer(serializers.Serializer):
 #	token = serializers.CharField()
@@ -445,6 +447,7 @@ class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 	participant_count = serializers.SerializerMethodField()
 	recent_obtain_name = serializers.SerializerMethodField()
 	recent_obtain_mob = serializers.SerializerMethodField()
+	recent_dispatcher = serializers.SerializerMethodField()
 	card_url = serializers.SerializerMethodField()
 
 	class Meta:
@@ -453,7 +456,7 @@ class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 			'products', 'location', 'standard_time', 'dead_time', 
 			'arrived_time', 'status', 'card_title', 'card_desc',
 			'card_icon', 'card_url', 'create_time', 'participant_count',
-			'recent_obtain_name', 'recent_obtain_mob')
+			'recent_obtain_name', 'recent_obtain_mob', 'recent_dispatcher')
 
 	def get_participant_count(self, obj):
 		return Order.objects.filter(bulk_id=obj.pk).count()
@@ -476,6 +479,18 @@ class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 		if isinstance(mob_user, MobUser):
 			if hasattr(mob_user, 'user'):
 				return mob_user.user.recent_obtain_mob
+		return None
+
+	def get_recent_dispatcher(self, obj):
+		request = self.context.get('request', None)
+		if request is None:
+			return None
+		mob_user = request.user
+		if isinstance(mob_user, MobUser):
+			if hasattr(mob_user, 'user'):
+				if hasattr(mob_user.user, 'recent_dispatcher') and \
+					mob_user.user.recent_dispatcher is not None:
+					return mob_user.user.recent_dispatcher.id
 		return None
 
 	def get_card_url(self, obj):
@@ -610,6 +625,7 @@ class OrderCreateSerializer(serializers.Serializer):
 			)
 		user.recent_obtain_name = obtain_name
 		user.recent_obtain_mob = obtain_mob
+		user.recent_dispatcher = dispatcher
 		user.save()
 		return order
 		
