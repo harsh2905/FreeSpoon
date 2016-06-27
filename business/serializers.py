@@ -405,11 +405,12 @@ class ProductListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedMo
 		goods = Goods.objects.filter(product_id=obj.pk)
 		for _ in goods:
 			user = _.order.user
-			if user.avatar:
-				url = user.avatar.url
-				if request:
-					url = request.build_absolute_uri(url)
-				avatars[user.pk] = url
+			if hasattr(user, 'mob_user') and user.mob_user:
+				url = user.mob_user.real_wx_headimgurl
+				if url is not None and len(url) > 0:
+					if request:
+						url = request.build_absolute_uri(url)
+					avatars[user.pk] = url
 		return avatars.values()[:6]
 
 	def get_history(self, obj):
@@ -508,20 +509,21 @@ class ShippingAddressSerializer(serializers.HyperlinkedModelSerializer):
 			user=user)
 		return shippingaddress
 
-class PurchasedProductHistorySerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
+class PurchasedProductHistorySerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
 	order_id = serializers.ReadOnlyField()
 	bulk_id = serializers.ReadOnlyField()
 	product_id = serializers.ReadOnlyField()
 	name = serializers.ReadOnlyField()
+	wx_nickname = serializers.ReadOnlyField(source='user.mob_user.real_wx_nickname')
+	wx_headimgurl = serializers.ReadOnlyField(source='user.mob_user.real_wx_headimgurl')
 	quantity = serializers.ReadOnlyField()
 	spec = serializers.ReadOnlyField()
 	create_time = TimestampField(read_only=True)
 
 	class Meta:
 		model = PurchasedProductHistory
-		fields = ('order_id', 'bulk_id', 'product_id', 
-			'name', 'quantity', 'spec', 'create_time',
-			'wx_nickname', 'wx_headimgurl')
+		fields = ('order_id', 'bulk_id', 'product_id', 'name',
+			'wx_nickname', 'wx_headimgurl', 'quantity', 'spec', 'create_time',)
 
 class GoodsCreateSerializer(serializers.Serializer):
 	product_id = serializers.IntegerField()

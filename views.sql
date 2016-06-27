@@ -27,7 +27,7 @@ SET character_set_client = utf8;
   `order_id` tinyint NOT NULL,
   `bulk_id` tinyint NOT NULL,
   `product_id` tinyint NOT NULL,
-  `mob_user_id` tinyint NOT NULL,
+  `user_id` tinyint NOT NULL,
   `name` tinyint NOT NULL,
   `quantity` tinyint NOT NULL,
   `spec` tinyint NOT NULL,
@@ -49,7 +49,7 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `view_history_purchased_products` AS select `business_order`.`id` AS `order_id`,`business_order`.`bulk_id` AS `bulk_id`,`business_product`.`id` AS `product_id`,`business_user`.`mob_user_id` AS `mob_user_id`,`business_user`.`name` AS `name`,`business_goods`.`quantity` AS `quantity`,`business_product`.`spec` AS `spec`,`business_order`.`create_time` AS `create_time` from (((`business_order` left join `business_goods` on((`business_order`.`id` = `business_goods`.`order_id`))) left join `business_product` on((`business_goods`.`product_id` = `business_product`.`id`))) left join `business_user` on((`business_order`.`user_id` = `business_user`.`id`))) group by `business_order`.`id` */;
+/*!50001 VIEW `view_history_purchased_products` AS select `business_goods`.`order_id` AS `order_id`,`business_order`.`bulk_id` AS `bulk_id`,`business_goods`.`product_id` AS `product_id`,`business_user`.`id` AS `user_id`,`business_user`.`name` AS `name`,`business_goods`.`quantity` AS `quantity`,`business_product`.`spec` AS `spec`,`business_order`.`create_time` AS `create_time` from (((`business_goods` left join `business_order` on((`business_order`.`id` = `business_goods`.`order_id`))) left join `business_product` on((`business_goods`.`product_id` = `business_product`.`id`))) left join `business_user` on((`business_order`.`user_id` = `business_user`.`id`))) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -63,4 +63,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-06 17:11:30
+-- Dump completed on 2016-06-27 14:12:42

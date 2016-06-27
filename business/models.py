@@ -136,7 +136,7 @@ class PurchasedProductHistory(models.Model):
 		on_delete=models.DO_NOTHING, null=True)
 	bulk = models.ForeignKey('Bulk',
 		on_delete=models.DO_NOTHING, null=True)
-	mob_user = models.ForeignKey(settings.AUTH_USER_MODEL, 
+	user = models.ForeignKey('User', 
 		on_delete=models.DO_NOTHING, null=True)
 	name = models.CharField(max_length=100, null=True, blank=True)
 	quantity = models.IntegerField(max_length=11)
