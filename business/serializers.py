@@ -1033,8 +1033,12 @@ class RecipeSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSe
 
 	def get_more(self, obj):
 		request = self.context.get('request', None)
-		recipes = obj.user.recipe_set.exclude(id=obj.id)[:3]
-		if recipes.count() == 0:
+		recipes = None
+		if hasattr(obj, 'user') and obj.user:
+			recipes = obj.user.recipe_set.exclude(id=obj.id)[:3]
+			if recipes.count() == 0:
+				recipes = Recipe.objects.order_by('-create_time').exclude(id=obj.id)[:3]
+		else:
 			recipes = Recipe.objects.order_by('-create_time').exclude(id=obj.id)[:3]
 		serializer = RecipeSimpleSerializer(data=recipes, many=True, context={'request': request})
 		serializer.is_valid()
@@ -1228,8 +1232,12 @@ class DishSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 
 	def get_more(self, obj):
 		request = self.context.get('request', None)
-		dishs = obj.user.dish_set.exclude(id=obj.id)[:3]
-		if dishs.count() == 0:
+		dishs = None
+		if hasattr(obj, 'user') and obj.user:
+			dishs = obj.user.dish_set.exclude(id=obj.id)[:3]
+			if dishs and dishs.count() == 0:
+				dishs = Dish.objects.order_by('-create_time').exclude(id=obj.id)[:3]
+		else:
 			dishs = Dish.objects.order_by('-create_time').exclude(id=obj.id)[:3]
 		serializer = DishSimpleSerializer(data=dishs, many=True, context={'request': request})
 		serializer.is_valid()

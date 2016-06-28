@@ -53,9 +53,6 @@ from .wx import *
 def error():
 	return HttpResponse('Bad Request')
 
-def main(request):
-	return HttpResponse('FreeSpoon API v0.0.1')
-
 @require_GET
 def redirect(request, relativePath):
 	state = request.GET.get('state', None)
@@ -156,57 +153,6 @@ class BindView(
 		serializer = JWTSerializer(instance=data, context={'request': self.request})
 
 		return Response(serializer.data, status=status.HTTP_200_OK)
-
-#class LoginViewMixIn(object):
-#
-#	jwtSerializerClass = None # Must implement it in sub class
-#
-#	def get_response(self):
-#		user = self.serializer.validated_data['wrap_user']
-#
-#        	data = {
-#        	    'user': user,
-#        	    'token': self.token
-#        	}
-#        	serializer = self.jwtSerializerClass(instance=data, context={'request': self.request})
-#
-#        	return Response(serializer.data, status=status.HTTP_200_OK)
-#
-#class UserLoginView(
-#	LoginViewMixIn,
-#	BaseLoginView):
-#	serializer_class = UserLoginSerializer
-#	jwtSerializerClass = UserJWTSerializer
-#
-#class WeixinLogin(
-#	LoginViewMixIn,
-#	BaseWeixinLogin):
-#	serializer_class = UserSocialLoginSerializer
-#	jwtSerializerClass = UserJWTSerializer
-#
-#class ResellerLoginView(
-#	LoginViewMixIn,
-#	BaseLoginView):
-#	serializer_class = ResellerLoginSerializer
-#	jwtSerializerClass = ResellerJWTSerializer
-#
-#class ResellerWeixinLogin(
-#	LoginViewMixIn,
-#	BaseWeixinLogin):
-#	serializer_class = ResellerSocialLoginSerializer
-#	jwtSerializerClass = ResellerJWTSerializer
-#
-#class DispatcherLoginView(
-#	LoginViewMixIn,
-#	BaseLoginView):
-#	serializer_class = DispatcherLoginSerializer
-#	jwtSerializerClass = DispatcherJWTSerializer
-#
-#class DispatcherWeixinLogin(
-#	LoginViewMixIn,
-#	BaseWeixinLogin):
-#	serializer_class = DispatcherSocialLoginSerializer
-#	jwtSerializerClass = DispatcherJWTSerializer
 
 # Web Only
 
