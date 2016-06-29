@@ -354,7 +354,7 @@ class BulkViewSet(ModelViewSet):
 	filter_backends = (filters.SearchFilter, FieldOrderBackend, MethodFilterBackend,)
 
 	def update_bulk_status(self, queryset):
-		queryset.filter(dead_time__lt=datetime.datetime.now()).update(status=-1)
+		queryset.filter(dead_time__lt=datetime.datetime.now(tz=UTC())).update(status=-1)
 		return queryset
 
 	filter_method = update_bulk_status
@@ -377,10 +377,12 @@ class ShippingAddressViewSet(ModelViewSet):
 class PurchasedProductHistoryViewSet(ReadOnlyModelViewSet):
 	queryset = PurchasedProductHistory.objects.all()
 	serializer_class = PurchasedProductHistorySerializer
-	filter_backends = (FieldFilterBackend,)
+	filter_backends = (FieldFilterBackend, FieldOrderBackend,)
 
 	filter_fields = ['product_id']
 	filter_field_raise_exception = True
+
+	order_fields = ['-create_time']
 	
 class OrderViewSet(ModelViewSet):
 	queryset = Order.objects.filter(is_delete=False)
@@ -392,7 +394,7 @@ class OrderViewSet(ModelViewSet):
 	filter_backends = (IsOwnedByUserFilterBackend, FieldOrderBackend, MethodFilterBackend,)
 
 	def update_order_status(self, queryset):
-		queryset.filter(status=0, bulk__dead_time__lt=datetime.datetime.now()).update(status=-1)
+		queryset.filter(status=0, bulk__dead_time__lt=datetime.datetime.now(tz=UTC())).update(status=-1)
 		return queryset
 
 	filter_method = update_order_status
