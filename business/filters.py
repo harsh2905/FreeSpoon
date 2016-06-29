@@ -36,8 +36,12 @@ class MoreFilterBackend(filters.BaseFilterBackend):
 		obj_id = request.query_params.get('more', None)
 		try:
 			obj = queryset.get(pk=obj_id)
-			data = queryset.filter(user_id=obj.user.id).exclude(id=obj.id)
-			if data.count() == 0:
+			data = None
+			if hasattr(obj, 'user') and obj.user:
+				data = queryset.filter(user_id=obj.user.id).exclude(id=obj.id)
+				if data.count() == 0:
+					data = queryset.order_by('-create_time').exclude(id=obj.id)
+			else:
 				data = queryset.order_by('-create_time').exclude(id=obj.id)
 			return data
 		except ObjectDoesNotExist:
