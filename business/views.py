@@ -256,6 +256,10 @@ class payRequest(views.APIView):
 			raise BadRequestException('Order not found')
 		if order is None:
 			raise BadRequestException('Order not found')
+		if order.bulk is None:
+			raise BadRequestException('Bulk not found')
+		if order.bulk.status < 0 or order.bulk.dead_time < datetime.datetime.now(tz=UTC()):
+			raise BadRequestException('Order has been expired')
 		if hasattr(order, 'payrequest'):
 			order.payrequest.delete()
 		total_fee = order.total_fee

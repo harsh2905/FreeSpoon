@@ -3,6 +3,7 @@ import urlparse
 from django.db.models import Sum
 from rest_framework import exceptions
 
+from django.utils.timezone import UTC
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from rest_framework import serializers
@@ -582,6 +583,8 @@ class OrderCreateSerializer(serializers.Serializer):
 			bulk = Bulk.objects.get(pk=bulk_id)
 		except ObjectDoesNotExist:
 			raise BadRequestException('Bulk not found')
+		if bulk.status < 0 or bulk.dead_time < datetime.datetime.now(tz=UTC()):
+			raise BadRequestException('Bulk has been expired')
 		if bulk is None:
 			raise BadRequestException('Bulk not found')
 		dispatcher_id = validated_data.get('dispatcher_id')
