@@ -52,6 +52,11 @@ def createOrderId():
 	randomNum = '%08d' % random.randint(1, 99999999)
 	return '%s%s' % (prefix, randomNum)
 
+def createDisplayOrderId():
+	timestamp = str(now())
+	randomNum = '%04d' % random.randint(1, 9999)
+	return '%s%s' % (timestamp, randomNum)
+
 def mapToXml(d):
 	xml = ET.Element('xml')
 	for (name, value) in d.items():

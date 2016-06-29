@@ -333,7 +333,7 @@ class BulkListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModel
 	class Meta:
 		model = Bulk
 		fields = ('url', 'id', 'title', 'category', 'reseller', 'covers',
-			'dead_time', 'arrived_time', 'status',
+			'dead_time', 'arrived_time', 'status', 'receive_mode',
 			'create_time', 'location', 'participant_count')
 		#extra_kwargs = {
 		#	'url': {'view_name': 'bulk', 'lookup_field': 'id'}
@@ -456,7 +456,8 @@ class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 			'products', 'location', 'standard_time', 'dead_time', 
 			'arrived_time', 'status', 'card_title', 'card_desc',
 			'card_icon', 'card_url', 'create_time', 'participant_count',
-			'recent_obtain_name', 'recent_obtain_mob', 'recent_dispatcher')
+			'recent_obtain_name', 'recent_obtain_mob', 'recent_dispatcher',
+			'receive_mode',)
 
 	def get_participant_count(self, obj):
 		return Order.objects.filter(bulk_id=obj.pk).count()
@@ -603,7 +604,7 @@ class OrderCreateSerializer(serializers.Serializer):
 				total_fee += product.unit_price * quantity
 			except ObjectDoesNotExist:
 				raise BadRequestException('Product not found')
-		order_id = utils.createOrderId()
+		order_id = utils.createDisplayOrderId()
 		order = Order.objects.create(
 			id=order_id,
 			status=0,

@@ -351,7 +351,13 @@ class BulkViewSet(ModelViewSet):
 	pagination_field_name = 'create_time'
 	pagination_lookup_type = 'lt'
 
-	filter_backends = (filters.SearchFilter, FieldOrderBackend,)
+	filter_backends = (filters.SearchFilter, FieldOrderBackend, MethodFilterBackend,)
+
+	def update_bulk_status(self, queryset):
+		queryset.filter(dead_time__lt=datetime.datetime.now()).update(status=-1)
+		return queryset
+
+	filter_method = update_bulk_status
 
 	#search_fields = ('$products__title',)
 	search_fields = ('$product__title', '$reseller__name')
@@ -383,7 +389,13 @@ class OrderViewSet(ModelViewSet):
 	serializer_class_create = OrderCreateSerializer
 	serializer_class_update = OrderUpdateSerializer
 	permission_classes = [IsAuthenticated]
-	filter_backends = (IsOwnedByUserFilterBackend, FieldOrderBackend,)
+	filter_backends = (IsOwnedByUserFilterBackend, FieldOrderBackend, MethodFilterBackend,)
+
+	def update_order_status(self, queryset):
+		queryset.filter(status=0, bulk__dead_time__lt=datetime.datetime.now()).update(status=-1)
+		return queryset
+
+	filter_method = update_order_status
 
 	order_fields = ['-create_time']
 

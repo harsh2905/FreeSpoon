@@ -42,3 +42,9 @@ class MoreFilterBackend(filters.BaseFilterBackend):
 			return data
 		except ObjectDoesNotExist:
 			return queryset
+
+class MethodFilterBackend(filters.BaseFilterBackend):
+
+	def filter_queryset(self, request, queryset, view):
+		queryset = view.filter_method(queryset)
+		return queryset

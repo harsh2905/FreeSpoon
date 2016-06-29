@@ -87,6 +87,7 @@ class Bulk(models.Model):
 	arrived_time = models.DateTimeField()
 	status = models.IntegerField(max_length=11)
 	location = models.CharField(max_length=100)
+	receive_mode = models.IntegerField(max_length=11, default=2)
 	card_title = models.CharField(max_length=100)
 	card_desc = models.CharField(max_length=255)
 	card_icon = models.ImageField(upload_to='images/card_icon/%Y/%m/%d', blank=True)
