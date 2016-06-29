@@ -245,7 +245,7 @@ class payRequest(views.APIView):
 		openid = None
 		mob_user = request.user
 		if mob_user:
-			openid = mob_user.real_wx_openid
+			openid = mob_user.get_wx_openid(request)
 		user = mob_user.user
 		if user is None:
 			raise BadRequestException('User not found')

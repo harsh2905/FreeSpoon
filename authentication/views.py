@@ -81,10 +81,9 @@ class BindView(GenericAPIView):
 			and temp_mob_user.mob \
 			and len(temp_mob_user.mob) > 0:
 			raise AuthenticationFailed(detail='Duplicate bind')
-		social_account = temp_mob_user.wx_socialaccount
-		if mob_user and temp_mob_user and social_account:
-			social_account.user = mob_user
-			social_account.save()
+		social_accounts = temp_mob_user.wx_socialaccounts
+		if mob_user and temp_mob_user and social_accounts:
+			social_accounts.update(user=mob_user)
 			temp_mob_user.is_active = False
 			temp_mob_user.save()
 

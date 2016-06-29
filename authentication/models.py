@@ -6,7 +6,7 @@ from django.contrib.auth.models import (
 	BaseUserManager,
 	AbstractBaseUser
 )
-from allauth.socialaccount.models import SocialAccount
+from allauth.socialaccount.models import SocialAccount, SocialApp
 
 
 # Create your models here.
@@ -54,12 +54,12 @@ class MobUser(AbstractBaseUser):
 		return self.is_admin
 
 	@property
-	def wx_socialaccount(self):
-		return self.socialaccount_set.filter(provider='weixin').first()
+	def wx_socialaccounts(self):
+		return self.socialaccount_set.filter(provider='weixin')
 
 	@property
-        def real_wx_extra_data(self):
-		social_account = self.wx_socialaccount
+	def real_wx_extra_data(self):
+		social_account = self.wx_socialaccounts.first()
 		if social_account and hasattr(social_account, 'extra_data'):
 			return social_account.extra_data
 		return None
@@ -78,9 +78,15 @@ class MobUser(AbstractBaseUser):
 			return extra_data.get('headimgurl', None)
 		return None
 
-	@property
-	def real_wx_openid(self):
-		extra_data = self.real_wx_extra_data
+	def get_wx_extra_data(self, request):
+		social_app = SocialApp.objects.get_current('weixin', request)
+		social_account = self.wx_socialaccounts.filter(social_app=social_app).first()
+		if social_account and hasattr(social_account, 'extra_data'):
+			return social_account.extra_data
+		return None
+
+	def get_wx_openid(self, request):
+		extra_data = self.get_wx_extra_data(request)
 		if extra_data:
 			return extra_data.get('openid', None)
 		return None
