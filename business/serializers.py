@@ -508,9 +508,9 @@ class ShippingAddressSerializer(serializers.HyperlinkedModelSerializer):
 		if request is None:
 			raise BadRequestException('Bad Request')
 		mob_user = request.user
-		if mob_user:
-			openid = mob_user.real_wx_openid
-		user = mob_user.user
+		user = None
+		if hasattr(mob_user, 'user'):
+			user = mob_user.user
 		if user is None:
 			raise BadRequestException('User not found')
 
