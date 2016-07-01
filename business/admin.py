@@ -13,6 +13,7 @@ class BulkAdmin(admin.ModelAdmin):
 	inlines = [
 		ProductInline,
 	]
+	list_display = ('id', 'title',)
 
 class ProductDetailsInline(admin.TabularInline):
 	model = ProductDetails
@@ -56,6 +57,7 @@ class RecipeAdmin(admin.ModelAdmin):
 		StepInline,
 		IngredientInline,
 	]
+	list_display = ('id', 'name',)
 
 class DishDetailsInline(admin.TabularInline):
 	model = DishDetails

@@ -170,7 +170,8 @@ class Slide(models.Model):
 class ExhibitedProduct(models.Model):
 	exhibit = models.ForeignKey('Exhibit')
 	product = models.ForeignKey('Product')
-	cover = models.ImageField(upload_to='images/exhibited_product/%Y/%m/%d', null=True, blank=True)
+	cover_2x = models.ImageField(upload_to='images/exhibited_product/%Y/%m/%d', null=True, blank=True)
+	cover_3x = models.ImageField(upload_to='images/exhibited_product/%Y/%m/%d', null=True, blank=True)
 	seq = models.IntegerField(max_length=11)
 	stick = models.BooleanField(default=False)
 	def __unicode__(self):

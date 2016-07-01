@@ -17,6 +17,7 @@ def api_root(request, format=None):
 		'bind': reverse('bind', request=request, format=format),
 		'wxConfig': reverse('wxConfig', request=request, format=format),
 		'login': reverse('login', request=request, format=format),
+		'index': reverse('index', request=request, format=format),
 		'recipeIndex': reverse('recipeIndex', request=request, format=format),
 		'images': reverse('imageRetrieve', request=request, format=format, kwargs={'pk': 'yourkey'}),
 		'payNotify': reverse('payNotify', request=request, format=format, kwargs={'appid': 'yourappid'}),

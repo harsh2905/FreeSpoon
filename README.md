@@ -33,13 +33,11 @@ Visiting https://pillow.readthedocs.org/en/3.0.0/installation.html#linux-install
 
 ### Import & Export Data  
 
-	python manage.py dumpdata auth > /your/path/auth.json  
-	python manage.py dumpdata basic > /your/path/basic.json  
-	python manage.py loaddata /your/path/auth.json  
-	python manage.py loaddata /your/path/basic.json  
+	python manage.py dumpdata -e business.purchasedproducthistory business > /data/business.json  
+	python manage.py loaddata /your/path/business.json  
 
 ### Configuration Social App Key
 
-> Media Platform: Chrome  
+> Media Platform: Mozilla  
 > App: iOS  
 

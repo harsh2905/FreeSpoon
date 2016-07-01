@@ -7,6 +7,7 @@ ADD https://github.com/codemeow5/software/raw/master/ubt_sources_list_aliyun.txt
 RUN apt-get update && apt-get install wget -y
 
 RUN apt-get install nginx -y
+RUN sed -i '/^http {/a\\tclient_max_body_size 10m;' /etc/nginx/nginx.conf
 RUN rm /etc/nginx/sites-enabled/default -f
 COPY reverse /etc/nginx/sites-available/
 RUN ln -s /etc/nginx/sites-available/reverse /etc/nginx/sites-enabled/
