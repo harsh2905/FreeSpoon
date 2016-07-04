@@ -1,15 +1,12 @@
 web:
   build: web
-  #ports:
-  #  - "80:80"
 nginx:
   build: nginx
   links:
     - web:web
     - freespoon:freespoon
-    - wx:wx
   environment:
-    - NGINX_DOMAIN=yourdomain
+    - DOMAINNAME=yourdomain
   ports:
     - "80:80"
 db:
@@ -38,10 +35,3 @@ freespoon:
     - APPSECRET=yourappsecret
     - MCHID=yourmchid
     - APPKEY=yourappkey
-  ports:
-    #- "80:80"
-wx:
-  build: wx
-  ports:
-    - "25:22"
-    #- "8081:80"

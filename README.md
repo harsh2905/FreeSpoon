@@ -4,23 +4,63 @@
 
 A group purchase website based on WeChat.
 
-### Install
+## Development Enviroment Install
 
-	sudo apt-get install mysql-server mysql-client -y  
-	sudo apt-get install python-pip python-dev -y  
-	sudo pip install django  
-	sudo apt-get install libmysqlclient-dev -y  
-	sudo pip install MySQL-python  
-	sudo pip install qrcode  
-	sudo pip install Pillow  
-	sudo pip install openpyxl  
+### Prerequisites  
 
-### About install Pillow
+	sudo wget -qO- https://get.docker.com/ | sh  
+	sudo pip install docker-compose  
 
-	$ sudo apt-get install libtiff5-dev libjpeg8-dev zlib1g-dev \  
-		libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk  
+### Copy config files  
 
-Visiting https://pillow.readthedocs.org/en/3.0.0/installation.html#linux-installation  
+	cp docker-compose.yml.development docker-compose.yml  
+	cp smbkeys.template smbkeys  
+	cp smbusers.template smbusers  
+	cp sshkeys.template sshkeys  
+	cp sshkeys web/sshkeys
+
+### Download git repository  
+
+	git clone https://github.com/cuilyGitHub/FreeSpoonUI /your/path/FreeSpoonUI  
+
+### Modify config  
+
+> docker-compose.yml  
+
+	web:  
+	  volumes:  
+	    - /your/path:/FreeSpoonUI  
+	nginx:  
+	  environment:  
+	    - DOMAINNAME=yourdomain  
+	db:  
+	  environment:  
+	    - MYSQL_ROOT_PASSWORD=123456  
+	freespoon:  
+	  volumes:  
+	    - /your/path:/FreeSpoon  
+	  environment:  
+	    ...  
+
+### Migrate data  
+
+Copy data json files to /freespoon_data  
+Copy media files to /freespoon_media  
+
+### Run  
+
+> freespoon  
+
+	python manage.py migrate  
+	export ENV...   
+	mysql -hdb -uroot -p123456 -DFreeSpoon < ./views.sql  
+	python manage.py createsuperuser  
+	python manage.py runserver 0.0.0.0:80  
+
+> web  
+
+	npm install  
+	gulp run  
 
 ### Create Database
 

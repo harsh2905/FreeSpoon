@@ -5,16 +5,13 @@ web:
   ports:
     - "35729:35729"
     - "24:22"
-    #- "80:80"
 nginx:
   build: nginx
   links:
     - web:web
     - freespoon:freespoon
-    - wx:wx
-    - cookbook:cookbook
   environment:
-    - NGINX_DOMAIN=yourdomain
+    - DOMAINNAME=yourdomain
   ports:
     - "80:80"
 db:
@@ -37,16 +34,17 @@ freespoon:
   links:
     - db:db
   ports:
-    #- "80:80"
     - "23:22"
     - "139:139"
     - "455:455"
     - "137/udp:137/udp"
     - "138/udp:138/udp"
-wx:
-  build: wx
-  volumes:
-    - /your/path:/WeChatAPI
-  ports:
-    - "25:22"
-    #- "8081:80"
+  environment:
+    - SMSACCOUNTSID=
+    - SMSAUTHTOKEN=
+    - SMSAPPID=
+    - SMSTEMPLATEID=
+    - SMSRESTHOST=
+    - DOMAINNAME=
+    - DBHOST=db
+    - DBPASSWD=123456

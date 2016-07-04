@@ -21,7 +21,7 @@ EXPOSE 80
 RUN echo Asia/Shanghai > /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata
 
 RUN mkdir /FreeSpoon
-COPY / /FreeSpoon/
+COPY . /FreeSpoon/
 WORKDIR /FreeSpoon
 
 ENTRYPOINT /bin/bash ./wait-for-it.sh db:3306 -- python manage.py migrate && \
