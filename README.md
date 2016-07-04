@@ -47,6 +47,18 @@ A group purchase website based on WeChat.
 Copy data json files to /freespoon_data  
 Copy media files to /freespoon_media  
 
+### Run  
+
+> freespoon  
+
+	python manage.py migrate  
+	export ENV...   
+	python manage.py runserver 0.0.0.0:80  
+
+> web  
+
+	gulp run  
+
 ### Create Database
 
 	create database FreeSpoon character set utf8;
