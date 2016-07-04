@@ -53,6 +53,7 @@ Copy media files to /freespoon_media
 
 	python manage.py migrate  
 	export ENV...   
+	mysql -hdb -uroot -p123456 -DFreeSpoon < ./views.sql  
 	python manage.py runserver 0.0.0.0:80  
 
 > web  
