@@ -58,7 +58,6 @@ COPY smbkeys /
 COPY samba.sh /
 RUN /bin/bash /samba.sh
 
-#CMD ["/usr/sbin/sshd", "-D"]
 ENTRYPOINT smbd && \
 	/usr/sbin/sshd -D
 

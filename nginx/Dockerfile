@@ -11,15 +11,10 @@ RUN sed -i '/^http {/a\\tclient_max_body_size 10m;' /etc/nginx/nginx.conf
 RUN rm /etc/nginx/sites-enabled/default -f
 COPY reverse /etc/nginx/sites-available/
 RUN ln -s /etc/nginx/sites-available/reverse /etc/nginx/sites-enabled/
-#COPY config.sh /
-#RUN chmod +x /config.sh
-#RUN ./config.sh
 
 EXPOSE 80
 
 RUN echo Asia/Shanghai > /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata
 
-#CMD ["nginx", "-g", "daemon off;"]
-
-ENTRYPOINT sed -i "/yourdomain/s/yourdomain/${NGINX_DOMAIN}/g" /etc/nginx/sites-available/reverse && \
+ENTRYPOINT sed -i "/yourdomain/s/yourdomain/${DOMAINNAME}/g" /etc/nginx/sites-available/reverse && \
 	/usr/sbin/nginx -g "daemon off;"
