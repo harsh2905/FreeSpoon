@@ -11,7 +11,7 @@ nginx:
     - web:web
     - freespoon:freespoon
   environment:
-    - NGINX_DOMAIN=yourdomain
+    - DOMAINNAME=yourdomain
   ports:
     - "80:80"
 db:

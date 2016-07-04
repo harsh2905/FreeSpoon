@@ -28,7 +28,7 @@ RUN apt-get install vim -y
 
 RUN apt-get install -y openssh-server
 RUN mkdir /var/run/sshd
-COPY ../sshkeys /
+ADD sshkeys /
 RUN cat /sshkeys | chpasswd
 
 RUN sed -ri 's/^PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config

@@ -42,7 +42,7 @@ RUN apt-get install mysql-client -y
 
 RUN apt-get install -y openssh-server
 RUN mkdir /var/run/sshd
-COPY sshkeys /
+ADD sshkeys /
 RUN cat /sshkeys | chpasswd
 
 RUN sed -ri 's/^PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
@@ -53,12 +53,16 @@ EXPOSE 22
 # Samba
 
 RUN apt-get install samba -y
-COPY smbusers /etc/samba/
-COPY smbkeys /
-COPY samba.sh /
+ADD smbusers /etc/samba/
+ADD smbkeys /
+ADD samba.sh /
 RUN /bin/bash /samba.sh
 
-ENTRYPOINT smbd && \
+# Third-party components  
+
+ADD setup.sh /
+
+ENTRYPOINT /bin/bash /setup.sh && smbd && \
 	/usr/sbin/sshd -D
 
 
