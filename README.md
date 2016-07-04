@@ -59,6 +59,7 @@ Copy media files to /freespoon_media
 
 > web  
 
+	npm install  
 	gulp run  
 
 ### Create Database
