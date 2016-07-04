@@ -4,10 +4,48 @@
 
 A group purchase website based on WeChat.
 
-### Install
+## Development Enviroment Install
+
+### Prerequisites  
 
 	sudo wget -qO- https://get.docker.com/ | sh  
 	sudo pip install docker-compose  
+
+### Copy config files  
+
+	cp docker-compose.yml.development docker-compose.yml  
+	cp smbkeys.template smbkeys  
+	cp smbusers.template smbusers  
+	cp sshkeys.template sshkeys  
+	cp sshkeys web/sshkeys
+
+### Download git repository  
+
+	git clone https://github.com/cuilyGitHub/FreeSpoonUI /your/path/FreeSpoonUI  
+
+### Modify config  
+
+> docker-compose.yml  
+
+	web:  
+	  volumes:  
+	    - /your/path:/FreeSpoonUI  
+	nginx:  
+	  environment:  
+	    - DOMAINNAME=yourdomain  
+	db:  
+	  environment:  
+	    - MYSQL_ROOT_PASSWORD=123456  
+	freespoon:  
+	  volumes:  
+	    - /your/path:/FreeSpoon  
+	  environment:  
+	    ...  
+
+### Migrate data  
+
+Copy data json files to /freespoon_data  
+Copy media files to /freespoon_media  
 
 ### Create Database
 
