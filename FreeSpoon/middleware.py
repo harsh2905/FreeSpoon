@@ -9,6 +9,7 @@ from django.utils.functional import SimpleLazyObject
 from django.contrib import auth
 
 from django.contrib.messages.storage import default_storage
+from django.contrib.auth.models import AnonymousUser
 
 
 class MessageMiddleware(object):
@@ -94,7 +95,10 @@ class SessionMiddleware(object):
 
 def get_user(request):
     if not hasattr(request, '_cached_user'):
-        request._cached_user = auth.get_user(request)
+        if request.path.startswith('/api/'):
+            request._cached_user = AnonymousUser()
+        else:
+            request._cached_user = auth.get_user(request)
     return request._cached_user
 
 class AuthenticationMiddleware(object):
