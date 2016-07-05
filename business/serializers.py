@@ -507,13 +507,13 @@ class ShippingAddressSerializer(serializers.HyperlinkedModelSerializer):
 	def create(self, validated_data):
 		request = self.context.get('request', None)
 		if request is None:
-			raise BadRequestException('Bad Request')
+			raise BadRequestException(detail='Bad Request')
 		mob_user = request.user
 		user = None
 		if hasattr(mob_user, 'user'):
 			user = mob_user.user
 		if user is None:
-			raise BadRequestException('User not found')
+			raise BadRequestException(detail='User not found')
 
 		name = validated_data.get('name')
 		mob = validated_data.get('mob')
@@ -572,29 +572,29 @@ class OrderCreateSerializer(serializers.Serializer):
 	def create(self, validated_data):
 		request = self.context.get('request', None)
 		if request is None:
-			raise BadRequestException('Bad Request')
+			raise BadRequestException(detail='Bad Request')
 		mob_user = request.user
 		user = mob_user.user
 		if user is None:
-			raise BadRequestException('User not found')
+			raise BadRequestException(detail='User not found')
 		bulk_id = validated_data.get('bulk_id')
 		bulk = None
 		try:
 			bulk = Bulk.objects.get(pk=bulk_id)
 		except ObjectDoesNotExist:
-			raise BadRequestException('Bulk not found')
+			raise BadRequestException(detail='Bulk not found')
 		if bulk.status < 0 or bulk.dead_time < datetime.datetime.now(tz=UTC()):
-			raise BadRequestException('Bulk has been expired')
+			raise BadRequestException(detail='Bulk has been expired')
 		if bulk is None:
-			raise BadRequestException('Bulk not found')
+			raise BadRequestException(detail='Bulk not found')
 		dispatcher_id = validated_data.get('dispatcher_id')
 		dispatcher = None
 		try:
 			dispatcher = Dispatcher.objects.get(pk=dispatcher_id)
 		except ObjectDoesNotExist:
-			raise BadRequestException('Dispatcher not found')
+			raise BadRequestException(detail='Dispatcher not found')
 		if dispatcher is None:
-			raise BadRequestException('Dispatcher not found')
+			raise BadRequestException(detail='Dispatcher not found')
 		obtain_name = validated_data.get('obtain_name')
 		obtain_mob = validated_data.get('obtain_mob')
 		goods = validated_data.get('goods')
@@ -606,7 +606,7 @@ class OrderCreateSerializer(serializers.Serializer):
 				product = Product.objects.get(pk=product_id)
 				total_fee += product.unit_price * quantity
 			except ObjectDoesNotExist:
-				raise BadRequestException('Product not found')
+				raise BadRequestException(detail='Product not found')
 		order_id = utils.createDisplayOrderId()
 		bulk.seq += 1
 		order = Order.objects.create(
@@ -867,7 +867,7 @@ class RecipeUpdateSerializer(serializers.Serializer):
 	def update(self, instance, validated_data):
 		request = self.context.get('request', None)
 		if request is None:
-			raise BadRequestException('Bad Request')
+			raise BadRequestException(detail='Bad Request')
 		instance.name = validated_data.get('name', instance.name)
 		instance.desc = validated_data.get('desc', instance.desc)
 		cover_md5 = validated_data.get('cover', None)
@@ -946,7 +946,7 @@ class RecipeUpdateSerializer(serializers.Serializer):
 					for tip in tips:
 						instance.tips.create(plain=tip)
 		except IntegrityError:
-			raise BadRequestException('Update failed')
+			raise BadRequestException(detail='Update failed')
 		instance.save()
 		return instance
 
@@ -965,11 +965,11 @@ class RecipeCreateSerializer(serializers.Serializer):
 	def create(self, validated_data):
 		request = self.context.get('request', None)
 		if request is None:
-			raise BadRequestException('Bad Request')
+			raise BadRequestException(detail='Bad Request')
 		mob_user = request.user
 		user = mob_user.user
 		if user is None:
-			raise BadRequestException('User not found')
+			raise BadRequestException(detail='User not found')
 		name = validated_data.get('name')
 		desc = validated_data.get('desc')
 		cover_md5 = validated_data.get('cover')
@@ -1014,9 +1014,9 @@ class RecipeCreateSerializer(serializers.Serializer):
 				recipe.tips.create(plain=tip)
 			return recipe
 		except Image.DoesNotExist:
-			raise BadRequestException('Image does not exist')
+			raise BadRequestException(detail='Image does not exist')
 		except IntegrityError:
-			raise BadRequestException('Create failed')
+			raise BadRequestException(detail='Create failed')
 
 class RecipeSimpleSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	create_time = TimestampField()
@@ -1107,7 +1107,7 @@ class DishUpdateSerializer(serializers.Serializer):
 	def update(self, instance, validated_data):
 		request = self.context.get('request', None)
 		if request is None:
-			raise BadRequestException('Bad Request')
+			raise BadRequestException(detail='Bad Request')
 		instance.name = validated_data.get('name', instance.name)
 		instance.desc = validated_data.get('desc', instance.desc)
 		cover_md5 = validated_data.get('cover', None)
@@ -1158,7 +1158,7 @@ class DishUpdateSerializer(serializers.Serializer):
 					for tip in tips:
 						instance.tips.create(plain=tip)
 		except IntegrityError:
-			raise BadRequestException('Update failed')
+			raise BadRequestException(detail='Update failed')
 		return instance
 
 class DishCreateSerializer(serializers.Serializer):
@@ -1175,11 +1175,11 @@ class DishCreateSerializer(serializers.Serializer):
 	def create(self, validated_data):
 		request = self.context.get('request', None)
 		if request is None:
-			raise BadRequestException('Bad Request')
+			raise BadRequestException(detail='Bad Request')
 		mob_user = request.user
 		user = mob_user.user
 		if user is None:
-			raise BadRequestException('User not found')
+			raise BadRequestException(detail='User not found')
 		recipe_id = validated_data.get('recipe')
 		name = validated_data.get('name')
 		desc = validated_data.get('desc')
@@ -1216,11 +1216,11 @@ class DishCreateSerializer(serializers.Serializer):
 				dish.tips.create(plain=tip)
 			return dish
 		except Recipe.DoesNotExist:
-			raise BadRequestException('Recipe does not exist')
+			raise BadRequestException(detail='Recipe does not exist')
 		except Image.DoesNotExist:
-			raise BadRequestException('Image does not exist')
+			raise BadRequestException(detail='Image does not exist')
 		except IntegrityError:
-			raise BadRequestException('Create failed')
+			raise BadRequestException(detail='Create failed')
 
 class DishSimpleSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	create_time = TimestampField()

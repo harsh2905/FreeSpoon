@@ -165,10 +165,10 @@ def wxConfig(request):
 
 	jsApiList = request.data.get('jsApiList', None)
 	if jsApiList is None:
-		raise BadRequestException('jsApiList is required')
+		raise BadRequestException(detail='jsApiList is required')
 	url = request.data.get('url', None)
 	if url is None:
-		raise BadRequestException('url is required')
+		raise BadRequestException(detail='url is required')
 	wxConfig = WxApp.get_current(request).createWXConfig(url, jsApiList)
 	return Response(wxConfig)
 
@@ -197,7 +197,7 @@ def payNotify(request, appid):
 	try:
 		payrequest = PayRequest.objects.get(third_party_order_id=order_id)
 	except ObjectDoesNotExist:
-		raise BadRequestException('Order not found')
+		raise BadRequestException(detail='Order not found')
 	if payrequest is None:
 		error['return_msg'] = 'Error'
 		xml = utils.mapToXml(error)
@@ -248,18 +248,18 @@ class payRequest(views.APIView):
 			openid = mob_user.get_wx_openid(request)
 		user = mob_user.user
 		if user is None:
-			raise BadRequestException('User not found')
+			raise BadRequestException(detail='User not found')
 		order = None
 		try:
 			order = Order.objects.get(pk=order_id)
 		except ObjectDoesNotExist:
-			raise BadRequestException('Order not found')
+			raise BadRequestException(detail='Order not found')
 		if order is None:
-			raise BadRequestException('Order not found')
+			raise BadRequestException(detail='Order not found')
 		if order.bulk is None:
-			raise BadRequestException('Bulk not found')
+			raise BadRequestException(detail='Bulk not found')
 		if order.bulk.status < 0 or order.bulk.dead_time < datetime.datetime.now(tz=UTC()):
-			raise BadRequestException('Order has been expired')
+			raise BadRequestException(detail='Order has been expired')
 		if hasattr(order, 'payrequest'):
 			order.payrequest.delete()
 		total_fee = order.total_fee
@@ -316,7 +316,7 @@ class payRequest(views.APIView):
 			notify_url=reverse('payNotify', request=request, kwargs={'appid': WxApp.get_current(request).appid})
 		)
 		if prepay_id is None:
-			raise BadRequestException('Failed to create pre pay order')
+			raise BadRequestException(detail='Failed to create pre pay order')
 		data = {
 			'require_third_party_payment': require_third_party_payment,
 			'pay_request_json': WxApp.get_current(request).createPayRequestJson(prepay_id),
@@ -407,7 +407,7 @@ class OrderViewSet(ModelViewSet):
 
 	def perform_destroy(self, instance):
 		if instance.status > 1:
-			raise BadRequestException('Refused to destroy order')
+			raise BadRequestException(detail='Refused to destroy order')
 		if instance.status > 0:
 			instance.user.balance += instance.total_fee
 			instance.user.save()
@@ -513,6 +513,6 @@ def image_retrieve(request, pk):
 def sms(request, mob):
 	if mob and SmsApp.send(mob):
 		return Response(status=status.HTTP_204_NO_CONTENT)
-	raise BadRequestException('SMS sending failure')
+	raise BadRequestException(detail='SMS sending failure')
 
 	

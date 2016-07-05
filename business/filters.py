@@ -8,7 +8,7 @@ class IsOwnedByUserFilterBackend(filters.BaseFilterBackend):
 	def filter_queryset(self, request, queryset, view):
 		mob_user = request.user
 		if mob_user is None:
-			raise BadRequestException('Mob user not found')
+			raise BadRequestException(detail='Mob user not found')
 		return queryset.filter(user=mob_user.user)
 
 class FieldFilterBackend(filters.BaseFilterBackend):
@@ -18,7 +18,7 @@ class FieldFilterBackend(filters.BaseFilterBackend):
 		for filter_field in view.filter_fields:
 			condition = request.query_params.get(filter_field, None)
 			if view.filter_field_raise_exception and condition is None:
-				raise BadRequestException('%s is required' % filter_field)
+				raise BadRequestException(detail='%s is required' % filter_field)
 			if condition is not None:
 				conditions[filter_field] = condition
 		queryset = queryset.filter(**conditions)
