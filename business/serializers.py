@@ -391,7 +391,7 @@ class ProductListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedMo
 		model = Product
 		fields = ('url', 'id', 'title', 'desc', 'unit_price', 'market_price',
 			'spec', 'spec_desc', 'cover', 'create_time', 'details',
-			'participant_count', 'purchased_count', 'tag',
+			'participant_count', 'purchased_count', 'tag', 'tag_color',
 			'participant_avatars', 'history')
 
 	def get_participant_count(self, obj):
@@ -608,6 +608,7 @@ class OrderCreateSerializer(serializers.Serializer):
 			except ObjectDoesNotExist:
 				raise BadRequestException('Product not found')
 		order_id = utils.createDisplayOrderId()
+		bulk.seq += 1
 		order = Order.objects.create(
 			id=order_id,
 			status=0,
@@ -617,8 +618,10 @@ class OrderCreateSerializer(serializers.Serializer):
 			dispatcher_id=dispatcher_id,
 			user_id=user.id,
 			obtain_name=obtain_name,
-			obtain_mob=obtain_mob
+			obtain_mob=obtain_mob,
+			seq=bulk.seq
 		)
+		bulk.save()
 		for _ in goods:
 			product_id = _.get('product_id')
 			quantity = _.get('quantity')
@@ -656,18 +659,34 @@ class OrderListSerializer(serializers.HyperlinkedModelSerializer):
 			if hasattr(g.product.cover, 'url') 
 			else '', obj.goods_set.all()))
 
-class OrderSerializer(serializers.HyperlinkedModelSerializer):
+class PayRequestModelSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
+
+	class Meta:
+		model = PayRequest
+		fields = ('third_party_order_id', 'third_party_fee', 
+				'balance_fee', 'use_balance', 'status')
+
+class OrderSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	dispatcher = DispatcherSerializer()
 	create_time = TimestampField()
 	goods = GoodsSerializer(source='goods_set', many=True)
 	wx_pay_request = serializers.SerializerMethodField()
-	
+	payrequest = PayRequestModelSerializer()
+	card_title = serializers.CharField(source='bulk.card_title')
+	card_desc = serializers.CharField(source='bulk.card_desc')
+	card_icon = serializers.CharField(source='bulk.card_icon')
+	card_url = serializers.SerializerMethodField()
+
 	class Meta:
 		model = Order
 		fields = ('url', 'id', 'create_time', 'dispatcher', 
-			'status', 'freight', 'total_fee',
-			'obtain_name', 'obtain_mob', 'goods',
-			'wx_pay_request',)
+			'status', 'freight', 'total_fee', 'obtain_name', 
+			'obtain_mob', 'goods', 'wx_pay_request', 'payrequest',
+			'card_title', 'card_desc', 'card_icon', 'card_url',
+			'seq')
+
+	def get_card_url(self, obj):
+		return config.CARD_URL % obj.bulk.id
 
 	def get_wx_pay_request(self, obj):
 		request = self.context.get('request', None)
@@ -748,7 +767,7 @@ class ProductExhibitSerializer(RemoveNullSerializerMixIn, serializers.Hyperlinke
 		model = Product
 		fields = ('url', 'id', 'title', 'desc', 'unit_price', 'market_price',
 			'spec', 'spec_desc', 'cover', 'create_time', 'details',
-			'participant_count', 'purchased_count', 'tag', 'bulk_url')
+			'participant_count', 'purchased_count', 'tag', 'tag_color', 'bulk_url')
 
 	def get_participant_count(self, obj):
 		return Goods.objects.filter(product_id=obj.pk).count()
