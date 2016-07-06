@@ -396,6 +396,11 @@ class OrderViewSet(ModelViewSet):
 	serializer_class_update = OrderUpdateSerializer
 	permission_classes = [IsAuthenticated]
 	filter_backends = (IsOwnedByUserFilterBackend, FieldOrderBackend, MethodFilterBackend,)
+	
+	pagination_class = TimestampPagination
+
+	pagination_field_name = 'create_time'
+	pagination_lookup_type = 'lt'
 
 	def update_order_status(self, queryset):
 		queryset.filter(status=0, bulk__dead_time__lt=datetime.datetime.now(tz=UTC())).update(status=-1)

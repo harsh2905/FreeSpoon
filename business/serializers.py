@@ -414,6 +414,8 @@ class ProductListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedMo
 					if request:
 						url = request.build_absolute_uri(url)
 					avatars[user.pk] = url
+				else:
+					avatars[user.pk] = ''
 		return avatars.values()[:6]
 
 	def get_history(self, obj):
@@ -641,10 +643,19 @@ class OrderListSerializer(serializers.HyperlinkedModelSerializer):
 	create_time = TimestampField()
 	covers = serializers.SerializerMethodField(method_name='get_goods_covers')
 	count = serializers.SerializerMethodField(method_name='get_goods_count')
+	card_title = serializers.CharField(source='bulk.card_title')
+	card_desc = serializers.CharField(source='bulk.card_desc')
+	card_icon = serializers.CharField(source='bulk.card_icon')
+	card_url = serializers.SerializerMethodField()
+
 	class Meta:
 		model = Order
 		fields = ('url', 'id', 'create_time', 'reseller', 
-			'status', 'total_fee', 'covers', 'count',)
+			'status', 'total_fee', 'covers', 'count', 'seq',
+			'card_title', 'card_desc', 'card_icon', 'card_url',)
+
+	def get_card_url(self, obj):
+		return config.CARD_URL % obj.bulk.id
 
 	def get_goods_count(self, obj):
 		result = Goods.objects.filter(order_id=obj.pk).aggregate(Sum('quantity'))
@@ -1059,13 +1070,10 @@ class RecipeSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSe
 		recipes = None
 		if hasattr(obj, 'user') and obj.user:
 			recipes = obj.user.recipe_set.exclude(id=obj.id)[:3]
-			if recipes.count() == 0:
-				recipes = Recipe.objects.order_by('-create_time').exclude(id=obj.id)[:3]
-		else:
-			recipes = Recipe.objects.order_by('-create_time').exclude(id=obj.id)[:3]
-		serializer = RecipeSimpleSerializer(data=recipes, many=True, context={'request': request})
-		serializer.is_valid()
-		return serializer.data
+			serializer = RecipeSimpleSerializer(data=recipes, many=True, context={'request': request})
+			serializer.is_valid()
+			return serializer.data
+		return []
 
 
 
