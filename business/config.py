@@ -19,7 +19,9 @@ FETCH_JSAPI_TICKET_URL = \
 UNIFIEDORDER_URL = \
 	'https://api.mch.weixin.qq.com/pay/unifiedorder'
 
-CARD_URL = '%s/api/business/redirect?state=%s' % (DOMAIN_URL, '%s')
+CARD_BULK_URL = '%s/api/business/redirect/index?state=%s' % (DOMAIN_URL, '%s')
+CARD_RECIPE_URL = '%s/api/business/redirect/recipes?state=%s' % (DOMAIN_URL, '%s')
+CARD_DISH_URL = '%s/api/business/redirect/dishs?state=%s' % (DOMAIN_URL, '%s')
 
 # Sms
 

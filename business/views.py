@@ -197,7 +197,10 @@ def payNotify(request, appid):
 	try:
 		payrequest = PayRequest.objects.get(third_party_order_id=order_id)
 	except ObjectDoesNotExist:
-		raise BadRequestException(detail='Order not found')
+		error['return_msg'] = 'Error'
+		xml = utils.mapToXml(error)
+		return HttpResponse(xml,
+			content_type='text/xml')
 	if payrequest is None:
 		error['return_msg'] = 'Error'
 		xml = utils.mapToXml(error)

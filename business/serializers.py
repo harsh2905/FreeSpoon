@@ -498,7 +498,7 @@ class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 		return None
 
 	def get_card_url(self, obj):
-		return config.CARD_URL % obj.id
+		return config.CARD_BULK_URL % obj.id
 
 
 class ShippingAddressSerializer(serializers.HyperlinkedModelSerializer):
@@ -647,15 +647,17 @@ class OrderListSerializer(serializers.HyperlinkedModelSerializer):
 	card_desc = serializers.CharField(source='bulk.card_desc')
 	card_icon = serializers.CharField(source='bulk.card_icon')
 	card_url = serializers.SerializerMethodField()
+	bulk_status = serializers.IntegerField(source='bulk.status')
 
 	class Meta:
 		model = Order
 		fields = ('url', 'id', 'create_time', 'reseller', 
 			'status', 'total_fee', 'covers', 'count', 'seq',
-			'card_title', 'card_desc', 'card_icon', 'card_url',)
+			'card_title', 'card_desc', 'card_icon', 'card_url',
+			'bulk_status')
 
 	def get_card_url(self, obj):
-		return config.CARD_URL % obj.bulk.id
+		return config.CARD_BULK_URL % obj.bulk.id
 
 	def get_goods_count(self, obj):
 		result = Goods.objects.filter(order_id=obj.pk).aggregate(Sum('quantity'))
@@ -687,6 +689,7 @@ class OrderSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSer
 	card_desc = serializers.CharField(source='bulk.card_desc')
 	card_icon = serializers.CharField(source='bulk.card_icon')
 	card_url = serializers.SerializerMethodField()
+	bulk_status = serializers.IntegerField(source='bulk.status')
 
 	class Meta:
 		model = Order
@@ -694,10 +697,10 @@ class OrderSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSer
 			'status', 'freight', 'total_fee', 'obtain_name', 
 			'obtain_mob', 'goods', 'wx_pay_request', 'payrequest',
 			'card_title', 'card_desc', 'card_icon', 'card_url',
-			'seq')
+			'seq', 'bulk_status')
 
 	def get_card_url(self, obj):
-		return config.CARD_URL % obj.bulk.id
+		return config.CARD_BULK_URL % obj.bulk.id
 
 	def get_wx_pay_request(self, obj):
 		request = self.context.get('request', None)
@@ -1051,13 +1054,14 @@ class RecipeSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSe
 	step_num = serializers.SerializerMethodField()
 	cover = serializers.ImageField(source='cover.image')
 	more = serializers.SerializerMethodField()
+	card_url =serializers.SerializerMethodField()
 
 	class Meta:
 		model = Recipe
 		fields = ('url', 'id', 'name', 'user', 'desc', 'cover', 
 			'status', 'tag', 'tips', 'time', 'steps',
 			'dish_num', 'ingredients', 'step_num',
-			'create_time', 'more')
+			'create_time', 'more', 'card_url')
 
 	def get_dish_num(self, obj):
 		return Dish.objects.filter(recipe=obj).count()
@@ -1074,6 +1078,9 @@ class RecipeSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSe
 			serializer.is_valid()
 			return serializer.data
 		return []
+
+	def get_card_url(self, obj):
+		return config.CARD_RECIPE_URL % obj.id
 
 
 
@@ -1251,12 +1258,13 @@ class DishSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 	step_num = serializers.SerializerMethodField()
 	cover = serializers.ImageField(source='cover.image')
 	more = serializers.SerializerMethodField()
+	card_url =serializers.SerializerMethodField()
 
 	class Meta:
 		model = Dish
 		fields = ('url', 'id', 'name', 'user', 'desc', 'cover',
 			'status', 'tag', 'tips', 'create_time', 'recipe',
-			'steps', 'step_num', 'more')
+			'steps', 'step_num', 'more', 'card_url')
 
 	def get_step_num(self, obj):
 		return obj.dishdetails_set.count()
@@ -1273,6 +1281,9 @@ class DishSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 		serializer = DishSimpleSerializer(data=dishs, many=True, context={'request': request})
 		serializer.is_valid()
 		return serializer.data
+
+	def get_card_url(self, obj):
+		return config.CARD_DISH_URL % obj.id
 
 
 class ImageSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
