@@ -74,6 +74,7 @@ Copy media files to /freespoon_media
 ### Import & Export Data  
 
 	python manage.py dumpdata -e business.purchasedproducthistory business > /data/business.json  
+	python manage.py dumpdata authentication > /data/authentication.json  
 	python manage.py loaddata /your/path/business.json  
 
 ### Configuration Social App Key
