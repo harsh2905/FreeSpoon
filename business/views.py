@@ -118,14 +118,26 @@ class BindView(
 		if not mob_user:
 			return
 		if user:
-			user.name = mob_user.real_wx_nickname
-			user.save()
+			try:
+				user.name = mob_user.real_wx_nickname
+				user.save()
+			except Exception, e:
+				user.name = '#'
+				user.save()
 		if reseller:
-			reseller.name = mob_user.real_wx_nickname
-			reseller.save()
+			try:
+				reseller.name = mob_user.real_wx_nickname
+				reseller.save()
+			except Exception, e:
+				reseller.name = '#'
+				reseller.save()
 		if dispatcher:
-			dispatcher.name = mob_user.real_wx_nickname
-			dispatcher.save()
+			try:
+				dispatcher.name = mob_user.real_wx_nickname
+				dispatcher.save()
+			except Exception, e:
+				dispatcher.name = '#'
+				dispatcher.save()
 
 
 	def get_response(self):
