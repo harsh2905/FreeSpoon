@@ -645,7 +645,7 @@ class OrderListSerializer(serializers.HyperlinkedModelSerializer):
 	count = serializers.SerializerMethodField(method_name='get_goods_count')
 	card_title = serializers.CharField(source='bulk.card_title')
 	card_desc = serializers.CharField(source='bulk.card_desc')
-	card_icon = serializers.CharField(source='bulk.card_icon')
+	card_icon = serializers.ImageField(source='bulk.card_icon')
 	card_url = serializers.SerializerMethodField()
 	bulk_status = serializers.IntegerField(source='bulk.status')
 
@@ -687,7 +687,7 @@ class OrderSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSer
 	payrequest = PayRequestModelSerializer()
 	card_title = serializers.CharField(source='bulk.card_title')
 	card_desc = serializers.CharField(source='bulk.card_desc')
-	card_icon = serializers.CharField(source='bulk.card_icon')
+	card_icon = serializers.ImageField(source='bulk.card_icon')
 	card_url = serializers.SerializerMethodField()
 	bulk_status = serializers.IntegerField(source='bulk.status')
 
