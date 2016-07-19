@@ -22,8 +22,8 @@ from .views import *
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^api/$', meta),
-    url(r'^api/root/$', api_root),
-    url(r'^api/auth/', include('authentication.urls')),
-    url(r'^api/business/', include('business.urls')),
+    url(r'^v1/$', meta),
+    url(r'^v1/root/$', api_root),
+    url(r'^v1/auth/', include('authentication.urls')),
+    url(r'^v1/business/', include('business.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
