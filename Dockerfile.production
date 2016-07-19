@@ -16,7 +16,7 @@ RUN pip install qrcode
 RUN pip install Pillow
 RUN pip install openpyxl
 
-RUN apt-get install git -y
+RUN apt-get install curl git -y
 RUN apt-get install apache2 apache2-dev -y
 RUN pip install mod_wsgi
 RUN apt-get install libapache2-mod-python libapache2-mod-wsgi -y
@@ -53,6 +53,7 @@ RUN git clone https://github.com/cuilyGitHub/FreeSpoonUI.git /FreeSpoonUI
 WORKDIR /FreeSpoonUI
 
 RUN curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+RUN apt-get install node -y
 RUN apt-get install nodejs -y
 RUN npm install
 RUN npm install -g gulp
@@ -75,8 +76,8 @@ RUN ln -s /etc/apache2/sites-available/wsgi.conf /etc/apache2/sites-enabled/
 
 ENTRYPOINT sed -i "/yourdomain/s/yourdomain/${DOMAINNAME}/g" /etc/apache2/sites-available/wsgi.conf && \
 		/bin/bash ./wait-for-it.sh db:3306 -- python manage.py migrate && \
-		mysql -h${DBHOST} -uroot -p${DBPASSWD} -DFreeSpoon < /FreeSpoon/views.sql
+		(mysql -h${DBHOST} -uroot -p${DBPASSWD} -DFreeSpoon < /FreeSpoon/views.sql) && \
 		python manage.py collectstatic --noinput && \
 		/bin/bash load_data.sh && \
-		/usr/sbin/apache2ctl -D FOREGROUND
+		/usr/sbin/apache2ctl -DFOREGROUND
 
