@@ -62,7 +62,38 @@ Copy media files to /freespoon_media
 	npm install  
 	gulp run  
 
-### Create Database
+## Production Enviroments Install  
+
+### Download project sources  
+
+	git clone --recursive https://github.com/codemeow5/FreeSpoon.git  /usr/local/FreeSpoon  
+
+### Copy config files  
+
+	cp docker-compose.yml.production docker-compose.yml  
+	cp Dockerfile.production Dockerfile  
+
+### Configuration  
+
+> docker-compose.yml  
+
+	db:  
+	  environment:  
+	    - MYSQL_ROOT_PASSWORD=123456  
+	freespoon:  
+	  environment:  
+	    ...  
+
+### Pull data  
+
+pull data files to /freespoon_data  
+pull media files to /freespoon_media  
+
+### Run  
+
+	docker-compose up  
+
+### Create Database (Optional)  
 
 	create database FreeSpoon character set utf8;
 
