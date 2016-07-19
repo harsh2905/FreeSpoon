@@ -16,14 +16,67 @@ RUN pip install qrcode
 RUN pip install Pillow
 RUN pip install openpyxl
 
+RUN apt-get install git -y
+RUN apt-get install apache2 apache2-dev -y
+RUN pip install mod_wsgi
+RUN apt-get install libapache2-mod-python libapache2-mod-wsgi -y
+RUN a2enmod wsgi
+
+RUN apt-get install mysql-client -y
+
 EXPOSE 80
 
 RUN echo Asia/Shanghai > /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata
 
+# Chinese Enviroment
+
+RUN apt-get install locales -y
+WORKDIR /usr/share/locales
+RUN ./install-language-pack en_US.UTF-8
+RUN dpkg-reconfigure locales
+RUN export LC_ALL=en_US.UTF-8
+RUN echo "export LC_ALL=en_US.UTF-8" >> /etc/bash.bashrc
+
 RUN mkdir /FreeSpoon
 COPY . /FreeSpoon/
+
+WORKDIR /FreeSpoon/vendor/django-rest-framework/
+RUN python setup.py develop
+WORKDIR /FreeSpoon/vendor/django-rest-framework-jwt/
+RUN python setup.py develop
+WORKDIR /FreeSpoon/vendor/django-allauth/
+RUN python setup.py develop
+WORKDIR /FreeSpoon/vendor/django-rest-auth/
+RUN python setup.py develop
+
+RUN git clone https://github.com/cuilyGitHub/FreeSpoonUI.git /FreeSpoonUI
+WORKDIR /FreeSpoonUI
+
+RUN curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+RUN apt-get install nodejs -y
+RUN npm install
+RUN npm install -g gulp
+RUN gulp prod
+
 WORKDIR /FreeSpoon
 
-ENTRYPOINT /bin/bash ./wait-for-it.sh db:3306 -- python manage.py migrate && \
+RUN useradd -d /var/freespoon -m -G www-data freespoon
+RUN chown -R freespoon:www-data /FreeSpoon
+RUN chown -R freespoon:www-data /FreeSpoonUI
+RUN mkdir -p /var/log/django
+RUN chown -R freespoon:www-data /var/log/django
+
+RUN echo "export LANG='en_US.UTF-8'" >> /etc/apache2/envvars
+RUN echo "export LC_ALL='en_US.UTF-8'" >> /etc/apache2/envvars
+
+RUN rm /etc/apache2/sites-enabled/000-default.conf -f
+ADD wsgi.conf /etc/apache2/sites-available/
+RUN ln -s /etc/apache2/sites-available/wsgi.conf /etc/apache2/sites-enabled/
+
+ENTRYPOINT sed -i "/yourdomain/s/yourdomain/${DOMAINNAME}/g" /etc/apache2/sites-available/wsgi.conf && \
+		/bin/bash ./wait-for-it.sh db:3306 -- python manage.py migrate && \
+		mysql -h${DBHOST} -uroot -p${DBPASSWD} -DFreeSpoon < /FreeSpoon/views.sql
+		python manage.py collectstatic --noinput && \
 		/bin/bash load_data.sh && \
-		python manage.py runserver 0.0.0.0:80
+		/usr/sbin/apache2ctl -D FOREGROUND
+
