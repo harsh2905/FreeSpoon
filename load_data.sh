@@ -4,11 +4,17 @@ set -e
 
 pushd /FreeSpoon
 
-if [ -f ./data/basic.json ]; then
-	python manage.py loaddata ./data/basic.json
+if [ -f ./data/authentication.json ]; then
+	python manage.py loaddata ./data/authentication.json
+	mv ./data/authentication.json ./data/authentication.json.used
 fi
-if [ -f ./data/auth.json ]; then
-	python manage.py loaddata ./data/auth.json
+if [ -f ./data/socialaccount.json ]; then
+	python manage.py loaddata ./data/socialaccount.json
+	mv ./data/socialaccount.json ./data/socialaccount.json.used
+fi
+if [ -f ./data/business.json ]; then
+	python manage.py loaddata ./data/business.json
+	mv ./data/business.json ./data/business.json.used
 fi
 
 popd

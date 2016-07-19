@@ -1,14 +1,3 @@
-web:
-  build: web
-nginx:
-  build: nginx
-  links:
-    - web:web
-    - freespoon:freespoon
-  environment:
-    - DOMAINNAME=yourdomain
-  ports:
-    - "80:80"
 db:
   build: db
   volumes:
@@ -17,8 +6,6 @@ db:
   environment:
     - MYSQL_ROOT_PASSWORD=123456
     - MYSQL_DATABASE=FreeSpoon
-  ports:
-    - "3306:3306"
 freespoon:
   build: .
   volumes:
@@ -27,11 +14,14 @@ freespoon:
     - /freespoon_media:/FreeSpoon/media
   links:
     - db:db
+  ports:
+    - "80:80"
   environment:
-    - DOMAINNAME=localhost
+    - SMSACCOUNTSID=yourid
+    - SMSAUTHTOKEN=yourid
+    - SMSAPPID=yourid
+    - SMSTEMPLATEID=yourid
+    - SMSRESTHOST=yourid
+    - DOMAINNAME=yourdomain
     - DBHOST=db
     - DBPASSWD=123456
-    - APPID=yourappid
-    - APPSECRET=yourappsecret
-    - MCHID=yourmchid
-    - APPKEY=yourappkey
