@@ -64,6 +64,7 @@ target/
 #
 media/
 data/
+static/
 Dockerfile
 docker-compose.yml
 sshkeys
