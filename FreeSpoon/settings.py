@@ -74,8 +74,11 @@ MIDDLEWARE_CLASSES = [
 
 DOMAINNAME = os.getenv('DOMAINNAME')
 
-CORS_ORIGIN_REGEX_WHITELIST = (
-        '(\w+\.)?%s' % DOMAINNAME,
+CORS_ORIGIN_WHITELIST = (
+        '%s' % DOMAINNAME,
+        'api.%s' % DOMAINNAME,
+        'm.%s' % DOMAINNAME,
+        'dev.%s' % DOMAINNAME,
 )
 
 ROOT_URLCONF = 'FreeSpoon.urls'

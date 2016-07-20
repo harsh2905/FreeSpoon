@@ -58,7 +58,8 @@ def redirect(request, relativePath):
 	state = request.GET.get('state', None)
 	if state is None:
 		return error()
-	targetUrl = '%s%s' % (config.DOMAIN_URL, relativePath)
+	#targetUrl = '%s%s' % (config.DOMAIN_URL, relativePath)
+	targetUrl = request.build_absolute_uri(relativePath)
 	redirectUrl = WxApp.get_current(request).createAuthorizeRedirectUrl(targetUrl, state)
 	return HttpResponseRedirect(redirectUrl)
 
