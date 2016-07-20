@@ -61,6 +61,7 @@ RUN /bin/bash /samba.sh
 # Third-party components  
 
 ADD setup.sh /
+RUN mkdir -p /var/log/django
 
 ENTRYPOINT /bin/bash /setup.sh && smbd && \
 	/usr/sbin/sshd -D

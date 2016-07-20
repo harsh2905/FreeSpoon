@@ -18,7 +18,7 @@ class MessageMiddleware(object):
     """
 
     def process_request(self, request):
-        if request.path.startswith('/api/'):
+        if request.path.startswith('/v1/'):
             return
         request._messages = default_storage(request)
 
@@ -29,7 +29,7 @@ class MessageMiddleware(object):
         If not all messages could not be stored and ``DEBUG`` is ``True``, a
         ``ValueError`` is raised.
         """
-        if request.path.startswith('/api/'):
+        if request.path.startswith('/v1/'):
             return response
         # A higher middleware layer may return a request which does not contain
         # messages storage, so make no assumption that it will be there.
@@ -45,7 +45,7 @@ class SessionMiddleware(object):
         self.SessionStore = engine.SessionStore
 
     def process_request(self, request):
-        if request.path.startswith('/api/'):
+        if request.path.startswith('/v1/'):
             return
         session_key = request.COOKIES.get(settings.SESSION_COOKIE_NAME)
         request.session = self.SessionStore(session_key)
@@ -56,7 +56,7 @@ class SessionMiddleware(object):
         session every time, save the changes and set a session cookie or delete
         the session cookie if the session has been emptied.
         """
-        if request.path.startswith('/api/'):
+        if request.path.startswith('/v1/'):
             return response
         try:
             accessed = request.session.accessed
@@ -95,7 +95,7 @@ class SessionMiddleware(object):
 
 def get_user(request):
     if not hasattr(request, '_cached_user'):
-        if request.path.startswith('/api/'):
+        if request.path.startswith('/v1/'):
             request._cached_user = AnonymousUser()
         else:
             request._cached_user = auth.get_user(request)
@@ -103,7 +103,7 @@ def get_user(request):
 
 class AuthenticationMiddleware(object):
     def process_request(self, request):
-        if not request.path.startswith('/api/'):
+        if not request.path.startswith('/v1/'):
             assert hasattr(request, 'session'), (
                 "The Django authentication middleware requires session middleware "
                 "to be installed. Edit your MIDDLEWARE_CLASSES setting to insert "

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'authentication',
 
     'rest_framework',
@@ -62,6 +63,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     #'django.contrib.sessions.middleware.SessionMiddleware',
     'FreeSpoon.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'FreeSpoon.middleware.AuthenticationMiddleware',
@@ -69,6 +71,12 @@ MIDDLEWARE_CLASSES = [
     'FreeSpoon.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+DOMAINNAME = os.getenv('DOMAINNAME')
+
+CORS_ORIGIN_REGEX_WHITELIST = (
+        '(\w+\.)?%s' % DOMAINNAME,
+)
 
 ROOT_URLCONF = 'FreeSpoon.urls'
 

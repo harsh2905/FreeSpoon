@@ -14,6 +14,7 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from django.template import TemplateDoesNotExist
 from rest_framework.exceptions import AuthenticationFailed
+from django.contrib import messages
 
 class DefaultSocialAccountAdapter(BaseDefaultSocialAccountAdapter):
 	def populate_user(self,
@@ -58,7 +59,7 @@ class DefaultAccountAdapter(BaseDefaultAccountAdapter):
 		the message text from a template.
 		"""
 		if 'django.contrib.messages' in settings.INSTALLED_APPS and \
-			not request.path.startswith('/api/'):
+			not request.path.startswith('/v1/'):
 			try:
 				if message_context is None:
 					message_context = {}
