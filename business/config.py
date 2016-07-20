@@ -19,9 +19,12 @@ FETCH_JSAPI_TICKET_URL = \
 UNIFIEDORDER_URL = \
 	'https://api.mch.weixin.qq.com/pay/unifiedorder'
 
-CARD_BULK_URL = '%s/api/business/redirect/index?state=%s' % (DOMAIN_URL, '%s')
-CARD_RECIPE_URL = '%s/api/business/redirect/recipes?state=%s' % (DOMAIN_URL, '%s')
-CARD_DISH_URL = '%s/api/business/redirect/dishs?state=%s' % (DOMAIN_URL, '%s')
+MOBILE_DOMAIN_NAME = os.getenv('MOBILEDOMAINNAME')
+MOBILE_DOMAIN_URL = 'http://%s' % MOBILE_DOMAIN_NAME
+
+CARD_BULK_URL = '%s/v1/business/redirect/index?state=%s' % (MOBILE_DOMAIN_URL, '%s')
+CARD_RECIPE_URL = '%s/v1/business/redirect/recipes?state=%s' % (MOBILE_DOMAIN_URL, '%s')
+CARD_DISH_URL = '%s/v1/business/redirect/dishs?state=%s' % (MOBILE_DOMAIN_URL, '%s')
 
 # Sms
 

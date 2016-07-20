@@ -46,5 +46,6 @@ freespoon:
     - SMSTEMPLATEID=
     - SMSRESTHOST=
     - DOMAINNAME=
+    - MOBILEDOMAINNAME=
     - DBHOST=db
     - DBPASSWD=123456
