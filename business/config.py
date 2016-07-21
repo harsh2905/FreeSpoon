@@ -21,10 +21,12 @@ UNIFIEDORDER_URL = \
 
 MOBILE_DOMAIN_NAME = os.getenv('MOBILEDOMAINNAME')
 MOBILE_DOMAIN_URL = 'http://%s' % MOBILE_DOMAIN_NAME
+API_DOMAIN_NAME = os.getenv('APIDOMAINNAME')
+API_DOMAIN_URL = 'http://%s' % API_DOMAIN_NAME
 
-CARD_BULK_URL = '%s/v1/business/redirect/index?state=%s' % (MOBILE_DOMAIN_URL, '%s')
-CARD_RECIPE_URL = '%s/v1/business/redirect/recipes?state=%s' % (MOBILE_DOMAIN_URL, '%s')
-CARD_DISH_URL = '%s/v1/business/redirect/dishs?state=%s' % (MOBILE_DOMAIN_URL, '%s')
+CARD_BULK_URL = '%s/v1/business/redirect/index?state=%s' % (API_DOMAIN_URL, '%s')
+CARD_RECIPE_URL = '%s/v1/business/redirect/recipes?state=%s' % (API_DOMAIN_URL, '%s')
+CARD_DISH_URL = '%s/v1/business/redirect/dishs?state=%s' % (API_DOMAIN_URL, '%s')
 
 # Sms
 

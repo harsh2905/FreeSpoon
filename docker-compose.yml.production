@@ -24,5 +24,6 @@ freespoon:
     - SMSRESTHOST=yourid
     - DOMAINNAME=yourdomain
     - MOBILEDOMAINNAME=m.yourdomain
+    - APIDOMAINNAME=api.yourdomain
     - DBHOST=db
     - DBPASSWD=123456

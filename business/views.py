@@ -58,7 +58,7 @@ def redirect(request, relativePath):
 	state = request.GET.get('state', None)
 	if state is None:
 		return error()
-	targetUrl = 'http://%s%s' % (request.get_host(), relativePath)
+	targetUrl = '%s%s' % (config.MOBILE_DOMAIN_URL, relativePath)
 	redirectUrl = WxApp.get_current(request).createAuthorizeRedirectUrl(targetUrl, state)
 	return HttpResponseRedirect(redirectUrl)
 
