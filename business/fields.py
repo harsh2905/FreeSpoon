@@ -14,7 +14,8 @@ class TimestampField(serializers.Field):
 
 	def to_internal_value(self, value):
 		value = value / 10**6
-		return datetime.datetime.utcfromtimestamp(value) # No additional time zone
+		# return datetime.datetime.utcfromtimestamp(value) # No additional time zone
+		return datetime.datetime.fromtimestamp(value, tz=UTC())
 
 class StandardTimeField(serializers.Field):
 	def to_representation(self, value):

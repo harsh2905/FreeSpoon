@@ -31,6 +31,7 @@ def api_root(request, format=None):
 		'bulks': reverse('bulk-list', request=request, format=format),
 		'products': reverse('product-list', request=request, format=format),
 		'shippingaddresses': reverse('shippingaddress-list', request=request, format=format),
+		'categorys': reverse('category-list', request=request, format=format),
 		'purchasedproducthistorys': reverse('purchasedproducthistory-list', request=request, format=format),
 		'orders': reverse('order-list', request=request, format=format),
 		'recipes': reverse('recipe-list', request=request, format=format),

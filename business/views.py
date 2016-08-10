@@ -365,6 +365,7 @@ class BulkViewSet(ModelViewSet):
 	queryset = Bulk.objects.all()
 	serializer_class_list = BulkListSerializer
 	serializer_class_retrieve = BulkSerializer
+	serializer_class_create = BulkCreateSerializer
 	pagination_class = TimestampPagination
 
 	pagination_field_name = 'create_time'
@@ -385,7 +386,17 @@ class BulkViewSet(ModelViewSet):
 
 class ProductViewSet(ModelViewSet):
 	queryset = Product.objects.all()
+	serializer_class = ProductSerializer
 	serializer_class_retrieve = ProductSerializer
+	filter_backends = (FieldFilterBackend,)
+
+	filter_fields = ['is_snapshot', 'category']
+	filter_field_raise_exception = True
+
+class CategoryViewSet(ModelViewSet):
+	queryset = Category.objects.all()
+	serializer_class = CategorySerializer
+	permission_classes = [IsAuthenticated]
 
 class ShippingAddressViewSet(ModelViewSet):
 	queryset = ShippingAddress.objects.all()

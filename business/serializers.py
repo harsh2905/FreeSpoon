@@ -319,11 +319,102 @@ def jwt_response_payload_handler(token, user=None, request=None):
 
 # Business Serializer model
 
+
+class BulkCreateSerializer(serializers.Serializer):
+	title = serializers.CharField()
+	category = serializers.IntegerField()
+	dispatchers = serializers.ListField(
+		child=serializers.IntegerField()
+		)
+	dead_time = TimestampField()
+	arrived_time = TimestampField()
+	location = serializers.CharField()
+	receive_mode = serializers.IntegerField()
+	products = serializers.ListField(
+		child=serializers.IntegerField()
+		)
+
+	def create(self, validated_data):
+		request = self.context.get('request', None)
+		if request is None:
+			raise BadRequestException(detail='Bad Request')
+		mob_user = request.user
+		reseller = None
+		if hasattr(mob_user, 'reseller'):
+			reseller = mob_user.reseller
+		if reseller is None:
+			raise BadRequestException(detail='Reseller not found')
+
+		title = validated_data.get('title')
+		category_id = validated_data.get('category')
+		category = None
+		try:
+			category = Category.objects.get(pk=category_id)
+		except:
+			raise BadRequestException(detail='Category does not exist')
+		dispatchers_ = validated_data.get('dispatchers')
+		if len(dispatchers_) == 0:
+			raise BadRequestException(detail='Dispatchers can not be empty')
+		dispatchers = []
+		try:
+			for dispatcher_id in dispatchers_:
+				dispatcher = Dispatcher.objects.get(pk=dispatcher_id)
+				dispatchers.append(dispatcher)
+		except ObjectDoesNotExist:
+			raise BadRequestException(detail='Dispatcher does not exist')
+
+		dead_time = validated_data.get('dead_time')
+		arrived_time = validated_data.get('arrived_time')
+		location = validated_data.get('location')
+		receive_mode = validated_data.get('receive_mode')
+		if receive_mode not in [1, 2, 3]:
+			raise BadRequestException(detail='Receive mode is incorrect')
+		products_ = validated_data.get('products')
+		if len(products_) == 0:
+			raise BadRequestException(detail='Products can not be empty')
+		products = []
+		try:
+			for product_id in products_:
+				product = Product.objects.get(pk=product_id)
+				products.append(product)
+		except ObjectDoesNotExist:
+			raise BadRequestException(detail='Product does not exist')
+
+		bulk = Bulk(
+			title=title,
+			category=category,
+			reseller=reseller,
+			dead_time=dead_time,
+			arrived_time=arrived_time,
+			status=0,
+			location=location,
+			receive_mode=receive_mode,
+			card_title=title,
+			card_desc=title,
+			card_icon=products[0].cover
+			)
+		bulk.save()
+		for dispatcher in dispatchers:
+			bulk.dispatchers.add(dispatcher)
+		for product in products:
+			productdetails_set = product.productdetails_set.all() # Cache
+			product.pk = None
+			product.is_snapshot = True
+			product.save()
+			for product_details in productdetails_set:
+				product_details.pk = None
+				product_details.is_snapshot = True
+				product_details.product = product
+				product_details.save()
+			bulk.product_set.add(product)
+		return bulk
+
 class BulkListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	#url = serializers.HyperlinkedIdentityField(
 	#	view_name='bulk-detail',
 	#	lookup_field='id'
 	#)
+	category = serializers.CharField(source='category.name')
 	reseller = ResellerSerializer()
 	covers = serializers.SerializerMethodField(method_name='get_product_covers')
 	create_time = TimestampField()
@@ -381,6 +472,7 @@ class ProductDetailsSerializer(serializers.ModelSerializer):
 
 class ProductListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	create_time = TimestampField()
+	category = serializers.CharField(source='category.name')
 	participant_count = serializers.SerializerMethodField()
 	purchased_count = serializers.SerializerMethodField()
 	participant_avatars = serializers.SerializerMethodField()
@@ -389,7 +481,7 @@ class ProductListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedMo
 
 	class Meta:
 		model = Product
-		fields = ('url', 'id', 'title', 'desc', 'unit_price', 'market_price',
+		fields = ('url', 'id', 'title', 'desc', 'category', 'unit_price', 'market_price',
 			'spec', 'spec_desc', 'cover', 'create_time', 'details',
 			'participant_count', 'purchased_count', 'tag', 'tag_color',
 			'participant_avatars', 'history')
@@ -430,16 +522,18 @@ class ProductListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedMo
 
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
 	create_time = TimestampField()
+	category = serializers.CharField(source='category.name')
 	details = ProductDetailsSerializer(source='productdetails_set', many=True)
 	bulk_url = serializers.HyperlinkedRelatedField(
 		source='bulk', read_only=True, view_name='bulk-detail')
 
 	class Meta:
 		model = Product
-		fields = ('url', 'id', 'title', 'desc', 'unit_price', 'market_price',
+		fields = ('url', 'id', 'title', 'desc', 'category', 'unit_price', 'market_price',
 			'spec', 'spec_desc', 'cover', 'create_time', 'details', 'bulk_url')
 
 class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
+	category = serializers.CharField(source='category.name')
 	reseller = ResellerSerializer()
 	dispatchers = DispatcherSerializer(many=True)
 	create_time = TimestampField()
@@ -500,6 +594,11 @@ class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 	def get_card_url(self, obj):
 		return config.CARD_BULK_URL % obj.id
 
+class CategorySerializer(serializers.ModelSerializer):
+	name = serializers.CharField()
+	class Meta:
+		model = Category
+		fields = ('id', 'name',)
 
 class ShippingAddressSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
@@ -771,6 +870,7 @@ class BulkExhibitSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedMo
 
 class ProductExhibitSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	create_time = TimestampField()
+	category = serializers.CharField(source='category.name')
 	participant_count = serializers.SerializerMethodField()
 	purchased_count = serializers.SerializerMethodField()
 	details = ProductDetailsSerializer(source='productdetails_set', many=True)
@@ -779,7 +879,7 @@ class ProductExhibitSerializer(RemoveNullSerializerMixIn, serializers.Hyperlinke
 
 	class Meta:
 		model = Product
-		fields = ('url', 'id', 'title', 'desc', 'unit_price', 'market_price',
+		fields = ('url', 'id', 'title', 'desc', 'category', 'unit_price', 'market_price',
 			'spec', 'spec_desc', 'cover', 'create_time', 'details',
 			'participant_count', 'purchased_count', 'tag', 'tag_color', 'bulk_url')
 
@@ -829,11 +929,12 @@ class StepSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
 	width = serializers.SerializerMethodField(read_only=True)
 	height = serializers.SerializerMethodField(read_only=True)
 	image = serializers.ImageField(source='image.image')
+	md5 = serializers.CharField(source='image.md5')
 	plain = serializers.CharField(allow_blank=True)
 
 	class Meta:
 		model = Step
-		fields = ('image', 'plain', 'seq', 'create_time', 'width', 'height')
+		fields = ('image', 'plain', 'seq', 'create_time', 'width', 'height', 'md5')
 
 	def get_width(self, obj):
 		if hasattr(obj, 'image') and hasattr(obj.image, 'image'):
@@ -1089,10 +1190,11 @@ class DishDetailsSerializer(RemoveNullSerializerMixIn, serializers.ModelSerializ
 	width = serializers.SerializerMethodField()
 	height = serializers.SerializerMethodField()
 	image = serializers.ImageField(source='image.image')
+	md5 = serializers.CharField(source='image.md5')
 
 	class Meta:
 		model = Step
-		fields = ('image', 'plain', 'seq', 'create_time', 'width', 'height')
+		fields = ('image', 'plain', 'seq', 'create_time', 'width', 'height', 'md5')
 
 	def get_width(self, obj):
 		if hasattr(obj, 'image') and hasattr(obj.image, 'image'):

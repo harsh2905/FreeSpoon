@@ -47,9 +47,15 @@ class Dispatcher(models.Model):
 	def __unicode__(self):
 		return self.name
 
+class Category(models.Model):
+	name = models.CharField(max_length=100, null=True, blank=True)
+	def __unicode__(self):
+		return self.name
+
 class Product(models.Model):
 	title = models.CharField(max_length=200)
 	desc = models.TextField()
+	category = models.ForeignKey('Category', null=True, blank=True)
 	bulk = models.ForeignKey('Bulk', null=True, blank=True)
 	unit_price = models.IntegerField(max_length=11)
 	market_price = models.IntegerField(max_length=11)
@@ -80,7 +86,7 @@ class ProductDetails(models.Model):
 
 class Bulk(models.Model):
 	title = models.CharField(max_length=200)
-	category = models.CharField(max_length=100)
+	category = models.ForeignKey('Category')
 	details = models.TextField()
 	reseller = models.ForeignKey('Reseller')
 	dispatchers = models.ManyToManyField('Dispatcher')

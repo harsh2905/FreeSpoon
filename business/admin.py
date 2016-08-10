@@ -72,6 +72,7 @@ admin.site.register(User)
 admin.site.register(Reseller)
 admin.site.register(Dispatcher)
 
+admin.site.register(Category)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductDetails)
 admin.site.register(Bulk, BulkAdmin)
