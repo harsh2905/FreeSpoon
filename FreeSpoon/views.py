@@ -8,6 +8,8 @@ from rest_framework.permissions import (
 from rest_framework.reverse import reverse
 from rest_framework.response import Response
 
+import os
+
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def api_root(request, format=None):
@@ -20,18 +22,19 @@ def api_root(request, format=None):
 		'login': reverse('login', request=request, format=format),
 		'index': reverse('index', request=request, format=format),
 		'recipeIndex': reverse('recipeIndex', request=request, format=format),
-		'images': 'http://api.yijiayinong.com/v1/business/images/',
+		'images': 'http://%s/v1/business/images/' % os.getenv('APIDOMAINNAME'),
 		#'images': reverse('imageRetrieve', request=request, format=format, kwargs={'pk': 'yourkey'}),
-		'payNotify': 'http://api.yijiayinong.com/v1/business/paynotify/',
+		'payNotify': 'http://%s/v1/business/paynotify/' % os.getenv('APIDOMAINNAME'),
 		#'payNotify': reverse('payNotify', request=request, format=format, kwargs={'appid': 'yourappid'}),
-		'payRequest': 'http://api.yijiayinong.com/v1/business/payrequest/',
+		'payRequest': 'http://%s/v1/business/payrequest/' % os.getenv('APIDOMAINNAME'),
 		#'payRequest': reverse('payRequest', request=request, format=format, kwargs={'pk': 123456}),
-		'sms': 'http://api.yijiayinong.com/v1/business/sms/',
+		'sms': 'http://%s/v1/business/sms/' % os.getenv('APIDOMAINNAME'),
 		#'sms': reverse('sms', request=request, format=format, kwargs={'mob': 18600000000}),
 		'bulks': reverse('bulk-list', request=request, format=format),
 		'products': reverse('product-list', request=request, format=format),
 		'shippingaddresses': reverse('shippingaddress-list', request=request, format=format),
 		'categorys': reverse('category-list', request=request, format=format),
+		'bulksummary': reverse('bulksummary-list', request=request, format=format),
 		'purchasedproducthistorys': reverse('purchasedproducthistory-list', request=request, format=format),
 		'orders': reverse('order-list', request=request, format=format),
 		'recipes': reverse('recipe-list', request=request, format=format),

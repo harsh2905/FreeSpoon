@@ -98,7 +98,7 @@ class LoginResellerSerializer(WeixinSerializerMixIn, serializers.ModelSerializer
 	create_time = TimestampField()
 	class Meta:
 		model = Reseller
-		fields = ('tail', 'create_time')
+		fields = ('id', 'tail', 'create_time')
 
 #class ResellerJWTSerializer(serializers.Serializer):
 #	token = serializers.CharField()
@@ -409,6 +409,122 @@ class BulkCreateSerializer(serializers.Serializer):
 			bulk.product_set.add(product)
 		return bulk
 
+class BulkUpdateSerializer(serializers.Serializer):
+	title = serializers.CharField()
+	category = serializers.IntegerField()
+	dispatchers = serializers.ListField(
+		child=serializers.IntegerField()
+		)
+	dead_time = TimestampField()
+	arrived_time = TimestampField()
+	location = serializers.CharField()
+	receive_mode = serializers.IntegerField()
+	products = serializers.ListField(
+		child=serializers.IntegerField()
+		)
+
+	def update(self, instance, validated_data):
+		request = self.context.get('request', None)
+		if request is None:
+			raise BadRequestException(detail='Bad Request')
+		mob_user = request.user
+		reseller = None
+		if hasattr(mob_user, 'reseller'):
+			reseller = mob_user.reseller
+		if reseller is None:
+			raise BadRequestException(detail='Reseller not found')
+
+		title = validated_data.get('title')
+		category_id = validated_data.get('category')
+		category = None
+		try:
+			category = Category.objects.get(pk=category_id)
+		except ObjectDoesNotExist:
+			raise BadRequestException(detail='Category does not exist')
+		except IntegrityError:
+			raise BadRequestException(detail='Category does not exist')
+		dispatchers_ = validated_data.get('dispatchers')
+		if len(dispatchers_) == 0:
+			raise BadRequestException(detail='Dispatchers can not be empty')
+		dispatchers = []
+		try:
+			for dispatcher_id in dispatchers_:
+				dispatcher = Dispatcher.objects.get(pk=dispatcher_id)
+				dispatchers.append(dispatcher)
+		except ObjectDoesNotExist:
+			raise BadRequestException(detail='Dispatcher does not exist')
+		except IntegrityError:
+			raise BadRequestException(detail='Dispatcher does not exist')
+
+		dead_time = validated_data.get('dead_time')
+		arrived_time = validated_data.get('arrived_time')
+		location = validated_data.get('location')
+		receive_mode = validated_data.get('receive_mode')
+		if receive_mode not in [1, 2, 3]:
+			raise BadRequestException(detail='Receive mode is incorrect')
+		products_ = validated_data.get('products')
+		if len(products_) == 0:
+			raise BadRequestException(detail='Products can not be empty')
+		products = []
+		try:
+			for product_id in products_:
+				product = Product.objects.get(pk=product_id)
+				products.append(product)
+		except ObjectDoesNotExist:
+			raise BadRequestException(detail='Product does not exist')
+		except IntegrityError:
+			raise BadRequestException(detail='Product does not exist')
+
+		instance.title=title
+		instance.category=category
+		instance.reseller=reseller
+		instance.dead_time=dead_time
+		instance.arrived_time=arrived_time
+		instance.status=0
+		instance.location=location
+		instance.receive_mode=receive_mode
+		instance.card_title=title
+		instance.card_desc=title
+		instance.card_icon=products[0].cover
+		instance.save()
+
+		if request.method == 'PUT':
+			instance.dispatchers.remove()
+			instance.product_set.all().delete()
+			for dispatcher in dispatchers:
+				instance.dispatchers.add(dispatcher)
+			for product in products:
+				productdetails_set = product.productdetails_set.all() # Cache
+				product.pk = None
+				product.is_snapshot = True
+				product.save()
+				for product_details in productdetails_set:
+					product_details.pk = None
+					product_details.is_snapshot = True
+					product_details.product = product
+					product_details.save()
+				instance.product_set.add(product)
+		elif request.method == 'PATCH':
+			if len(dispatchers) > 0:
+				instance.dispatchers.remove()
+				for dispatcher in dispatchers:
+					instance.dispatchers.add(dispatcher)
+			if len(products) > 0:
+				instance.product_set.all().delete()
+				for product in products:
+					productdetails_set = product.productdetails_set.all() # Cache
+					product.pk = None
+					product.is_snapshot = True
+					product.save()
+					for product_details in productdetails_set:
+						product_details.pk = None
+						product_details.is_snapshot = True
+						product_details.product = product
+						product_details.save()
+					instance.product_set.add(product)
+			
+		return instance
+
 class BulkListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	#url = serializers.HyperlinkedIdentityField(
 	#	view_name='bulk-detail',
@@ -626,6 +742,19 @@ class ShippingAddressSerializer(serializers.HyperlinkedModelSerializer):
 			address=address,
 			user=user)
 		return shippingaddress
+
+class BulkSummarySerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
+	bulk_id = serializers.ReadOnlyField()
+	cover = serializers.ReadOnlyField(source='product.cover.url')
+	title = serializers.ReadOnlyField(source='product.title')
+	quantity = serializers.ReadOnlyField()
+	total_price = serializers.ReadOnlyField()
+	spec = serializers.ReadOnlyField()
+
+	class Meta:
+		model = BulkSummary
+		fields = ('bulk_id', 'cover', 'title', 'quantity', 'total_price', 'spec',)
+
 
 class PurchasedProductHistorySerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
 	order_id = serializers.ReadOnlyField()
@@ -1136,10 +1265,11 @@ class RecipeCreateSerializer(serializers.Serializer):
 class RecipeSimpleSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	create_time = TimestampField()
 	cover = serializers.ImageField(source='cover.image')
+	cover_md5 = serializers.CharField(source='cover.md5')
 
 	class Meta:
 		model = Recipe
-		fields = ('url', 'id', 'name', 'cover', 'create_time')
+		fields = ('url', 'id', 'name', 'cover', 'cover_md5', 'create_time')
 
 class RecipeSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	create_time = TimestampField()	
@@ -1154,13 +1284,14 @@ class RecipeSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSe
 	ingredients = IngredientSerializer(source='ingredient_set', many=True)
 	step_num = serializers.SerializerMethodField()
 	cover = serializers.ImageField(source='cover.image')
+	cover_md5 = serializers.CharField(source='cover.md5')
 	more = serializers.SerializerMethodField()
 	card_url =serializers.SerializerMethodField()
 
 	class Meta:
 		model = Recipe
 		fields = ('url', 'id', 'name', 'user', 'desc', 'cover', 
-			'status', 'tag', 'tips', 'time', 'steps',
+			'cover_md5', 'status', 'tag', 'tips', 'time', 'steps',
 			'dish_num', 'ingredients', 'step_num',
 			'create_time', 'more', 'card_url')
 
@@ -1342,10 +1473,11 @@ class DishCreateSerializer(serializers.Serializer):
 class DishSimpleSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	create_time = TimestampField()
 	cover = serializers.ImageField(source='cover.image')
+	cover_md5 = serializers.CharField(source='cover.md5')
 
 	class Meta:
 		model = Dish
-		fields = ('url', 'id', 'name', 'cover', 'create_time')
+		fields = ('url', 'id', 'name', 'cover', 'cover_md5', 'create_time')
 
 class DishSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	create_time = TimestampField()
@@ -1359,13 +1491,14 @@ class DishSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 	steps = DishDetailsSerializer(source='dishdetails_set', many=True)
 	step_num = serializers.SerializerMethodField()
 	cover = serializers.ImageField(source='cover.image')
+	cover_md5 = serializers.CharField(source='cover.md5')
 	more = serializers.SerializerMethodField()
 	card_url =serializers.SerializerMethodField()
 
 	class Meta:
 		model = Dish
 		fields = ('url', 'id', 'name', 'user', 'desc', 'cover',
-			'status', 'tag', 'tips', 'create_time', 'recipe',
+			'cover_md5', 'status', 'tag', 'tips', 'create_time', 'recipe',
 			'steps', 'step_num', 'more', 'card_url')
 
 	def get_step_num(self, obj):

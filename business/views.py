@@ -366,12 +366,17 @@ class BulkViewSet(ModelViewSet):
 	serializer_class_list = BulkListSerializer
 	serializer_class_retrieve = BulkSerializer
 	serializer_class_create = BulkCreateSerializer
+	serializer_class_update = BulkUpdateSerializer
 	pagination_class = TimestampPagination
 
 	pagination_field_name = 'create_time'
 	pagination_lookup_type = 'lt'
 
-	filter_backends = (filters.SearchFilter, FieldOrderBackend, MethodFilterBackend,)
+	filter_backends = (filters.SearchFilter, FieldOrderBackend, FieldFilterBackend, MethodFilterBackend,)
+
+	filter_fields = ['reseller_id']
+	filter_field_raise_exception = False
+
 
 	def update_bulk_status(self, queryset):
 		queryset.filter(dead_time__lt=datetime.datetime.now(tz=UTC())).update(status=-1)
@@ -391,7 +396,7 @@ class ProductViewSet(ModelViewSet):
 	filter_backends = (FieldFilterBackend,)
 
 	filter_fields = ['is_snapshot', 'category']
-	filter_field_raise_exception = True
+	filter_field_raise_exception = False
 
 class CategoryViewSet(ModelViewSet):
 	queryset = Category.objects.all()
@@ -403,6 +408,14 @@ class ShippingAddressViewSet(ModelViewSet):
 	serializer_class = ShippingAddressSerializer
 	permission_classes = [IsAuthenticated]
 	filter_backends = (IsOwnedByUserFilterBackend,)
+
+class BulkSummaryViewSet(ReadOnlyModelViewSet):
+	queryset = BulkSummary.objects.all()
+	serializer_class = BulkSummarySerializer
+	filter_backends = (FieldFilterBackend,)
+
+	filter_fields = ['bulk_id']
+	filter_field_raise_exception = False
 
 class PurchasedProductHistoryViewSet(ReadOnlyModelViewSet):
 	queryset = PurchasedProductHistory.objects.all()

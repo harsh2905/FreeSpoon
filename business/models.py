@@ -140,6 +140,19 @@ class ShippingAddress(models.Model):
 
 # Views
 
+class BulkSummary(models.Model):
+	product = models.ForeignKey('Product', primary_key=True,
+		on_delete=models.DO_NOTHING)
+	bulk = models.ForeignKey('Bulk',
+		on_delete=models.DO_NOTHING, null=True)
+	total_price = models.IntegerField(max_length=11)
+	quantity = models.IntegerField(max_length=11)
+	spec = models.CharField(max_length=100)
+
+	class Meta:
+		managed = False
+		db_table = 'view_bulk_summary'
+
 class PurchasedProductHistory(models.Model):
 	order = models.ForeignKey('Order', primary_key=True,
 		on_delete=models.DO_NOTHING)

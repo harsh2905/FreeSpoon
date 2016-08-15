@@ -27,6 +27,7 @@ router.register(r'categorys', views.CategoryViewSet, base_name='category')
 router.register(r'shippingaddresses', views.ShippingAddressViewSet, base_name='shippingaddress')
 router.register(r'purchasedproducthistorys', views.PurchasedProductHistoryViewSet, 
 		base_name='purchasedproducthistory')
+router.register(r'bulksummarys', views.BulkSummaryViewSet, base_name='bulksummary')
 router.register(r'orders', views.OrderViewSet, base_name='order')
 router.register(r'recipes', views.RecipeViewSet, base_name='recipe')
 router.register(r'dishs', views.DishViewSet, base_name='dish')
