@@ -745,7 +745,7 @@ class ShippingAddressSerializer(serializers.HyperlinkedModelSerializer):
 
 class BulkSummarySerializer(RemoveNullSerializerMixIn, serializers.ModelSerializer):
 	bulk_id = serializers.ReadOnlyField()
-	cover = serializers.ReadOnlyField(source='product.cover.url')
+	cover = serializers.ImageField(source='product.cover', read_only=True)
 	title = serializers.ReadOnlyField(source='product.title')
 	quantity = serializers.ReadOnlyField()
 	total_price = serializers.ReadOnlyField()
