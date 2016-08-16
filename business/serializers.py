@@ -253,7 +253,8 @@ class StorageSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
 	class Meta:
 		model = Storage
 		fields = ('id', 'address', 'create_time', 
-			'mob', 'opening_time', 'closing_time')
+			'mob', 'opening_time', 'closing_time',
+			'is_custom')
 	
 	def create(self, validated_data):
 		request = self.context.get('request', None)
