@@ -32,6 +32,7 @@ def api_root(request, format=None):
 		#'sms': reverse('sms', request=request, format=format, kwargs={'mob': 18600000000}),
 		'bulks': reverse('bulk-list', request=request, format=format),
 		'products': reverse('product-list', request=request, format=format),
+		'storages': reverse('storage-list', request=request, format=format),
 		'shippingaddresses': reverse('shippingaddress-list', request=request, format=format),
 		'categorys': reverse('category-list', request=request, format=format),
 		'bulksummary': reverse('bulksummary-list', request=request, format=format),

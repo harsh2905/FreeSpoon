@@ -7,6 +7,7 @@ from django.views.decorators.http import require_GET
 from django.shortcuts import get_object_or_404
 from django.db import IntegrityError
 from django.core.files.base import ContentFile
+from django.db.models import Q
 
 from rest_framework import status
 from rest_framework import mixins
@@ -408,6 +409,22 @@ class ShippingAddressViewSet(ModelViewSet):
 	serializer_class = ShippingAddressSerializer
 	permission_classes = [IsAuthenticated]
 	filter_backends = (IsOwnedByUserFilterBackend,)
+
+class StorageViewSet(ModelViewSet):
+	queryset = Storage.objects.all()
+	serializer_class = StorageSerializer
+
+	class IsOwnedByResellerFilterBackend(filters.BaseFilterBackend):
+		def filter_queryset(self, request, queryset, view):
+			mob_user = request.user
+			if mob_user is None:
+				raise BadRequestException(detail='Mob user not found')
+			return queryset.filter(Q(reseller=mob_user.reseller) | Q(is_custom=False))
+
+	filter_backends = (FieldFilterBackend, IsOwnedByResellerFilterBackend,)
+
+	filter_fields = ['is_custom']
+	filter_field_raise_exception = False
 
 class BulkSummaryViewSet(ReadOnlyModelViewSet):
 	queryset = BulkSummary.objects.all()

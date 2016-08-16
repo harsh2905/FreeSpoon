@@ -17,7 +17,7 @@ class User(models.Model):
 	balance = models.IntegerField(max_length=11, default=0)
 	recent_obtain_name = models.CharField(max_length=100, null=True, blank=True)
 	recent_obtain_mob = models.CharField(max_length=20, null=True, blank=True)
-	recent_dispatcher = models.ForeignKey('Dispatcher', on_delete=models.SET_NULL, null=True)
+	recent_storage = models.ForeignKey('Storage', on_delete=models.SET_NULL, null=True)
 	create_time = models.DateTimeField(auto_now=True)
 	def __unicode__(self):
 		return '%s(%s)' % (self.name, self.id)
@@ -40,12 +40,20 @@ class Dispatcher(models.Model):
 	name = models.CharField(max_length=100, null=True, blank=True)
 	avatar = models.ImageField(upload_to='avatars', null=True, blank=True)
 	tail = models.CharField(max_length=255, blank=True)
-	address = models.TextField()
-	opening_time = models.IntegerField(max_length=11)
-	closing_time = models.IntegerField(max_length=11)
 	create_time = models.DateTimeField(auto_now=True)
 	def __unicode__(self):
 		return self.name
+
+class Storage(models.Model):
+	address = models.TextField()
+	mob = models.CharField(max_length=100, null=True, blank=True)
+	opening_time = models.IntegerField(max_length=11)
+	closing_time = models.IntegerField(max_length=11)
+	create_time = models.DateTimeField(auto_now=True)
+	is_custom = models.BooleanField(default=False)
+	reseller = models.ForeignKey('Reseller', null=True, blank=True)
+	def __unicode__(self):
+		return self.address
 
 class Category(models.Model):
 	name = models.CharField(max_length=100, null=True, blank=True)
@@ -89,7 +97,7 @@ class Bulk(models.Model):
 	category = models.ForeignKey('Category')
 	details = models.TextField()
 	reseller = models.ForeignKey('Reseller')
-	dispatchers = models.ManyToManyField('Dispatcher')
+	storages = models.ManyToManyField('Storage')
 	dead_time = models.DateTimeField()
 	arrived_time = models.DateTimeField()
 	status = models.IntegerField(max_length=11)
@@ -107,7 +115,7 @@ class Order(models.Model):
 	id = models.CharField(max_length=200, primary_key=True)
 	user = models.ForeignKey('User')
 	bulk = models.ForeignKey('Bulk')
-	dispatcher = models.ForeignKey('Dispatcher')
+	storage = models.ForeignKey('Storage')
 	status = models.IntegerField(max_length=11)
 	freight = models.IntegerField(max_length=11)
 	total_fee = models.IntegerField(max_length=11)

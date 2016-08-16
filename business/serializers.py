@@ -66,21 +66,21 @@ class WeixinSerializerMixIn(RemoveNullSerializerMixIn, serializers.Serializer):
 
 class UserSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
 	mob = serializers.CharField(source='mob_user.mob')
-	recent_dispatcher = serializers.IntegerField(source='recent_dispatcher.id')
+	recent_storage = serializers.IntegerField(source='recent_storage.id')
 	create_time = TimestampField()
 	class Meta:
 		model = User
 		fields = ('id', 'name', 'create_time', 'mob', 
 			'recent_obtain_name', 'recent_obtain_mob', 
-			'recent_dispatcher', 'wx_nickname', 'wx_headimgurl', 'balance')
+			'recent_storage', 'wx_nickname', 'wx_headimgurl', 'balance')
 
 class LoginUserSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
 	create_time = TimestampField()
-	recent_dispatcher = serializers.IntegerField(source='recent_dispatcher.id')
+	recent_storage = serializers.IntegerField(source='recent_storage.id')
 	class Meta:
 		model = User
 		fields = ('id', 'create_time', 'balance', 'name',
-			'recent_dispatcher', 'recent_obtain_name', 'recent_obtain_mob')
+			'recent_storage', 'recent_obtain_name', 'recent_obtain_mob')
 
 #class UserJWTSerializer(serializers.Serializer):
 #	token = serializers.CharField()
@@ -109,17 +109,14 @@ class DispatcherSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
 	create_time = TimestampField()
 	class Meta:
 		model = Dispatcher
-		fields = ('id', 'name', 'tail', 'address', 
-			'create_time', 'mob', 'opening_time', 
-			'closing_time', 'wx_nickname', 'wx_headimgurl')
+		fields = ('id', 'name', 'tail', 'create_time', 
+			'mob', 'wx_nickname', 'wx_headimgurl')
 
 class LoginDispatcherSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
 	create_time = TimestampField()
 	class Meta:
 		model = Dispatcher
-		fields = ('tail', 'address', 
-			'create_time', 'opening_time', 
-			'closing_time')
+		fields = ('id', 'tail', 'create_time',)
 
 #class DispatcherJWTSerializer(serializers.Serializer):
 #	token = serializers.CharField()
@@ -212,74 +209,6 @@ class SocialLoginSerializer(BaseSocialLoginSerializer):
 			pass
 		return attrs
 
-#class LoginSerializerMixIn(serializers.Serializer):
-#	name = serializers.CharField(required=False, allow_blank=True)
-#
-#	mainModel = None # Must implement it in sub class
-#	parentClass = None # Must implement it in sub class
-#	defaultFieldNames = [] # Must implement it in sub class
-#
-#	def validate(self, attrs):
-#		attrs = self.parentClass.validate(self, attrs)
-#		mob_user = attrs['user']
-#		if mob_user:
-#			defaults = {}
-#			for fieldName in self.defaultFieldNames:
-#				fieldValue = attrs.get(fieldName)
-#				if fieldValue:
-#					defaults[fieldName] = fieldValue
-#			user, created = self.mainModel.objects.get_or_create(
-#				mob_user=mob_user,
-#				defaults=defaults
-#			)
-#			attrs['wrap_user'] = user
-#		else:
-#			msg = _('Unable to log in with provided credentials.')
-#			raise exceptions.ValidationError(msg)
-#		return attrs
-#
-#class UserLoginSerializer(
-#	LoginSerializerMixIn, 
-#	BaseLoginSerializer):
-#	parentClass = BaseLoginSerializer
-#	defaultFieldNames = ['name']
-#	mainModel = User
-#
-#class UserSocialLoginSerializer(
-#	LoginSerializerMixIn, 
-#	BaseSocialLoginSerializer):
-#	parentClass = BaseSocialLoginSerializer
-#	defaultFieldNames = ['name']
-#	mainModel = User
-#
-#class ResellerLoginSerializer(
-#	LoginSerializerMixIn, 
-#	BaseLoginSerializer):
-#	parentClass = BaseLoginSerializer
-#	defaultFieldNames = ['name', 'tail']
-#	mainModel = Reseller
-#
-#class ResellerSocialLoginSerializer(
-#	LoginSerializerMixIn, 
-#	BaseSocialLoginSerializer):
-#	parentClass = BaseSocialLoginSerializer
-#	defaultFieldNames = ['name', 'tail']
-#	mainModel = Reseller
-#
-#class DispatcherLoginSerializer(
-#	LoginSerializerMixIn, 
-#	BaseLoginSerializer):
-#	parentClass = BaseLoginSerializer
-#	defaultFieldNames = ['name', 'tail', 'address']
-#	mainModel = Dispatcher
-#
-#class DispatcherSocialLoginSerializer(
-#	LoginSerializerMixIn, 
-#	BaseSocialLoginSerializer):
-#	parentClass = BaseSocialLoginSerializer
-#	defaultFieldNames = ['name', 'tail', 'address']
-#	mainModel = Dispatcher
-
 def jwt_response_payload_handler(token, user=None, request=None):
 	mob_user = user
 	user = None
@@ -319,11 +248,43 @@ def jwt_response_payload_handler(token, user=None, request=None):
 
 # Business Serializer model
 
+class StorageSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
+	create_time = TimestampField(read_only=True)
+	class Meta:
+		model = Storage
+		fields = ('id', 'address', 'create_time', 
+			'mob', 'opening_time', 'closing_time')
+	
+	def create(self, validated_data):
+		request = self.context.get('request', None)
+		if request is None:
+			raise BadRequestException(detail='Bad Request')
+		mob_user = request.user
+		reseller = None
+		if hasattr(mob_user, 'reseller'):
+			reseller = mob_user.reseller
+		if reseller is None:
+			raise BadRequestException(detail='Reseller not found')
+
+		mob = validated_data.get('mob')
+		address = validated_data.get('address')
+		opening_time = validated_data.get('opening_time')
+		closing_time = validated_data.get('closing_time')
+
+		storage = Storage.objects.create(
+			mob=mob,
+			address=address,
+			opening_time=opening_time,
+			closing_time=closing_time,
+			is_custom=True,
+			reseller=reseller)
+		return storage
+
 
 class BulkCreateSerializer(serializers.Serializer):
 	title = serializers.CharField()
 	category = serializers.IntegerField()
-	dispatchers = serializers.ListField(
+	storages = serializers.ListField(
 		child=serializers.IntegerField()
 		)
 	dead_time = TimestampField()
@@ -352,16 +313,16 @@ class BulkCreateSerializer(serializers.Serializer):
 			category = Category.objects.get(pk=category_id)
 		except:
 			raise BadRequestException(detail='Category does not exist')
-		dispatchers_ = validated_data.get('dispatchers')
-		if len(dispatchers_) == 0:
-			raise BadRequestException(detail='Dispatchers can not be empty')
-		dispatchers = []
+		storages_ = validated_data.get('storages')
+		if len(storages_) == 0:
+			raise BadRequestException(detail='Storages can not be empty')
+		storages = []
 		try:
-			for dispatcher_id in dispatchers_:
-				dispatcher = Dispatcher.objects.get(pk=dispatcher_id)
-				dispatchers.append(dispatcher)
+			for storage_id in storages_:
+				storage = Storage.objects.get(pk=storage_id)
+				storages.append(storage)
 		except ObjectDoesNotExist:
-			raise BadRequestException(detail='Dispatcher does not exist')
+			raise BadRequestException(detail='Storage does not exist')
 
 		dead_time = validated_data.get('dead_time')
 		arrived_time = validated_data.get('arrived_time')
@@ -394,8 +355,8 @@ class BulkCreateSerializer(serializers.Serializer):
 			card_icon=products[0].cover
 			)
 		bulk.save()
-		for dispatcher in dispatchers:
-			bulk.dispatchers.add(dispatcher)
+		for storage in storages:
+			bulk.storages.add(storage)
 		for product in products:
 			productdetails_set = product.productdetails_set.all() # Cache
 			product.pk = None
@@ -412,7 +373,7 @@ class BulkCreateSerializer(serializers.Serializer):
 class BulkUpdateSerializer(serializers.Serializer):
 	title = serializers.CharField()
 	category = serializers.IntegerField()
-	dispatchers = serializers.ListField(
+	storages = serializers.ListField(
 		child=serializers.IntegerField()
 		)
 	dead_time = TimestampField()
@@ -443,18 +404,18 @@ class BulkUpdateSerializer(serializers.Serializer):
 			raise BadRequestException(detail='Category does not exist')
 		except IntegrityError:
 			raise BadRequestException(detail='Category does not exist')
-		dispatchers_ = validated_data.get('dispatchers')
-		if len(dispatchers_) == 0:
-			raise BadRequestException(detail='Dispatchers can not be empty')
-		dispatchers = []
+		storages_ = validated_data.get('storages')
+		if len(storages_) == 0:
+			raise BadRequestException(detail='Storages can not be empty')
+		storages = []
 		try:
-			for dispatcher_id in dispatchers_:
-				dispatcher = Dispatcher.objects.get(pk=dispatcher_id)
-				dispatchers.append(dispatcher)
+			for storage_id in storages_:
+				storage = Storage.objects.get(pk=storage_id)
+				storages.append(storage)
 		except ObjectDoesNotExist:
-			raise BadRequestException(detail='Dispatcher does not exist')
+			raise BadRequestException(detail='Storage does not exist')
 		except IntegrityError:
-			raise BadRequestException(detail='Dispatcher does not exist')
+			raise BadRequestException(detail='Storage does not exist')
 
 		dead_time = validated_data.get('dead_time')
 		arrived_time = validated_data.get('arrived_time')
@@ -489,10 +450,10 @@ class BulkUpdateSerializer(serializers.Serializer):
 		instance.save()
 
 		if request.method == 'PUT':
-			instance.dispatchers.remove()
+			instance.storages.remove()
 			instance.product_set.all().delete()
-			for dispatcher in dispatchers:
-				instance.dispatchers.add(dispatcher)
+			for storage in storages:
+				instance.storages.add(storage)
 			for product in products:
 				productdetails_set = product.productdetails_set.all() # Cache
 				product.pk = None
@@ -505,10 +466,10 @@ class BulkUpdateSerializer(serializers.Serializer):
 					product_details.save()
 				instance.product_set.add(product)
 		elif request.method == 'PATCH':
-			if len(dispatchers) > 0:
-				instance.dispatchers.remove()
-				for dispatcher in dispatchers:
-					instance.dispatchers.add(dispatcher)
+			if len(storages) > 0:
+				instance.storages.remove()
+				for storage in storages:
+					instance.storages.add(storage)
 			if len(products) > 0:
 				instance.product_set.all().delete()
 				for product in products:
@@ -651,7 +612,7 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
 class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	category = serializers.CharField(source='category.name')
 	reseller = ResellerSerializer()
-	dispatchers = DispatcherSerializer(many=True)
+	storages = StorageSerializer(many=True)
 	create_time = TimestampField()
 	dead_time = TimestampField()
 	standard_time = StandardTimeField(source='*')
@@ -660,16 +621,16 @@ class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 	participant_count = serializers.SerializerMethodField()
 	recent_obtain_name = serializers.SerializerMethodField()
 	recent_obtain_mob = serializers.SerializerMethodField()
-	recent_dispatcher = serializers.SerializerMethodField()
+	recent_storage = serializers.SerializerMethodField()
 	card_url = serializers.SerializerMethodField()
 
 	class Meta:
 		model = Bulk
-		fields = ('url', 'id', 'title', 'category', 'reseller', 'dispatchers', 
+		fields = ('url', 'id', 'title', 'category', 'reseller', 'storages', 
 			'products', 'location', 'standard_time', 'dead_time', 
 			'arrived_time', 'status', 'card_title', 'card_desc',
 			'card_icon', 'card_url', 'create_time', 'participant_count',
-			'recent_obtain_name', 'recent_obtain_mob', 'recent_dispatcher',
+			'recent_obtain_name', 'recent_obtain_mob', 'recent_storage',
 			'receive_mode',)
 
 	def get_participant_count(self, obj):
@@ -695,16 +656,16 @@ class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 				return mob_user.user.recent_obtain_mob
 		return None
 
-	def get_recent_dispatcher(self, obj):
+	def get_recent_storage(self, obj):
 		request = self.context.get('request', None)
 		if request is None:
 			return None
 		mob_user = request.user
 		if isinstance(mob_user, MobUser):
 			if hasattr(mob_user, 'user'):
-				if hasattr(mob_user.user, 'recent_dispatcher') and \
-					mob_user.user.recent_dispatcher is not None:
-					return mob_user.user.recent_dispatcher.id
+				if hasattr(mob_user.user, 'recent_storage') and \
+					mob_user.user.recent_storage is not None:
+					return mob_user.user.recent_storage.id
 		return None
 
 	def get_card_url(self, obj):
@@ -797,7 +758,7 @@ class OrderCreateSerializer(serializers.Serializer):
 	obtain_name = serializers.CharField()
 	obtain_mob = serializers.CharField()
 	bulk_id = serializers.IntegerField()
-	dispatcher_id = serializers.IntegerField()
+	storage_id = serializers.IntegerField()
 
 	def create(self, validated_data):
 		request = self.context.get('request', None)
@@ -817,14 +778,14 @@ class OrderCreateSerializer(serializers.Serializer):
 			raise BadRequestException(detail='Bulk has been expired')
 		if bulk is None:
 			raise BadRequestException(detail='Bulk not found')
-		dispatcher_id = validated_data.get('dispatcher_id')
-		dispatcher = None
+		storage_id = validated_data.get('storage_id')
+		storage = None
 		try:
-			dispatcher = Dispatcher.objects.get(pk=dispatcher_id)
+			storage = Storage.objects.get(pk=storage_id)
 		except ObjectDoesNotExist:
-			raise BadRequestException(detail='Dispatcher not found')
-		if dispatcher is None:
-			raise BadRequestException(detail='Dispatcher not found')
+			raise BadRequestException(detail='Storage not found')
+		if storage is None:
+			raise BadRequestException(detail='Storage not found')
 		obtain_name = validated_data.get('obtain_name')
 		obtain_mob = validated_data.get('obtain_mob')
 		goods = validated_data.get('goods')
@@ -845,7 +806,7 @@ class OrderCreateSerializer(serializers.Serializer):
 			freight=0,
 			total_fee=total_fee,
 			bulk_id=bulk_id,
-			dispatcher_id=dispatcher_id,
+			storage_id=storage_id,
 			user_id=user.id,
 			obtain_name=obtain_name,
 			obtain_mob=obtain_mob,
@@ -862,7 +823,7 @@ class OrderCreateSerializer(serializers.Serializer):
 			)
 		user.recent_obtain_name = obtain_name
 		user.recent_obtain_mob = obtain_mob
-		user.recent_dispatcher = dispatcher
+		user.recent_storage = storage
 		user.save()
 		return order
 		
@@ -908,7 +869,7 @@ class PayRequestModelSerializer(RemoveNullSerializerMixIn, serializers.ModelSeri
 				'balance_fee', 'use_balance', 'status')
 
 class OrderSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
-	dispatcher = DispatcherSerializer()
+	storage = StorageSerializer()
 	create_time = TimestampField()
 	goods = GoodsSerializer(source='goods_set', many=True)
 	wx_pay_request = serializers.SerializerMethodField()
@@ -921,7 +882,7 @@ class OrderSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSer
 
 	class Meta:
 		model = Order
-		fields = ('url', 'id', 'create_time', 'dispatcher', 
+		fields = ('url', 'id', 'create_time', 'storage', 
 			'status', 'freight', 'total_fee', 'obtain_name', 
 			'obtain_mob', 'goods', 'wx_pay_request', 'payrequest',
 			'card_title', 'card_desc', 'card_icon', 'card_url',

@@ -77,6 +77,7 @@ admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductDetails)
 admin.site.register(Bulk, BulkAdmin)
 admin.site.register(Order, OrderAdmin)
+admin.site.register(Storage)
 admin.site.register(Goods)
 admin.site.register(ShippingAddress)
 

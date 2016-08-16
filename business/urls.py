@@ -24,6 +24,7 @@ router = SimpleRouter()
 router.register(r'bulks', views.BulkViewSet, base_name='bulk')
 router.register(r'products', views.ProductViewSet, base_name='product')
 router.register(r'categorys', views.CategoryViewSet, base_name='category')
+router.register(r'storages', views.StorageViewSet, base_name='storage')
 router.register(r'shippingaddresses', views.ShippingAddressViewSet, base_name='shippingaddress')
 router.register(r'purchasedproducthistorys', views.PurchasedProductHistoryViewSet, 
 		base_name='purchasedproducthistory')
