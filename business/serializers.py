@@ -248,11 +248,11 @@ def jwt_response_payload_handler(token, user=None, request=None):
 
 # Business Serializer model
 
-class StorageSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
+class StorageSerializer(WeixinSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	create_time = TimestampField(read_only=True)
 	class Meta:
 		model = Storage
-		fields = ('id', 'address', 'create_time', 
+		fields = ('url', 'id', 'address', 'create_time', 
 			'mob', 'opening_time', 'closing_time',
 			'is_custom')
 	
@@ -288,6 +288,7 @@ class BulkCreateSerializer(serializers.Serializer):
 	storages = serializers.ListField(
 		child=serializers.IntegerField()
 		)
+	start_time = TimestampField()
 	dead_time = TimestampField()
 	arrived_time = TimestampField()
 	location = serializers.CharField()
@@ -325,6 +326,7 @@ class BulkCreateSerializer(serializers.Serializer):
 		except ObjectDoesNotExist:
 			raise BadRequestException(detail='Storage does not exist')
 
+		start_time = validated_data.get('start_time')
 		dead_time = validated_data.get('dead_time')
 		arrived_time = validated_data.get('arrived_time')
 		location = validated_data.get('location')
@@ -346,9 +348,10 @@ class BulkCreateSerializer(serializers.Serializer):
 			title=title,
 			category=category,
 			reseller=reseller,
+			start_time=start_time,
 			dead_time=dead_time,
 			arrived_time=arrived_time,
-			status=0,
+			status=-2,
 			location=location,
 			receive_mode=receive_mode,
 			card_title=title,
@@ -377,10 +380,12 @@ class BulkUpdateSerializer(serializers.Serializer):
 	storages = serializers.ListField(
 		child=serializers.IntegerField()
 		)
+	start_time = TimestampField()
 	dead_time = TimestampField()
 	arrived_time = TimestampField()
 	location = serializers.CharField()
 	receive_mode = serializers.IntegerField()
+	status = serializers.IntegerField(required=False)
 	products = serializers.ListField(
 		child=serializers.IntegerField()
 		)
@@ -389,66 +394,71 @@ class BulkUpdateSerializer(serializers.Serializer):
 		request = self.context.get('request', None)
 		if request is None:
 			raise BadRequestException(detail='Bad Request')
-		mob_user = request.user
-		reseller = None
-		if hasattr(mob_user, 'reseller'):
-			reseller = mob_user.reseller
-		if reseller is None:
-			raise BadRequestException(detail='Reseller not found')
 
 		title = validated_data.get('title')
 		category_id = validated_data.get('category')
 		category = None
-		try:
-			category = Category.objects.get(pk=category_id)
-		except ObjectDoesNotExist:
-			raise BadRequestException(detail='Category does not exist')
-		except IntegrityError:
-			raise BadRequestException(detail='Category does not exist')
+		if request.method == 'PUT':
+			try:
+				category = Category.objects.get(pk=category_id)
+			except ObjectDoesNotExist:
+				raise BadRequestException(detail='Category does not exist')
+			except IntegrityError:
+				raise BadRequestException(detail='Category does not exist')
 		storages_ = validated_data.get('storages')
-		if len(storages_) == 0:
-			raise BadRequestException(detail='Storages can not be empty')
-		storages = []
-		try:
-			for storage_id in storages_:
-				storage = Storage.objects.get(pk=storage_id)
-				storages.append(storage)
-		except ObjectDoesNotExist:
-			raise BadRequestException(detail='Storage does not exist')
-		except IntegrityError:
-			raise BadRequestException(detail='Storage does not exist')
+		storages = None
+		if request.method == 'PUT':
+			storages = []
+			if storages_ is None or len(storages_) == 0:
+				raise BadRequestException(detail='Storages can not be empty')
+			try:
+				for storage_id in storages_:
+					storage = Storage.objects.get(pk=storage_id)
+					storages.append(storage)
+			except ObjectDoesNotExist:
+				raise BadRequestException(detail='Storage does not exist')
+			except IntegrityError:
+				raise BadRequestException(detail='Storage does not exist')
 
+		start_time = validated_data.get('start_time')
 		dead_time = validated_data.get('dead_time')
 		arrived_time = validated_data.get('arrived_time')
 		location = validated_data.get('location')
 		receive_mode = validated_data.get('receive_mode')
-		if receive_mode not in [1, 2, 3]:
+		if request.method == 'PUT' and receive_mode not in [1, 2, 3]:
 			raise BadRequestException(detail='Receive mode is incorrect')
 		products_ = validated_data.get('products')
-		if len(products_) == 0:
-			raise BadRequestException(detail='Products can not be empty')
-		products = []
-		try:
-			for product_id in products_:
-				product = Product.objects.get(pk=product_id)
-				products.append(product)
-		except ObjectDoesNotExist:
-			raise BadRequestException(detail='Product does not exist')
-		except IntegrityError:
-			raise BadRequestException(detail='Product does not exist')
+		products = None
+		if request.method == 'PUT':
+			if len(products_) == 0:
+				raise BadRequestException(detail='Products can not be empty')
+			products = []
+			try:
+				for product_id in products_:
+					product = Product.objects.get(pk=product_id)
+					products.append(product)
+			except ObjectDoesNotExist:
+				raise BadRequestException(detail='Product does not exist')
+			except IntegrityError:
+				raise BadRequestException(detail='Product does not exist')
 
-		instance.title=title
-		instance.category=category
-		instance.reseller=reseller
-		instance.dead_time=dead_time
-		instance.arrived_time=arrived_time
-		instance.status=0
-		instance.location=location
-		instance.receive_mode=receive_mode
-		instance.card_title=title
-		instance.card_desc=title
-		instance.card_icon=products[0].cover
-		instance.save()
+		if title is not None:
+			instance.title = title
+			instance.card_title=title
+			instance.card_desc=title
+		if category is not None:
+			instance.category=category
+		if start_time is not None:
+			instance.start_time=start_time
+		if dead_time is not None:
+			instance.dead_time=dead_time
+		if arrived_time is not None:
+			instance.arrived_time=arrived_time
+		if location is not None:
+			instance.location=location
+		if receive_mode is not None:
+			instance.receive_mode=receive_mode
+		instance.status = validated_data.get('status', instance.status)
 
 		if request.method == 'PUT':
 			instance.storages.remove()
@@ -467,11 +477,11 @@ class BulkUpdateSerializer(serializers.Serializer):
 					product_details.save()
 				instance.product_set.add(product)
 		elif request.method == 'PATCH':
-			if len(storages) > 0:
+			if storages is not None and len(storages) > 0:
 				instance.storages.remove()
 				for storage in storages:
 					instance.storages.add(storage)
-			if len(products) > 0:
+			if products is not None and len(products) > 0:
 				instance.product_set.all().delete()
 				for product in products:
 					productdetails_set = product.productdetails_set.all() # Cache
@@ -485,6 +495,11 @@ class BulkUpdateSerializer(serializers.Serializer):
 						product_details.save()
 					instance.product_set.add(product)
 			
+
+		if instance.product_set.count() > 0:
+			instance.card_icon = instance.product_set.first().cover
+		instance.save()
+
 		return instance
 
 class BulkListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
@@ -496,6 +511,7 @@ class BulkListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModel
 	reseller = ResellerSerializer()
 	covers = serializers.SerializerMethodField(method_name='get_product_covers')
 	create_time = TimestampField()
+	start_time = TimestampField()
 	dead_time = TimestampField()
 	arrived_time = TimestampField()
 	participant_count = serializers.SerializerMethodField()
@@ -503,7 +519,7 @@ class BulkListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModel
 	class Meta:
 		model = Bulk
 		fields = ('url', 'id', 'title', 'category', 'reseller', 'covers',
-			'dead_time', 'arrived_time', 'status', 'receive_mode',
+			'start_time', 'dead_time', 'arrived_time', 'status', 'receive_mode',
 			'create_time', 'location', 'participant_count')
 		#extra_kwargs = {
 		#	'url': {'view_name': 'bulk', 'lookup_field': 'id'}
@@ -598,7 +614,7 @@ class ProductListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedMo
 		url = reverse('purchasedproducthistory-list', request=request)
 		return utils.addQueryParams(url, params)
 
-class ProductSerializer(serializers.HyperlinkedModelSerializer):
+class ProductSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	create_time = TimestampField()
 	category = serializers.CharField(source='category.name')
 	details = ProductDetailsSerializer(source='productdetails_set', many=True)
@@ -608,13 +624,14 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = Product
 		fields = ('url', 'id', 'title', 'desc', 'category', 'unit_price', 'market_price',
-			'spec', 'spec_desc', 'cover', 'create_time', 'details', 'bulk_url')
+			'spec', 'spec_desc', 'cover', 'create_time', 'details', 'bulk_url', 'tag', 'tag_color')
 
 class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	category = serializers.CharField(source='category.name')
 	reseller = ResellerSerializer()
 	storages = StorageSerializer(many=True)
 	create_time = TimestampField()
+	start_time = TimestampField()
 	dead_time = TimestampField()
 	standard_time = StandardTimeField(source='*')
 	arrived_time = TimestampField()
@@ -628,7 +645,7 @@ class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 	class Meta:
 		model = Bulk
 		fields = ('url', 'id', 'title', 'category', 'reseller', 'storages', 
-			'products', 'location', 'standard_time', 'dead_time', 
+			'products', 'location', 'standard_time', 'start_time', 'dead_time', 
 			'arrived_time', 'status', 'card_title', 'card_desc',
 			'card_icon', 'card_url', 'create_time', 'participant_count',
 			'recent_obtain_name', 'recent_obtain_mob', 'recent_storage',

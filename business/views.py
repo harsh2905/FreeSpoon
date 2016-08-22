@@ -370,7 +370,7 @@ class BulkViewSet(ModelViewSet):
 	serializer_class_update = BulkUpdateSerializer
 	pagination_class = TimestampPagination
 
-	pagination_field_name = 'create_time'
+	pagination_field_name = 'dead_time'
 	pagination_lookup_type = 'lt'
 
 	filter_backends = (filters.SearchFilter, FieldOrderBackend, FieldFilterBackend, MethodFilterBackend,)
@@ -380,7 +380,8 @@ class BulkViewSet(ModelViewSet):
 
 
 	def update_bulk_status(self, queryset):
-		queryset.filter(dead_time__lt=datetime.datetime.now(tz=UTC())).update(status=-1)
+		queryset.filter(Q(start_time__lt=datetime.datetime.now(tz=UTC())) & Q(status=-2)).update(status=0)
+		queryset.filter(Q(dead_time__lt=datetime.datetime.now(tz=UTC())) & Q(status__gte=0)).update(status=-1)
 		return queryset
 
 	filter_method = update_bulk_status

@@ -47,8 +47,8 @@ class Dispatcher(models.Model):
 class Storage(models.Model):
 	address = models.TextField()
 	mob = models.CharField(max_length=100, null=True, blank=True)
-	opening_time = models.IntegerField(max_length=11)
-	closing_time = models.IntegerField(max_length=11)
+	opening_time = models.IntegerField(max_length=11, null=True, blank=True)
+	closing_time = models.IntegerField(max_length=11, null=True, blank=True)
 	create_time = models.DateTimeField(auto_now=True)
 	is_custom = models.BooleanField(default=False)
 	reseller = models.ForeignKey('Reseller', null=True, blank=True)
@@ -98,6 +98,7 @@ class Bulk(models.Model):
 	details = models.TextField()
 	reseller = models.ForeignKey('Reseller')
 	storages = models.ManyToManyField('Storage')
+	start_time = models.DateTimeField()
 	dead_time = models.DateTimeField()
 	arrived_time = models.DateTimeField()
 	status = models.IntegerField(max_length=11)
