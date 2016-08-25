@@ -1386,6 +1386,7 @@ class DishUpdateSerializer(serializers.Serializer):
 						instance.tips.create(plain=tip)
 		except IntegrityError:
 			raise BadRequestException(detail='Update failed')
+		instance.save()
 		return instance
 
 class DishCreateSerializer(serializers.Serializer):
