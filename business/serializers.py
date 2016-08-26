@@ -961,6 +961,7 @@ class SlideDetailsSerializer(RemoveNullSerializerMixIn, serializers.ModelSeriali
 		return obj.source
 
 class BulkExhibitSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
+	category = serializers.CharField(source='category.name')
 	covers = serializers.SerializerMethodField(method_name='get_product_covers')
 
 	class Meta:
