@@ -460,7 +460,8 @@ class OrderViewSet(ModelViewSet):
 	pagination_lookup_type = 'lt'
 
 	def update_order_status(self, queryset):
-		queryset.filter(status=0, bulk__dead_time__lt=datetime.datetime.now(tz=UTC())).update(status=-1)
+		queryset.filter(Q(status=0) & (Q(bulk__status=-1) | Q(bulk__status__lt=0) | Q(bulk__dead_time__lt=datetime.datetime.now(tz=UTC())))).update(status=-1)
+		queryset.filter(Q(status=1) & (Q(bulk__status=-1) | Q(bulk__status__lt=0) | Q(bulk__dead_time__lt=datetime.datetime.now(tz=UTC())))).update(status=2)
 		return queryset
 
 	filter_method = update_order_status
