@@ -776,7 +776,12 @@ class OrderCreateSerializer(serializers.Serializer):
 	obtain_name = serializers.CharField()
 	obtain_mob = serializers.CharField()
 	bulk_id = serializers.IntegerField()
-	storage_id = serializers.IntegerField()
+	receive_mode = serializers.IntegerField()
+	storage_id = serializers.IntegerField(required=False)
+	shippingaddress_id = serializers.IntegerField(required=False)
+	receive_name = serializers.CharField(required=False)
+	receive_mob = serializers.CharField(required=False)
+	receive_address = serializers.CharField(required=False)
 
 	def create(self, validated_data):
 		request = self.context.get('request', None)
@@ -796,14 +801,41 @@ class OrderCreateSerializer(serializers.Serializer):
 			raise BadRequestException(detail='Bulk has been expired')
 		if bulk is None:
 			raise BadRequestException(detail='Bulk not found')
-		storage_id = validated_data.get('storage_id')
+		receive_mode = validated_data.get('receive_mode')
+		if receive_mode is None or not receive_mode in [1, 2]:
+			raise BadRequestException(detail='Receive mode not found')
+		receive_name = None
+		receive_mob = None
+		receive_address = None
+		if receive_mode & 2:
+			shippingaddress_id = validated_data.get('shippingaddress_id')
+			if shippingaddress_id is not None:
+				try:
+					shippingaddress = ShippingAddress.objects.get(pk=shippingaddress_id)
+					receive_name = shippingaddress.name
+					receive_mob = shippingaddress.mob
+					receive_address = shippingaddress.address
+				except ObjectDoesNotExist:
+					raise BadRequestException(detail='Shipping address not found')
+			else:
+				receive_name = validated_data.get('receive_name')
+				if receive_name is None or len(receive_name) == 0:
+					raise BadRequestException(detail='Receive name not found')
+				receive_mob = validated_data.get('receive_mob')
+				if receive_mob is None or len(receive_mob) == 0:
+					raise BadRequestException(detail='Receive mob not found')
+				receive_address = validated_data.get('receive_address')
+				if receive_address is None or len(receive_address) == 0:
+					raise BadRequestException(detail='Receive address not found')
 		storage = None
-		try:
-			storage = Storage.objects.get(pk=storage_id)
-		except ObjectDoesNotExist:
-			raise BadRequestException(detail='Storage not found')
-		if storage is None:
-			raise BadRequestException(detail='Storage not found')
+		storage_id = validated_data.get('storage_id')
+		if receive_mode & 1:
+			try:
+				storage = Storage.objects.get(pk=storage_id)
+			except ObjectDoesNotExist:
+				raise BadRequestException(detail='Storage not found')
+			if storage is None:
+				raise BadRequestException(detail='Storage not found')
 		obtain_name = validated_data.get('obtain_name')
 		obtain_mob = validated_data.get('obtain_mob')
 		goods = validated_data.get('goods')
@@ -824,6 +856,10 @@ class OrderCreateSerializer(serializers.Serializer):
 			freight=0,
 			total_fee=total_fee,
 			bulk_id=bulk_id,
+			receive_mode=receive_mode,
+			receive_name=receive_name,
+			receive_mob=receive_mob,
+			receive_address=receive_address,
 			storage_id=storage_id,
 			user_id=user.id,
 			obtain_name=obtain_name,
@@ -904,7 +940,8 @@ class OrderSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSer
 			'status', 'freight', 'total_fee', 'obtain_name', 
 			'obtain_mob', 'goods', 'wx_pay_request', 'payrequest',
 			'card_title', 'card_desc', 'card_icon', 'card_url',
-			'seq', 'bulk_status')
+			'seq', 'bulk_status', 'receive_mode', 'receive_name', 
+			'receive_mob', 'receive_address')
 
 	def get_card_url(self, obj):
 		return config.CARD_BULK_URL % obj.bulk.id
