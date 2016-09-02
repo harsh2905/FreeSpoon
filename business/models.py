@@ -57,6 +57,7 @@ class Storage(models.Model):
 
 class Category(models.Model):
 	name = models.CharField(max_length=100, null=True, blank=True)
+	receive_mode = models.IntegerField(max_length=11, default=2)
 	def __unicode__(self):
 		return self.name
 
@@ -129,6 +130,7 @@ class Order(models.Model):
 	obtain_name = models.CharField(max_length=100, null=True, blank=True)
 	obtain_mob = models.CharField(max_length=20, null=True, blank=True)
 	is_delete = models.BooleanField(default=False)
+	comments = models.TextField(null=True, blank=True)
 	def __unicode__(self):
 		return '%s(User: %s, Date: %s)' % (
 			self.bulk.title, self.user.name, self.create_time)

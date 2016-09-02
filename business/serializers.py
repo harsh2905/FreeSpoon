@@ -286,7 +286,8 @@ class BulkCreateSerializer(serializers.Serializer):
 	title = serializers.CharField()
 	category = serializers.IntegerField()
 	storages = serializers.ListField(
-		child=serializers.IntegerField()
+		child=serializers.IntegerField(),
+		required=False
 		)
 	start_time = TimestampField()
 	dead_time = TimestampField()
@@ -309,30 +310,31 @@ class BulkCreateSerializer(serializers.Serializer):
 			raise BadRequestException(detail='Reseller not found')
 
 		title = validated_data.get('title')
+		receive_mode = validated_data.get('receive_mode')
+		if receive_mode not in [1, 2, 3]:
+			raise BadRequestException(detail='Receive mode is incorrect')
 		category_id = validated_data.get('category')
 		category = None
 		try:
 			category = Category.objects.get(pk=category_id)
 		except:
 			raise BadRequestException(detail='Category does not exist')
-		storages_ = validated_data.get('storages')
-		if len(storages_) == 0:
-			raise BadRequestException(detail='Storages can not be empty')
 		storages = []
-		try:
-			for storage_id in storages_:
-				storage = Storage.objects.get(pk=storage_id)
-				storages.append(storage)
-		except ObjectDoesNotExist:
-			raise BadRequestException(detail='Storage does not exist')
+		if receive_mode & 1:
+			storages_ = validated_data.get('storages')
+			if storages_ is None or len(storages_) == 0:
+				raise BadRequestException(detail='Storages can not be empty')
+			try:
+				for storage_id in storages_:
+					storage = Storage.objects.get(pk=storage_id)
+					storages.append(storage)
+			except ObjectDoesNotExist:
+				raise BadRequestException(detail='Storage does not exist')
 
 		start_time = validated_data.get('start_time')
 		dead_time = validated_data.get('dead_time')
 		arrived_time = validated_data.get('arrived_time')
 		location = validated_data.get('location')
-		receive_mode = validated_data.get('receive_mode')
-		if receive_mode not in [1, 2, 3]:
-			raise BadRequestException(detail='Receive mode is incorrect')
 		products_ = validated_data.get('products')
 		if len(products_) == 0:
 			raise BadRequestException(detail='Products can not be empty')
@@ -359,8 +361,9 @@ class BulkCreateSerializer(serializers.Serializer):
 			card_icon=products[0].cover
 			)
 		bulk.save()
-		for storage in storages:
-			bulk.storages.add(storage)
+		if receive_mode & 1:
+			for storage in storages:
+				bulk.storages.add(storage)
 		for product in products:
 			productdetails_set = product.productdetails_set.all() # Cache
 			product.pk = None
@@ -378,7 +381,8 @@ class BulkUpdateSerializer(serializers.Serializer):
 	title = serializers.CharField()
 	category = serializers.IntegerField()
 	storages = serializers.ListField(
-		child=serializers.IntegerField()
+		child=serializers.IntegerField(),
+		required=False
 		)
 	start_time = TimestampField()
 	dead_time = TimestampField()
@@ -396,6 +400,10 @@ class BulkUpdateSerializer(serializers.Serializer):
 			raise BadRequestException(detail='Bad Request')
 
 		title = validated_data.get('title')
+		receive_mode = validated_data.get('receive_mode')
+		if request.method == 'PUT' and receive_mode not in [1, 2, 3]:
+			raise BadRequestException(detail='Receive mode is incorrect')
+		receive_mode = instance.receive_mode if receive_mode is None else receive_mode
 		category_id = validated_data.get('category')
 		category = None
 		if request.method == 'PUT':
@@ -405,28 +413,26 @@ class BulkUpdateSerializer(serializers.Serializer):
 				raise BadRequestException(detail='Category does not exist')
 			except IntegrityError:
 				raise BadRequestException(detail='Category does not exist')
-		storages_ = validated_data.get('storages')
 		storages = None
-		if request.method == 'PUT':
-			storages = []
-			if storages_ is None or len(storages_) == 0:
-				raise BadRequestException(detail='Storages can not be empty')
-			try:
-				for storage_id in storages_:
-					storage = Storage.objects.get(pk=storage_id)
-					storages.append(storage)
-			except ObjectDoesNotExist:
-				raise BadRequestException(detail='Storage does not exist')
-			except IntegrityError:
-				raise BadRequestException(detail='Storage does not exist')
+		if receive_mode & 1:
+			storages_ = validated_data.get('storages')
+			if request.method == 'PUT':
+				storages = []
+				if storages_ is None or len(storages_) == 0:
+					raise BadRequestException(detail='Storages can not be empty')
+				try:
+					for storage_id in storages_:
+						storage = Storage.objects.get(pk=storage_id)
+						storages.append(storage)
+				except ObjectDoesNotExist:
+					raise BadRequestException(detail='Storage does not exist')
+				except IntegrityError:
+					raise BadRequestException(detail='Storage does not exist')
 
 		start_time = validated_data.get('start_time')
 		dead_time = validated_data.get('dead_time')
 		arrived_time = validated_data.get('arrived_time')
 		location = validated_data.get('location')
-		receive_mode = validated_data.get('receive_mode')
-		if request.method == 'PUT' and receive_mode not in [1, 2, 3]:
-			raise BadRequestException(detail='Receive mode is incorrect')
 		products_ = validated_data.get('products')
 		products = None
 		if request.method == 'PUT':
@@ -461,10 +467,11 @@ class BulkUpdateSerializer(serializers.Serializer):
 		instance.status = validated_data.get('status', instance.status)
 
 		if request.method == 'PUT':
-			instance.storages.remove()
 			instance.product_set.all().delete()
-			for storage in storages:
-				instance.storages.add(storage)
+			if receive_mode & 1:
+				instance.storages.remove()
+				for storage in storages:
+					instance.storages.add(storage)
 			for product in products:
 				productdetails_set = product.productdetails_set.all() # Cache
 				product.pk = None
@@ -477,10 +484,11 @@ class BulkUpdateSerializer(serializers.Serializer):
 					product_details.save()
 				instance.product_set.add(product)
 		elif request.method == 'PATCH':
-			if storages is not None and len(storages) > 0:
-				instance.storages.remove()
-				for storage in storages:
-					instance.storages.add(storage)
+			if receive_mode & 1:
+				if storages is not None and len(storages) > 0:
+					instance.storages.remove()
+					for storage in storages:
+						instance.storages.add(storage)
 			if products is not None and len(products) > 0:
 				instance.product_set.all().delete()
 				for product in products:
@@ -693,7 +701,7 @@ class CategorySerializer(serializers.ModelSerializer):
 	name = serializers.CharField()
 	class Meta:
 		model = Category
-		fields = ('id', 'name',)
+		fields = ('id', 'name', 'receive_mode')
 
 class ShippingAddressSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
@@ -782,6 +790,7 @@ class OrderCreateSerializer(serializers.Serializer):
 	receive_name = serializers.CharField(required=False)
 	receive_mob = serializers.CharField(required=False)
 	receive_address = serializers.CharField(required=False)
+	comments = serializers.CharField(required=False)
 
 	def create(self, validated_data):
 		request = self.context.get('request', None)
@@ -838,6 +847,7 @@ class OrderCreateSerializer(serializers.Serializer):
 				raise BadRequestException(detail='Storage not found')
 		obtain_name = validated_data.get('obtain_name')
 		obtain_mob = validated_data.get('obtain_mob')
+		comments = validated_data.get('comments')
 		goods = validated_data.get('goods')
 		total_fee = 0
 		for _ in goods:
@@ -864,6 +874,7 @@ class OrderCreateSerializer(serializers.Serializer):
 			user_id=user.id,
 			obtain_name=obtain_name,
 			obtain_mob=obtain_mob,
+			comments=comments,
 			seq=bulk.seq
 		)
 		bulk.save()
@@ -881,7 +892,7 @@ class OrderCreateSerializer(serializers.Serializer):
 		user.save()
 		return order
 		
-class OrderListSerializer(serializers.HyperlinkedModelSerializer):
+class OrderListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	reseller = ResellerSerializer(source='bulk.reseller')
 	create_time = TimestampField()
 	covers = serializers.SerializerMethodField(method_name='get_goods_covers')
@@ -897,7 +908,7 @@ class OrderListSerializer(serializers.HyperlinkedModelSerializer):
 		fields = ('url', 'id', 'create_time', 'reseller', 
 			'status', 'total_fee', 'covers', 'count', 'seq',
 			'card_title', 'card_desc', 'card_icon', 'card_url',
-			'bulk_status')
+			'bulk_status', 'comments')
 
 	def get_card_url(self, obj):
 		return config.CARD_BULK_URL % obj.bulk.id
@@ -941,7 +952,7 @@ class OrderSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSer
 			'obtain_mob', 'goods', 'wx_pay_request', 'payrequest',
 			'card_title', 'card_desc', 'card_icon', 'card_url',
 			'seq', 'bulk_status', 'receive_mode', 'receive_name', 
-			'receive_mob', 'receive_address')
+			'receive_mob', 'receive_address', 'comments')
 
 	def get_card_url(self, obj):
 		return config.CARD_BULK_URL % obj.bulk.id
