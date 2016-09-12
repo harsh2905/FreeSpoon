@@ -561,7 +561,10 @@ class ProductListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedMo
 			'participant_avatars', 'history', 'limit', 'stock',)
 
 	def get_participant_count(self, obj):
-		return Goods.objects.filter(product_id=obj.pk).count()
+		pk = self.context.get('pk', None)
+		if not pk:
+			return None
+		return Goods.objects.filter(product_id=obj.pk, order__bulk_id=pk).count()
 
 	def get_participant_avatars(self, obj):
 		request = self.context.get('request', None)

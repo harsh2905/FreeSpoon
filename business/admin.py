@@ -18,9 +18,10 @@ class ResellerAdmin(admin.ModelAdmin):
 		return obj.mob_user.mob
 
 class BulkAdmin(admin.ModelAdmin):
-	inlines = [
-		ProductInline,
-	]
+	# inlines = [
+	# 	ProductInline,
+	# ]
+	filter_horizontal = ('storages', 'products',)
 	list_display = ('id', 'title',)
 
 class ProductDetailsInline(admin.TabularInline):
@@ -65,6 +66,7 @@ class RecipeAdmin(admin.ModelAdmin):
 		StepInline,
 		IngredientInline,
 	]
+	filter_horizontal = ('tips',)
 	list_display = ('id', 'name',)
 
 class DishDetailsInline(admin.TabularInline):
@@ -72,6 +74,7 @@ class DishDetailsInline(admin.TabularInline):
 	extra = 1
 
 class DishAdmin(admin.ModelAdmin):
+	filter_horizontal = ('tips',)
 	inlines = [
 		DishDetailsInline,
 	]
