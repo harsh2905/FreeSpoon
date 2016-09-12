@@ -10,7 +10,7 @@ class BadRequestException(APIException):
 		if detail is not None:
 			self.detail = {
 				'errcode': errcode,
-				'detail': force_text(detail)
+				'detail': detail
 			}
 			self.detail_ = force_text(detail)
 		else:

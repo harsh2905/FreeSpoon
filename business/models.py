@@ -29,9 +29,10 @@ class Reseller(models.Model):
 	name = models.CharField(max_length=100, null=True, blank=True)
 	avatar = models.ImageField(upload_to='avatars', null=True, blank=True)
 	tail = models.CharField(max_length=255, blank=True)
+	state = models.IntegerField(max_length=11, default=0)
 	create_time = models.DateTimeField(auto_now=True)
 	def __unicode__(self):
-		return self.name
+		return self.name if self.name else 'None'
 	
 class Dispatcher(models.Model):
 	related_field_name = 'dispatcher'
@@ -65,7 +66,7 @@ class Product(models.Model):
 	title = models.CharField(max_length=200)
 	desc = models.TextField()
 	category = models.ForeignKey('Category', null=True, blank=True)
-	bulk = models.ForeignKey('Bulk', null=True, blank=True)
+	bulk = models.ForeignKey('Bulk', null=True, blank=True, on_delete=models.SET_NULL)
 	unit_price = models.IntegerField(max_length=11)
 	market_price = models.IntegerField(max_length=11)
 	tag = models.CharField(max_length=20, null=True, blank=True)
@@ -73,11 +74,11 @@ class Product(models.Model):
 	spec = models.CharField(max_length=100)
 	spec_desc = models.CharField(max_length=100)
 	cover = models.ImageField(upload_to='images/product/%Y/%m/%d')
-	is_snapshot = models.BooleanField(default=False)
 	create_time = models.DateTimeField(auto_now=True)
+	limit = models.IntegerField(max_length=11, null=True)
+	stock = models.IntegerField(max_length=11, default=0)
+	purchased = models.IntegerField(max_length=11, default=0)
 	def __unicode__(self):
-		if self.is_snapshot:
-			return '%s[SnapShot]' % self.title
 		return self.title
 
 class ProductDetails(models.Model):
@@ -85,7 +86,6 @@ class ProductDetails(models.Model):
 	image = models.ImageField(upload_to='images/product_details/%Y/%m/%d')
 	plain = models.TextField()
 	seq = models.IntegerField(max_length=11)
-	is_snapshot = models.BooleanField(default=False)
 	create_time = models.DateTimeField(auto_now=True)
 	def __unicode__(self):
 		return '%s[%s]' % (self.product.title, self.seq)
@@ -137,6 +137,7 @@ class Order(models.Model):
 
 class Goods(models.Model):
 	order = models.ForeignKey('Order')
+	user = models.ForeignKey('User', null=True)
 	product = models.ForeignKey('Product')
 	quantity = models.IntegerField(max_length=11)
 	def __unicode__(self):

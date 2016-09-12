@@ -5,7 +5,7 @@ from django.utils.timezone import UTC
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_GET
 from django.shortcuts import get_object_or_404
-from django.db import IntegrityError
+from django.db import IntegrityError, OperationalError
 from django.core.files.base import ContentFile
 from django.db.models import Q
 
@@ -235,6 +235,10 @@ def payNotify(request, appid):
 	payrequest.save()
 	order.status = 1
 	order.save()
+	for goods in order.goods_set.all():
+		product = goods.product
+		product.purchased += goods.quantity
+		product.save()
 	user.balance -= payrequest.balance_fee
 	user.save()
 	success = {
@@ -276,6 +280,20 @@ class payRequest(views.APIView):
 			raise BadRequestException(detail='Bulk not found')
 		if order.bulk.status < 0 or order.bulk.dead_time < datetime.datetime.now(tz=UTC()):
 			raise BadRequestException(detail='Order has been expired')
+		errs = []
+		for goods in order.goods_set.all():
+			stock = goods.product.stock
+			if stock is not None and stock > 0:
+				purchased = goods.product.purchased
+				if stock < (purchased + goods.quantity):
+					errs.append({
+						'product_id': goods.product_id,
+						'product_title': goods.product.title
+					})
+		if len(errs) > 0:
+			exception = BadRequestException(errcode=-2, detail=errs)
+			exception.status_code = 200
+			raise exception
 		if hasattr(order, 'payrequest'):
 			order.payrequest.delete()
 		total_fee = order.total_fee
@@ -308,7 +326,11 @@ class payRequest(views.APIView):
 			order.status = 1
 			order.save()
 			user.balance -= payrequest.balance_fee
-			user.save()			
+			user.save()
+			for goods in order.goods_set.all():
+				product = goods.product
+				product.purchased += goods.quantity
+				product.save()
 			data = {
 				'require_third_party_payment': require_third_party_payment,
 				'pay_request_json': None,
@@ -378,6 +400,12 @@ class BulkViewSet(ModelViewSet):
 	filter_fields = ['reseller_id']
 	filter_field_raise_exception = False
 
+	def retrieve(self, request, pk=None):
+		queryset = Bulk.objects.all()
+		bulk = get_object_or_404(queryset, pk=pk)
+		serializer = BulkSerializer(bulk, 
+			context={'request': request, 'pk': pk})
+		return Response(serializer.data)
 
 	def update_bulk_status(self, queryset):
 		queryset.filter(Q(start_time__lt=datetime.datetime.now(tz=UTC())) & Q(status=-2)).update(status=0)
@@ -440,7 +468,7 @@ class PurchasedProductHistoryViewSet(ReadOnlyModelViewSet):
 	serializer_class = PurchasedProductHistorySerializer
 	filter_backends = (FieldFilterBackend, FieldOrderBackend,)
 
-	filter_fields = ['product_id']
+	filter_fields = ['product_id', 'bulk_id']
 	filter_field_raise_exception = True
 
 	order_fields = ['-create_time']
@@ -473,6 +501,10 @@ class OrderViewSet(ModelViewSet):
 			raise BadRequestException(detail='Refused to destroy order')
 		if instance.status > 0:
 			instance.user.balance += instance.total_fee
+			for goods in instance.goods_set.all():
+				product = goods.product
+				product.purchased -= goods.quantity
+				product.save()
 			instance.user.save()
 		instance.is_delete = True
 		instance.save()
@@ -578,4 +610,23 @@ def sms(request, mob):
 		return Response(status=status.HTTP_204_NO_CONTENT)
 	raise BadRequestException(detail='SMS sending failure')
 
+	
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def apply_reseller(request):
+	mob_user = request.user
+	if not mob_user:
+		raise BadRequestException(detail='Mob User not found')
+	# name = request.data.get('name', None)
+	name = mob_user.real_wx_nickname if mob_user.real_wx_nickname else mob_user.mob
+	name = utils.filter_emoji(name)
+	try:
+		reseller = Reseller.objects.create(
+			mob_user=mob_user, 
+			name=name,
+			state=1)
+	except IntegrityError:
+		raise BadRequestException(detail='Submit duplicate')
+	serializer = ResellerSerializer(instance=reseller, context={'request': request})
+	return Response(serializer.data, status=status.HTTP_200_OK)
 	

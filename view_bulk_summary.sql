@@ -46,7 +46,7 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `view_bulk_summary` AS select `business_goods`.`product_id` AS `product_id`,sum(`business_goods`.`quantity`) AS `quantity`,sum((`business_goods`.`quantity` * `business_product`.`unit_price`)) AS `total_price`,`business_product`.`spec` AS `spec`,`business_product`.`bulk_id` AS `bulk_id` from (`business_goods` left join `business_product` on((`business_goods`.`product_id` = `business_product`.`id`))) group by `business_goods`.`product_id` */;
+/*!50001 VIEW `view_bulk_summary` AS select `business_goods`.`product_id` AS `product_id`,sum(`business_goods`.`quantity`) AS `quantity`,sum((`business_goods`.`quantity` * `business_product`.`unit_price`)) AS `total_price`,`business_product`.`spec` AS `spec`,`business_order`.`bulk_id` AS `bulk_id` from ((`business_goods` left join `business_product` on((`business_goods`.`product_id` = `business_product`.`id`))) left join `business_order` on((`business_goods`.`order_id` = `business_order`.`id`))) group by `business_goods`.`product_id`,`business_order`.`bulk_id` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -60,4 +60,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-08-14 23:02:04
+-- Dump completed on 2016-09-11 23:16:10

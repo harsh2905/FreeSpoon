@@ -92,13 +92,13 @@ class ResellerSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
 	class Meta:
 		model = Reseller
 		fields = ('id', 'name', 'tail', 'create_time', 
-			'mob', 'wx_nickname', 'wx_headimgurl')
+			'mob', 'wx_nickname', 'wx_headimgurl', 'state',)
 
 class LoginResellerSerializer(WeixinSerializerMixIn, serializers.ModelSerializer):
 	create_time = TimestampField()
 	class Meta:
 		model = Reseller
-		fields = ('id', 'tail', 'create_time')
+		fields = ('id', 'tail', 'create_time', 'state',)
 
 #class ResellerJWTSerializer(serializers.Serializer):
 #	token = serializers.CharField()
@@ -306,7 +306,7 @@ class BulkCreateSerializer(serializers.Serializer):
 		reseller = None
 		if hasattr(mob_user, 'reseller'):
 			reseller = mob_user.reseller
-		if reseller is None:
+		if reseller is None or reseller.state <> 2:
 			raise BadRequestException(detail='Reseller not found')
 
 		title = validated_data.get('title')
@@ -365,15 +365,6 @@ class BulkCreateSerializer(serializers.Serializer):
 			for storage in storages:
 				bulk.storages.add(storage)
 		for product in products:
-			productdetails_set = product.productdetails_set.all() # Cache
-			product.pk = None
-			product.is_snapshot = True
-			product.save()
-			for product_details in productdetails_set:
-				product_details.pk = None
-				product_details.is_snapshot = True
-				product_details.product = product
-				product_details.save()
 			bulk.product_set.add(product)
 		return bulk
 
@@ -434,11 +425,11 @@ class BulkUpdateSerializer(serializers.Serializer):
 		arrived_time = validated_data.get('arrived_time')
 		location = validated_data.get('location')
 		products_ = validated_data.get('products')
-		products = None
+		products = []
 		if request.method == 'PUT':
-			if len(products_) == 0:
+			if products_ is None or len(products_) == 0:
 				raise BadRequestException(detail='Products can not be empty')
-			products = []
+		if request.method == 'PUT' or (request.method == 'PATCH' and products_ is not None):
 			try:
 				for product_id in products_:
 					product = Product.objects.get(pk=product_id)
@@ -467,21 +458,12 @@ class BulkUpdateSerializer(serializers.Serializer):
 		instance.status = validated_data.get('status', instance.status)
 
 		if request.method == 'PUT':
-			instance.product_set.all().delete()
+			instance.product_set.remove()
 			if receive_mode & 1:
 				instance.storages.remove()
 				for storage in storages:
 					instance.storages.add(storage)
 			for product in products:
-				productdetails_set = product.productdetails_set.all() # Cache
-				product.pk = None
-				product.is_snapshot = True
-				product.save()
-				for product_details in productdetails_set:
-					product_details.pk = None
-					product_details.is_snapshot = True
-					product_details.product = product
-					product_details.save()
 				instance.product_set.add(product)
 		elif request.method == 'PATCH':
 			if receive_mode & 1:
@@ -489,20 +471,10 @@ class BulkUpdateSerializer(serializers.Serializer):
 					instance.storages.remove()
 					for storage in storages:
 						instance.storages.add(storage)
-			if products is not None and len(products) > 0:
-				instance.product_set.all().delete()
+			if len(products) > 0:
+				instance.product_set.remove()
 				for product in products:
-					productdetails_set = product.productdetails_set.all() # Cache
-					product.pk = None
-					product.is_snapshot = True
-					product.save()
-					for product_details in productdetails_set:
-						product_details.pk = None
-						product_details.is_snapshot = True
-						product_details.product = product
-						product_details.save()
 					instance.product_set.add(product)
-			
 
 		if instance.product_set.count() > 0:
 			instance.card_icon = instance.product_set.first().cover
@@ -528,7 +500,7 @@ class BulkListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModel
 		model = Bulk
 		fields = ('url', 'id', 'title', 'category', 'reseller', 'covers',
 			'start_time', 'dead_time', 'arrived_time', 'status', 'receive_mode',
-			'create_time', 'location', 'participant_count')
+			'create_time', 'location', 'participant_count',)
 		#extra_kwargs = {
 		#	'url': {'view_name': 'bulk', 'lookup_field': 'id'}
 		#}
@@ -576,7 +548,7 @@ class ProductListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedMo
 	create_time = TimestampField()
 	category = serializers.CharField(source='category.name')
 	participant_count = serializers.SerializerMethodField()
-	purchased_count = serializers.SerializerMethodField()
+	purchased_count = serializers.IntegerField(source='purchased')
 	participant_avatars = serializers.SerializerMethodField()
 	history = serializers.SerializerMethodField()
 	details = ProductDetailsSerializer(source='productdetails_set', many=True)
@@ -586,20 +558,19 @@ class ProductListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedMo
 		fields = ('url', 'id', 'title', 'desc', 'category', 'unit_price', 'market_price',
 			'spec', 'spec_desc', 'cover', 'create_time', 'details',
 			'participant_count', 'purchased_count', 'tag', 'tag_color',
-			'participant_avatars', 'history')
+			'participant_avatars', 'history', 'limit', 'stock',)
 
 	def get_participant_count(self, obj):
 		return Goods.objects.filter(product_id=obj.pk).count()
-
-	def get_purchased_count(self, obj):
-		result = Goods.objects.filter(product_id=obj.pk).aggregate(Sum('quantity'))
-		return result.get('quantity__sum', 0)
 
 	def get_participant_avatars(self, obj):
 		request = self.context.get('request', None)
 		avatars = dict()
 
-		goods = Goods.objects.filter(product_id=obj.pk)
+		pk = self.context.get('pk', None)
+		if not pk:
+			return None
+		goods = Goods.objects.filter(product_id=obj.pk, order__bulk_id=pk)
 		for _ in goods:
 			user = _.order.user
 			if hasattr(user, 'mob_user') and user.mob_user:
@@ -616,8 +587,12 @@ class ProductListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedMo
 		request = self.context.get('request', None)
 		if not request:
 			return None
+		pk = self.context.get('pk', None)
+		if not pk:
+			return None
 		params = {
 			'product_id': obj.id,
+			'bulk_id': pk,
 		}
 		url = reverse('purchasedproducthistory-list', request=request)
 		return utils.addQueryParams(url, params)
@@ -625,6 +600,7 @@ class ProductListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedMo
 class ProductSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	create_time = TimestampField()
 	category = serializers.CharField(source='category.name')
+	purchased_count = serializers.IntegerField(source='purchased')
 	details = ProductDetailsSerializer(source='productdetails_set', many=True)
 	bulk_url = serializers.HyperlinkedRelatedField(
 		source='bulk', read_only=True, view_name='bulk-detail')
@@ -632,7 +608,8 @@ class ProductSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelS
 	class Meta:
 		model = Product
 		fields = ('url', 'id', 'title', 'desc', 'category', 'unit_price', 'market_price',
-			'spec', 'spec_desc', 'cover', 'create_time', 'details', 'bulk_url', 'tag', 'tag_color')
+			'spec', 'spec_desc', 'cover', 'create_time', 'details', 'bulk_url', 'tag', 'tag_color',
+			'limit', 'stock', 'purchased_count',)
 
 class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	category = serializers.CharField(source='category.name')
@@ -850,14 +827,33 @@ class OrderCreateSerializer(serializers.Serializer):
 		comments = validated_data.get('comments')
 		goods = validated_data.get('goods')
 		total_fee = 0
+		errs = []
 		for _ in goods:
 			product_id = _.get('product_id')
 			quantity = _.get('quantity')
 			try:
 				product = Product.objects.get(pk=product_id)
+				if product.limit is not None and product.limit > 0:
+					purchased = Goods.objects.filter(
+						user_id=user.id, product_id=product_id, order__bulk_id=bulk_id, order__is_delete=False
+						).aggregate(Sum('quantity')).get('quantity__sum', 0)
+					purchased = 0 if purchased is None else purchased
+					if product.limit < (purchased + quantity):
+						errs.append({
+							'product_id': product_id,
+							'product_title': product.title,
+							'product_limit': product.limit,
+							'product_spec': product.spec,
+							'quantity': quantity,
+							'purchased': purchased
+						})
 				total_fee += product.unit_price * quantity
 			except ObjectDoesNotExist:
 				raise BadRequestException(detail='Product not found')
+		if len(errs) > 0:
+			exception = BadRequestException(errcode=-1, detail=errs)
+			exception.status_code = 200
+			raise exception
 		order_id = utils.createDisplayOrderId()
 		bulk.seq += 1
 		order = Order.objects.create(
@@ -884,6 +880,7 @@ class OrderCreateSerializer(serializers.Serializer):
 			Goods.objects.create(
 				quantity=quantity,
 				order_id=order.id,
+				user_id=order.user_id,
 				product_id=product_id
 			)
 		user.recent_obtain_name = obtain_name
@@ -1029,7 +1026,7 @@ class ProductExhibitSerializer(RemoveNullSerializerMixIn, serializers.Hyperlinke
 	create_time = TimestampField()
 	category = serializers.CharField(source='category.name')
 	participant_count = serializers.SerializerMethodField()
-	purchased_count = serializers.SerializerMethodField()
+	purchased_count = serializers.IntegerField(source='purchased')
 	details = ProductDetailsSerializer(source='productdetails_set', many=True)
 	bulk_url = serializers.HyperlinkedRelatedField(
 		source='bulk', read_only=True, view_name='bulk-detail')
@@ -1038,14 +1035,11 @@ class ProductExhibitSerializer(RemoveNullSerializerMixIn, serializers.Hyperlinke
 		model = Product
 		fields = ('url', 'id', 'title', 'desc', 'category', 'unit_price', 'market_price',
 			'spec', 'spec_desc', 'cover', 'create_time', 'details',
-			'participant_count', 'purchased_count', 'tag', 'tag_color', 'bulk_url')
+			'participant_count', 'purchased_count', 'tag', 'tag_color', 'bulk_url',
+			'limit', 'stock',)
 
 	def get_participant_count(self, obj):
 		return Goods.objects.filter(product_id=obj.pk).count()
-
-	def get_purchased_count(self, obj):
-		result = Goods.objects.filter(product_id=obj.pk).aggregate(Sum('quantity'))
-		return result.get('quantity__sum', 0)
 
 class ExhibitedProductSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	product = ProductExhibitSerializer()

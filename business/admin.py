@@ -9,6 +9,14 @@ class ProductInline(admin.TabularInline):
 	model = Product
 	extra = 1
 
+class ResellerAdmin(admin.ModelAdmin):
+	list_display = ('id', 'name', 'state', 'mob', 'create_time',)
+	list_filter = ('state',)
+	search_fields = ('name',)
+
+	def mob(self, obj):
+		return obj.mob_user.mob
+
 class BulkAdmin(admin.ModelAdmin):
 	inlines = [
 		ProductInline,
@@ -69,7 +77,7 @@ class DishAdmin(admin.ModelAdmin):
 	]
 
 admin.site.register(User)
-admin.site.register(Reseller)
+admin.site.register(Reseller, ResellerAdmin)
 admin.site.register(Dispatcher)
 
 admin.site.register(Category)

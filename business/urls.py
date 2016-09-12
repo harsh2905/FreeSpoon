@@ -6,6 +6,7 @@ from rest_framework.routers import SimpleRouter
 from . import views
 
 urlpatterns = [
+	url(r'^apply$', views.apply_reseller, name='applyReseller'),
 	url(r'^wxConfig$', views.wxConfig, name='wxConfig'),
 	url(r'^login$', views.UserLoginView.as_view(), name='login'),
 	url(r'^weixin$', views.WeixinLoginView.as_view(), name='weixin'),

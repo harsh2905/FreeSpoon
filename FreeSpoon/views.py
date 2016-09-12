@@ -18,6 +18,7 @@ def api_root(request, format=None):
 		'weixin': reverse('weixin', request=request, format=format),
 		'user': reverse('details', request=request, format=format),
 		'bind': reverse('bind', request=request, format=format),
+		'apply': reverse('applyReseller', request=request, format=format),
 		'wxConfig': reverse('wxConfig', request=request, format=format),
 		'login': reverse('login', request=request, format=format),
 		'index': reverse('index', request=request, format=format),
