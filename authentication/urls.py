@@ -11,5 +11,4 @@ from .views import *
 
 urlpatterns = [
 	url(r'^refresh$', refresh_jwt_token, name='refresh'),
-	url(r'^user$', UserDetailsView.as_view(), name='details'),
 ]

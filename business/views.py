@@ -187,6 +187,46 @@ def wxConfig(request):
 
 # General API
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def userDetail(request):
+	mob_user = request.user
+	if mob_user is None:
+		raise BadRequestException(detail='Mob user not found')
+	user = None
+	reseller = None
+	dispatcher = None
+	try:
+		user = User.objects.get(mob_user=mob_user)
+	except ObjectDoesNotExist:
+		pass
+	try:
+		reseller = Reseller.objects.get(mob_user=mob_user)
+	except ObjectDoesNotExist:
+		pass
+	try:
+		dispatcher = Dispatcher.objects.get(mob_user=mob_user)
+	except ObjectDoesNotExist:
+		pass
+
+	flag = 0
+	if user:
+		flag = flag | 1
+	if reseller:
+		flag = flag | (1 << 1)
+	if dispatcher:
+		flag = flag | (1 << 2)
+
+	data = {
+		'mob_user': mob_user,
+		'user': user,
+		'reseller': reseller,
+		'dispatcher': dispatcher,
+		'flag': flag
+	}
+	serializer = JWTSerializer(instance=data, context={'request': request})
+	return Response(serializer.data, status=status.HTTP_200_OK)
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def payNotify(request, appid):
@@ -415,7 +455,7 @@ class BulkViewSet(ModelViewSet):
 	filter_method = update_bulk_status
 
 	#search_fields = ('$products__title',)
-	search_fields = ('$product__title', '$reseller__name')
+	search_fields = ('$products__title', '$reseller__name')
 
 	order_fields = ['-dead_time']
 

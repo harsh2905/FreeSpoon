@@ -124,7 +124,7 @@ class LoginDispatcherSerializer(WeixinSerializerMixIn, serializers.ModelSerializ
 
 class JWTSerializer(RemoveNullSerializerMixIn, serializers.Serializer):
 	flag = serializers.IntegerField()
-	token = serializers.CharField()
+	token = serializers.CharField(required=False)
 	mob_user = MobUserSerializer()
 	user = LoginUserSerializer()
 	reseller = LoginResellerSerializer()
@@ -365,7 +365,7 @@ class BulkCreateSerializer(serializers.Serializer):
 			for storage in storages:
 				bulk.storages.add(storage)
 		for product in products:
-			bulk.product_set.add(product)
+			bulk.products.add(product)
 		return bulk
 
 class BulkUpdateSerializer(serializers.Serializer):
@@ -458,13 +458,13 @@ class BulkUpdateSerializer(serializers.Serializer):
 		instance.status = validated_data.get('status', instance.status)
 
 		if request.method == 'PUT':
-			instance.product_set.remove()
+			instance.products.remove()
 			if receive_mode & 1:
 				instance.storages.remove()
 				for storage in storages:
 					instance.storages.add(storage)
 			for product in products:
-				instance.product_set.add(product)
+				instance.products.add(product)
 		elif request.method == 'PATCH':
 			if receive_mode & 1:
 				if storages is not None and len(storages) > 0:
@@ -472,12 +472,12 @@ class BulkUpdateSerializer(serializers.Serializer):
 					for storage in storages:
 						instance.storages.add(storage)
 			if len(products) > 0:
-				instance.product_set.remove()
+				instance.products.remove()
 				for product in products:
-					instance.product_set.add(product)
+					instance.products.add(product)
 
-		if instance.product_set.count() > 0:
-			instance.card_icon = instance.product_set.first().cover
+		if instance.products.count() > 0:
+			instance.card_icon = instance.products.first().cover
 		instance.save()
 
 		return instance
@@ -521,7 +521,7 @@ class BulkListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModel
 			request.build_absolute_uri(url),
 			map(lambda p: p.cover.url 
 			if hasattr(p.cover, 'url') 
-			else '', obj.product_set.all()))
+			else '', obj.products.all()))
 
 	def get_participant_count(self, obj):
 		return Order.objects.filter(bulk_id=obj.pk).count()
@@ -605,13 +605,13 @@ class ProductSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelS
 	category = serializers.CharField(source='category.name')
 	purchased_count = serializers.IntegerField(source='purchased')
 	details = ProductDetailsSerializer(source='productdetails_set', many=True)
-	bulk_url = serializers.HyperlinkedRelatedField(
-		source='bulk', read_only=True, view_name='bulk-detail')
+	# bulk_url = serializers.HyperlinkedRelatedField(
+	# 	source='bulk', read_only=True, view_name='bulk-detail')
 
 	class Meta:
 		model = Product
 		fields = ('url', 'id', 'title', 'desc', 'category', 'unit_price', 'market_price',
-			'spec', 'spec_desc', 'cover', 'create_time', 'details', 'bulk_url', 'tag', 'tag_color',
+			'spec', 'spec_desc', 'cover', 'create_time', 'details', 'tag', 'tag_color',
 			'limit', 'stock', 'purchased_count',)
 
 class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
@@ -623,7 +623,7 @@ class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 	dead_time = TimestampField()
 	standard_time = StandardTimeField(source='*')
 	arrived_time = TimestampField()
-	products = ProductListSerializer(source='product_set', many=True)
+	products = ProductListSerializer(many=True)
 	participant_count = serializers.SerializerMethodField()
 	recent_obtain_name = serializers.SerializerMethodField()
 	recent_obtain_mob = serializers.SerializerMethodField()
@@ -761,8 +761,8 @@ class OrderUpdateSerializer(serializers.Serializer):
 
 class OrderCreateSerializer(serializers.Serializer):
 	goods = GoodsCreateSerializer(many=True)
-	obtain_name = serializers.CharField()
-	obtain_mob = serializers.CharField()
+	obtain_name = serializers.CharField(required=False)
+	obtain_mob = serializers.CharField(required=False)
 	bulk_id = serializers.IntegerField()
 	receive_mode = serializers.IntegerField()
 	storage_id = serializers.IntegerField(required=False)
@@ -886,10 +886,11 @@ class OrderCreateSerializer(serializers.Serializer):
 				user_id=order.user_id,
 				product_id=product_id
 			)
-		user.recent_obtain_name = obtain_name
-		user.recent_obtain_mob = obtain_mob
-		user.recent_storage = storage
-		user.save()
+		if receive_mode & 1:
+			user.recent_obtain_name = obtain_name
+			user.recent_obtain_mob = obtain_mob
+			user.recent_storage = storage
+			user.save()
 		return order
 		
 class OrderListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
@@ -1023,7 +1024,7 @@ class BulkExhibitSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedMo
 			request.build_absolute_uri(url),
 			map(lambda p: p.cover.url 
 			if hasattr(p.cover, 'url') 
-			else '', obj.product_set.all()))
+			else '', obj.products.all()))
 
 class ProductExhibitSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	create_time = TimestampField()
