@@ -15,7 +15,10 @@ class ResellerAdmin(admin.ModelAdmin):
 	search_fields = ('name',)
 
 	def mob(self, obj):
-		return obj.mob_user.mob
+		if obj.mob_user is not None:
+			return obj.mob_user.mob
+		else:
+			return ''
 
 class BulkAdmin(admin.ModelAdmin):
 	# inlines = [
