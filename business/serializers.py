@@ -1032,15 +1032,14 @@ class ProductExhibitSerializer(RemoveNullSerializerMixIn, serializers.Hyperlinke
 	participant_count = serializers.SerializerMethodField()
 	purchased_count = serializers.IntegerField(source='purchased')
 	details = ProductDetailsSerializer(source='productdetails_set', many=True)
-	bulk_url = serializers.HyperlinkedRelatedField(
-		source='bulk', read_only=True, view_name='bulk-detail')
+	# bulk_url = serializers.HyperlinkedRelatedField(
+	# 	source='bulk', read_only=True, view_name='bulk-detail')
 
 	class Meta:
 		model = Product
 		fields = ('url', 'id', 'title', 'desc', 'category', 'unit_price', 'market_price',
 			'spec', 'spec_desc', 'cover', 'create_time', 'details',
-			'participant_count', 'purchased_count', 'tag', 'tag_color', 'bulk_url',
-			'limit', 'stock',)
+			'participant_count', 'purchased_count', 'tag', 'tag_color', 'limit', 'stock',)
 
 	def get_participant_count(self, obj):
 		return Goods.objects.filter(product_id=obj.pk).count()
