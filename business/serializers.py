@@ -524,7 +524,7 @@ class BulkListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModel
 			else '', obj.products.all()))
 
 	def get_participant_count(self, obj):
-		return Order.objects.filter(bulk_id=obj.pk).count()
+		return Order.objects.filter(bulk_id=obj.pk, is_delete=False).values('user_id').distinct().count()
 
 class ProductDetailsSerializer(serializers.ModelSerializer):
 	width = serializers.SerializerMethodField(read_only=True)
@@ -564,7 +564,7 @@ class ProductListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedMo
 		pk = self.context.get('pk', None)
 		if not pk:
 			return None
-		return Goods.objects.filter(product_id=obj.pk, order__bulk_id=pk).count()
+		return Goods.objects.filter(product_id=obj.pk, order__bulk_id=pk, order__is_delete=False).values('order__user_id').distinct().count()
 
 	def get_participant_avatars(self, obj):
 		request = self.context.get('request', None)
@@ -573,7 +573,7 @@ class ProductListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedMo
 		pk = self.context.get('pk', None)
 		if not pk:
 			return None
-		goods = Goods.objects.filter(product_id=obj.pk, order__bulk_id=pk)
+		goods = Goods.objects.filter(product_id=obj.pk, order__bulk_id=pk, order__is_delete=False)
 		for _ in goods:
 			user = _.order.user
 			if hasattr(user, 'mob_user') and user.mob_user:
@@ -640,7 +640,7 @@ class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 			'receive_mode',)
 
 	def get_participant_count(self, obj):
-		return Order.objects.filter(bulk_id=obj.pk).count()
+		return Order.objects.filter(bulk_id=obj.pk, is_delete=False).values('user_id').distinct().count()
 
 	def get_recent_obtain_name(self, obj):
 		request = self.context.get('request', None)
