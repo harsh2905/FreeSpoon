@@ -62,6 +62,11 @@ class Category(models.Model):
 	def __unicode__(self):
 		return self.name
 
+class BulkProduct(models.Model):
+	bulk = models.ForeignKey('Bulk')
+	product = models.ForeignKey('Product')
+	seq = models.IntegerField(max_length=11, default=0)
+
 class Product(models.Model):
 	title = models.CharField(max_length=200)
 	desc = models.TextField()
@@ -98,10 +103,10 @@ class Bulk(models.Model):
 	details = models.TextField()
 	reseller = models.ForeignKey('Reseller')
 	storages = models.ManyToManyField('Storage')
-	products = models.ManyToManyField('Product')
+	products = models.ManyToManyField('Product', through='BulkProduct')
 	start_time = models.DateTimeField()
 	dead_time = models.DateTimeField()
-	arrived_time = models.DateTimeField()
+	arrived_time = models.CharField(max_length=100, null=True)
 	status = models.IntegerField(max_length=11)
 	location = models.CharField(max_length=100)
 	receive_mode = models.IntegerField(max_length=11, default=2)
@@ -112,6 +117,12 @@ class Bulk(models.Model):
 	create_time = models.DateTimeField(auto_now=True)
 	def __unicode__(self):
 		return self.title
+
+class Configuration(models.Model):
+	bulk_card_title_template = models.TextField(null=True, blank=True)
+	bulk_card_desc_template = models.TextField(null=True, blank=True)
+	order_card_title_template = models.TextField(null=True, blank=True)
+	order_card_desc_template = models.TextField(null=True, blank=True)
 
 class Order(models.Model):
 	id = models.CharField(max_length=200, primary_key=True)

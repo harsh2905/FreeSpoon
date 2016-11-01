@@ -20,12 +20,17 @@ class ResellerAdmin(admin.ModelAdmin):
 		else:
 			return ''
 
+class BulkProductInline(admin.TabularInline):
+	model = BulkProduct
+	extra = 1
+
 class BulkAdmin(admin.ModelAdmin):
 	# inlines = [
 	# 	ProductInline,
 	# ]
 	filter_horizontal = ('storages', 'products',)
 	list_display = ('id', 'title',)
+	inlines = [BulkProductInline]
 
 class ProductDetailsInline(admin.TabularInline):
 	model = ProductDetails
@@ -106,3 +111,5 @@ admin.site.register(Dish, DishAdmin)
 admin.site.register(DishDetails)
 admin.site.register(Tip)
 admin.site.register(Image)
+
+admin.site.register(Configuration)

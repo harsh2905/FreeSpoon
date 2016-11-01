@@ -291,7 +291,7 @@ class BulkCreateSerializer(serializers.Serializer):
 		)
 	start_time = TimestampField()
 	dead_time = TimestampField()
-	arrived_time = TimestampField()
+	arrived_time = serializers.CharField()
 	location = serializers.CharField()
 	receive_mode = serializers.IntegerField()
 	products = serializers.ListField(
@@ -356,16 +356,22 @@ class BulkCreateSerializer(serializers.Serializer):
 			status=-2,
 			location=location,
 			receive_mode=receive_mode,
-			card_title=title,
-			card_desc=title,
 			card_icon=products[0].cover
 			)
 		bulk.save()
 		if receive_mode & 1:
 			for storage in storages:
 				bulk.storages.add(storage)
+		seq = 0
 		for product in products:
-			bulk.products.add(product)
+			BulkProduct.objects.create(bulk=bulk, product=product, seq=seq)
+			seq += 1
+		configuration = Configuration.objects.first()
+		if configuration is None:
+			raise BadRequestException(detail='System configuration not found')
+		bulk.card_title=utils.populateCascadeString(configuration.bulk_card_title_template, bulk)
+		bulk.card_desc=utils.populateCascadeString(configuration.bulk_card_desc_template, bulk)
+		bulk.save()
 		return bulk
 
 class BulkUpdateSerializer(serializers.Serializer):
@@ -377,7 +383,7 @@ class BulkUpdateSerializer(serializers.Serializer):
 		)
 	start_time = TimestampField()
 	dead_time = TimestampField()
-	arrived_time = TimestampField()
+	arrived_time = serializers.CharField()
 	location = serializers.CharField()
 	receive_mode = serializers.IntegerField()
 	status = serializers.IntegerField(required=False)
@@ -441,8 +447,6 @@ class BulkUpdateSerializer(serializers.Serializer):
 
 		if title is not None:
 			instance.title = title
-			instance.card_title=title
-			instance.card_desc=title
 		if category is not None:
 			instance.category=category
 		if start_time is not None:
@@ -463,8 +467,10 @@ class BulkUpdateSerializer(serializers.Serializer):
 				instance.storages.remove()
 				for storage in storages:
 					instance.storages.add(storage)
+			seq = 0
 			for product in products:
-				instance.products.add(product)
+				BulkProduct.objects.create(bulk=instance, product=product, seq=seq)
+				seq += 1
 		elif request.method == 'PATCH':
 			if receive_mode & 1:
 				if storages is not None and len(storages) > 0:
@@ -473,11 +479,18 @@ class BulkUpdateSerializer(serializers.Serializer):
 						instance.storages.add(storage)
 			if len(products) > 0:
 				instance.products.remove()
+				seq = 0
 				for product in products:
-					instance.products.add(product)
+					BulkProduct.objects.create(bulk=instance, product=product, seq=seq)
+					seq += 1
 
 		if instance.products.count() > 0:
 			instance.card_icon = instance.products.first().cover
+		configuration = Configuration.objects.first()
+		if configuration is None:
+			raise BadRequestException(detail='System configuration not found')
+		instance.card_title=utils.populateCascadeString(configuration.bulk_card_title_template, instance)
+		instance.card_desc=utils.populateCascadeString(configuration.bulk_card_desc_template, instance)
 		instance.save()
 
 		return instance
@@ -493,14 +506,14 @@ class BulkListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModel
 	create_time = TimestampField()
 	start_time = TimestampField()
 	dead_time = TimestampField()
-	arrived_time = TimestampField()
 	participant_count = serializers.SerializerMethodField()
+	soldout = serializers.SerializerMethodField()
 
 	class Meta:
 		model = Bulk
 		fields = ('url', 'id', 'title', 'category', 'reseller', 'covers',
 			'start_time', 'dead_time', 'arrived_time', 'status', 'receive_mode',
-			'create_time', 'location', 'participant_count',)
+			'create_time', 'location', 'participant_count', 'soldout',)
 		#extra_kwargs = {
 		#	'url': {'view_name': 'bulk', 'lookup_field': 'id'}
 		#}
@@ -514,6 +527,12 @@ class BulkListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModel
 	#		return ''
 	#	return obj.real_wx_nickname
 
+	def get_soldout(self, obj):
+		for product in obj.products.all():
+			if product.stock > product.purchased:
+				return False
+		return True
+
 	def get_product_covers(self, obj): # So ugly :(
 		request = self.context.get('request', None)
 		return map(lambda url: 
@@ -524,7 +543,7 @@ class BulkListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModel
 			else '', obj.products.all()))
 
 	def get_participant_count(self, obj):
-		return Order.objects.filter(bulk_id=obj.pk, is_delete=False).values('user_id').distinct().count()
+		return Order.objects.filter(bulk_id=obj.pk, is_delete=False, status__gt=0).values('user_id').distinct().count()
 
 class ProductDetailsSerializer(serializers.ModelSerializer):
 	width = serializers.SerializerMethodField(read_only=True)
@@ -564,7 +583,7 @@ class ProductListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedMo
 		pk = self.context.get('pk', None)
 		if not pk:
 			return None
-		return Goods.objects.filter(product_id=obj.pk, order__bulk_id=pk, order__is_delete=False).values('order__user_id').distinct().count()
+		return Goods.objects.filter(product_id=obj.pk, order__bulk_id=pk, order__is_delete=False, order__status__gt=0).values('order__user_id').distinct().count()
 
 	def get_participant_avatars(self, obj):
 		request = self.context.get('request', None)
@@ -573,7 +592,7 @@ class ProductListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedMo
 		pk = self.context.get('pk', None)
 		if not pk:
 			return None
-		goods = Goods.objects.filter(product_id=obj.pk, order__bulk_id=pk, order__is_delete=False)
+		goods = Goods.objects.filter(product_id=obj.pk, order__bulk_id=pk, order__is_delete=False, order__status__gt=0)
 		for _ in goods:
 			user = _.order.user
 			if hasattr(user, 'mob_user') and user.mob_user:
@@ -622,8 +641,8 @@ class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 	start_time = TimestampField()
 	dead_time = TimestampField()
 	standard_time = StandardTimeField(source='*')
-	arrived_time = TimestampField()
-	products = ProductListSerializer(many=True)
+	#products = ProductListSerializer(many=True)
+	products = serializers.SerializerMethodField()
 	participant_count = serializers.SerializerMethodField()
 	recent_obtain_name = serializers.SerializerMethodField()
 	recent_obtain_mob = serializers.SerializerMethodField()
@@ -639,8 +658,13 @@ class BulkSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSeri
 			'recent_obtain_name', 'recent_obtain_mob', 'recent_storage',
 			'receive_mode',)
 
+	def get_products(self, obj):
+		products = obj.products.order_by('bulkproduct__seq')
+		serializer = ProductListSerializer(instance=products, many=True, context=self.context)
+		return serializer.data
+
 	def get_participant_count(self, obj):
-		return Order.objects.filter(bulk_id=obj.pk, is_delete=False).values('user_id').distinct().count()
+		return Order.objects.filter(bulk_id=obj.pk, is_delete=False, status__gt=0).values('user_id').distinct().count()
 
 	def get_recent_obtain_name(self, obj):
 		request = self.context.get('request', None)
@@ -838,7 +862,8 @@ class OrderCreateSerializer(serializers.Serializer):
 				product = Product.objects.get(pk=product_id)
 				if product.limit is not None and product.limit > 0:
 					purchased = Goods.objects.filter(
-						user_id=user.id, product_id=product_id, order__bulk_id=bulk_id, order__is_delete=False
+						user_id=user.id, product_id=product_id, order__bulk_id=bulk_id, 
+						order__is_delete=False, order__status__gte=0
 						).aggregate(Sum('quantity')).get('quantity__sum', 0)
 					purchased = 0 if purchased is None else purchased
 					if product.limit < (purchased + quantity):
@@ -898,9 +923,11 @@ class OrderListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedMode
 	create_time = TimestampField()
 	covers = serializers.SerializerMethodField(method_name='get_goods_covers')
 	count = serializers.SerializerMethodField(method_name='get_goods_count')
-	card_title = serializers.CharField(source='bulk.card_title')
-	card_desc = serializers.CharField(source='bulk.card_desc')
-	card_icon = serializers.ImageField(source='bulk.card_icon')
+	# card_title = serializers.CharField(source='bulk.card_title')
+	# card_desc = serializers.CharField(source='bulk.card_desc')
+	card_title = serializers.SerializerMethodField()
+	card_desc = serializers.SerializerMethodField()
+	card_icon = serializers.SerializerMethodField()
 	card_url = serializers.SerializerMethodField()
 	bulk_status = serializers.IntegerField(source='bulk.status')
 
@@ -910,6 +937,22 @@ class OrderListSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedMode
 			'status', 'total_fee', 'covers', 'count', 'seq',
 			'card_title', 'card_desc', 'card_icon', 'card_url',
 			'bulk_status', 'comments')
+
+	def get_card_title(self, obj):
+		configuration = Configuration.objects.first()
+		if configuration is None:
+			raise BadRequestException(detail='System configuration not found')
+		return utils.populateCascadeString(configuration.order_card_title_template, obj)
+
+	def get_card_desc(self, obj):
+		configuration = Configuration.objects.first()
+		if configuration is None:
+			raise BadRequestException(detail='System configuration not found')
+		return utils.populateCascadeString(configuration.order_card_desc_template, obj)
+
+	def get_card_icon(self, obj):
+		request = self.context.get('request', None)
+		return request.build_absolute_uri(obj.goods_set.first().product.cover.url)
 
 	def get_card_url(self, obj):
 		return config.CARD_BULK_URL % obj.bulk.id
@@ -940,9 +983,11 @@ class OrderSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSer
 	goods = GoodsSerializer(source='goods_set', many=True)
 	wx_pay_request = serializers.SerializerMethodField()
 	payrequest = PayRequestModelSerializer()
-	card_title = serializers.CharField(source='bulk.card_title')
-	card_desc = serializers.CharField(source='bulk.card_desc')
-	card_icon = serializers.ImageField(source='bulk.card_icon')
+	# card_title = serializers.CharField(source='bulk.card_title')
+	# card_desc = serializers.CharField(source='bulk.card_desc')
+	card_title = serializers.SerializerMethodField()
+	card_desc = serializers.SerializerMethodField()
+	card_icon = serializers.SerializerMethodField()
 	card_url = serializers.SerializerMethodField()
 	bulk_status = serializers.IntegerField(source='bulk.status')
 
@@ -954,6 +999,22 @@ class OrderSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSer
 			'card_title', 'card_desc', 'card_icon', 'card_url',
 			'seq', 'bulk_status', 'receive_mode', 'receive_name', 
 			'receive_mob', 'receive_address', 'comments')
+
+	def get_card_title(self, obj):
+		configuration = Configuration.objects.first()
+		if configuration is None:
+			raise BadRequestException(detail='System configuration not found')
+		return utils.populateCascadeString(configuration.order_card_title_template, obj)
+
+	def get_card_desc(self, obj):
+		configuration = Configuration.objects.first()
+		if configuration is None:
+			raise BadRequestException(detail='System configuration not found')
+		return utils.populateCascadeString(configuration.order_card_desc_template, obj)
+
+	def get_card_icon(self, obj):
+		request = self.context.get('request', None)
+		return request.build_absolute_uri(obj.goods_set.first().product.cover.url)
 
 	def get_card_url(self, obj):
 		return config.CARD_BULK_URL % obj.bulk.id
@@ -1042,7 +1103,7 @@ class ProductExhibitSerializer(RemoveNullSerializerMixIn, serializers.Hyperlinke
 			'participant_count', 'purchased_count', 'tag', 'tag_color', 'limit', 'stock',)
 
 	def get_participant_count(self, obj):
-		return Goods.objects.filter(product_id=obj.pk).count()
+		return Goods.objects.filter(product_id=obj.pk, order__is_delete=False, order__status__gt=0).values('order__user_id').distinct().count()
 
 class ExhibitedProductSerializer(RemoveNullSerializerMixIn, serializers.HyperlinkedModelSerializer):
 	product = ProductExhibitSerializer()

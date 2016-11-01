@@ -9,6 +9,8 @@ import time
 import urlparse
 import re
 from urllib import urlencode
+from functools import partial
+from django.db import models
 
 def filter_emoji(desstr,restr=''):
     try:
@@ -115,6 +117,32 @@ def addQueryParams(url, params):
 	url_parts[4] = urlencode(query)
 	return urlparse.urlunparse(url_parts)
 
+def populateRepl(m, obj):
+	# 我准备买新鲜美味的{obj.category.name}，快和我一起买吧！
+	# 新鲜美味的{obj.category.name}，里面包含了{','.join(set(item.__unicode__() for item in obj.products.all()))}。
+	# 我买了{goods_set#{str(obj.product.unit_price*obj.quantity/100.0)}元的{obj.product.__unicode__()}}，就差你一个人了！
+	# {obj.goods_set.first().product.desc if obj.goods_set.first() is not None else ''}
+	return eval(m.group(2), globals(), {'obj': obj})
+
+def populateRepl2(m, obj):
+	attr = None
+	if isinstance(obj, dict):
+		attr = obj.get(m.group(2), None)
+	else:
+		attr = getattr(obj, m.group(2))
+	if hasattr(attr, 'values'):
+		items = set(populateString(m.group(3), item) for item in attr.all())
+		return ','.join(items)
+	return ''
+
+def populateCascadeString(templateString, obj):
+	pattern = re.compile(r'(\{(\w+)#(.+)\})')
+	result = pattern.sub(partial(populateRepl2, obj=obj), templateString)
+	return populateString(result, obj)
+
+def populateString(templateString, obj):
+	pattern = re.compile(r'(\{([^{}]+)\})')
+	return pattern.sub(partial(populateRepl, obj=obj), templateString)
 
 
 
