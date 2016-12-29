@@ -27,3 +27,4 @@ freespoon:
     - APIDOMAINNAME=api.yourdomain
     - DBHOST=db
     - DBPASSWD=123456
+    - SERVICE_API_URL=api.yourdomain

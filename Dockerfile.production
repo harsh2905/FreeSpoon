@@ -3,7 +3,7 @@ FROM ubuntu:14.04.3
 MAINTAINER codemeow codemeow@yahoo.com
 
 RUN cp /etc/apt/sources.list /etc/apt/sources.list.raw
-ADD https://github.com/codemeow5/software/raw/master/ubt_sources_list_aliyun.txt /etc/apt/sources.list
+ADD https://github.com/codemeow5/Scripts/raw/master/ubt_1404_aliyun_sources.list /etc/apt/sources.list
 RUN apt-get update && apt-get install wget -y
 
 RUN apt-get install libmysqlclient-dev -y
@@ -78,6 +78,7 @@ RUN ln -s /etc/apache2/sites-available/wsgi.conf /etc/apache2/sites-enabled/
 
 ENTRYPOINT sed -i "/yourdomain/s/yourdomain/${DOMAINNAME}/g" /etc/apache2/sites-available/wsgi.conf && \
 		/bin/bash ./wait-for-it.sh db:3306 -- python manage.py migrate && \
+		(mysql -h${DBHOST} -uroot -p${DBPASSWD} -DFreeSpoon < /FreeSpoon/views_bulk_summary.sql) && \
 		(mysql -h${DBHOST} -uroot -p${DBPASSWD} -DFreeSpoon < /FreeSpoon/views.sql) && \
 		python manage.py collectstatic --noinput && \
 		/bin/bash load_data.sh && \
