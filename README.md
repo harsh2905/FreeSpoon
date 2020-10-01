@@ -1,3 +1,4 @@
+Free Spoon - An amazing project.
 # Free Spoon  
 
 [![Build Status](https://travis-ci.org/codemeow5/FreeSpoon.svg?branch=dev)](https://travis-ci.org/codemeow5/FreeSpoon)
@@ -35,7 +36,7 @@ A group purchase website based on WeChat.
 	    - DOMAINNAME=yourdomain  
 	db:  
 	  environment:  
-	    - MYSQL_ROOT_PASSWORD=123456  
+	    - MYSQL_ROOT_PASSWORD=1a2z3b4y5c6x  
 	freespoon:  
 	  volumes:  
 	    - /your/path:/FreeSpoon  
